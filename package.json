@@ -1,0 +1,19 @@
+{
+  "name": "maximuskratos",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w @mk/database && npm run build -w @mk/api && npm run build -w @mk/web",
+    "dev:api": "npm run dev -w @mk/api",
+    "dev:web": "npm run dev -w @mk/web",
+    "db:generate": "npm run generate -w @mk/database",
+    "db:migrate": "npm run migrate:dev -w @mk/database",
+    "db:migrate:deploy": "npm run migrate:deploy -w @mk/database"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
