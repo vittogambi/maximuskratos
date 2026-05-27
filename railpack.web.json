@@ -1,0 +1,14 @@
+{
+  "$schema": "https://schema.railpack.com",
+  "steps": {
+    "build": {
+      "commands": [
+        "npm install",
+        "npm run build -w @mk/web"
+      ]
+    }
+  },
+  "deploy": {
+    "startCommand": "npm run start -w @mk/web"
+  }
+}

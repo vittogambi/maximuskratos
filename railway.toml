@@ -1,0 +1,10 @@
+# Railway service config (repo root). Prefer railpack.json for API / railpack.web.json for Web.
+# If your project still uses Nixpacks, set builder in the Railway dashboard.
+
+[build]
+builder = "RAILPACK"
+
+[deploy]
+startCommand = "npm run start:api"
+healthcheckPath = "/health"
+healthcheckTimeout = 120
