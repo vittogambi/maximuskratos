@@ -11,6 +11,6 @@
     }
   },
   "deploy": {
-    "startCommand": "npm run db:migrate:deploy && npm run start -w @mk/api"
+    "startCommand": "npm run start:api"
   }
 }

@@ -7,6 +7,8 @@
   ],
   "scripts": {
     "build": "npm run build -w @mk/database && npm run build -w @mk/api && npm run build -w @mk/web",
+    "start": "sh scripts/start-api.sh",
+    "start:api": "sh scripts/start-api.sh",
     "dev:api": "npm run dev -w @mk/api",
     "dev:web": "npm run dev -w @mk/web",
     "db:generate": "npm run generate -w @mk/database",
