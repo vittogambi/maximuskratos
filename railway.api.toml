@@ -1,0 +1,6 @@
+# API service only — in Railway: Settings → Config file path = railway.api.toml
+# Or rely on default railpack.json at repo root.
+
+[deploy]
+startCommand = "npm run start:api"
+healthcheckPath = "/health"

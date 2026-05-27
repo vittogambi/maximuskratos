@@ -1,0 +1,5 @@
+# Web service only — in Railway: Settings → Config file path = railway.web.toml
+
+[deploy]
+startCommand = "npm run start:web"
+healthcheckPath = "/login"
