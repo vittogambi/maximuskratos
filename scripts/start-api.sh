@@ -1,31 +1,47 @@
 #!/bin/sh
 set -e
 
-if [ -z "$DATABASE_URL" ]; then
-  echo "ERROR: DATABASE_URL is not set."
-  echo "  Railway → API service → Variables → add a reference to your Postgres service DATABASE_URL."
-  exit 1
-fi
+. "$(dirname "$0")/resolve-database-url.sh"
 
 if [ -z "$JWT_ACCESS_SECRET" ]; then
   echo "ERROR: JWT_ACCESS_SECRET is not set."
   exit 1
 fi
 
-# Log host only (never the password) to help debug wrong/stale credentials.
-db_host=$(printf '%s' "$DATABASE_URL" | sed -n 's|.*@\([^/]*\)/.*|\1|p')
-echo "DATABASE_URL target: ${db_host:-unknown}"
+run_migrate() {
+  npm run db:migrate:deploy
+}
 
 echo "Running database migrations..."
-if ! npm run db:migrate:deploy; then
+if run_migrate; then
+  :
+elif [ -n "$DATABASE_PUBLIC_URL" ] && [ "$DATABASE_URL" != "$DATABASE_PUBLIC_URL" ]; then
+  echo ""
+  echo "Private URL failed; retrying with DATABASE_PUBLIC_URL (TCP proxy)…"
+  export DATABASE_URL="$DATABASE_PUBLIC_URL"
+  export MK_DB_URL_SOURCE="DATABASE_PUBLIC_URL (retry)"
+  db_host=$(printf '%s' "$DATABASE_URL" | sed -n 's|.*@\([^/]*\)/.*|\1|p')
+  echo "Database connection via $MK_DB_URL_SOURCE → ${db_host:-unknown}"
+  run_migrate
+else
   echo ""
   echo "ERROR: Database migration failed."
-  echo "  If you see P1000 (authentication failed), the API DATABASE_URL does not match Postgres."
-  echo "  Railway fix:"
-  echo "    1. API service → Variables → remove any hand-typed DATABASE_URL"
-  echo "    2. Add variable REFERENCE: Postgres → DATABASE_URL (from your Postgres plugin)"
-  echo "    3. Redeploy API (and Postgres if you recently recreated it)"
-  echo "  Do not copy an old URL; always use a live reference after Postgres rotates credentials."
+  echo ""
+  echo "P1000 on Railway usually means Postgres password ≠ what is stored on the volume."
+  echo "Fix (pick one):"
+  echo ""
+  echo "  A) Reset Postgres volume (most reliable)"
+  echo "     Postgres service → Settings → Danger → Remove volume / redeploy Postgres"
+  echo "     Wait until healthy, then API → Variables:"
+  echo "       - Delete DATABASE_URL (and DATABASE_PUBLIC_URL if set)"
+  echo "       - Add Reference → your Postgres service → DATABASE_URL"
+  echo "     Redeploy API only."
+  echo ""
+  echo "  B) Reference the public URL on API"
+  echo "     API → Variables → DATABASE_URL = Reference → Postgres → DATABASE_PUBLIC_URL"
+  echo "     Redeploy API."
+  echo ""
+  echo "  C) Never paste connection strings; only use live References."
   exit 1
 fi
 

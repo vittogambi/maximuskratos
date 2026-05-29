@@ -91,22 +91,39 @@ Add a Postgres plugin in the same Railway project/environment.
 - **Start:** `npm run start:api` (runs migrations, then the API)
 - **Health check:** `/health`
 
-**`DATABASE_URL` on the API service (required)**
+### Variables per service
 
-Use a **variable reference**, not a copied connection string:
+**Postgres** — leave Railway defaults; do not copy URLs into other services.
 
-1. Open the **API** service → **Variables**.
-2. Remove any manually pasted `DATABASE_URL` (stale passwords cause `P1000`).
-3. **New variable** → **Add reference** → choose your **Postgres** service → select **`DATABASE_URL`**.
-4. Redeploy the API.
+**API service**
 
-The Web service must **not** have `DATABASE_URL` (only the API talks to Postgres).
+| Variable | Value |
+|----------|--------|
+| `DATABASE_URL` | **Reference** → Postgres → `DATABASE_URL` (private). If P1000 persists after volume reset, use Reference → `DATABASE_PUBLIC_URL` instead. |
+| `JWT_ACCESS_SECRET` | Random string, 32+ characters |
+| `NODE_ENV` | `production` |
+| `CORS_ORIGINS` | Public Web URL, e.g. `https://web-production-xxxx.up.railway.app` (no trailing `/`) |
+
+Do **not** put `NEXT_PUBLIC_*` on the API. You may keep `DATABASE_PUBLIC_URL` as an extra reference for the startup retry script, but Prisma needs a resolved URL via `DATABASE_URL` or `DATABASE_PUBLIC_URL` (see `scripts/resolve-database-url.sh`).
+
+**Web service**
+
+| Variable | Value |
+|----------|--------|
+| `NEXT_PUBLIC_API_URL` | Public API URL, e.g. `https://api-production-xxxx.up.railway.app` (no trailing `/`) |
+| `RAILPACK_CONFIG_FILE` | `railpack.web.json` (if Web was running the API start command) |
+
+Do **not** put `DATABASE_URL`, `JWT_*`, or `CORS_*` on the Web service.
+
+**Shared variables** — optional. For this project, per-service **references** to Postgres are enough; you do not need Project shared variables unless you want one `CORS_ORIGINS` edited in a single place.
 
 | Symptom | Cause | Fix |
 |---------|--------|-----|
-| `P1000: Authentication failed` | API `DATABASE_URL` password does not match Postgres | Re-add reference from Postgres; redeploy API |
+| `P1000: Authentication failed` at `postgres.railway.internal` | Postgres **volume password** out of sync with env vars (common after volume swap or manual edits) | **Remove Postgres volume** → redeploy Postgres → re-add `DATABASE_URL` reference on API → redeploy API. Or set API `DATABASE_URL` = reference to Postgres `DATABASE_PUBLIC_URL` |
 | `DATABASE_URL is not set` | API not linked to Postgres | Add reference as above |
-| API crash loop on start | Migrations fail → container restarts | Fix `DATABASE_URL`, then redeploy |
+| API crash loop on start | Migrations fail → container restarts | Fix DB connection, then redeploy |
+
+**P1000 still after a reference?** The host in logs is correct; the password is wrong on disk. Wipe the Postgres volume (Settings → Danger) so Postgres re-inits with the current `POSTGRES_PASSWORD`, then link the API again.
 
 ### Web
 
