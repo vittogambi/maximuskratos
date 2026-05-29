@@ -41,7 +41,7 @@ export class AuthService {
       where: { email: dto.email.toLowerCase() },
     });
     if (existing) {
-      throw new ConflictException('Email already registered');
+      throw new ConflictException('Este email ya está registrado.');
     }
 
     const passwordHash = await bcrypt.hash(dto.password, 12);
@@ -66,12 +66,12 @@ export class AuthService {
       where: { email: dto.email.toLowerCase() },
     });
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Email o contraseña inválidas.');
     }
 
     const valid = await bcrypt.compare(dto.password, user.passwordHash);
     if (!valid) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Email o contraseña inválidas.');
     }
 
     const tokens = await this.issueTokens(user.id, user.email, user.role);

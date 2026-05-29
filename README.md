@@ -9,17 +9,42 @@ Web platform and REST API for user accounts and authentication.
 
 ## Local setup
 
+**First time only:**
+
 ```bash
-docker compose up -d
 npm install
-cp .env.example apps/api/.env
-cp .env.example packages/database/.env
-echo 'NEXT_PUBLIC_API_URL=http://localhost:4000' > apps/web/.env.local
-npm run db:generate
-npm run db:migrate:deploy
-npm run dev:api   # http://localhost:4000
-npm run dev:web   # http://localhost:3000
+npm run setup:env
 ```
+
+**Run everything (Postgres + API + Web):**
+
+1. Start **Docker Desktop** and wait until it is running.
+2. Then:
+
+```bash
+npm run dev
+```
+
+Opens:
+
+- Web → http://localhost:3000  
+- API → http://localhost:4000  
+
+**Run API and Web only** (if Postgres is already up):
+
+```bash
+npm run dev:api   # terminal 1
+npm run dev:web   # terminal 2
+```
+
+### Local dev troubleshooting
+
+| Symptom | Fix |
+|---------|-----|
+| `Cannot connect to the Docker daemon` | Open Docker Desktop, then `npm run dev` again |
+| `User was denied access` / migrate fails | `DATABASE_URL` must use port **5433** (Docker), not 5432. Run `npm run setup:env` |
+| Web cannot reach API | `apps/web/.env.local` must have `NEXT_PUBLIC_API_URL=http://localhost:4000` (no trailing slash) |
+| Login works in Swagger but not in browser | `CORS_ORIGINS=http://localhost:3000` in `apps/api/.env` |
 
 | Endpoint | URL |
 |----------|-----|
@@ -27,13 +52,19 @@ npm run dev:web   # http://localhost:3000
 | Health | http://localhost:4000/health |
 | API docs | http://localhost:4000/api/v1/docs |
 
+**Local admin** (created by `npm run dev` / `npm run db:seed`):
+
+| Email | Password |
+|-------|----------|
+| `admin@maximuskratos.local` | `ChangeMeAdmin123!` |
+
 ## Environment
 
 **API** (`apps/api/.env`)
 
 | Variable | Description |
 |----------|-------------|
-| `DATABASE_URL` | PostgreSQL connection string |
+| `DATABASE_URL` | Local Docker Postgres: `postgresql://mk:mk_local_dev@localhost:5433/maximuskratos` |
 | `JWT_ACCESS_SECRET` | Access token signing secret (32+ chars) |
 | `JWT_REFRESH_SECRET` | Reserved for future use |
 | `CORS_ORIGINS` | Allowed web origins, comma-separated |

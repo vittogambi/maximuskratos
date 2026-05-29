@@ -1,3 +1,5 @@
+import { toAuthUserMessage, type AuthErrorContext } from './auth-errors';
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
 
 export type AuthUser = {
@@ -11,15 +13,19 @@ export type AuthResponse = {
   user: AuthUser;
 };
 
-async function parseError(res: Response): Promise<string> {
+async function parseError(
+  res: Response,
+  context: AuthErrorContext,
+): Promise<string> {
+  let raw = res.statusText || '';
   try {
     const body = await res.json();
-    if (Array.isArray(body.message)) return body.message.join(', ');
-    if (typeof body.message === 'string') return body.message;
+    if (Array.isArray(body.message)) raw = body.message.join(', ');
+    else if (typeof body.message === 'string') raw = body.message;
   } catch {
     /* ignore */
   }
-  return res.statusText || 'Request failed';
+  return toAuthUserMessage(raw, res.status, context);
 }
 
 export async function apiRegister(
@@ -32,7 +38,7 @@ export async function apiRegister(
     credentials: 'include',
     body: JSON.stringify({ email, password }),
   });
-  if (!res.ok) throw new Error(await parseError(res));
+  if (!res.ok) throw new Error(await parseError(res, 'register'));
   return res.json();
 }
 
@@ -46,7 +52,7 @@ export async function apiLogin(
     credentials: 'include',
     body: JSON.stringify({ email, password }),
   });
-  if (!res.ok) throw new Error(await parseError(res));
+  if (!res.ok) throw new Error(await parseError(res, 'login'));
   return res.json();
 }
 

@@ -2,13 +2,19 @@ services:
   postgres:
     image: postgres:16-alpine
     ports:
-      - "5432:5432"
+      # 5433 avoids clashing with a system Postgres on 5432 (common on macOS)
+      - "5433:5432"
     environment:
       POSTGRES_USER: mk
       POSTGRES_PASSWORD: mk_local_dev
       POSTGRES_DB: maximuskratos
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U mk -d maximuskratos']
+      interval: 2s
+      timeout: 5s
+      retries: 10
 
 volumes:
   pgdata:

@@ -1,8 +1,11 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
+import { AuthFormError } from '@/components/auth-form-error';
+import { AuthFooterLink, AuthShell } from '@/components/auth-shell';
+import { PasswordInput } from '@/components/password-input';
+import { toAuthUserMessage } from '@/lib/auth-errors';
 import { apiRegister } from '@/lib/api';
 import { setAccessToken } from '@/lib/auth-storage';
 
@@ -22,48 +25,52 @@ export default function RegisterPage() {
       setAccessToken(data.accessToken);
       router.push('/app');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al registrarse');
+      const raw = err instanceof Error ? err.message : '';
+      setError(toAuthUserMessage(raw, 0, 'register'));
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <main>
-      <h1>Crear cuenta</h1>
-      <p className="subtitle">Maximus Kratos</p>
-      <div className="card">
-        <form onSubmit={onSubmit}>
-          <label>
-            Email
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-            />
-          </label>
-          <label>
-            Contraseña (mín. 8 caracteres)
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={8}
-              autoComplete="new-password"
-            />
-          </label>
-          {error ? <p className="error">{error}</p> : null}
-          <button type="submit" disabled={loading}>
-            {loading ? 'Creando…' : 'Registrarse'}
-          </button>
-        </form>
-        <p className="footer-links">
-          ¿Ya tienes cuenta? <Link href="/login">Iniciar sesión</Link>
-        </p>
-      </div>
-    </main>
+    <AuthShell
+      title="Crear cuenta"
+      description="Regístrate para acceder a la plataforma."
+      footer={
+        <AuthFooterLink
+          text="¿Ya tienes cuenta?"
+          linkText="Iniciar sesión"
+          href="/login"
+        />
+      }
+    >
+      <form className="auth-form" onSubmit={onSubmit}>
+        <label>
+          Email
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+            placeholder="tu@email.com"
+          />
+        </label>
+        <label>
+          Contraseña
+          <PasswordInput
+            value={password}
+            onChange={setPassword}
+            minLength={8}
+            autoComplete="new-password"
+            placeholder="Mínimo 8 caracteres"
+          />
+        </label>
+        <AuthFormError message={error} context="register" />
+        <button type="submit" className="auth-button" disabled={loading}>
+          {loading ? 'Creando cuenta…' : 'Crear cuenta'}
+        </button>
+      </form>
+    </AuthShell>
   );
 }

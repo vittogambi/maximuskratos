@@ -1,7 +1,9 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { AuthShell } from '@/components/auth-shell';
 import { apiLogout, apiMe, apiRefresh } from '@/lib/api';
 import {
   clearAccessToken,
@@ -14,6 +16,7 @@ export default function AppPage() {
   const [email, setEmail] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     let cancelled = false;
 
@@ -57,29 +60,48 @@ export default function AppPage() {
 
   if (loading) {
     return (
-      <main>
-        <p className="subtitle">Cargando sesión…</p>
-      </main>
+      <AuthShell title="Cargando" description="Verificando tu sesión…">
+        <div className="auth-loading">
+          <span className="auth-spinner" aria-hidden />
+          <p>Un momento</p>
+        </div>
+      </AuthShell>
     );
   }
 
   return (
-    <main>
-      <h1>Mi cuenta</h1>
-      <p className="subtitle">Maximus Kratos</p>
-      <div className="card">
-        <p>
-          <strong>Email:</strong> {email}
+    <AuthShell
+      title="Tu espacio"
+      description="Sesión iniciada correctamente."
+      footer={
+        <p className="auth-footer-text">
+          <Link href="/login" className="auth-link">
+            Volver al inicio de sesión
+          </Link>
         </p>
-        <p>
-          <strong>Rol:</strong> {role}
-        </p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1.5rem' }}>
-          <button type="button" className="secondary" onClick={handleLogout}>
-            Cerrar sesión
-          </button>
-        </div>
+      }
+    >
+      <div className="session-status">
+        <span className="session-badge">Sesión activa</span>
       </div>
-    </main>
+      <dl className="user-details">
+        <div>
+          <dt>Email</dt>
+          <dd>{email}</dd>
+        </div>
+        <div>
+          <dt>Perfil</dt>
+          <dd>{role === 'ADMIN' ? 'Administrador' : 'Usuario'}</dd>
+        </div>
+      </dl>
+      <ul className="session-checklist">
+        <li>Cuenta verificada en el servidor</li>
+        <li>Sesión segura con token de acceso</li>
+        <li>La sesión se mantiene al recargar la página</li>
+      </ul>
+      <button type="button" className="auth-button secondary" onClick={handleLogout}>
+        Cerrar sesión
+      </button>
+    </AuthShell>
   );
 }
