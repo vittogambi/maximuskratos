@@ -15,7 +15,7 @@ export type AuthResponse = {
 
 async function parseError(
   res: Response,
-  context: AuthErrorContext,
+  context?: AuthErrorContext,
 ): Promise<string> {
   let raw = res.statusText || '';
   try {
@@ -25,7 +25,10 @@ async function parseError(
   } catch {
     /* ignore */
   }
-  return toAuthUserMessage(raw, res.status, context);
+  if (context) {
+    return toAuthUserMessage(raw, res.status, context);
+  }
+  return raw || 'Request failed';
 }
 
 export async function apiRegister(
