@@ -83,13 +83,30 @@ Deploy from the **repository root**.
 
 ### PostgreSQL
 
-Add a Postgres service and attach `DATABASE_URL` to the API service.
+Add a Postgres plugin in the same Railway project/environment.
 
 ### API
 
 - **Build:** `npm install && npm run db:generate && npm run build -w @mk/database && npm run build -w @mk/api`
-- **Start:** `npm run db:migrate:deploy && npm run start -w @mk/api`
+- **Start:** `npm run start:api` (runs migrations, then the API)
 - **Health check:** `/health`
+
+**`DATABASE_URL` on the API service (required)**
+
+Use a **variable reference**, not a copied connection string:
+
+1. Open the **API** service → **Variables**.
+2. Remove any manually pasted `DATABASE_URL` (stale passwords cause `P1000`).
+3. **New variable** → **Add reference** → choose your **Postgres** service → select **`DATABASE_URL`**.
+4. Redeploy the API.
+
+The Web service must **not** have `DATABASE_URL` (only the API talks to Postgres).
+
+| Symptom | Cause | Fix |
+|---------|--------|-----|
+| `P1000: Authentication failed` | API `DATABASE_URL` password does not match Postgres | Re-add reference from Postgres; redeploy API |
+| `DATABASE_URL is not set` | API not linked to Postgres | Add reference as above |
+| API crash loop on start | Migrations fail → container restarts | Fix `DATABASE_URL`, then redeploy |
 
 ### Web
 
