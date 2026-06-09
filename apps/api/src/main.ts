@@ -6,12 +6,16 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableShutdownHooks();
 
   const expressApp = app.getHttpAdapter().getInstance();
   expressApp.set('trust proxy', 1);
   app.use(cookieParser());
 
-  const corsOrigins = (process.env.CORS_ORIGINS ?? 'http://localhost:3000')
+  const corsOrigins = (
+    process.env.CORS_ORIGINS ??
+    'http://localhost:3000,http://127.0.0.1:3000'
+  )
     .split(',')
     .map((o) => o.trim())
     .filter(Boolean);

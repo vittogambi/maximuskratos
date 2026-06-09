@@ -1,20 +1,11 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const protectedPaths = ['/app'];
-
-export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-
-  if (!protectedPaths.some((p) => pathname.startsWith(p))) {
-    return NextResponse.next();
-  }
-
-  // Access token lives in sessionStorage; client-side guard on /app handles auth.
-  // Middleware only blocks direct navigation without client hydration path.
+export function middleware(_request: NextRequest) {
+  // Auth guards run client-side (sessionStorage + refresh cookie).
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/app/:path*'],
+  matcher: ['/admin/:path*', '/app/:path*'],
 };

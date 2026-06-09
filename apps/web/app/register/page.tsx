@@ -2,15 +2,21 @@
 
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
+import { useAuthSession } from '@/components/auth-session-provider';
 import { AuthFormError } from '@/components/auth-form-error';
 import { AuthFooterLink, AuthShell } from '@/components/auth-shell';
+import { AuthSubmitButton } from '@/components/auth-submit-button';
 import { PasswordInput } from '@/components/password-input';
-import { toAuthUserMessage } from '@/lib/auth-errors';
+import { StaggerContainer, StaggerItem } from '@/components/motion';
+import { getPostAuthPath } from '@/lib/auth-redirect';
 import { apiRegister } from '@/lib/api';
+import { useRequireGuest } from '@/lib/use-require-guest';
 import { setAccessToken } from '@/lib/auth-storage';
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { refresh } = useAuthSession();
+  const status = useRequireGuest();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -23,17 +29,31 @@ export default function RegisterPage() {
     try {
       const data = await apiRegister(email, password);
       setAccessToken(data.accessToken);
-      router.push('/app');
+      router.replace(getPostAuthPath(data.user.role));
+      void refresh({ force: true });
     } catch (err) {
-      const raw = err instanceof Error ? err.message : '';
-      setError(toAuthUserMessage(raw, 0, 'register'));
+      const message = err instanceof Error ? err.message : '';
+      setError(message || 'No se pudo crear la cuenta. Inténtalo de nuevo.');
     } finally {
       setLoading(false);
     }
   }
 
+  if (status === 'loading') {
+    return (
+      <AuthShell title="Redirigiendo" description="Un momento…">
+        <div className="auth-loading">
+          <span className="auth-spinner" aria-hidden />
+          <p>Preparando tu sesión</p>
+        </div>
+      </AuthShell>
+    );
+  }
+
   return (
     <AuthShell
+      showNav
+      atmosphere="register"
       title="Crear cuenta"
       description="Regístrate para acceder a la plataforma."
       footer={
@@ -45,31 +65,43 @@ export default function RegisterPage() {
       }
     >
       <form className="auth-form" onSubmit={onSubmit}>
-        <label>
-          Email
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-            placeholder="tu@email.com"
-          />
-        </label>
-        <label>
-          Contraseña
-          <PasswordInput
-            value={password}
-            onChange={setPassword}
-            minLength={8}
-            autoComplete="new-password"
-            placeholder="Mínimo 8 caracteres"
-          />
-        </label>
-        <AuthFormError message={error} context="register" />
-        <button type="submit" className="auth-button" disabled={loading}>
-          {loading ? 'Creando cuenta…' : 'Crear cuenta'}
-        </button>
+        <StaggerContainer className="auth-form__fields" stagger={0.06}>
+          <StaggerItem>
+            <label>
+              Correo electrónico
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoComplete="email"
+                placeholder="tu@email.com"
+                disabled={loading}
+              />
+            </label>
+          </StaggerItem>
+          <StaggerItem>
+            <label>
+              Contraseña
+              <PasswordInput
+                value={password}
+                onChange={setPassword}
+                minLength={8}
+                autoComplete="new-password"
+                placeholder="Mínimo 8 caracteres"
+                disabled={loading}
+              />
+            </label>
+          </StaggerItem>
+          <StaggerItem>
+            <AuthFormError message={error} context="register" />
+          </StaggerItem>
+          <StaggerItem>
+            <AuthSubmitButton loading={loading} loadingLabel="Creando cuenta…">
+              Crear cuenta
+            </AuthSubmitButton>
+          </StaggerItem>
+        </StaggerContainer>
       </form>
     </AuthShell>
   );

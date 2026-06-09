@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   UnauthorizedException,
@@ -8,7 +9,10 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { createHash, randomBytes } from 'crypto';
 import { Response } from 'express';
+import { MailService } from '../mail/mail.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import {
@@ -34,6 +38,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
+    private readonly mail: MailService,
   ) {}
 
   async register(dto: RegisterDto, res: Response) {
@@ -41,7 +46,7 @@ export class AuthService {
       where: { email: dto.email.toLowerCase() },
     });
     if (existing) {
-      throw new ConflictException('Este email ya está registrado.');
+      throw new ConflictException('Este correo electrónico ya está registrado.');
     }
 
     const passwordHash = await bcrypt.hash(dto.password, 12);
@@ -128,16 +133,88 @@ export class AuthService {
   async me(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      select: { id: true, email: true, role: true, createdAt: true },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        onboardingStep: true,
+        createdAt: true,
+        subscription: {
+          select: {
+            status: true,
+            trialEnd: true,
+            currentPeriodEnd: true,
+          },
+        },
+      },
     });
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
+    const { subscription, ...rest } = user;
     return {
-      ...user,
-      subscription: null,
-      onboardingStep: 'TERMS_PENDING',
+      ...rest,
+      subscription: subscription ?? null,
     };
+  }
+
+  async forgotPassword(dto: ForgotPasswordDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: dto.email.toLowerCase() },
+    });
+    if (!user) {
+      return { success: true };
+    }
+
+    const rawToken = randomBytes(32).toString('hex');
+    const tokenHash = this.hashToken(rawToken);
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + 1);
+
+    await this.prisma.passwordResetToken.create({
+      data: {
+        userId: user.id,
+        tokenHash,
+        expiresAt,
+      },
+    });
+
+    const webUrl =
+      this.config.get<string>('WEB_URL') ?? 'http://localhost:3000';
+    const resetUrl = `${webUrl.replace(/\/$/, '')}/reset-password?token=${rawToken}`;
+    await this.mail.sendPasswordResetEmail(user.email, resetUrl);
+
+    return { success: true };
+  }
+
+  async resetPassword(dto: ResetPasswordDto) {
+    const tokenHash = this.hashToken(dto.token);
+    const stored = await this.prisma.passwordResetToken.findUnique({
+      where: { tokenHash },
+      include: { user: true },
+    });
+
+    if (!stored || stored.usedAt || stored.expiresAt < new Date()) {
+      throw new BadRequestException('Token inválido o expirado.');
+    }
+
+    const passwordHash = await bcrypt.hash(dto.password, 12);
+    await this.prisma.$transaction([
+      this.prisma.user.update({
+        where: { id: stored.userId },
+        data: { passwordHash },
+      }),
+      this.prisma.passwordResetToken.update({
+        where: { id: stored.id },
+        data: { usedAt: new Date() },
+      }),
+      this.prisma.refreshToken.updateMany({
+        where: { userId: stored.userId, revokedAt: null },
+        data: { revokedAt: new Date() },
+      }),
+    ]);
+
+    return { success: true };
   }
 
   private async issueTokens(

@@ -13,8 +13,11 @@ function resolveApiEnvFile(): string | undefined {
 }
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
 import { HealthController } from './health/health.controller';
+import { LeadsModule } from './leads/leads.module';
+import { MailModule } from './mail/mail.module';
 import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
@@ -32,11 +35,14 @@ import { PrismaModule } from './prisma/prisma.module';
       {
         name: 'auth',
         ttl: 60_000,
-        limit: 10,
+        limit: 30,
       },
     ]),
     PrismaModule,
+    MailModule,
     AuthModule,
+    LeadsModule,
+    AdminModule,
   ],
   controllers: [HealthController],
   providers: [

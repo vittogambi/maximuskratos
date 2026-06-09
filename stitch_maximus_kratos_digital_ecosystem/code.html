@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MAXIMUS KRATOS - Elite Performance &amp; Alignment</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&amp;family=Libre+Caslon+Text:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-primary": "#690100",
+                "inverse-surface": "#e5e2e1",
+                "primary": "#ffb4a8",
+                "surface-container-lowest": "#0e0e0e",
+                "on-tertiary-fixed": "#001a40",
+                "on-tertiary": "#002f67",
+                "surface-dim": "#131313",
+                "surface-container-highest": "#353534",
+                "surface-container-low": "#1c1b1b",
+                "on-primary-fixed": "#410000",
+                "inverse-primary": "#c00100",
+                "on-error": "#690005",
+                "tertiary": "#acc7ff",
+                "on-surface-variant": "#ebbbb4",
+                "on-primary-fixed-variant": "#930100",
+                "tertiary-container": "#488fff",
+                "on-background": "#e5e2e1",
+                "on-tertiary-container": "#00285b",
+                "surface-variant": "#353534",
+                "secondary": "#ffb4a8",
+                "surface-container": "#201f1f",
+                "surface": "#131313",
+                "on-secondary-fixed-variant": "#920703",
+                "secondary-container": "#920703",
+                "surface-container-high": "#2a2a2a",
+                "inverse-on-surface": "#313030",
+                "on-error-container": "#ffdad6",
+                "secondary-fixed-dim": "#ffb4a8",
+                "on-secondary": "#690000",
+                "outline-variant": "#603e39",
+                "surface-tint": "#ffb4a8",
+                "primary-fixed": "#ffdad4",
+                "outline": "#b18780",
+                "on-tertiary-fixed-variant": "#004491",
+                "on-surface": "#e5e2e1",
+                "on-secondary-container": "#ff9a8a",
+                "surface-bright": "#3a3939",
+                "primary-container": "#ff5540",
+                "on-primary-container": "#5c0000",
+                "error-container": "#93000a",
+                "primary-fixed-dim": "#ffb4a8",
+                "error": "#ffb4ab",
+                "tertiary-fixed-dim": "#acc7ff",
+                "background": "#131313",
+                "tertiary-fixed": "#d7e2ff",
+                "secondary-fixed": "#ffdad4",
+                "on-secondary-fixed": "#410000",
+                "action-red": "#c00100"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "stack-md": "16px",
+                "gutter": "24px",
+                "stack-lg": "32px",
+                "margin-mobile": "16px",
+                "stack-sm": "8px",
+                "margin-desktop": "48px",
+                "unit": "4px"
+        },
+        "fontFamily": {
+                "headline-sm": [
+                        "Libre Caslon Text"
+                ],
+                "display-xl": [
+                        "Libre Caslon Text"
+                ],
+                "headline-lg": [
+                        "Libre Caslon Text"
+                ],
+                "label-lg": [
+                        "Hanken Grotesk"
+                ],
+                "body-md": [
+                        "Hanken Grotesk"
+                ],
+                "body-lg": [
+                        "Hanken Grotesk"
+                ],
+                "headline-md": [
+                        "Libre Caslon Text"
+                ],
+                "headline-lg-mobile": [
+                        "Libre Caslon Text"
+                ],
+                "label-sm": [
+                        "Hanken Grotesk"
+                ]
+        },
+        "fontSize": {
+                "headline-sm": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display-xl": [
+                        "64px",
+                        {
+                                "lineHeight": "72px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "headline-lg": [
+                        "40px",
+                        {
+                                "lineHeight": "48px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-lg": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-md": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.02em",
+                                "fontWeight": "500"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        body {
+            background-color: #0e0e0e;
+            color: #e5e2e1;
+        }
+        .glass-panel {
+            background: rgba(19, 19, 19, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .milled-card {
+            background: rgba(19, 19, 19, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid #353534;
+        }
+        .btn-primary {
+            background-color: #c00100;
+            color: white;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        .text-glow {
+            text-shadow: 0 0 40px rgba(192, 1, 0, 0.6), 0 0 80px rgba(192, 1, 0, 0.3);
+        }
+        .cinematic-shadow {
+            text-shadow: 0 10px 30px rgba(0,0,0,0.9);
+        }
+        .hud-line {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+        }
+        .hud-text {
+            font-family: 'Hanken Grotesk', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col selection:bg-action-red selection:text-white overflow-x-hidden">
+<!-- Minimalist TopNavBar -->
+<nav class="flex justify-between items-center w-full px-margin-desktop py-6 bg-transparent z-50 fixed top-0 mix-blend-difference">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-2xl font-bold tracking-widest text-white uppercase">Kratos</span>
+</div>
+<div class="hidden md:flex items-center gap-12">
+<a class="font-label-lg text-xs tracking-[0.2em] text-white uppercase hover:text-action-red transition-all duration-300" href="#">Marco</a>
+<a class="font-label-lg text-xs tracking-[0.2em] text-white/70 uppercase hover:text-white transition-all duration-300" href="#">Exhibición</a>
+<a class="font-label-lg text-xs tracking-[0.2em] text-white/70 uppercase hover:text-white transition-all duration-300" href="#">Acceder</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="font-label-lg text-xs tracking-[0.2em] border border-white/30 px-6 py-3 uppercase text-white hover:bg-white hover:text-black transition-colors duration-500">Iniciar</button>
+</div>
+</nav>
+<!-- HUD Overlays -->
+<div class="fixed inset-0 pointer-events-none z-40 overflow-hidden mix-blend-screen opacity-50">
+<div class="absolute top-1/4 left-8 hud-text">SYS.ON // ALIGNMENT: NOMINAL</div>
+<div class="absolute bottom-1/4 right-8 hud-text text-right">COORD: 41°53'24"N 12°29'32"E<br/>OP.MODE: SOVEREIGN</div>
+<div class="hud-line h-screen w-[1px] left-12 top-0"></div>
+<div class="hud-line h-screen w-[1px] right-12 top-0"></div>
+</div>
+<main class="flex-grow">
+<!-- Cinematic Sequence Wrapper -->
+<div class="relative w-full">
+<!-- Part 1: The Clean Statue -->
+<section class="relative min-h-[150vh]">
+<div class="sticky top-0 h-screen w-full overflow-hidden z-0 bg-surface-container-lowest">
+<img alt="Clean Statue" class="absolute inset-0 w-full h-full object-cover object-center opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD06RqmyuUgkK0FvdKkKCU_SrTA0FlcCmtLFYiNQJv3u9llA5PkDUa3Rcv-JtkDOWX7p3QocKsMd-4BppQtgNV5dJY2tYLvwjkoylzDjlMoMXdpsTB9FokpzhcORrP4OmuRudx_-uWXtM_mXH20lr0WpDbFq58lEihvod0P-HmY0Ysorp8IbtJV4Ix_OwjAevhBuuR6LY4UmyYXwsWwoTH7gsSB4H8lRYQqQj1bTeiWrNYjDehnV8dsq-A2cVvVwuyGEOfixR3k7Vk"/>
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-surface-container-lowest"></div>
+</div>
+<div class="relative z-10 -mt-[100vh] min-h-[150vh] flex flex-col items-center justify-between pointer-events-none">
+<div class="h-screen flex items-center justify-center w-full px-4">
+<h1 class="font-display-xl text-[10vw] leading-[0.85] text-white tracking-tighter text-center uppercase cinematic-shadow mix-blend-overlay opacity-90">
+                            El Hombre<br/>Que Estás Destinado<br/>A Ser
+                        </h1>
+</div>
+<div class="h-[50vh] flex items-center justify-center w-full px-4 pointer-events-auto">
+<div class="glass-panel p-12 max-w-2xl text-center relative">
+<div class="absolute top-0 left-0 w-4 h-4 border-t border-l border-white/30"></div>
+<div class="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-white/30"></div>
+<p class="font-body-lg text-xl text-white/90 mb-8">Diseña tu Arquitectura de Vida con precisión de ingeniería. Un sistema de alto rendimiento para hombres que exigen soberanía absoluta sobre su destino.</p>
+<button class="btn-primary font-label-lg px-10 py-5 rounded-sm hover:scale-105 transition-transform duration-500 text-sm uppercase tracking-widest">
+                                Comienza Tu Evaluación
+                            </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Part 2: The Broken Statue -->
+<section class="relative min-h-[200vh]">
+<div class="sticky top-0 h-screen w-full overflow-hidden z-0">
+<img alt="Broken Statue" class="absolute inset-0 w-full h-full object-cover object-center opacity-70" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4oJc7L3I97xIMkpddgGaOwTfebuMBieQ2Iu6gERcK3jyP4NPSekrghbENbyplkQMYdRAddG-CwRZE1rssPW_deWxbOqak5w_0n5tCcY9B4mRdYXW7h9Bt4iHC_V09awAyhMemB80_leiRe6qp1-cWb4rw48bbGK7IQvinuo7slOHkWlBIiEXmNIhOIV-wcAVqrCBIZ5SlFbd47EHGx8LRk-iAzsluEYEGl_M74XBhPMcebq2CCw0gNdOmU6fYSscCYZFSE66RbIY"/>
+<div class="absolute inset-0 bg-gradient-to-b from-surface-container-lowest via-transparent to-surface-container-lowest"></div>
+</div>
+<div class="relative z-10 -mt-[100vh] min-h-[200vh] py-32 px-margin-desktop flex flex-col justify-center">
+<div class="max-w-6xl mx-auto w-full">
+<div class="text-center mb-32">
+<span class="font-label-lg text-action-red tracking-[0.3em] uppercase mb-6 block text-sm flex items-center justify-center gap-4"><span class="w-8 h-[1px] bg-action-red"></span> La Crisis Moderna <span class="w-8 h-[1px] bg-action-red"></span></span>
+<h2 class="font-display-xl text-action-red text-glow text-5xl md:text-7xl mb-8 leading-tight">A la Deriva<br/>Sin Brújula</h2>
+<p class="font-body-lg text-2xl text-white/80 max-w-2xl mx-auto cinematic-shadow">
+                                En un mundo de distracción infinita, la mayoría de los hombres carecen de un plan definitivo para sus vidas.
+                            </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12 mt-32">
+<div class="milled-card p-10 rounded-none border-action-red/20 hover:border-action-red transition-colors duration-500 shadow-[0_0_40px_rgba(192,1,0,0.1)] transform md:translate-y-12 relative group">
+<div class="absolute top-4 right-4 hud-text opacity-50">CRIT_ERR_01</div>
+<span class="text-action-red text-glow font-headline-md text-5xl mb-6 block opacity-50 group-hover:opacity-100 transition-opacity">01</span>
+<h3 class="font-headline-sm text-white mb-4 text-2xl">Falta de Visión</h3>
+<p class="font-body-md text-white/70 text-lg">Operar sin una trayectoria clara a 5 años.</p>
+</div>
+<div class="milled-card p-10 rounded-none border-action-red/20 hover:border-action-red transition-colors duration-500 shadow-[0_0_40px_rgba(192,1,0,0.1)] transform md:-translate-y-12 relative group">
+<div class="absolute top-4 right-4 hud-text opacity-50">CRIT_ERR_02</div>
+<span class="text-action-red text-glow font-headline-md text-5xl mb-6 block opacity-50 group-hover:opacity-100 transition-opacity">02</span>
+<h3 class="font-headline-sm text-white mb-4 text-2xl">Identidad Fragmentada</h3>
+<p class="font-body-md text-white/70 text-lg">Inconsistencias entre las acciones y el yo deseado.</p>
+</div>
+<div class="milled-card p-10 rounded-none border-action-red/20 hover:border-action-red transition-colors duration-500 shadow-[0_0_40px_rgba(192,1,0,0.1)] transform md:translate-y-24 relative group">
+<div class="absolute top-4 right-4 hud-text opacity-50">CRIT_ERR_03</div>
+<span class="text-action-red text-glow font-headline-md text-5xl mb-6 block opacity-50 group-hover:opacity-100 transition-opacity">03</span>
+<h3 class="font-headline-sm text-white mb-4 text-2xl">Energía Agotada</h3>
+<p class="font-body-md text-white/70 text-lg">Agotamiento físico y mental por desalineación.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Operating System Section -->
+<section class="relative min-h-screen py-32 bg-surface-container-lowest border-y border-white/5 relative overflow-hidden">
+<!-- Grid background -->
+<div class="absolute inset-0 pointer-events-none" style="background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px;"></div>
+<div class="relative z-10 max-w-7xl mx-auto px-margin-desktop">
+<div class="text-center mb-32">
+<span class="hud-text text-action-red mb-4 block">SYS.ARCH // OPERATING SYSTEM</span>
+<h2 class="font-display-xl text-white text-5xl md:text-7xl mb-8 leading-tight">El Sistema Operativo</h2>
+<p class="font-body-lg text-xl text-white/70 max-w-2xl mx-auto">No es coaching. Es una infraestructura de Sincronización de Identidad diseñada para escalar tu potencial humano desde la fragmentación hasta el dominio total.</p>
+</div>
+<div class="space-y-32">
+<!-- Phase 01 -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="order-2 lg:order-1 relative">
+<div class="absolute -inset-4 border border-white/10 p-4"></div>
+<img alt="Fase 01" class="w-full h-auto object-cover grayscale opacity-80 mix-blend-lighten border border-white/5" src="https://lh3.googleusercontent.com/aida/AP1WRLtycORml9iPScCBTWUKM6VOk-fy9g6Fn6j7svGAra2sxnGGlGOKy-4qusxlgBnygU0sIQNhpDrsm_X7LickWH4yEvc8EbpWXJrI6zW3v_J_Y_Une8E3w2sON5C-YNaWA4xm89pkG0ldTfBv0yyzgJjVrPE8ubHX-oMeBBBvbYZhOubmCYkYQbSMjA3ZDZkCy_-wPCceBTvnZuyvle0MUenmQ-JL5QXjomA5xWSMBaQzf5izW2OI-u8PJVM"/>
+<div class="absolute top-4 left-4 hud-text bg-black/80 px-2 py-1 border border-white/20">IMG_REF_01</div>
+</div>
+<div class="order-1 lg:order-2 glass-panel p-12 border-l-2 border-action-red">
+<div class="hud-text text-action-red mb-4">PHASE_01</div>
+<h3 class="font-headline-md text-white text-4xl mb-6">Análisis Dimensional</h3>
+<p class="font-body-md text-white/70 text-lg mb-8">
+                        Responde a un diagnóstico exhaustivo a través de los pilares fundamentales (Espíritu, Mente, Cuerpo). Revelamos patrones ocultos, desalineaciones críticas y la causa raíz de tu estancamiento.
+                    </p>
+<div class="flex gap-4">
+<div class="border border-white/10 p-4 w-full">
+<span class="hud-text block mb-1">STATE</span>
+<span class="font-mono text-white/50 text-sm">FRAGMENTADO</span>
+</div>
+<div class="border border-white/10 p-4 w-full">
+<span class="hud-text block mb-1">ACTION</span>
+<span class="font-mono text-white/50 text-sm">EVALUACIÓN</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Phase 02 -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="glass-panel p-12 border-l-2 border-action-red">
+<div class="hud-text text-action-red mb-4">PHASE_02</div>
+<h3 class="font-headline-md text-white text-4xl mb-6">Arquitectura de Identidad</h3>
+<p class="font-body-md text-white/70 text-lg mb-8">
+                        Basado en el análisis, el sistema construye tu Plano de Vida, Declaración de Propósito y un mapa de ruta preciso a 30, 90 y 365 días.
+                    </p>
+<div class="grid grid-cols-3 gap-4 mb-8">
+<div class="bg-black/50 border border-white/10 p-4 text-center">
+<span class="hud-text text-white/40 block mb-2">ALIGNMENT</span>
+<span class="font-mono text-action-red text-2xl">74%</span>
+</div>
+<div class="bg-black/50 border border-white/10 p-4 text-center">
+<span class="hud-text text-white/40 block mb-2">ARQUETIPO</span>
+<span class="font-mono text-white text-xs uppercase">El Constructor</span>
+</div>
+<div class="bg-black/50 border border-white/10 p-4 text-center">
+<span class="hud-text text-white/40 block mb-2">FORTALEZA</span>
+<span class="font-mono text-white text-xs uppercase">Disciplina</span>
+</div>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -inset-4 border border-white/10 p-4"></div>
+<img alt="Fase 02" class="w-full h-auto object-cover opacity-90 mix-blend-lighten border border-white/5" src="https://lh3.googleusercontent.com/aida/AP1WRLtmeW_Ypz6YoyK5X2Y3NmuHCXbSqszzNc2FGIxfUhfX098H8VwRafgTatZurXV-p-a84ZNYGOEeZOklyqKo3c513zd-yUthFduoUAsgpbg4A0V9_QjbNvNvK9hzSrXKgh8JNc4nFpdjAdhL3wfhfeAxYeMNdgX3L1zzw1d6quq7QIZH8R875na6rX_HyDiAVzJ_SyvsjzssAYQO7scEPRP-gAz7ZDyObt7lBeuaNLUsqXwUs2i8y5qw4g"/>
+<div class="absolute top-4 right-4 hud-text bg-black/80 px-2 py-1 border border-white/20">IMG_REF_02</div>
+</div>
+</div>
+<!-- Phase 03 -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="order-2 lg:order-1 relative">
+<div class="absolute -inset-4 border border-white/10 p-4"></div>
+<img alt="Fase 03" class="w-full h-auto object-cover opacity-100 mix-blend-lighten border border-white/5" src="https://lh3.googleusercontent.com/aida/AP1WRLsCqZE4CMX4unowe5QHZ3AHR61nX_-_SK_eZvVT-gXpprZlUREB1bV0RebtGmD75jJVIKrSL1je4dc-0aAdURn2XX6rGDxQnX4rXUG0piGG4tO1pcBimp9kmNKADkjO9KimnNwi5Ks8XUzBODCqRalSZSqhQfbXUz_CqhY4QRd5QDAV6MNY1o-O6gqqW9aoB_xPQtDllWBP5EaO5_bjNuo7eBsi7aoJQou1tuDtRcx74YATER_EZYoHyg"/>
+<div class="absolute top-4 left-4 hud-text bg-black/80 px-2 py-1 border border-white/20">IMG_REF_03</div>
+</div>
+<div class="order-1 lg:order-2 glass-panel p-12 border-l-2 border-action-red">
+<div class="hud-text text-action-red mb-4">PHASE_03</div>
+<h3 class="font-headline-md text-white text-4xl mb-6">Protocolos de Ejecución</h3>
+<p class="font-body-md text-white/70 text-lg mb-8">
+                        La capa de ejecución diaria. Misiones específicas y hábitos micro-calibrados que aseguran que tus acciones diarias coincidan milimétricamente con tu plan maestro.
+                    </p>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center border-b border-white/10 py-2">
+<span class="font-mono text-xs text-white/50">SYS.SYNC</span>
+<span class="font-mono text-xs text-action-red">ACTIVE</span>
+</div>
+<div class="flex justify-between items-center border-b border-white/10 py-2">
+<span class="font-mono text-xs text-white/50">DAILY.MISSIONS</span>
+<span class="font-mono text-xs text-white">LOCKED</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Part 3: The Aligned Statue -->
+<section class="relative min-h-[200vh]">
+<div class="sticky top-0 h-screen w-full overflow-hidden z-0">
+<img alt="Aligned Statue" class="absolute inset-0 w-full h-full object-cover object-center opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAtjAZjVU4QMeq0ei_gwJKE4u5E84BWRdurrNjGGh0jIn85f22G-YP49otjtkPnNtDZpCmzuNZpjorbXwsWUgvLahcFZcqEiBKBOrNhPNOccaVac7NAGP9x-D5Jub_BtgQfwo_Ux66Cg0yh1K6x7zt6af-wTD8O-HpXiwl35iKTJYVplvhIvDs4EBL5mtsCrPXX34C6q5ud7sEVHvBVLYXpw6hugoFChx3lESsmdvmEzmroS3VAcGtqMHKtvIpOVnjKmosuyaHIUw"/>
+<div class="absolute inset-0 bg-gradient-to-b from-surface-container-lowest via-surface-container-lowest/70 to-surface-container-lowest"></div>
+</div>
+<div class="relative z-10 -mt-[100vh] min-h-[200vh] py-32 px-margin-desktop flex flex-col justify-center">
+<div class="max-w-7xl mx-auto w-full">
+<div class="text-center mb-24 glass-panel p-16 max-w-4xl mx-auto border-white/10 relative overflow-hidden">
+<div class="absolute inset-0 border border-white/5 m-2 pointer-events-none"></div>
+<span class="font-label-lg text-white/50 tracking-[0.3em] uppercase mb-6 block text-sm flex justify-center items-center gap-4"><span class="w-4 h-[1px] bg-white/30"></span> El Plano <span class="w-4 h-[1px] bg-white/30"></span></span>
+<h2 class="font-display-xl text-white text-5xl md:text-7xl">Marco Central</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Clean Ordered Cards -->
+<div class="glass-panel p-10 border-white/10 hover:border-white/30 hover:bg-white/5 transition-all duration-500 group relative">
+<div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start mb-12">
+<h3 class="font-headline-sm text-white text-2xl">Visión</h3>
+<span class="font-label-lg text-white/30 text-sm font-mono">01</span>
+</div>
+<p class="font-body-md text-white/60 group-hover:text-white/90 transition-colors">Define el hombre que serás en 5 años con absoluta claridad.</p>
+</div>
+<div class="glass-panel p-10 border-white/10 hover:border-white/30 hover:bg-white/5 transition-all duration-500 group relative">
+<div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start mb-12">
+<h3 class="font-headline-sm text-white text-2xl">Identidad y Valores</h3>
+<span class="font-label-lg text-white/30 text-sm font-mono">02</span>
+</div>
+<p class="font-body-md text-white/60 group-hover:text-white/90 transition-colors">Forja un carácter inquebrantable arraigado en la determinación, responsabilidad y coraje.</p>
+</div>
+<div class="glass-panel p-10 border-white/10 hover:border-white/30 hover:bg-white/5 transition-all duration-500 group relative">
+<div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start mb-12">
+<h3 class="font-headline-sm text-white text-2xl">Estándares</h3>
+<span class="font-label-lg text-white/30 text-sm font-mono">03</span>
+</div>
+<p class="font-body-md text-white/60 group-hover:text-white/90 transition-colors">Establece líneas base no negociables para cada aspecto de tu vida.</p>
+</div>
+<div class="glass-panel p-10 border-white/10 hover:border-white/30 hover:bg-white/5 transition-all duration-500 group relative">
+<div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start mb-12">
+<h3 class="font-headline-sm text-white text-2xl">La Sombra</h3>
+<span class="font-label-lg text-white/30 text-sm font-mono">04</span>
+</div>
+<p class="font-body-md text-white/60 group-hover:text-white/90 transition-colors">Confronta e integra tus aspectos más oscuros para alcanzar la plenitud.</p>
+</div>
+<div class="glass-panel p-10 border-white/10 hover:border-white/30 hover:bg-white/5 transition-all duration-500 group relative">
+<div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start mb-12">
+<h3 class="font-headline-sm text-white text-2xl">Ikigai</h3>
+<span class="font-label-lg text-white/30 text-sm font-mono">05</span>
+</div>
+<p class="font-body-md text-white/60 group-hover:text-white/90 transition-colors">Encuentra la intersección de tu pasión, misión, vocación y profesión.</p>
+</div>
+<div class="glass-panel p-10 border-white/10 hover:border-white/30 hover:bg-white/5 transition-all duration-500 group relative">
+<div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start mb-12">
+<h3 class="font-headline-sm text-white text-2xl">Legado Personal</h3>
+<span class="font-label-lg text-white/30 text-sm font-mono">06</span>
+</div>
+<p class="font-body-md text-white/60 group-hover:text-white/90 transition-colors">Define el impacto que dejarás en el mundo.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Final CTA / Sovereign Statue -->
+<section class="relative min-h-[100vh] py-40 px-margin-desktop bg-surface-container-lowest border-t border-white/5 flex items-center justify-center overflow-hidden">
+<img alt="Sovereign Statue" class="absolute inset-0 w-full h-full object-cover object-top opacity-40 mix-blend-lighten" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAElTTDTBaeJoz9o__N_fyfIwgyKngituB0c_wnSTwxsl_xdOqtQxL5OYeJPQApAy90iL_cR-TY_qEF5lcaY1YxkpGqVuhKsZ-MfSaMaV8fyKJkW0wKZyZgVC9nf-mRBdwC68BTdLND64oIsfvpsOQKtnfapXVVfAO_kydM9RsiwCKoh-uhesq-2clwUtAto_3RiZ9udOLfV0nW3LKTNzpINJEsYxLsvUlaq0gRf_EaB3kz1HBfJRbKWqtuE0Hr2dQ6LTgi-wMPNbM"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/80 to-transparent"></div>
+<div class="relative z-10 text-center max-w-4xl mx-auto glass-panel p-16 border-white/10">
+<div class="hud-text mb-8 tracking-[0.4em]">SYSTEM_READY_</div>
+<h2 class="font-display-xl text-white text-5xl md:text-7xl mb-8 leading-tight">Tu yo del futuro<br/>te está esperando.</h2>
+<p class="font-body-lg text-xl text-white/70 mb-16 max-w-2xl mx-auto">El rendimiento de élite no es un accidente, es una arquitectura. ¿Estás listo para activar tu Sistema Operativo de Vida?</p>
+<button class="bg-white text-black font-label-lg px-12 py-6 rounded-none hover:bg-action-red hover:text-white transition-all duration-500 text-sm uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_50px_rgba(192,1,0,0.4)]">
+                    Comienza Tu Transformación
+                </button>
+</div>
+</section>
+</main>
+<!-- Footer Component -->
+<footer class="relative z-10 w-full py-12 px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-8 bg-surface-container-lowest border-t border-white/5">
+<div class="font-headline-sm text-xl text-white uppercase tracking-widest">KRATOS</div>
+<div class="flex flex-wrap justify-center gap-10">
+<a class="font-label-sm text-xs tracking-[0.1em] text-white/50 uppercase hover:text-white transition-colors" href="#">Política de Privacidad</a>
+<a class="font-label-sm text-xs tracking-[0.1em] text-white/50 uppercase hover:text-white transition-colors" href="#">Términos de Servicio</a>
+<a class="font-label-sm text-xs tracking-[0.1em] text-white/50 uppercase hover:text-white transition-colors" href="#">Programa Élite</a>
+</div>
+<div class="font-body-md text-xs tracking-widest text-white/30 uppercase text-center md:text-right">
+            © 2024 KRATOS. TODOS LOS DERECHOS RESERVADOS.
+        </div>
+</footer>
+</body></html>

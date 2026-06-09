@@ -1,17 +1,19 @@
 export type AuthErrorContext = 'login' | 'register';
 
 /** Single message shown on any failed login attempt. */
-export const LOGIN_INVALID_CREDENTIALS = 'Email o contraseña inválidas.';
+export const LOGIN_INVALID_CREDENTIALS = 'Correo electrónico o contraseña incorrectos.';
 
 const REGISTER_MESSAGE_ES: Record<string, string> = {
   'Email already registered':
-    'Ya existe una cuenta con este email. Si ya te registraste, inicia sesión.',
+    'Ya existe una cuenta con este correo electrónico. Si ya te registraste, inicia sesión.',
   'Este email ya está registrado.':
-    'Ya existe una cuenta con este email. Si ya te registraste, inicia sesión.',
+    'Ya existe una cuenta con este correo electrónico. Si ya te registraste, inicia sesión.',
+  'Este correo electrónico ya está registrado.':
+    'Ya existe una cuenta con este correo electrónico. Si ya te registraste, inicia sesión.',
 };
 
 const VALIDATION_HINT_ES =
-  'Revisa el formulario: usa un email válido y una contraseña de al menos 8 caracteres.';
+  'Revisa el formulario: usa un correo electrónico válido y una contraseña de al menos 8 caracteres.';
 
 export function toAuthUserMessage(
   raw: string,
@@ -43,12 +45,16 @@ export function toAuthUserMessage(
     return 'El servidor no está disponible en este momento. Inténtalo más tarde.';
   }
 
+  if (trimmed.includes('ThrottlerException')) {
+    return 'Demasiados intentos. Espera un minuto e inténtalo de nuevo.';
+  }
+
   if (
     !status ||
     trimmed === 'Failed to fetch' ||
     trimmed.toLowerCase().includes('network')
   ) {
-    return 'No pudimos conectar con el servidor. Comprueba que la API esté en marcha y vuelve a intentarlo.';
+    return 'No pudimos conectar con el servidor. Verifica que la API esté funcionando y vuelve a intentarlo.';
   }
 
   if (trimmed) {

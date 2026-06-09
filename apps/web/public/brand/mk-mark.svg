@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 131 123" fill="none" aria-hidden="true">
+  <defs>
+    <radialGradient id="mkShieldGrad" cx="48%" cy="34%" r="72%" fx="48%" fy="30%">
+      <stop offset="0%" stop-color="#FF3045" />
+      <stop offset="42%" stop-color="#D31124" />
+      <stop offset="100%" stop-color="#7A0614" />
+    </radialGradient>
+  </defs>
+  <path
+    fill="url(#mkShieldGrad)"
+    d="M65.5 6c-1.2 3.2-6.8 5.8-14.2 8.4C41.8 18.2 18 24.5 16.8 58.5c-.5 15.2 12.8 38.5 48.7 58.5 35.9-20 49.2-43.3 48.7-58.5C112.2 24.5 88.4 18.2 79.7 14.4 72.3 11.8 66.7 9.2 65.5 6Z"
+  />
+  <path
+    fill="#0A0A0A"
+    d="M46.5 38.5h38a6 6 0 0 1 0 12h-38a6 6 0 0 1 0-12Zm8.5 6h21a7 7 0 0 1 7 7v32a7 7 0 0 1-7 7h-21a7 7 0 0 1-7-7V51.5a7 7 0 0 1 7-7Zm-1-16h23a5.5 5.5 0 0 1 0 11h-23a5.5 5.5 0 0 1 0-11Z"
+  />
+</svg>

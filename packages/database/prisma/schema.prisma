@@ -12,24 +12,26 @@ enum Role {
   ADMIN
 }
 
-model User {
-  id            String         @id @default(uuid())
-  email         String         @unique
-  passwordHash  String         @map("password_hash")
-  role          Role           @default(USER)
-  createdAt     DateTime       @default(now()) @map("created_at")
-  updatedAt     DateTime       @updatedAt @map("updated_at")
-  refreshTokens RefreshToken[]
-  subscription  Subscription?
-
-  @@map("users")
-}
-
 enum SubscriptionStatus {
   TRIAL
   ACTIVE
   EXPIRED
   CANCELLED
+}
+
+model User {
+  id                  String               @id @default(uuid())
+  email               String               @unique
+  passwordHash        String               @map("password_hash")
+  role                Role                 @default(USER)
+  onboardingStep      String               @default("TERMS_PENDING") @map("onboarding_step")
+  createdAt           DateTime             @default(now()) @map("created_at")
+  updatedAt           DateTime             @updatedAt @map("updated_at")
+  refreshTokens       RefreshToken[]
+  subscription        Subscription?
+  passwordResetTokens PasswordResetToken[]
+
+  @@map("users")
 }
 
 model Subscription {
@@ -56,4 +58,28 @@ model RefreshToken {
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("refresh_tokens")
+}
+
+model Lead {
+  id        String   @id @default(uuid())
+  email     String
+  name      String?
+  message   String?
+  source    String?  @default("contact")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([email])
+  @@index([createdAt])
+  @@map("leads")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("password_reset_tokens")
 }

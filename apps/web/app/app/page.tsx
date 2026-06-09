@@ -1,26 +1,24 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { AuthShell } from '@/components/auth-shell';
-import { apiLogout, apiMe, apiRefresh } from '@/lib/api';
+import { getPostAuthPath } from '@/lib/auth-redirect';
+import { apiMe, apiRefresh } from '@/lib/api';
 import {
   clearAccessToken,
   getAccessToken,
   setAccessToken,
 } from '@/lib/auth-storage';
 
-export default function AppPage() {
+/** Legacy route — redirects to admin or home. */
+export default function AppRedirectPage() {
   const router = useRouter();
-  const [email, setEmail] = useState<string | null>(null);
-  const [role, setRole] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
 
-    async function loadSession() {
+    async function redirect() {
       try {
         let token = getAccessToken();
         if (!token) {
@@ -29,79 +27,27 @@ export default function AppPage() {
           setAccessToken(token);
         }
         const me = await apiMe(token);
-        if (!cancelled) {
-          setEmail(me.email);
-          setRole(me.role);
-        }
+        if (!cancelled) router.replace(getPostAuthPath(me.role));
       } catch {
         if (!cancelled) {
           clearAccessToken();
           router.replace('/login');
         }
-      } finally {
-        if (!cancelled) setLoading(false);
       }
     }
 
-    loadSession();
+    redirect();
     return () => {
       cancelled = true;
     };
   }, [router]);
 
-  async function handleLogout() {
-    try {
-      await apiLogout();
-    } finally {
-      clearAccessToken();
-      router.push('/login');
-    }
-  }
-
-  if (loading) {
-    return (
-      <AuthShell title="Cargando" description="Verificando tu sesión…">
-        <div className="auth-loading">
-          <span className="auth-spinner" aria-hidden />
-          <p>Un momento</p>
-        </div>
-      </AuthShell>
-    );
-  }
-
   return (
-    <AuthShell
-      title="Tu espacio"
-      description="Sesión iniciada correctamente."
-      footer={
-        <p className="auth-footer-text">
-          <Link href="/login" className="auth-link">
-            Volver al inicio de sesión
-          </Link>
-        </p>
-      }
-    >
-      <div className="session-status">
-        <span className="session-badge">Sesión activa</span>
+    <AuthShell title="Redirigiendo" description="Un momento…">
+      <div className="auth-loading">
+        <span className="auth-spinner" aria-hidden />
+        <p>Preparando tu sesión</p>
       </div>
-      <dl className="user-details">
-        <div>
-          <dt>Email</dt>
-          <dd>{email}</dd>
-        </div>
-        <div>
-          <dt>Perfil</dt>
-          <dd>{role === 'ADMIN' ? 'Administrador' : 'Usuario'}</dd>
-        </div>
-      </dl>
-      <ul className="session-checklist">
-        <li>Cuenta verificada en el servidor</li>
-        <li>Sesión segura con token de acceso</li>
-        <li>La sesión se mantiene al recargar la página</li>
-      </ul>
-      <button type="button" className="auth-button secondary" onClick={handleLogout}>
-        Cerrar sesión
-      </button>
     </AuthShell>
   );
 }

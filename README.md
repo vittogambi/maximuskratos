@@ -49,6 +49,8 @@ npm run dev:web   # terminal 2
 | Endpoint | URL |
 |----------|-----|
 | Web | http://localhost:3000 |
+| Landing | http://localhost:3000 (Home, Quiénes Somos, El Sistema, Eventos, Contacto) |
+| Admin | http://localhost:3000/admin (rol `ADMIN`) |
 | Health | http://localhost:4000/health |
 | API docs | http://localhost:4000/api/v1/docs |
 
@@ -70,12 +72,16 @@ npm run dev:web   # terminal 2
 | `CORS_ORIGINS` | Allowed web origins, comma-separated |
 | `NODE_ENV` | `development` or `production` |
 | `PORT` | API port (default 4000) |
+| `WEB_URL` | Public web URL for password-reset links (e.g. `http://localhost:3000`) |
+| `RESEND_API_KEY` | Optional — sends reset emails via Resend; without it, reset URL is logged |
+| `RESEND_FROM` | Sender address for Resend (default onboarding@resend.dev) |
 
 **Web** (`apps/web/.env.local`)
 
 | Variable | Description |
 |----------|-------------|
 | `NEXT_PUBLIC_API_URL` | Public API base URL (no trailing slash) |
+| `NEXT_PUBLIC_SITE_URL` | Public site URL for sitemap/SEO (no trailing slash) |
 
 ## Deployment (Railway)
 
