@@ -40,7 +40,16 @@ export function PublicAuthActions({
               <AppIcon name="layout-dashboard" size={16} aria-hidden />
               Panel Admin
             </Link>
-          ) : null}
+          ) : (
+            <Link
+              href="/panel"
+              className="public-nav__cta public-nav__cta--block public-nav__action-with-icon"
+              onClick={onNavigate}
+            >
+              <AppIcon name="layout-dashboard" size={16} aria-hidden />
+              Tu panel
+            </Link>
+          )}
           <button
             type="button"
             className="mobile-drawer__login public-nav__action-with-icon"
@@ -65,10 +74,11 @@ export function PublicAuthActions({
             <span className="public-nav__label public-nav__label--short">Admin</span>
           </Link>
         ) : (
-          <span className="public-nav__session" title={user.email}>
-            <span className="public-nav__label public-nav__label--full">Sesión activa</span>
-            <span className="public-nav__label public-nav__label--short">Activo</span>
-          </span>
+          <Link href="/panel" className="public-nav__login public-nav__action-with-icon">
+            <AppIcon name="layout-dashboard" size={15} aria-hidden />
+            <span className="public-nav__label public-nav__label--full">Tu panel</span>
+            <span className="public-nav__label public-nav__label--short">Panel</span>
+          </Link>
         )}
         <button
           type="button"

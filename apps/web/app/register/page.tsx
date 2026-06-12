@@ -29,8 +29,8 @@ export default function RegisterPage() {
     try {
       const data = await apiRegister(email, password);
       setAccessToken(data.accessToken);
+      await refresh({ force: true });
       router.replace(getPostAuthPath(data.user.role));
-      void refresh({ force: true });
     } catch (err) {
       const message = err instanceof Error ? err.message : '';
       setError(message || 'No se pudo crear la cuenta. Inténtalo de nuevo.');
@@ -54,8 +54,8 @@ export default function RegisterPage() {
     <AuthShell
       showNav
       atmosphere="register"
-      title="Crear cuenta"
-      description="Regístrate para acceder a la plataforma."
+      title="Crea tu cuenta de fundador"
+      description="Cuenta gratis, estatus de fundador y acceso a tu panel desde hoy."
       footer={
         <AuthFooterLink
           text="¿Ya tienes cuenta?"
@@ -98,7 +98,7 @@ export default function RegisterPage() {
           </StaggerItem>
           <StaggerItem>
             <AuthSubmitButton loading={loading} loadingLabel="Creando cuenta…">
-              Crear cuenta
+              Crear cuenta de fundador
             </AuthSubmitButton>
           </StaggerItem>
         </StaggerContainer>

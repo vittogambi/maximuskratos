@@ -7,12 +7,22 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from 'react';
 import { apiLogout, type MeResponse } from '@/lib/api';
 import { clearAccessToken } from '@/lib/auth-storage';
-import { resolveSession } from '@/lib/resolve-session';
+import { resetResolveSession, resolveSession } from '@/lib/resolve-session';
+
+function postLogoutPath(): string | null {
+  if (typeof window === 'undefined') return null;
+  const path = window.location.pathname;
+  if (path.startsWith('/panel') || path.startsWith('/admin')) {
+    return '/login';
+  }
+  return null;
+}
 
 type AuthStatus = 'loading' | 'guest' | 'authenticated';
 
@@ -29,9 +39,12 @@ export function AuthSessionProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const [status, setStatus] = useState<AuthStatus>('loading');
   const [user, setUser] = useState<MeResponse | null>(null);
+  const refreshIdRef = useRef(0);
 
   const refresh = useCallback(async (options?: { force?: boolean }) => {
+    const refreshId = ++refreshIdRef.current;
     const me = await resolveSession(options);
+    if (refreshId !== refreshIdRef.current) return;
     if (me) {
       setUser(me);
       setStatus('authenticated');
@@ -49,10 +62,15 @@ export function AuthSessionProvider({ children }: { children: ReactNode }) {
     try {
       await apiLogout();
     } finally {
+      refreshIdRef.current++;
       clearAccessToken();
+      resetResolveSession();
       setUser(null);
       setStatus('guest');
-      router.refresh();
+      const redirectTo = postLogoutPath();
+      if (redirectTo) {
+        router.replace(redirectTo);
+      }
     }
   }, [router]);
 

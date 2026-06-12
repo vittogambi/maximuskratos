@@ -66,25 +66,6 @@ export function LegalDocumentContent({ document }: LegalDocumentContentProps) {
                 ) : null}
               </section>
             ))}
-
-            <aside className="ag-legal-page__notice ag-panel ag-panel--marco">
-              <span className="ag-panel__corner" aria-hidden />
-              <p className="ag-legal-page__notice-label hud-text">Nota</p>
-              <p className="ag-legal-page__notice-body font-body-md">{document.footerNote}</p>
-              <p className="ag-legal-page__notice-links font-body-md">
-                <Link href="/privacidad" className="ag-legal-page__inline-link">
-                  Política de Privacidad
-                </Link>
-                {' · '}
-                <Link href="/terminos" className="ag-legal-page__inline-link">
-                  Términos de Servicio
-                </Link>
-                {' · '}
-                <Link href="/contacto" className="ag-legal-page__inline-link">
-                  Contacto
-                </Link>
-              </p>
-            </aside>
           </article>
         </div>
       </section>

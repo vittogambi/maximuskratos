@@ -3,9 +3,9 @@ import { AethelgardLanding } from '@/components/landing/aethelgard-landing';
 import { landingFaqJsonLd } from '@/lib/landing-faq';
 
 export const metadata: Metadata = {
-  title: 'MAXIMUS KRATOS — Elite Performance & Alignment',
+  title: 'Maximus Kratos — Sistema Operativo para la Vida',
   description:
-    'Diseña tu Arquitectura de Vida con precisión de ingeniería. Un sistema de alto rendimiento para hombres que exigen soberanía absoluta sobre su destino.',
+    'Diseña tu arquitectura de vida con precisión. Un sistema de diagnóstico, plano estratégico y ejecución diaria para hombres que exigen soberanía real sobre su destino.',
 };
 
 export default function HomePage() {

@@ -3,7 +3,8 @@ import { ContactoContent } from '@/components/pages/contacto-content';
 
 export const metadata: Metadata = {
   title: 'Contacto',
-  description: 'Contáctanos — Maximus Kratos. Inicia tu diagnóstico o solicita más información.',
+  description:
+    'Escríbenos con preguntas, feedback o consultas de empresas. Estamos construyendo Maximus Kratos y queremos escucharte.',
 };
 
 export default function ContactoPage() {

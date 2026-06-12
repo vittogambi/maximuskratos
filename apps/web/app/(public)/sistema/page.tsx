@@ -4,7 +4,7 @@ import { SistemaContent } from '@/components/pages/sistema-content';
 export const metadata: Metadata = {
   title: 'El Sistema',
   description:
-    'La plataforma Maximus Kratos en web y móvil: diagnóstico, blueprint de vida y ejecución diaria con una sola cuenta.',
+    'Visualiza el Sistema Operativo para la Vida. Claridad, dirección y consistencia en una plataforma que se activa por etapas.',
 };
 
 export default function SistemaPage() {

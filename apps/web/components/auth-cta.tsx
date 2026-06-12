@@ -19,14 +19,12 @@ export function AuthCta({ href = '/register', className, children }: AuthCtaProp
   }
 
   if (status === 'authenticated' && user) {
-    if (user.role === 'ADMIN') {
-      return (
-        <Link href="/admin" className={className}>
-          Ir al panel
-        </Link>
-      );
-    }
-    return null;
+    const panelHref = user.role === 'ADMIN' ? '/admin' : '/panel';
+    return (
+      <Link href={panelHref} className={className}>
+        Ir a tu panel
+      </Link>
+    );
   }
 
   return (
@@ -57,17 +55,16 @@ export function GuestAuthLinks({
   }
 
   if (status === 'authenticated' && user) {
-    if (user.role === 'ADMIN') {
-      return (
-        <Link href="/admin" className={registerClassName}>
-          Ir al panel
-        </Link>
-      );
-    }
+    const panelHref = user.role === 'ADMIN' ? '/admin' : '/panel';
     return (
-      <p className="public-auth-session-note font-body-md">
-        Sesión iniciada como {user.email}
-      </p>
+      <>
+        <Link href={panelHref} className={registerClassName}>
+          Ir a tu panel
+        </Link>
+        <p className="public-auth-session-note font-body-md">
+          Sesión iniciada como {user.email}
+        </p>
+      </>
     );
   }
 

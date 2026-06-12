@@ -13,6 +13,12 @@ import { PublicFooter } from '@/components/public-footer';
 import { PublicNav } from '@/components/public-nav';
 import { LANDING_IMAGES } from '@/lib/assets';
 import { LANDING_FAQ_ITEMS } from '@/lib/landing-faq';
+import {
+  FOUNDER_BENEFITS,
+  METHOD_PHASE_MICROSTATES,
+  PLATFORM_STATUS_LINE,
+} from '@/lib/platform-status';
+import { EarlyAccessForm } from '@/components/early-access-form';
 
 const MK_REALMS = [
   {
@@ -168,6 +174,13 @@ const MARCO_CARDS: ReadonlyArray<{
     quote: 'Mis antepasados habitan en mí.',
     body: 'Nombre, apellido y linaje como raíz. Eslabón consciente de una cadena que honras y transformas.',
   },
+  {
+    num: '08',
+    title: 'Huella Personal',
+    icon: 'target',
+    quote: 'El sello que dejaré en el mundo.',
+    body: 'El legado que construyes: el mensaje que dejas en quienes te rodean y la marca que imprimes en el mundo.',
+  },
 ];
 
 type GradientDir = 'to-b' | 'to-t';
@@ -259,7 +272,7 @@ export function AethelgardLanding() {
           <section className="ag-hero-section relative">
             <StickyStatue
               src={LANDING_IMAGES.statueClean}
-              alt="Clean Statue"
+              alt="Estatua"
               imgOpacity={0.8}
               gradientDir="to-b"
               gradientFrom="transparent"
@@ -283,11 +296,11 @@ export function AethelgardLanding() {
                     <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
                     <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
                     <p className="ag-panel__body font-body-lg">
-                      Diseña tu Arquitectura de Vida con precisión de ingeniería. Un sistema de alto
-                      rendimiento para hombres que exigen soberanía absoluta sobre su destino.
+                      Un sistema para reconstruir identidad, disciplina y propósito.
                     </p>
+                    <p className="ag-hero-status hud-text">{PLATFORM_STATUS_LINE}</p>
                     <AuthCta href="/register" className="btn-primary font-label-lg">
-                      Comienza Tu Evaluación
+                      Crea tu cuenta de fundador
                     </AuthCta>
                   </div>
                 </HeroRevealItem>
@@ -299,7 +312,7 @@ export function AethelgardLanding() {
           <section id="crisis" className="ag-crisis-section relative">
             <StickyStatue
               src={LANDING_IMAGES.statueBroken}
-              alt="Broken Statue"
+              alt="Estatua rota"
               imgOpacity={0.7}
               gradientDir="to-b"
               gradientFrom="#0e0e0e"
@@ -322,9 +335,9 @@ export function AethelgardLanding() {
                     className="ag-crisis-title font-display-xl text-glow text-action-red"
                     style={{ fontSize: 'clamp(2.25rem, 7vw, 4.5rem)' }}
                   >
-                    El hombre dividido
+                    El hombre 
                     <br />
-                    Sin rumbo
+                    sin rumbo
                   </h2>
                   <p className="ag-crisis-lead font-body-lg cinematic-shadow text-white/80">
                     El caos es el estado natural. En un mundo de distracción infinita, la mayoría
@@ -360,16 +373,17 @@ export function AethelgardLanding() {
             />
             <div className="ag-container relative z-10 mx-auto">
               <ScrollReveal className="ag-os-intro text-center" distance={16}>
-                <span className="hud-text mb-4 block text-action-red">MK · ¿CÓMO FUNCIONA?</span>
+                <span className="hud-text mb-4 block text-action-red">MK · EL MÉTODO</span>
                 <h2
-                  className="font-display-xl leading-tight text-white"
-                  style={{ fontSize: 'clamp(3rem, 7vw, 4.5rem)' }}
-                >
-                  La Arquitectura Del Sentido
-                </h2>
+                    className="font-display-xl leading-tight text-white"
+                    style={{ fontSize: 'clamp(3rem, 7vw, 4.5rem)' }}
+                  >
+                    La arquitectura del sentido
+                  </h2>
                 <p className="ag-os-lead font-body-lg text-xl text-white/70">
-                  No es coaching. Es una infraestructura de Sincronización de Identidad diseñada para
-                  escalar tu potencial humano desde la fragmentación hasta el dominio total.
+                  No es coaching ni motivación. Es una metodología documentada que alinea Espíritu,
+                  Mente y Cuerpo. No se queda en teoría: se convierte en tu sistema personal, etapa
+                  por etapa.
                 </p>
               </ScrollReveal>
 
@@ -411,8 +425,8 @@ export function AethelgardLanding() {
                     </div>
                   </div>
                   <div className="ag-panel ag-panel--phase order-1 lg:order-2">
-                    <div className="hud-text mb-4 text-action-red">FASE 01 · AUDITORÍA INICIAL</div>
-                    <h3 className="ag-panel__title font-headline-md">Radiografía en 3 dimensiones</h3>
+                    <div className="hud-text mb-4 text-action-red">FASE 01 · DIAGNÓSTICO</div>
+                    <h3 className="ag-panel__title font-headline-md">Diagnóstico en 3 dimensiones</h3>
                     <p className="ag-panel__body font-body-md">
                       Ver la realidad sin autoengaño. Un diagnóstico honesto en Espíritu, Mente y Cuerpo
                       para saber dónde estás fragmentado y qué te está frenando.
@@ -428,9 +442,10 @@ export function AethelgardLanding() {
                       </div>
                       <div className="ag-phase-step">
                         <span className="hud-text ag-phase-step__label">Entregamos</span>
-                        <p className="ag-phase-step__text">Tu radiografía e índice de alineación.</p>
+                        <p className="ag-phase-step__text">Tu diagnóstico e índice de alineación.</p>
                       </div>
                     </div>
+                    <p className="ag-phase-microstate hud-text">{METHOD_PHASE_MICROSTATES.diagnostico}</p>
                   </div>
                 </ScrollReveal>
 
@@ -440,7 +455,7 @@ export function AethelgardLanding() {
                     <div className="hud-text mb-4 text-action-red">FASE 02 · ARQUITECTURA</div>
                     <h3 className="ag-panel__title font-headline-md">Plano de Vida</h3>
                     <p className="ag-panel__body font-body-md">
-                      Antes que la estrategia, viene la identidad. Con la radiografía hecha, redefinimos
+                      Antes que la estrategia, viene la identidad. Con el diagnóstico hecho, redefinimos
                       quién eres, hacia dónde vas y cómo se articula tu propósito.
                     </p>
                     <div className="ag-phase-steps">
@@ -457,6 +472,7 @@ export function AethelgardLanding() {
                         <p className="ag-phase-step__text">Hoja de ruta a 30, 90 y 365 días.</p>
                       </div>
                     </div>
+                    <p className="ag-phase-microstate hud-text">{METHOD_PHASE_MICROSTATES.arquitectura}</p>
                   </div>
                   <div className="ag-phase-media relative">
                     <div className="absolute -inset-4 border border-white/10" />
@@ -507,6 +523,7 @@ export function AethelgardLanding() {
                         <p className="ag-phase-step__text">Hitos a 40 días, 3, 6 y 12 meses.</p>
                       </div>
                     </div>
+                    <p className="ag-phase-microstate hud-text">{METHOD_PHASE_MICROSTATES.ejecucion}</p>
                   </div>
                 </ScrollReveal>
               </div>
@@ -517,7 +534,7 @@ export function AethelgardLanding() {
           <section id="marco-central" className="ag-marco-section relative">
             <StickyStatue
               src={LANDING_IMAGES.statueAligned}
-              alt="Aligned Statue"
+              alt="Estatua alineada"
               imgOpacity={0.8}
               gradientDir="to-b"
               gradientFrom="#0e0e0e"
@@ -533,7 +550,7 @@ export function AethelgardLanding() {
                     style={{ letterSpacing: '0.3em' }}
                   >
                     <span className="h-px w-4 bg-white/30" />
-                    El Plano
+                    El marco de la metodología
                     <span className="h-px w-4 bg-white/30" />
                   </span>
                   <h2
@@ -542,6 +559,9 @@ export function AethelgardLanding() {
                   >
                     Marco Central
                   </h2>
+                  <p className="ag-marco-context font-body-md text-white/60">
+                    Ocho pilares que componen el perfil Maximus documentado en la metodología.
+                  </p>
                 </ScrollReveal>
                 <ScrollStaggerContainer className="ag-marco-grid">
                   {MARCO_CARDS.map((card) => (
@@ -553,9 +573,6 @@ export function AethelgardLanding() {
                             <AppIcon name={card.icon} size={24} />
                           </div>
                           <h3 className="ag-panel__card-title font-headline-sm">{card.title}</h3>
-                          <span className="ag-marco-card__num font-label-lg font-mono text-sm text-white/30">
-                            {card.num}
-                          </span>
                         </div>
                         {card.quote ? (
                           <p className="ag-panel__card-quote font-body-md">{card.quote}</p>
@@ -588,7 +605,7 @@ export function AethelgardLanding() {
               </h2>
               <p className="ag-faq-header__lead font-body-lg">
                 Respuestas claras sobre la metodología Maximus Kratos, el proceso y cómo
-                empezar. Disponible en web y app móvil.
+                empezar.
               </p>
             </ScrollReveal>
 
@@ -620,12 +637,12 @@ export function AethelgardLanding() {
           </div>
         </section>
 
-        {/* ── Final CTA ─────────────────────────────────────────────────── */}
+        {/* ── Programa Fundador — unified closing ───────────────────────── */}
         <section className="ag-cta-section ag-section-inner relative flex items-center justify-center overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={LANDING_IMAGES.statueSovereign}
-            alt="Sovereign Statue"
+            alt="Estatua soberana"
             style={{
               position: 'absolute',
               inset: 0,
@@ -645,8 +662,8 @@ export function AethelgardLanding() {
               backgroundImage: 'linear-gradient(to top, #0e0e0e, rgba(14,14,14,0.55), transparent)',
             }}
           />
-          <ScrollReveal className="ag-panel ag-panel--wide relative z-10" distance={16}>
-            <div className="hud-text mb-8" style={{ letterSpacing: '0.4em' }}>ALÍNEATE</div>
+          <ScrollReveal className="ag-panel ag-panel--wide relative z-10 ag-founder-close" distance={16}>
+            <div className="hud-text mb-8" style={{ letterSpacing: '0.4em' }}>PROGRAMA FUNDADOR</div>
             <h2
               className="ag-cta-title font-display-xl text-white"
               style={{ fontSize: 'clamp(2.25rem, 6vw, 4rem)' }}
@@ -655,13 +672,22 @@ export function AethelgardLanding() {
               <br />
               te está esperando.
             </h2>
-            <p className="ag-cta-lead ag-panel__body font-body-lg">
-              El rendimiento de élite no es un accidente, es una arquitectura. ¿Estás listo para
-              activar tu Sistema Operativo de Vida?
-            </p>
-            <AuthCta href="/register" className="ag-btn-cta font-label-lg">
-              Comienza Tu Transformación
-            </AuthCta>
+            <ul className="ag-founder-benefits font-body-lg">
+              {FOUNDER_BENEFITS.map((benefit) => (
+                <li key={benefit}>{benefit}</li>
+              ))}
+            </ul>
+            <div className="ag-founder-close__primary">
+              <AuthCta href="/register" className="ag-btn-cta ag-founder-close__cta font-label-lg">
+                Crea tu cuenta de fundador
+              </AuthCta>
+            </div>
+            <div className="ag-founder-secondary">
+              <p className="ag-founder-secondary__lead font-body-md">
+                ¿Aún no? Déjanos tu correo y te avisamos cuando el diagnóstico abra.
+              </p>
+              <EarlyAccessForm submitLabel="Recibir aviso" variant="secondary" />
+            </div>
           </ScrollReveal>
         </section>
       </main>

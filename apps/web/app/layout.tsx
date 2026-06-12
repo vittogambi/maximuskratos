@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { Hanken_Grotesk, Libre_Caslon_Text, Geist } from 'next/font/google';
 import './globals.css';
 import { AuthSessionProvider } from '@/components/auth-session-provider';
@@ -45,6 +46,9 @@ export default function RootLayout({
   return (
     <html lang="es" className={cn("dark", caslon.variable, hanken.variable, "font-sans", geist.variable)}>
       <body>
+        <Script id="reload-scroll-top" strategy="beforeInteractive">
+          {`(function(){try{if('scrollRestoration'in history)history.scrollRestoration='manual';var n=performance.getEntriesByType('navigation')[0];if(n&&n.type==='reload'&&location.hash){history.replaceState(null,'',location.pathname+location.search);scrollTo(0,0);}}catch(e){}})();`}
+        </Script>
         <AuthSessionProvider>{children}</AuthSessionProvider>
       </body>
     </html>

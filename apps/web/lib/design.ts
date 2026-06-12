@@ -27,7 +27,6 @@ export const publicNav = [
   })),
   { href: '/quienes-somos', label: 'Nosotros' },
   { href: '/sistema',       label: 'El Sistema' },
-  { href: '/eventos',       label: 'Eventos' },
   { href: '/contacto',      label: 'Contacto' },
 ] as const;
 
@@ -40,7 +39,12 @@ export const publicNavAuth = {
 
 export const footerPlatformNav = publicNav.slice(0, 3);
 
-export const footerSiteNav = publicNav.slice(3);
+export const footerSiteNav = [
+  { href: '/quienes-somos', label: 'Nosotros' },
+  { href: '/sistema',       label: 'El Sistema' },
+  { href: '/eventos',       label: 'Eventos' },
+  { href: '/contacto',      label: 'Contacto' },
+] as const;
 
 export const footerAccessNav = [
   { href: '/register', label: 'Crear cuenta' },
@@ -50,7 +54,6 @@ export const footerAccessNav = [
 export const footerLegalNav = [
   { href: '/privacidad', label: 'Política de Privacidad' },
   { href: '/terminos', label: 'Términos de Servicio' },
-  { href: '/contacto', label: 'Programa Élite' },
 ] as const;
 
 export const socialLinks = [

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useState, type ReactNode } from 'react';
 import { Logo } from '@/components/logo';
 import { AppIcon } from '@/components/app-icon';
 import { useAuthSession } from '@/components/auth-session-provider';
@@ -19,12 +19,15 @@ export function AdminShell({ children }: { children: ReactNode }) {
   const { status, user, logout: sessionLogout } = useAuthSession();
   const [loggingOut, setLoggingOut] = useState(false);
 
-  useEffect(() => {
-    if (status === 'loading') return;
+  useLayoutEffect(() => {
     if (status === 'guest') {
       router.replace('/login');
-      return;
     }
+  }, [status, router]);
+
+  useEffect(() => {
+    if (status === 'loading') return;
+    if (status === 'guest') return;
     if (user?.role !== 'ADMIN') {
       router.replace('/');
     }
@@ -39,9 +42,12 @@ export function AdminShell({ children }: { children: ReactNode }) {
     try {
       await sessionLogout();
     } finally {
-      router.push('/login');
       setLoggingOut(false);
     }
+  }
+
+  if (status === 'guest') {
+    return null;
   }
 
   if (!ready) {

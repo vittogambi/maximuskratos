@@ -30,8 +30,8 @@ export default function LoginPage() {
     try {
       const data = await apiLogin(email, password);
       setAccessToken(data.accessToken);
+      await refresh({ force: true });
       router.replace(getPostAuthPath(data.user.role));
-      void refresh({ force: true });
     } catch (err) {
       const message =
         err instanceof Error ? err.message : LOGIN_INVALID_CREDENTIALS;

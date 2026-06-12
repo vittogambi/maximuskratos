@@ -4,7 +4,7 @@ import { QuienesSomosContent } from '@/components/pages/quienes-somos-content';
 export const metadata: Metadata = {
   title: 'Quiénes Somos',
   description:
-    'Maximus Kratos — sistemas de desarrollo humano de alta precisión basados en diagnóstico, marcos estructurados y ejecución.',
+    'Por qué existe Maximus Kratos: origen, creencias y la decisión de construir un sistema operativo para la vida.',
 };
 
 export default function QuienesSomosPage() {

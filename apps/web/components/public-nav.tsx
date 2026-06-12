@@ -43,6 +43,12 @@ function writeHash(hash: string) {
   window.history.replaceState(null, '', hash ? `/${hash}` : '/');
 }
 
+function isPageReload(): boolean {
+  if (typeof performance === 'undefined') return false;
+  const entry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+  return entry?.type === 'reload';
+}
+
 function useActiveSection(pathname: string) {
   const [activeHash, setActiveHash] = useState('');
   const clickedRef = useRef(false);
@@ -65,58 +71,66 @@ function useActiveSection(pathname: string) {
       return;
     }
 
-    let hash = window.location.hash;
-    if (hash) {
-      const normalized = normalizeHash(hash);
-      if (normalized !== hash) {
-        writeHash(normalized);
-        hash = normalized;
+    if (isPageReload()) {
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual';
       }
-      setActiveHash(hash);
-      requestAnimationFrame(() => scrollToSection(hash));
-    } else {
+      if (window.location.hash) writeHash('');
+      window.scrollTo({ top: 0, behavior: 'auto' });
       setActiveHash('');
+    } else {
+      let hash = window.location.hash;
+      if (hash) {
+        const normalized = normalizeHash(hash);
+        if (normalized !== hash) {
+          writeHash(normalized);
+          hash = normalized;
+        }
+        setActiveHash(hash);
+        requestAnimationFrame(() => scrollToSection(hash));
+      } else {
+        setActiveHash('');
+      }
     }
 
-    const sections = LANDING_SECTION_IDS
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null);
+    const activationLine = () => Math.round(window.innerHeight * 0.18);
 
-    if (sections.length === 0) return;
+    const updateActiveSection = () => {
+      if (clickedRef.current) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (clickedRef.current) return;
+      if (window.scrollY < 200) {
+        setActiveHash('');
+        if (window.location.hash) writeHash('');
+        return;
+      }
 
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+      const line = activationLine();
+      let activeId = '';
 
-        if (visible.length === 0) {
-          if (window.scrollY < 200) {
-            setActiveHash('');
-            if (window.location.hash) writeHash('');
-          }
-          return;
+      for (const id of LANDING_SECTION_IDS) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top <= line) {
+          activeId = id;
         }
+      }
 
-        const top = visible[0];
-        if (top?.target.id) {
-          const next = `#${top.target.id}`;
-          setActiveHash(next);
-          if (window.location.hash !== next) {
-            writeHash(next);
-          }
-        }
-      },
-      {
-        rootMargin: '-18% 0px -52% 0px',
-        threshold: [0, 0.15, 0.35, 0.55],
-      },
-    );
+      const next = activeId ? `#${activeId}` : '';
+      setActiveHash(next);
+      if (next) {
+        if (window.location.hash !== next) writeHash(next);
+      } else if (window.location.hash) {
+        writeHash('');
+      }
+    };
 
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
+    window.addEventListener('scroll', updateActiveSection, { passive: true });
+    window.addEventListener('resize', updateActiveSection, { passive: true });
+    updateActiveSection();
+    return () => {
+      window.removeEventListener('scroll', updateActiveSection);
+      window.removeEventListener('resize', updateActiveSection);
+    };
   }, [pathname]);
 
   useEffect(() => {

@@ -1,13 +1,30 @@
 import { AppIcon } from '@/components/app-icon';
+import {
+  MkBlueprintScreen,
+  MkDiagnosticoScreen,
+  MkEjecucionScreen,
+  MkOverviewScreen,
+  MkProfileProgress,
+  MkRadarChart,
+  MkRealmSidebar,
+} from '@/components/mk-product-mock-screens';
 
 const SHIELD_ASPECT = 131 / 123;
 
-const DESKTOP_NAV = [
-  { icon: 'layout-dashboard' as const, label: 'Panel', active: true },
-  { icon: 'scan-line' as const, label: 'Diagnóstico', active: false },
-  { icon: 'map' as const, label: 'Blueprint', active: false },
-  { icon: 'calendar-check' as const, label: 'Misiones', active: false },
-] as const;
+export type DeviceShowcaseFocus = 'overview' | 'diagnostico' | 'blueprint' | 'ejecucion';
+
+type NavItem = {
+  icon: 'layout-dashboard' | 'scan-line' | 'map' | 'calendar-check';
+  label: string;
+  id: DeviceShowcaseFocus | 'panel';
+};
+
+const DESKTOP_NAV: NavItem[] = [
+  { icon: 'layout-dashboard', label: 'Panel', id: 'panel' },
+  { icon: 'scan-line', label: 'Diagnóstico', id: 'diagnostico' },
+  { icon: 'map', label: 'Blueprint', id: 'blueprint' },
+  { icon: 'calendar-check', label: 'Misiones', id: 'ejecucion' },
+];
 
 const MOBILE_NAV = [
   { icon: 'layout-dashboard' as const, label: 'Inicio', active: true },
@@ -15,6 +32,15 @@ const MOBILE_NAV = [
   { icon: 'map' as const, label: 'Plan', active: false },
   { icon: 'user-check' as const, label: 'Perfil', active: false },
 ] as const;
+
+function navActive(item: NavItem, focus: DeviceShowcaseFocus): boolean {
+  if (focus === 'overview') return item.id === 'panel';
+  return item.id === focus;
+}
+
+function usesRealmSidebar(focus: DeviceShowcaseFocus): boolean {
+  return focus !== 'overview';
+}
 
 function MkAppBrand({ variant = 'sidebar' }: { variant?: 'sidebar' | 'mobile' }) {
   const height = variant === 'mobile' ? 18 : 22;
@@ -40,9 +66,18 @@ function MkAppBrand({ variant = 'sidebar' }: { variant?: 'sidebar' | 'mobile' })
   );
 }
 
-function DesktopAppScreen() {
+function DesktopMainContent({ focus }: { focus: DeviceShowcaseFocus }) {
+  if (focus === 'diagnostico') return <MkDiagnosticoScreen />;
+  if (focus === 'blueprint') return <MkBlueprintScreen />;
+  if (focus === 'ejecucion') return <MkEjecucionScreen />;
+  return <MkOverviewScreen />;
+}
+
+function DesktopAppScreen({ focus }: { focus: DeviceShowcaseFocus }) {
+  const realmLayout = usesRealmSidebar(focus);
+
   return (
-    <div className="mk-app-ui mk-app-ui--desktop">
+    <div className={`mk-app-ui mk-app-ui--desktop${realmLayout ? ' mk-app-ui--pdf' : ''}`}>
       <header className="mk-app-ui__titlebar">
         <div className="mk-app-ui__traffic">
           <span className="mk-app-ui__traffic-dot mk-app-ui__traffic-dot--close" />
@@ -57,48 +92,29 @@ function DesktopAppScreen() {
       </header>
 
       <div className="mk-app-ui__body">
-        <aside className="mk-app-ui__sidebar">
-          <MkAppBrand variant="sidebar" />
-          <nav className="mk-app-ui__nav">
-            {DESKTOP_NAV.map((item) => (
-              <div
-                key={item.label}
-                className={`mk-app-ui__nav-item${item.active ? ' is-active' : ''}`}
-              >
-                <AppIcon name={item.icon} size={14} />
-                <span>{item.label}</span>
-              </div>
-            ))}
-          </nav>
+        <aside className={`mk-app-ui__sidebar${realmLayout ? ' mk-app-ui__sidebar--realms' : ''}`}>
+          {realmLayout ? (
+            <MkRealmSidebar activeRealm="espiritu" />
+          ) : (
+            <>
+              <MkAppBrand variant="sidebar" />
+              <nav className="mk-app-ui__nav">
+                {DESKTOP_NAV.map((item) => (
+                  <div
+                    key={item.label}
+                    className={`mk-app-ui__nav-item${navActive(item, focus) ? ' is-active' : ''}`}
+                  >
+                    <AppIcon name={item.icon} size={14} />
+                    <span>{item.label}</span>
+                  </div>
+                ))}
+              </nav>
+            </>
+          )}
         </aside>
 
-        <main className="mk-app-ui__main">
-          <div className="mk-app-ui__topbar">
-            <p className="mk-app-ui__eyebrow">Panel de control</p>
-            <p className="mk-app-ui__sync">Sincronizado · Web</p>
-          </div>
-
-          <div className="mk-app-ui__stats">
-            <article className="mk-app-ui__stat mk-app-ui__stat--accent">
-              <p className="mk-app-ui__stat-label">Índice de alineación</p>
-              <p className="mk-app-ui__stat-value">78%</p>
-            </article>
-            <article className="mk-app-ui__stat">
-              <p className="mk-app-ui__stat-label">Racha activa</p>
-              <p className="mk-app-ui__stat-value">12 días</p>
-            </article>
-          </div>
-
-          <article className="mk-app-ui__card">
-            <div className="mk-app-ui__card-head">
-              <p className="mk-app-ui__card-title">Blueprint · Arquetipo Rey</p>
-              <span className="mk-app-ui__card-tag">Activo</span>
-            </div>
-            <p className="mk-app-ui__card-body">Plan 90 días · 3 misiones pendientes hoy</p>
-            <div className="mk-app-ui__progress">
-              <span style={{ width: '68%' }} />
-            </div>
-          </article>
+        <main className={`mk-app-ui__main${realmLayout ? ' mk-app-ui__main--pdf' : ''}`}>
+          <DesktopMainContent focus={focus} />
         </main>
       </div>
     </div>
@@ -130,10 +146,10 @@ function MobileAppScreen() {
         <p className="mk-app-ui__stat-value">78%</p>
       </article>
 
-      <article className="mk-app-ui__card">
-        <p className="mk-app-ui__card-title">Misiones de hoy</p>
-        <p className="mk-app-ui__card-body">3 pendientes · Blueprint activo</p>
-      </article>
+      <div className="mk-mock-overview__preview mk-mock-overview__preview--mobile">
+        <MkRadarChart />
+        <MkProfileProgress label="Perfil 68%" filled={3} />
+      </div>
 
       <nav className="mk-app-ui__mobile-nav">
         {MOBILE_NAV.map((item) => (
@@ -150,32 +166,54 @@ function MobileAppScreen() {
   );
 }
 
-export function DeviceShowcase() {
+type DeviceShowcaseProps = {
+  previewBadge?: boolean;
+  focus?: DeviceShowcaseFocus;
+  layout?: 'hero' | 'experience';
+};
+
+export function DeviceShowcase({
+  previewBadge = false,
+  focus = 'overview',
+  layout = 'hero',
+}: DeviceShowcaseProps) {
+  const isExperience = layout === 'experience';
+
   return (
-    <div className="device-showcase" aria-hidden>
-      <div className="device-showcase__ambient" />
-      <div className="device-showcase__floor" />
+    <div className={`device-showcase-wrap${isExperience ? ' device-showcase-wrap--experience' : ''}`}>
+      {previewBadge ? (
+        <p className="device-showcase__preview-badge hud-text">Vista previa del diseño</p>
+      ) : null}
+      <div
+        className={`device-showcase${isExperience ? ' device-showcase--experience' : ''}`}
+        aria-hidden
+      >
+        <div className="device-showcase__ambient" />
+        {!isExperience ? <div className="device-showcase__floor" /> : null}
 
-      <div className="device-showcase__compose">
-        <div className="device-frame device-frame--laptop">
-          <div className="device-frame__rim">
-            <div className="device-frame__viewport">
-              <div className="device-frame__sheen" />
-              <DesktopAppScreen />
+        <div className="device-showcase__compose">
+          <div className="device-frame device-frame--laptop">
+            <div className="device-frame__rim">
+              <div className="device-frame__viewport">
+                <div className="device-frame__sheen" />
+                <DesktopAppScreen focus={focus} />
+              </div>
             </div>
+            {!isExperience ? <div className="device-frame__lip" /> : null}
           </div>
-          <div className="device-frame__lip" />
-        </div>
 
-        <div className="device-frame device-frame--phone">
-          <div className="device-frame__rim device-frame__rim--phone">
-            <div className="device-frame__island" />
-            <div className="device-frame__viewport device-frame__viewport--phone">
-              <div className="device-frame__sheen device-frame__sheen--phone" />
-              <MobileAppScreen />
+          {!isExperience ? (
+            <div className="device-frame device-frame--phone">
+              <div className="device-frame__rim device-frame__rim--phone">
+                <div className="device-frame__island" />
+                <div className="device-frame__viewport device-frame__viewport--phone">
+                  <div className="device-frame__sheen device-frame__sheen--phone" />
+                  <MobileAppScreen />
+                </div>
+                <div className="device-frame__home-indicator" />
+              </div>
             </div>
-            <div className="device-frame__home-indicator" />
-          </div>
+          ) : null}
         </div>
       </div>
     </div>
