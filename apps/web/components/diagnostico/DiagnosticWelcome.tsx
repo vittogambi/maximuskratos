@@ -36,6 +36,7 @@ export function DiagnosticWelcome() {
   const reduced = useReducedMotion();
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (status !== 'authenticated') return;
@@ -65,12 +66,18 @@ export function DiagnosticWelcome() {
     if (loading) return;
 
     setLoading(true);
+    setError(null);
     try {
       await apiDiagnosticWelcomeSeen(token);
       await refresh({ force: true });
       const state = await apiDiagnosticStart(token);
       routeFromState(state, router);
-    } catch {
+    } catch (err) {
+      setError(
+        err instanceof Error && err.message
+          ? err.message
+          : 'No se pudo iniciar el diagnóstico. Intenta de nuevo en unos segundos.',
+      );
       setLoading(false);
     }
   }
@@ -138,6 +145,11 @@ export function DiagnosticWelcome() {
             >
               {loading ? 'Preparando…' : 'Comenzar diagnóstico'}
             </button>
+            {error && (
+              <p className="font-body-sm" style={{ color: 'var(--color-error)', marginTop: '0.75rem' }}>
+                {error}
+              </p>
+            )}
           </motion.div>
         </motion.div>
       )}

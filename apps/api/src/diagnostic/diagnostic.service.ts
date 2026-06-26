@@ -2,8 +2,10 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  ServiceUnavailableException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { DiagnosticCatalogService } from './diagnostic-catalog.service';
 import { SubmitResponseDto } from './dto/submit-response.dto';
 import type {
   DiagnosticProgressDto,
@@ -43,9 +45,20 @@ const ARCHETYPE_MATRIX: { dims: string[]; slug: string }[] = [
 
 @Injectable()
 export class DiagnosticService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly catalog: DiagnosticCatalogService,
+  ) {}
 
   async startOrResume(userId: string) {
+    try {
+      await this.catalog.ensureReady();
+    } catch {
+      throw new ServiceUnavailableException(
+        'El cuestionario no está disponible temporalmente. Intenta de nuevo en unos segundos.',
+      );
+    }
+
     const version = await this.prisma.diagnosticVersion.findFirst({
       where: { isActive: true },
       include: {
