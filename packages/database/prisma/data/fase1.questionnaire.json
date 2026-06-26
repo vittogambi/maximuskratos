@@ -1,0 +1,432 @@
+{
+  "version": "1.0",
+  "modules": [
+    {
+      "slug": "mentalidad-identidad",
+      "phase": "FASE1",
+      "dimensionKey": "mentality",
+      "order": 1,
+      "titleEs": "Mentalidad e Identidad",
+      "introEs": "Comenzamos donde todo se decide: tu mente. Aquí medimos la brecha entre el hombre que dices que quieres ser y el hombre que realmente actúa.",
+      "outroTemplateEs": "Has completado la primera sección. Lo que revelaste aquí define el fundamento de todo lo demás.",
+      "iconKey": "brain",
+      "estimatedMinutes": 6,
+      "isConditional": false,
+      "questions": [
+        {
+          "order": 1,
+          "type": "SINGLE_CHOICE",
+          "textEs": "¿Cuál es tu principal razón para estar aquí ahora?",
+          "contextEs": "Tu respuesta orienta el resto del diagnóstico. No hay opción correcta — solo la tuya.",
+          "options": [
+            { "order": 1, "textEs": "Quiero claridad sobre quién soy y hacia dónde voy", "value": "identity_purpose", "scoreDeltas": { "identity": 10, "purpose": 8 }, "flags": [], "tags": ["PURPOSE_SEEKER"] },
+            { "order": 2, "textEs": "Necesito mejorar mi disciplina y mis hábitos", "value": "habits_discipline", "scoreDeltas": { "habits": 10, "mentality": 6 }, "flags": [], "tags": ["HABIT_BUILDER"] },
+            { "order": 3, "textEs": "Quiero ordenar mi situación financiera", "value": "finances_order", "scoreDeltas": { "finances": 10, "identity": 4 }, "flags": [], "tags": ["FINANCE_FOCUS"] },
+            { "order": 4, "textEs": "Busco mejorar mis relaciones y mi entorno", "value": "relationships_environment", "scoreDeltas": { "relationships": 10, "environment": 6 }, "flags": [], "tags": ["SOCIAL_FOCUS"] },
+            { "order": 5, "textEs": "Quiero encontrar un propósito más claro", "value": "purpose_clarity", "scoreDeltas": { "purpose": 10, "ikigai": 6 }, "flags": [], "tags": ["PURPOSE_SEEKER"] }
+          ]
+        },
+        {
+          "order": 2,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "¿Mis decisiones diarias reflejan al hombre que digo que quiero llegar a ser?",
+          "contextEs": "Aquí se ve la brecha entre quién dices que quieres ser y cómo vives un martes cualquiera.",
+          "options": [
+            { "order": 1, "textEs": "Casi nunca; la mayoría de mis decisiones contradicen lo que digo querer.", "value": "scale_1", "scoreDeltas": { "mentality": 4, "identity": 2 }, "flags": ["BAJA_IDENTIDAD", "ALTO_AUTOENGANO"], "tags": [] },
+            { "order": 2, "textEs": "Rara vez; a menudo actúo en contra de mis propias declaraciones.", "value": "scale_2", "scoreDeltas": { "mentality": 8, "identity": 4 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "A veces; hay brecha entre lo que digo y lo que hago.", "value": "scale_3", "scoreDeltas": { "mentality": 12, "identity": 6 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Con frecuencia; mis decisiones reflejan en gran medida quién digo querer ser.", "value": "scale_4", "scoreDeltas": { "mentality": 16, "identity": 8 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Casi siempre; mis decisiones reflejan claramente al hombre que quiero ser.", "value": "scale_5", "scoreDeltas": { "mentality": 20, "identity": 10 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 3,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "Cuando siento presión, ¿reacciono emocionalmente o me ajusto de forma lógica?",
+          "contextEs": "Bajo presión, la versión real de ti sale a la superficie. Esta pregunta va directo ahí.",
+          "options": [
+            { "order": 1, "textEs": "Reacciono impulsivamente y pierdo control.", "value": "scale_1", "scoreDeltas": { "mentality": 5, "identity": 1 }, "flags": ["BAJA_MENTALIDAD"], "tags": [] },
+            { "order": 2, "textEs": "Suelo reaccionar con emoción antes de reflexionar; recupero el control tarde.", "value": "scale_2", "scoreDeltas": { "mentality": 10, "identity": 2 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "A veces me dejo llevar, pero logro reorientarme con esfuerzo.", "value": "scale_3", "scoreDeltas": { "mentality": 15, "identity": 3 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Generalmente me ajusto con calma, con ocasionales desvíos emocionales.", "value": "scale_4", "scoreDeltas": { "mentality": 20, "identity": 4 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Mantengo la calma y ajusto mi conducta con claridad lógica.", "value": "scale_5", "scoreDeltas": { "mentality": 25, "identity": 5 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 4,
+          "type": "SCALE_1_5",
+          "scaleType": "FREQUENCY",
+          "textEs": "¿Qué tan seguido uso excusas que suenan razonables, pero no lo son?",
+          "contextEs": "Las excusas más peligrosas son las que suenan razonables. Responde con honestidad, no con defensa.",
+          "options": [
+            { "order": 1, "textEs": "Uso excusas con frecuencia y las justifico fácilmente.", "value": "scale_1", "scoreDeltas": { "mentality": 4, "shadow": 2 }, "flags": ["ALTO_AUTOENGANO"], "tags": [] },
+            { "order": 2, "textEs": "Frecuentemente recurro a excusas aunque luego las reconozco como tales.", "value": "scale_2", "scoreDeltas": { "mentality": 8, "shadow": 4 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "Ocasionalmente uso excusas; tengo conciencia de ello pero no siempre las evito.", "value": "scale_3", "scoreDeltas": { "mentality": 12, "shadow": 6 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Rara vez; cuando surgen las identifico y las desecho rápidamente.", "value": "scale_4", "scoreDeltas": { "mentality": 16, "shadow": 8 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Rara vez uso excusas; asumo responsabilidad directa.", "value": "scale_5", "scoreDeltas": { "mentality": 20, "shadow": 10 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 5,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "¿Confío en mí mismo para terminar lo que empiezo?",
+          "contextEs": "Tu palabra contigo mismo es la base de todo lo demás. ¿Te la has ganado?",
+          "options": [
+            { "order": 1, "textEs": "No confío; suelo abandonar lo que inicio.", "value": "scale_1", "scoreDeltas": { "identity": 5, "mentality": 1 }, "flags": ["BAJA_IDENTIDAD"], "tags": [] },
+            { "order": 2, "textEs": "Poca confianza; termino lo que inicio solo bajo presión externa.", "value": "scale_2", "scoreDeltas": { "identity": 10, "mentality": 2 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "Confianza moderada; completo la mayoría si siento motivación.", "value": "scale_3", "scoreDeltas": { "identity": 15, "mentality": 3 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Bastante confianza; soy consistente en casi todos mis compromisos.", "value": "scale_4", "scoreDeltas": { "identity": 20, "mentality": 4 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Confío plenamente; soy consistente y confiable conmigo mismo.", "value": "scale_5", "scoreDeltas": { "identity": 25, "mentality": 5 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 6,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "¿Qué historia me cuento a mí mismo cuando las cosas se ponen difíciles?",
+          "contextEs": "Cuando todo se complica, ¿qué historia te cuentas: de víctima o de responsable?",
+          "options": [
+            { "order": 1, "textEs": "Una historia de víctima o resignación.", "value": "scale_1", "scoreDeltas": { "mentality": 5, "identity": 1 }, "flags": ["BAJA_MENTALIDAD", "VICTIMA"], "tags": [] },
+            { "order": 2, "textEs": "Una historia de queja y búsqueda de culpables externos.", "value": "scale_2", "scoreDeltas": { "mentality": 10, "identity": 2 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "Una historia mixta; a veces asumo responsabilidad, a veces culpo al contexto.", "value": "scale_3", "scoreDeltas": { "mentality": 15, "identity": 3 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Una historia de resiliencia; asumo responsabilidad con algunas dudas.", "value": "scale_4", "scoreDeltas": { "mentality": 20, "identity": 4 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Una historia de responsabilidad, crecimiento y dominio personal.", "value": "scale_5", "scoreDeltas": { "mentality": 25, "identity": 5 }, "flags": [], "tags": [] }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "habitos-acciones",
+      "phase": "FASE1",
+      "dimensionKey": "habits",
+      "order": 2,
+      "titleEs": "Hábitos y Acciones",
+      "introEs": "Tu cuerpo y tus hábitos no mienten. Esta sección evalúa la infraestructura biológica y operacional de tu vida.",
+      "outroTemplateEs": "Tus hábitos revelan tu nivel real de autodominio. Lo que encontramos aquí no juzga — informa.",
+      "iconKey": "activity",
+      "estimatedMinutes": 6,
+      "isConditional": false,
+      "questions": [
+        {
+          "order": 1,
+          "type": "SCALE_1_5",
+          "scaleType": "FREQUENCY",
+          "textEs": "¿Qué tan seguido realizas entrenamiento físico?",
+          "contextEs": "El cuerpo no negocia. Cómo cuidas tu físico suele predecir lo que pasa en el resto de tu vida.",
+          "options": [
+            { "order": 1, "textEs": "No entreno.", "value": "scale_1", "scoreDeltas": { "habits": 5 }, "flags": ["BAJA_EJECUCION"], "tags": [] },
+            { "order": 2, "textEs": "1 día a la semana o menos.", "value": "scale_2", "scoreDeltas": { "habits": 10 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "2 a 3 días a la semana.", "value": "scale_3", "scoreDeltas": { "habits": 15 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "4 días a la semana.", "value": "scale_4", "scoreDeltas": { "habits": 20 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "5 ó más días a la semana.", "value": "scale_5", "scoreDeltas": { "habits": 25 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 2,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "¿Qué tan constante has sido con la alimentación — no perfecto, sino honesto?",
+          "contextEs": "No buscamos perfección. Queremos saber si tu alimentación te sirve o te sabotea en silencio.",
+          "options": [
+            { "order": 1, "textEs": "Muy desordenado; sin estructura ni control.", "value": "scale_1", "scoreDeltas": { "habits": 4, "shadow": 1 }, "flags": ["BAJA_EJECUCION"], "tags": [] },
+            { "order": 2, "textEs": "Inconsistente; con períodos breves de orden seguidos de descontrol.", "value": "scale_2", "scoreDeltas": { "habits": 8, "shadow": 2 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "Moderadamente consistente; sigo un orden a veces pero con frecuentes excepciones.", "value": "scale_3", "scoreDeltas": { "habits": 12, "shadow": 3 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Bastante consistente; pequeños desvíos que no comprometen el objetivo.", "value": "scale_4", "scoreDeltas": { "habits": 16, "shadow": 4 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Muy consistente; alimentación alineada al objetivo.", "value": "scale_5", "scoreDeltas": { "habits": 20, "shadow": 5 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 3,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "¿Mi calidad de sueño está apoyando mi progreso o lo está saboteando silenciosamente?",
+          "contextEs": "Puedes tener el plan perfecto y el sueño destruirlo. Esta respuesta pesa más de lo que parece.",
+          "options": [
+            { "order": 1, "textEs": "Sabotea claramente mi progreso.", "value": "scale_1", "scoreDeltas": { "habits": 3, "environment": 2 }, "flags": ["BAJA_EJECUCION"], "tags": [] },
+            { "order": 2, "textEs": "Mayormente perjudicial; me levanto cansado y rindo por debajo de mi capacidad.", "value": "scale_2", "scoreDeltas": { "habits": 6, "environment": 4 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "Neutro; no me afecta gravemente pero tampoco me potencia.", "value": "scale_3", "scoreDeltas": { "habits": 9, "environment": 6 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Apoya mi progreso la mayor parte del tiempo.", "value": "scale_4", "scoreDeltas": { "habits": 12, "environment": 8 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Apoya plenamente mi progreso y rendimiento.", "value": "scale_5", "scoreDeltas": { "habits": 15, "environment": 10 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 4,
+          "type": "SCALE_1_5",
+          "scaleType": "FREQUENCY",
+          "textEs": "¿Con qué frecuencia gestiono el estrés recurriendo a la comida, el alcohol o la distracción?",
+          "contextEs": "Tu respuesta revela si el estrés te gobierna a ti o si tú lo gobiernas a él.",
+          "options": [
+            { "order": 1, "textEs": "Muy frecuentemente; es mi principal mecanismo.", "value": "scale_1", "scoreDeltas": { "habits": 4, "shadow": 2 }, "flags": ["MECANISMO_ESCAPE", "BAJA_EJECUCION"], "tags": [] },
+            { "order": 2, "textEs": "Con frecuencia; recurro a ello varias veces a la semana.", "value": "scale_2", "scoreDeltas": { "habits": 8, "shadow": 4 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "Ocasionalmente; solo en momentos de estrés muy alto.", "value": "scale_3", "scoreDeltas": { "habits": 12, "shadow": 6 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Rara vez; tengo alternativas conscientes que prefiero.", "value": "scale_4", "scoreDeltas": { "habits": 16, "shadow": 8 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Casi nunca; manejo el estrés de forma consciente.", "value": "scale_5", "scoreDeltas": { "habits": 20, "shadow": 10 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 5,
+          "type": "MULTI_CHOICE",
+          "textEs": "¿Cuáles son tus principales obstáculos para mantener disciplina?",
+          "contextEs": "Saber qué te frena es tan importante como saber hacia dónde vas.",
+          "maxSelections": 3,
+          "options": [
+            { "order": 1, "textEs": "Falta de energía o motivación en el momento", "value": "low_energy", "scoreDeltas": { "habits": -2, "shadow": 2 }, "flags": ["BAJA_EJECUCION"], "tags": [] },
+            { "order": 2, "textEs": "El estrés me lleva a la comida o el alcohol", "value": "stress_escape", "scoreDeltas": { "habits": -2, "shadow": 4 }, "flags": ["MECANISMO_ESCAPE"], "tags": [] },
+            { "order": 3, "textEs": "Falta de tiempo real o mala gestión del tiempo", "value": "time_management", "scoreDeltas": { "habits": -2, "environment": -1 }, "flags": ["BAJA_EJECUCION"], "tags": [] },
+            { "order": 4, "textEs": "Entorno o personas a mi alrededor no apoyan", "value": "bad_environment", "scoreDeltas": { "environment": -3, "relationships": -1 }, "flags": ["ENTORNO_TOXICO"], "tags": [] },
+            { "order": 5, "textEs": "No tengo claro qué hábito priorizar", "value": "no_priority", "scoreDeltas": { "purpose": -2, "mentality": -1 }, "flags": ["FALTA_PROPOSITO"], "tags": [] },
+            { "order": 6, "textEs": "Me inicio bien pero no mantengo la consistencia", "value": "inconsistency", "scoreDeltas": { "habits": -3, "identity": -2 }, "flags": ["BAJA_IDENTIDAD"], "tags": [] }
+          ]
+        },
+        {
+          "order": 6,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "¿Tus hábitos te están haciendo avanzar con claridad o drenando tu energía?",
+          "contextEs": "No todos los hábitos son iguales: algunos te cargan, otros te vacían. Haz el inventario sin maquillaje.",
+          "options": [
+            { "order": 1, "textEs": "La mayoría de mis hábitos drenan energía.", "value": "scale_1", "scoreDeltas": { "habits": 5 }, "flags": ["BAJA_EJECUCION"], "tags": [] },
+            { "order": 2, "textEs": "Más hábitos me restan que me suman.", "value": "scale_2", "scoreDeltas": { "habits": 10 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "Equilibrio entre hábitos que avanzan y los que drenan.", "value": "scale_3", "scoreDeltas": { "habits": 15 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "La mayoría de mis hábitos me impulsan, con algunas excepciones.", "value": "scale_4", "scoreDeltas": { "habits": 20 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Mis hábitos están claramente alineados con avanzar.", "value": "scale_5", "scoreDeltas": { "habits": 25 }, "flags": [], "tags": [] }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "decisiones-entorno",
+      "phase": "FASE1",
+      "dimensionKey": "environment",
+      "order": 3,
+      "titleEs": "Toma de Decisiones y Entorno",
+      "introEs": "Un hombre es el promedio de su entorno y sus decisiones. Aquí medimos el diseño de tu vida y tu capacidad de corrección de rumbo.",
+      "outroTemplateEs": "Tu entorno habla más fuerte que tus palabras. Lo que revelaste aquí muestra cómo tu contexto te moldea.",
+      "iconKey": "compass",
+      "estimatedMinutes": 5,
+      "isConditional": false,
+      "questions": [
+        {
+          "order": 1,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "¿Planifico mi semana o, en su mayoría, solo reacciono a ella?",
+          "contextEs": "La diferencia entre reaccionar y liderar tu semana empieza en cómo respondes esto.",
+          "alertOnScore2": true,
+          "options": [
+            { "order": 1, "textEs": "Solo reacciono; no planifico.", "value": "scale_1", "scoreDeltas": { "mentality": 3, "habits": 2 }, "flags": ["BAJA_EJECUCION"], "tags": [] },
+            { "order": 2, "textEs": "Planifico muy poco; la mayoría del tiempo voy según lo que surge.", "value": "scale_2", "scoreDeltas": { "mentality": 6, "habits": 4 }, "flags": ["BAJA_EJECUCION"], "tags": [] },
+            { "order": 3, "textEs": "Planifico parcialmente; tengo alguna estructura pero predomina la reacción.", "value": "scale_3", "scoreDeltas": { "mentality": 9, "habits": 6 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Planifico con regularidad; la mayoría de mi semana está estructurada.", "value": "scale_4", "scoreDeltas": { "mentality": 12, "habits": 8 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Planifico con claridad y propósito.", "value": "scale_5", "scoreDeltas": { "mentality": 15, "habits": 10 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 2,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "¿Mi entorno está configurado para apoyar la disciplina o la comodidad?",
+          "contextEs": "Tu espacio — físico y digital — te empuja hacia la disciplina o hacia la comodidad.",
+          "alertOnScore2": true,
+          "options": [
+            { "order": 1, "textEs": "Favorece claramente la comodidad.", "value": "scale_1", "scoreDeltas": { "environment": 5 }, "flags": ["ENTORNO_TOXICO"], "tags": [] },
+            { "order": 2, "textEs": "Diseñado más para comodidad que para disciplina.", "value": "scale_2", "scoreDeltas": { "environment": 10 }, "flags": ["ENTORNO_TOXICO"], "tags": [] },
+            { "order": 3, "textEs": "Neutro; facilita tanto la disciplina como la comodidad.", "value": "scale_3", "scoreDeltas": { "environment": 15 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "En su mayoría apoya la disciplina, con algunos focos de comodidad.", "value": "scale_4", "scoreDeltas": { "environment": 20 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Diseñado intencionalmente para la disciplina.", "value": "scale_5", "scoreDeltas": { "environment": 25 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 3,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "¿Quiénes están a mi alrededor elevan mis estándares o los bajan silenciosamente?",
+          "contextEs": "El estándar de quienes te rodean, con el tiempo, se convierte en el tuyo.",
+          "alertOnScore2": true,
+          "options": [
+            { "order": 1, "textEs": "Mi entorno baja claramente mis estándares.", "value": "scale_1", "scoreDeltas": { "environment": 3, "relationships": 2 }, "flags": ["ENTORNO_TOXICO"], "tags": [] },
+            { "order": 2, "textEs": "Mayormente me bajan; pocas personas me desafían.", "value": "scale_2", "scoreDeltas": { "environment": 6, "relationships": 4 }, "flags": ["ENTORNO_TOXICO"], "tags": [] },
+            { "order": 3, "textEs": "Mixto; algunos me elevan, otros me halan hacia abajo.", "value": "scale_3", "scoreDeltas": { "environment": 9, "relationships": 6 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Mayormente me elevan; hay pocas influencias negativas.", "value": "scale_4", "scoreDeltas": { "environment": 12, "relationships": 8 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Estoy rodeado de personas que elevan mis estándares.", "value": "scale_5", "scoreDeltas": { "environment": 15, "relationships": 10 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 4,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "Cuando me desvío del rumbo, ¿qué tan rápido corrijo el curso?",
+          "contextEs": "Todos se desvían del rumbo. Lo que separa resultados es qué tan rápido corriges.",
+          "alertOnScore2": true,
+          "options": [
+            { "order": 1, "textEs": "No corrijo; sigo desviándome.", "value": "scale_1", "scoreDeltas": { "mentality": 5 }, "flags": ["BAJA_MENTALIDAD"], "tags": [] },
+            { "order": 2, "textEs": "Demoro semanas o meses en reconocer la desviación y actuar.", "value": "scale_2", "scoreDeltas": { "mentality": 10 }, "flags": ["BAJA_MENTALIDAD"], "tags": [] },
+            { "order": 3, "textEs": "Reconozco la desviación, pero la corrección tarda días o semanas.", "value": "scale_3", "scoreDeltas": { "mentality": 15 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Corrijo en un par de días al detectar la desviación.", "value": "scale_4", "scoreDeltas": { "mentality": 20 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Corrijo casi de inmediato.", "value": "scale_5", "scoreDeltas": { "mentality": 25 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 5,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "Si siguiera viviendo exactamente de esta manera durante un año más, ¿me sentiría orgulloso del lugar al que me lleva?",
+          "contextEs": "Proyecta un año más igual que hoy. La respuesta honesta aquí duele — y vale.",
+          "alertOnScore2": true,
+          "reasonThreshold": 4,
+          "reasonPromptEs": "¿Por qué sientes que el camino actual no te llevaría a donde quieres estar?",
+          "options": [
+            { "order": 1, "textEs": "No; me decepcionaría profundamente.", "value": "scale_1", "scoreDeltas": { "purpose": 3, "mentality": 2 }, "flags": ["FALTA_PROPOSITO"], "tags": [] },
+            { "order": 2, "textEs": "Probablemente no; este camino no refleja quién quiero ser.", "value": "scale_2", "scoreDeltas": { "purpose": 6, "mentality": 4 }, "flags": ["FALTA_PROPOSITO"], "tags": [] },
+            { "order": 3, "textEs": "Parcialmente; hay aspectos de los que me sentiría orgulloso y otros no.", "value": "scale_3", "scoreDeltas": { "purpose": 9, "mentality": 6 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "En su mayoría sí; pequeñas correcciones mejorarían el resultado.", "value": "scale_4", "scoreDeltas": { "purpose": 12, "mentality": 8 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Muy orgulloso; este camino refleja quién quiero ser.", "value": "scale_5", "scoreDeltas": { "purpose": 15, "mentality": 10 }, "flags": [], "tags": [] }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "soberania-financiera",
+      "phase": "FASE1",
+      "dimensionKey": "finances",
+      "order": 4,
+      "titleEs": "Soberanía Financiera",
+      "introEs": "La soberanía financiera no es riqueza — es control. Aquí medimos tu estabilidad, capacidad de provisión y claridad sobre el dinero.",
+      "outroTemplateEs": "Tu relación con el dinero refleja tu relación contigo mismo. Estos datos construirán tu punto de partida financiero.",
+      "iconKey": "target",
+      "estimatedMinutes": 4,
+      "isConditional": false,
+      "questions": [
+        {
+          "order": 1,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "Control de Deuda: ¿En qué medida tus deudas actuales están bajo control y no comprometen tu paz mental o estabilidad básica?",
+          "contextEs": "La deuda sin control roba paz mental antes que dinero. Evalúa tu situación real, no la que deseas.",
+          "options": [
+            { "order": 1, "textEs": "Sobreendeudado y asfixiado; las deudas controlan mi vida.", "value": "scale_1", "scoreDeltas": { "finances": 5 }, "flags": ["RIESGO_FINANCIERO"], "tags": [] },
+            { "order": 2, "textEs": "Con deudas significativas que generan estrés frecuente.", "value": "scale_2", "scoreDeltas": { "finances": 10 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "Deudas manejables pero que requieren atención constante.", "value": "scale_3", "scoreDeltas": { "finances": 15 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Deudas bajo control con poco impacto en mi estabilidad.", "value": "scale_4", "scoreDeltas": { "finances": 20 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Sin deudas o deuda productiva completamente bajo control.", "value": "scale_5", "scoreDeltas": { "finances": 25 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 2,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "Capacidad de Ahorro/Inversión: ¿Qué tan constante es tu capacidad de separar una parte de tus ingresos para ahorro o inversión futura?",
+          "contextEs": "Separar ingresos para el futuro es señal de soberanía, no de suerte ni de exceso.",
+          "options": [
+            { "order": 1, "textEs": "Vivo al día; cero ahorro.", "value": "scale_1", "scoreDeltas": { "finances": 5 }, "flags": ["RIESGO_FINANCIERO"], "tags": [] },
+            { "order": 2, "textEs": "Ahorro esporádico e inconsistente; menos del 5% de mis ingresos.", "value": "scale_2", "scoreDeltas": { "finances": 10 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "Ahorro moderado y ocasional; entre el 5% y el 10% de mis ingresos.", "value": "scale_3", "scoreDeltas": { "finances": 15 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Ahorro regular; entre el 10% y el 20% de mis ingresos.", "value": "scale_4", "scoreDeltas": { "finances": 20 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Ahorro sistemático superior al 20% de mis ingresos.", "value": "scale_5", "scoreDeltas": { "finances": 25 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 3,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "Planificación Financiera: ¿Cuentas con un presupuesto escrito o un plan estructurado para tus finanzas a corto y largo plazo?",
+          "contextEs": "Improvisar mes a mes tiene un costo invisible. ¿Tienes un plan o solo reaccionas?",
+          "options": [
+            { "order": 1, "textEs": "Cero planificación; improviso mes a mes.", "value": "scale_1", "scoreDeltas": { "finances": 5 }, "flags": ["RIESGO_FINANCIERO"], "tags": [] },
+            { "order": 2, "textEs": "Planificación mínima; llevo un registro básico sin proyección real.", "value": "scale_2", "scoreDeltas": { "finances": 10 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "Presupuesto informal; tengo noción de mis gastos pero sin plan estructurado.", "value": "scale_3", "scoreDeltas": { "finances": 15 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Plan financiero estructurado con seguimiento mensual.", "value": "scale_4", "scoreDeltas": { "finances": 20 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Plan financiero profesional con seguimiento semanal.", "value": "scale_5", "scoreDeltas": { "finances": 25 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 4,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "Nivel de Ingresos vs. Propósito: ¿Qué tan satisfecho estás con tu capacidad actual de generar ingresos para sostener tu estilo de vida deseado?",
+          "contextEs": "No se trata de cuánto ganas en abstracto, sino de si tu ingreso sostiene la vida que quieres construir.",
+          "options": [
+            { "order": 1, "textEs": "Muy insuficiente; no puedo cubrir lo básico.", "value": "scale_1", "scoreDeltas": { "finances": 4, "purpose": 1 }, "flags": ["RIESGO_FINANCIERO"], "tags": [] },
+            { "order": 2, "textEs": "Insuficiente; cubro lo básico pero sin margen para crecer.", "value": "scale_2", "scoreDeltas": { "finances": 8, "purpose": 2 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "Suficiente para las necesidades actuales pero limitado para el estilo de vida deseado.", "value": "scale_3", "scoreDeltas": { "finances": 12, "purpose": 3 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Mis ingresos sostienen bien mi vida actual con algo de margen.", "value": "scale_4", "scoreDeltas": { "finances": 16, "purpose": 4 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Mis ingresos exceden mis necesidades y metas actuales.", "value": "scale_5", "scoreDeltas": { "finances": 20, "purpose": 5 }, "flags": [], "tags": [] }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "calidad-relaciones",
+      "phase": "FASE1",
+      "dimensionKey": "relationships",
+      "order": 5,
+      "titleEs": "Calidad de Relaciones",
+      "introEs": "Nadie llega a ningún lado solo. Esta sección mide el entorno de apoyo y tu liderazgo relacional.",
+      "outroTemplateEs": "Tus relaciones son el espejo de tu identidad. Lo que encontramos aquí habla de cómo te relacionas contigo mismo.",
+      "iconKey": "users",
+      "estimatedMinutes": 4,
+      "isConditional": false,
+      "questions": [
+        {
+          "order": 1,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "Dinámica de Pareja: ¿Qué tan sólida, alineada y nutritiva es tu relación de pareja actual (o tu preparación para tener una)?",
+          "contextEs": "Tu pareja — o tu preparación para tener una — puede ser tu mayor apoyo o tu mayor fuga.",
+          "options": [
+            { "order": 1, "textEs": "Conflicto constante o relación tóxica.", "value": "scale_1", "scoreDeltas": { "relationships": 5 }, "flags": ["ENTORNO_TOXICO"], "tags": [] },
+            { "order": 2, "textEs": "Relación con fricción frecuente y poca alineación de valores.", "value": "scale_2", "scoreDeltas": { "relationships": 10 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "Relación funcional pero con brechas importantes de comunicación o propósito.", "value": "scale_3", "scoreDeltas": { "relationships": 15 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Relación sólida con buenos cimientos y desafíos menores.", "value": "scale_4", "scoreDeltas": { "relationships": 20 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Alineación total en valores y apoyo mutuo.", "value": "scale_5", "scoreDeltas": { "relationships": 25 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 2,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "Relación Familiar (Padres/Hijos): ¿Qué tan sano es el vínculo con tu núcleo familiar y qué tan presente estás en su desarrollo?",
+          "contextEs": "Tu presencia en familia refleja tus prioridades reales, no solo las que declaras.",
+          "options": [
+            { "order": 1, "textEs": "Distante o con conflicto frecuente.", "value": "scale_1", "scoreDeltas": { "relationships": 4, "environment": 1 }, "flags": ["ENTORNO_TOXICO"], "tags": [] },
+            { "order": 2, "textEs": "Relación superficial o tensa; poca presencia activa.", "value": "scale_2", "scoreDeltas": { "relationships": 8, "environment": 2 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "Relación funcional pero con presencia limitada o comunicación superficial.", "value": "scale_3", "scoreDeltas": { "relationships": 12, "environment": 3 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Vínculo sano con presencia regular y buena comunicación.", "value": "scale_4", "scoreDeltas": { "relationships": 16, "environment": 4 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Presencia activa, respeto y armonía.", "value": "scale_5", "scoreDeltas": { "relationships": 20, "environment": 5 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 3,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "Círculo de Influencia (Amistades): ¿Qué tanto te impulsan tus relaciones sociales y amigos hacia la excelencia y el sentido de propósito?",
+          "contextEs": "Tus amistades no te definen, pero sí influyen en lo que consideras normal.",
+          "options": [
+            { "order": 1, "textEs": "Amigos que me restan energía o fomentan el vicio.", "value": "scale_1", "scoreDeltas": { "relationships": 3, "environment": 2 }, "flags": ["ENTORNO_TOXICO"], "tags": [] },
+            { "order": 2, "textEs": "Entorno social mayormente neutral o pasivo; sin desafío real.", "value": "scale_2", "scoreDeltas": { "relationships": 6, "environment": 4 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "Mezcla de influencias; algunos me impulsan, otros me frenan.", "value": "scale_3", "scoreDeltas": { "relationships": 9, "environment": 6 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Mayoritariamente impulso positivo; pocas relaciones que me restan.", "value": "scale_4", "scoreDeltas": { "relationships": 12, "environment": 8 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Círculo de hierro que me exige y me apoya.", "value": "scale_5", "scoreDeltas": { "relationships": 15, "environment": 10 }, "flags": [], "tags": [] }
+          ]
+        },
+        {
+          "order": 4,
+          "type": "SCALE_1_5",
+          "scaleType": "BEHAVIORAL",
+          "textEs": "Entorno Laboral/Social: ¿Qué tan respetado y funcional es tu liderazgo en tu entorno de trabajo o comunidad?",
+          "contextEs": "Cómo lideras — o dejas de liderar — en tu entorno dice mucho de quién eres en público.",
+          "options": [
+            { "order": 1, "textEs": "Invisible o en conflicto constante.", "value": "scale_1", "scoreDeltas": { "relationships": 2, "identity": 3 }, "flags": ["ENTORNO_TOXICO"], "tags": [] },
+            { "order": 2, "textEs": "Poco reconocido; liderazgo débil o inconsistente.", "value": "scale_2", "scoreDeltas": { "relationships": 4, "identity": 6 }, "flags": [], "tags": [] },
+            { "order": 3, "textEs": "Liderazgo funcional pero sin un rol de referencia claro.", "value": "scale_3", "scoreDeltas": { "relationships": 6, "identity": 9 }, "flags": [], "tags": [] },
+            { "order": 4, "textEs": "Respetado con un rol de influencia real en mi entorno.", "value": "scale_4", "scoreDeltas": { "relationships": 8, "identity": 12 }, "flags": [], "tags": [] },
+            { "order": 5, "textEs": "Referente de orden y liderazgo en mi entorno.", "value": "scale_5", "scoreDeltas": { "relationships": 10, "identity": 15 }, "flags": [], "tags": [] }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -223,3 +223,175 @@ export function getApiDocsUrl(): string {
 export function getApiBaseUrl(): string {
   return apiBaseUrl() || API_ORIGIN;
 }
+
+// ─── Diagnostic ───────────────────────────────────────────────────────────────
+
+export type AnswerOptionDto = {
+  id: string;
+  order: number;
+  textEs: string;
+  value: string;
+};
+
+export type QuestionDto = {
+  id: string;
+  type: 'SINGLE_CHOICE' | 'MULTI_CHOICE' | 'SCALE_1_5' | 'FREE_TEXT' | 'RANKING';
+  textEs: string;
+  contextEs: string | null;
+  maxSelections: number | null;
+  scaleType: 'BEHAVIORAL' | 'FREQUENCY' | null;
+  reasonPromptEs: string | null;
+  reasonThreshold: number | null;
+  options: AnswerOptionDto[];
+};
+
+export type SessionStateDto = {
+  phase: string;
+  completionPct: number;
+  currentModuleSlug: string | null;
+  currentModuleTitle: string | null;
+  currentModuleIntro: string | null;
+  currentModuleIcon: string | null;
+  moduleProgress: number;
+  selfKnowledgePct: number;
+  isModuleStart: boolean;
+  currentQuestionIndex: number | null;
+  moduleQuestionCount: number | null;
+  showWelcomeScreen: boolean;
+  currentModuleOrder: number | null;
+  totalModules: number;
+  currentModuleEstimatedMinutes: number | null;
+};
+
+export type ModuleProgressDto = {
+  slug: string;
+  titleEs: string;
+  iconKey: string | null;
+  status: 'LOCKED' | 'AVAILABLE' | 'IN_PROGRESS' | 'COMPLETE';
+  estimatedMinutes: number;
+  answeredQuestions: number;
+  totalQuestions: number;
+};
+
+export type DiagnosticProgressDto = {
+  completionPct: number;
+  selfKnowledgePct: number;
+  modules: ModuleProgressDto[];
+} | null;
+
+export type MasterProfileDto = {
+  archetypePrimary: string;
+  archetypeSecondary: string | null;
+  scores: Record<string, number>;
+  indices: Record<string, number>;
+  strengths: string[];
+  weaknesses: string[];
+  risks: string[];
+  potentials: string[];
+  bottlenecks: string[];
+  priorities: string[];
+  segmentTags: string[];
+  generatedAt: string;
+} | null;
+
+export type NextStep =
+  | { type: 'question'; data: QuestionDto }
+  | { type: 'module_outro'; data: { moduleSlug: string; titleEs: string; outroText: string } }
+  | { type: 'phase_end'; data: { phase: string; completionPct: number; selfKnowledgePct: number } }
+  | { type: 'diagnostic_complete'; data: { archetypePrimary: string; selfKnowledgePct: number } };
+
+export type DiagnosticState = {
+  sessionState: SessionStateDto;
+  nextStep: NextStep;
+};
+
+export type SubmitResponsePayload = {
+  questionId: string;
+  selectedOptionIds?: string[];
+  freeText?: string;
+  rankingOrder?: string[];
+  latencyMs?: number;
+  editCount?: number;
+};
+
+export async function apiDiagnosticStart(accessToken: string): Promise<DiagnosticState> {
+  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/start`, {
+    method: 'POST',
+    headers: { ...authHeaders(accessToken), 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({}),
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+
+export async function apiDiagnosticState(accessToken: string): Promise<DiagnosticState> {
+  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/state`, {
+    headers: authHeaders(accessToken),
+    credentials: 'include',
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+
+export async function apiDiagnosticSubmitResponse(
+  accessToken: string,
+  payload: SubmitResponsePayload,
+): Promise<DiagnosticState> {
+  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/response`, {
+    method: 'POST',
+    headers: { ...authHeaders(accessToken), 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+
+export async function apiDiagnosticProfile(accessToken: string): Promise<MasterProfileDto> {
+  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/profile`, {
+    headers: authHeaders(accessToken),
+    credentials: 'include',
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  // NestJS returns an empty body for null — res.json() would throw
+  const text = await res.text();
+  if (!text.trim()) return null;
+  return JSON.parse(text) as MasterProfileDto;
+}
+
+export async function apiDiagnosticProgress(accessToken: string): Promise<DiagnosticProgressDto> {
+  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/progress`, {
+    headers: authHeaders(accessToken),
+    credentials: 'include',
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+
+export async function apiDiagnosticWelcomeSeen(
+  accessToken: string,
+): Promise<{ success: boolean }> {
+  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/welcome-seen`, {
+    method: 'POST',
+    headers: { ...authHeaders(accessToken), 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({}),
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+
+export async function apiDiagnosticOutroSeen(
+  accessToken: string,
+  moduleSlug: string,
+): Promise<{ success: boolean }> {
+  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/outro-seen/${moduleSlug}`, {
+    method: 'POST',
+    headers: { ...authHeaders(accessToken), 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({}),
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}

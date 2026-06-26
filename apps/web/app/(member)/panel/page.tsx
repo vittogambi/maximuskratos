@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
-import { PanelContent } from '@/components/pages/panel-content';
+import { InicioDashboard } from '@/components/pages/InicioDashboard';
 
 export const metadata: Metadata = {
-  title: 'Tu panel | Maximus Kratos',
+  title: 'Inicio | Maximus Kratos',
   robots: { index: false, follow: false },
 };
 
 export default function PanelPage() {
-  return <PanelContent />;
+  return <InicioDashboard />;
 }

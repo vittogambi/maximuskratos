@@ -6,7 +6,6 @@ import { FormEvent, Suspense, useState } from 'react';
 import { AuthShell } from '@/components/auth-shell';
 import { AuthSubmitButton } from '@/components/auth-submit-button';
 import { PasswordInput } from '@/components/password-input';
-import { StaggerContainer, StaggerItem } from '@/components/motion';
 import { apiResetPassword } from '@/lib/api';
 
 function ResetPasswordForm() {
@@ -48,33 +47,27 @@ function ResetPasswordForm() {
 
   return (
     <form className="auth-form" onSubmit={onSubmit}>
-      <StaggerContainer className="auth-form__fields" stagger={0.06}>
-        <StaggerItem>
-          <label>
-            Nueva contraseña
-            <PasswordInput
-              value={password}
-              onChange={setPassword}
-              minLength={8}
-              autoComplete="new-password"
-              placeholder="Mínimo 8 caracteres"
-              disabled={loading}
-            />
-          </label>
-        </StaggerItem>
+      <div className="auth-form__fields">
+        <label>
+          Nueva contraseña
+          <PasswordInput
+            value={password}
+            onChange={setPassword}
+            minLength={8}
+            autoComplete="new-password"
+            placeholder="Mínimo 8 caracteres"
+            disabled={loading}
+          />
+        </label>
         {error ? (
-          <StaggerItem>
-            <p className="auth-error" role="alert">
-              {error}
-            </p>
-          </StaggerItem>
+          <p className="auth-error" role="alert">
+            {error}
+          </p>
         ) : null}
-        <StaggerItem>
-          <AuthSubmitButton loading={loading} loadingLabel="Guardando…">
-            Restablecer contraseña
-          </AuthSubmitButton>
-        </StaggerItem>
-      </StaggerContainer>
+        <AuthSubmitButton loading={loading} loadingLabel="Guardando…">
+          Restablecer contraseña
+        </AuthSubmitButton>
+      </div>
     </form>
   );
 }

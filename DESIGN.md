@@ -50,26 +50,26 @@ colors:
   surface-variant: '#353534'
 typography:
   display-xl:
-    fontFamily: Libre Caslon Text
+    fontFamily: Bitte BC
     fontSize: 64px
     fontWeight: '700'
     lineHeight: 72px
-    letterSpacing: -0.02em
+    letterSpacing: 0.02em
   headline-lg:
-    fontFamily: Libre Caslon Text
+    fontFamily: Bitte BC
     fontSize: 40px
-    fontWeight: '600'
+    fontWeight: '700'
     lineHeight: 48px
-    letterSpacing: -0.01em
+    letterSpacing: 0.02em
   headline-md:
-    fontFamily: Libre Caslon Text
+    fontFamily: Bitte BC
     fontSize: 32px
-    fontWeight: '600'
+    fontWeight: '700'
     lineHeight: 40px
   headline-sm:
-    fontFamily: Libre Caslon Text
+    fontFamily: Bitte BC
     fontSize: 24px
-    fontWeight: '600'
+    fontWeight: '700'
     lineHeight: 32px
   body-lg:
     fontFamily: Hanken Grotesk
@@ -94,10 +94,17 @@ typography:
     lineHeight: 16px
     letterSpacing: 0.02em
   headline-lg-mobile:
-    fontFamily: Libre Caslon Text
+    fontFamily: Bitte BC
     fontSize: 32px
-    fontWeight: '600'
+    fontWeight: '700'
     lineHeight: 40px
+  score-display:
+    fontFamily: Bitte BC
+    fontSize: clamp(2.5rem, 6vw, 4.5rem)
+    fontWeight: '900'
+    lineHeight: 1
+    letterSpacing: -0.01em
+    fontVariantNumeric: tabular-nums
 spacing:
   unit: 4px
   gutter: 24px
@@ -130,15 +137,20 @@ The palette is intentionally restricted to maintain a high-stakes, premium atmos
 
 ## Typography
 
-This design system employs a high-contrast typographic pairing. 
+This design system employs a high-contrast typographic pairing aligned with the BrandCrowd logo.
 
-**Libre Caslon Text** is used for headlines. Its classical proportions and sharp serifs evoke the feeling of inscriptions on stone monuments. It should be used with tight letter spacing in large formats to feel authoritative.
+**Bitte BC** (BrandCrowd) is used for display type and the MAXIMUS KRATOS wordmark. Condensed, bold, industrial — matches the logo’s distinctive letterforms (including the K).
 
-**Hanken Grotesk** serves as the functional workhorse. As a modern, sharp neo-grotesque, it provides the "tech-startup" balance to the classical headlines. Use it for all body text, data points, and navigation labels.
+**Bauhaus BC** (BrandCrowd) is reserved for the brand tagline «Alíneate» and similar micro-brand lines.
+
+**Hanken Grotesk** serves as the functional workhorse for body text, UI, data, and navigation. Its neo-grotesque clarity balances the geometric display face.
+
+**Web note:** BrandCrowd does not distribute BC font files with logo downloads. The site self-hosts OFL substitutes mapped to the same CSS names: Barlow Condensed ExtraBold → `Bitte BC`, Sulphur Point Light → `Bauhaus BC` (see `apps/web/public/fonts/OFL-NOTICE.txt`).
 
 **Usage Rules:**
 - All labels should utilize uppercase styling with increased letter-spacing to reinforce the "engineered" aesthetic.
 - Narrative body text should use `body-lg` to ensure a premium, spacious reading experience.
+- Host Bitte BC and Bauhaus BC webfonts in `apps/web/public/fonts/` (see `brand-fonts.css`).
 
 ## Layout & Spacing
 

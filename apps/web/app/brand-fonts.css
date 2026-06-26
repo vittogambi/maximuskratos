@@ -1,0 +1,20 @@
+/*
+ * BrandCrowd fonts — self-hosted from bcassetcdn.com
+ * Source: https://bcassetcdn.com/fonts/{name}.woff
+ */
+
+@font-face {
+  font-family: 'Bitte BC';
+  src: url('/fonts/bitte-bc.woff') format('woff');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bauhaus BC';
+  src: url('/fonts/bauhaus-bc.woff') format('woff');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}

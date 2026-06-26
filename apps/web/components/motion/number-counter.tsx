@@ -1,7 +1,7 @@
 'use client';
 
 import { useInView, useReducedMotion, animate } from 'motion/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface NumberCounterProps {
   to: number;
@@ -9,6 +9,8 @@ interface NumberCounterProps {
   className?: string;
   suffix?: string;
   prefix?: string;
+  /** inView = when scrolled into viewport (default). mount = as soon as rendered. */
+  startWhen?: 'inView' | 'mount';
 }
 
 export function NumberCounter({
@@ -17,15 +19,15 @@ export function NumberCounter({
   className,
   suffix = '',
   prefix = '',
+  startWhen = 'inView',
 }: NumberCounterProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const reduced = useReducedMotion();
   const inView = useInView(ref, { once: true, margin: '-40px 0px' });
-  const [started, setStarted] = useState(false);
+  const shouldStart = startWhen === 'mount' || inView;
 
   useEffect(() => {
-    if (!inView || started) return;
-    setStarted(true);
+    if (!shouldStart) return;
 
     if (reduced) {
       if (ref.current) ref.current.textContent = `${prefix}${to}${suffix}`;
@@ -43,11 +45,11 @@ export function NumberCounter({
     });
 
     return () => controls.stop();
-  }, [inView, started, to, duration, reduced, suffix, prefix]);
+  }, [shouldStart, to, duration, reduced, suffix, prefix]);
 
   return (
     <span ref={ref} className={className}>
-      {prefix}0{suffix}
+      {prefix}{reduced ? to : 0}{suffix}
     </span>
   );
 }

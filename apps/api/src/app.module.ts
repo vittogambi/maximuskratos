@@ -12,9 +12,11 @@ function resolveApiEnvFile(): string | undefined {
   return candidates.find((p) => existsSync(p));
 }
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ScheduleModule } from '@nestjs/schedule';
 import { APP_GUARD } from '@nestjs/core';
 import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
+import { DiagnosticModule } from './diagnostic/diagnostic.module';
 import { HealthController } from './health/health.controller';
 import { LeadsModule } from './leads/leads.module';
 import { MailModule } from './mail/mail.module';
@@ -26,6 +28,7 @@ import { PrismaModule } from './prisma/prisma.module';
       isGlobal: true,
       envFilePath: resolveApiEnvFile(),
     }),
+    ScheduleModule.forRoot(),
     ThrottlerModule.forRoot([
       {
         name: 'default',
@@ -43,6 +46,7 @@ import { PrismaModule } from './prisma/prisma.module';
     AuthModule,
     LeadsModule,
     AdminModule,
+    DiagnosticModule,
   ],
   controllers: [HealthController],
   providers: [

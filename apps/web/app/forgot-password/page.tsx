@@ -5,7 +5,6 @@ import { FormEvent, useState } from 'react';
 import { AuthShell } from '@/components/auth-shell';
 import { useRequireGuest } from '@/lib/use-require-guest';
 import { AuthSubmitButton } from '@/components/auth-submit-button';
-import { FadeIn, StaggerContainer, StaggerItem } from '@/components/motion';
 import { apiForgotPassword } from '@/lib/api';
 
 export default function ForgotPasswordPage() {
@@ -29,7 +28,7 @@ export default function ForgotPasswordPage() {
     }
   }
 
-  if (status === 'loading') {
+  if (status === 'authenticated') {
     return (
       <AuthShell title="Redirigiendo" description="Un momento…">
         <div className="auth-loading">
@@ -58,41 +57,33 @@ export default function ForgotPasswordPage() {
       }
     >
       {sent ? (
-        <FadeIn>
-          <p className="form-success auth-success" style={{ margin: 0 }}>
-            Revisa tu bandeja de entrada (y spam). El enlace expira en 1 hora.
-          </p>
-        </FadeIn>
+        <p className="form-success auth-success" style={{ margin: 0 }}>
+          Revisa tu bandeja de entrada (y spam). El enlace expira en 1 hora.
+        </p>
       ) : (
         <form className="auth-form" onSubmit={onSubmit}>
-          <StaggerContainer className="auth-form__fields" stagger={0.06}>
-            <StaggerItem>
-              <label>
-                Correo electrónico
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  autoComplete="email"
-                  placeholder="tu@email.com"
-                  disabled={loading}
-                />
-              </label>
-            </StaggerItem>
+          <div className="auth-form__fields">
+            <label>
+              Correo electrónico
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoComplete="email"
+                placeholder="tu@email.com"
+                disabled={loading}
+              />
+            </label>
             {error ? (
-              <StaggerItem>
-                <p className="auth-error" role="alert">
-                  {error}
-                </p>
-              </StaggerItem>
+              <p className="auth-error" role="alert">
+                {error}
+              </p>
             ) : null}
-            <StaggerItem>
-              <AuthSubmitButton loading={loading} loadingLabel="Enviando…">
-                Enviar enlace
-              </AuthSubmitButton>
-            </StaggerItem>
-          </StaggerContainer>
+            <AuthSubmitButton loading={loading} loadingLabel="Enviando…">
+              Enviar enlace
+            </AuthSubmitButton>
+          </div>
         </form>
       )}
     </AuthShell>

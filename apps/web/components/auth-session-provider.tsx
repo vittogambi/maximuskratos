@@ -15,13 +15,30 @@ import { apiLogout, type MeResponse } from '@/lib/api';
 import { clearAccessToken } from '@/lib/auth-storage';
 import { resetResolveSession, resolveSession } from '@/lib/resolve-session';
 
+const LOGOUT_API_TIMEOUT_MS = 4_000;
+
+/** Routes that should leave immediately after logout. */
 function postLogoutPath(): string | null {
   if (typeof window === 'undefined') return null;
   const path = window.location.pathname;
-  if (path.startsWith('/panel') || path.startsWith('/admin')) {
+  const protectedPrefixes = [
+    '/panel',
+    '/perfil',
+    '/ruta',
+    '/cuenta',
+    '/diagnostico',
+    '/admin',
+  ];
+  if (protectedPrefixes.some((p) => path.startsWith(p))) {
     return '/login';
   }
   return null;
+}
+
+function clearLocalSession(refreshIdRef: React.MutableRefObject<number>) {
+  refreshIdRef.current++;
+  clearAccessToken();
+  resetResolveSession();
 }
 
 type AuthStatus = 'loading' | 'guest' | 'authenticated';
@@ -59,18 +76,29 @@ export function AuthSessionProvider({ children }: { children: ReactNode }) {
   }, [refresh]);
 
   const logout = useCallback(async () => {
+    const redirectTo = postLogoutPath();
+
+    // Clear local session immediately — never block UI on the logout API.
+    clearLocalSession(refreshIdRef);
+    setUser(null);
+    setStatus('guest');
+
+    if (redirectTo) {
+      router.replace(redirectTo);
+    }
+
     try {
-      await apiLogout();
-    } finally {
-      refreshIdRef.current++;
-      clearAccessToken();
-      resetResolveSession();
-      setUser(null);
-      setStatus('guest');
-      const redirectTo = postLogoutPath();
-      if (redirectTo) {
-        router.replace(redirectTo);
-      }
+      await Promise.race([
+        apiLogout(),
+        new Promise<void>((_, reject) => {
+          window.setTimeout(
+            () => reject(new Error('logout_timeout')),
+            LOGOUT_API_TIMEOUT_MS,
+          );
+        }),
+      ]);
+    } catch {
+      // Best-effort: refresh cookie may already be cleared server-side.
     }
   }, [router]);
 

@@ -64,11 +64,11 @@ export const STATUE_FRAGMENTS: Record<FragmentKey, string | null> = {
 
 // ── Archetype statues ──────────────────────────────────────────────────────
 export const STATUES: Record<StatueKey, string | null> = {
-  warrior:    null, // /images/statues/warrior.jpg
-  builder:    null,
-  king:       null,
-  mentor:     null,
-  visionario: null,
+  warrior:    '/images/archetypes/guerrero.png',
+  builder:    '/images/archetypes/constructor.png',
+  king:       '/images/archetypes/rey.png',
+  mentor:     '/images/archetypes/mentor.png',
+  visionario: '/images/archetypes/visionario.png',
 };
 
 // ── Hero images (full-bleed backgrounds) ──────────────────────────────────

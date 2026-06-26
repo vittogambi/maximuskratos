@@ -1,22 +1,29 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useAuthSession } from '@/components/auth-session-provider';
 import { AuthFormError } from '@/components/auth-form-error';
 import { AuthFooterLink, AuthShell } from '@/components/auth-shell';
 import { AuthSubmitButton } from '@/components/auth-submit-button';
 import { PasswordInput } from '@/components/password-input';
-import { StaggerContainer, StaggerItem } from '@/components/motion';
 import { getPostAuthPath } from '@/lib/auth-redirect';
-import { apiRegister } from '@/lib/api';
+import { apiMe, apiRegister } from '@/lib/api';
 import { useRequireGuest } from '@/lib/use-require-guest';
 import { setAccessToken } from '@/lib/auth-storage';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { refresh } = useAuthSession();
+  const { refresh, status: authStatus, user } = useAuthSession();
   const status = useRequireGuest();
+
+  // Safety valve: if the hook's effect is late (user arrived after status),
+  // redirect from here too.
+  useEffect(() => {
+    if (authStatus === 'authenticated' && user) {
+      router.replace(getPostAuthPath(user.role, user.onboardingStep));
+    }
+  }, [authStatus, user, router]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -29,17 +36,17 @@ export default function RegisterPage() {
     try {
       const data = await apiRegister(email, password);
       setAccessToken(data.accessToken);
-      await refresh({ force: true });
-      router.replace(getPostAuthPath(data.user.role));
+      const [me] = await Promise.all([apiMe(data.accessToken), refresh({ force: true })]);
+      router.replace(getPostAuthPath(me.role, me.onboardingStep));
+      return;
     } catch (err) {
       const message = err instanceof Error ? err.message : '';
       setError(message || 'No se pudo crear la cuenta. Inténtalo de nuevo.');
-    } finally {
       setLoading(false);
     }
   }
 
-  if (status === 'loading') {
+  if (status === 'authenticated' && user) {
     return (
       <AuthShell title="Redirigiendo" description="Un momento…">
         <div className="auth-loading">
@@ -65,43 +72,35 @@ export default function RegisterPage() {
       }
     >
       <form className="auth-form" onSubmit={onSubmit}>
-        <StaggerContainer className="auth-form__fields" stagger={0.06}>
-          <StaggerItem>
-            <label>
-              Correo electrónico
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                autoComplete="email"
-                placeholder="tu@email.com"
-                disabled={loading}
-              />
-            </label>
-          </StaggerItem>
-          <StaggerItem>
-            <label>
-              Contraseña
-              <PasswordInput
-                value={password}
-                onChange={setPassword}
-                minLength={8}
-                autoComplete="new-password"
-                placeholder="Mínimo 8 caracteres"
-                disabled={loading}
-              />
-            </label>
-          </StaggerItem>
-          <StaggerItem>
-            <AuthFormError message={error} context="register" />
-          </StaggerItem>
-          <StaggerItem>
-            <AuthSubmitButton loading={loading} loadingLabel="Creando cuenta…">
-              Crear cuenta de fundador
-            </AuthSubmitButton>
-          </StaggerItem>
-        </StaggerContainer>
+        <div className="auth-form__fields">
+          <label>
+            Correo electrónico
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              placeholder="tu@email.com"
+              disabled={loading}
+            />
+          </label>
+          <label>
+            Contraseña
+            <PasswordInput
+              value={password}
+              onChange={setPassword}
+              minLength={8}
+              autoComplete="new-password"
+              placeholder="Mínimo 8 caracteres"
+              disabled={loading}
+            />
+          </label>
+          <AuthFormError message={error} context="register" />
+          <AuthSubmitButton loading={loading} loadingLabel="Creando cuenta…">
+            Crear cuenta de fundador
+          </AuthSubmitButton>
+        </div>
       </form>
     </AuthShell>
   );

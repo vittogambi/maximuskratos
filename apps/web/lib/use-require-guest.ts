@@ -11,9 +11,12 @@ export function useRequireGuest() {
   const { status, user } = useAuthSession();
 
   useEffect(() => {
-    if (status === 'authenticated' && user) {
-      router.replace(getPostAuthPath(user.role));
-    }
+    // Run whenever status OR user changes — user may arrive in a separate render.
+    if (status !== 'authenticated') return;
+    // user may be null for one render if React batching splits the two setState calls.
+    // In that case the effect fires again when user arrives (dependency array includes user).
+    if (!user) return;
+    router.replace(getPostAuthPath(user.role, user.onboardingStep));
   }, [status, user, router]);
 
   return status;

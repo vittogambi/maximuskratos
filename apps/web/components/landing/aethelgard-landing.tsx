@@ -285,9 +285,14 @@ export function AethelgardLanding() {
               <HeroReveal className="ag-hero-title-zone">
                 <HeroRevealItem distance={18}>
                   <h1 className="ag-hero-title cinematic-shadow">
-                    <span className="ag-hero-title__line">Descubre el hombre</span>
-                    <span className="ag-hero-title__line">que estás destinado a ser</span>
+                    <span className="ag-hero-title__line">Descúbrete.</span>
+                    <span className="ag-hero-title__line">Alíneate.</span>
+                    <span className="ag-hero-title__line">Construye.</span>
                   </h1>
+                  <p className="ag-hero-title__lead font-body-lg cinematic-shadow mt-4 max-w-xl text-center text-white/85">
+                    Define tu propósito trascendental y conviértelo en una vida coherente,
+                    significativa y con impacto.
+                  </p>
                 </HeroRevealItem>
               </HeroReveal>
               <HeroReveal className="ag-hero-cta-zone pointer-events-auto flex w-full items-center justify-center">
@@ -296,7 +301,8 @@ export function AethelgardLanding() {
                     <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
                     <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
                     <p className="ag-panel__body font-body-lg">
-                      Un sistema para reconstruir identidad, disciplina y propósito.
+                      Una metodología que construye sistemas alienados a tu propósito
+                      trascendental.
                     </p>
                     <p className="ag-hero-status hud-text">{PLATFORM_STATUS_LINE}</p>
                     <AuthCta href="/register" className="btn-primary font-label-lg">

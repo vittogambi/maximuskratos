@@ -1,0 +1,15 @@
+BrandCrowd fonts (self-hosted from bcassetcdn.com):
+
+  bitte-bc.woff              → MAXIMUS KRATOS / display (Bitte BC)
+  bauhaus-bc.woff            → ALÍNEATE / tagline (Bauhaus BC)
+
+Alternate variants (available, not wired in CSS):
+
+  bitte-two-bc.woff
+  bitte-two-italic-bc.woff
+  bauhaus-two-bc.woff
+  bauhaus-two-bc-italic.woff
+
+CDN pattern: https://bcassetcdn.com/fonts/{kebab-name}.woff
+
+Use only with an active BrandCrowd logo license.
