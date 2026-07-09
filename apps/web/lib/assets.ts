@@ -24,6 +24,16 @@ export const LANDING_IMAGES = {
   phase01:        '/images/landing/phase-01.jpg',
   phase02:        '/images/landing/phase-02.jpg',
   phase03:        '/images/landing/phase-03.jpg',
+  phase04:        '/images/landing/phase-04.jpg',
+  phase05:        '/images/landing/phase-05.jpg',
+  greekColumns:   '/images/backgrounds/greek-columns.png',
+  bgArquitecturaSentido: '/images/backgrounds/arquitectura-sentido-columns.png',
+  bgMarcoCentral:        '/images/backgrounds/marco-central.png',
+  bgAboutSystems:        '/images/backgrounds/about-systems.png',
+  bgCtaGateway:          '/images/backgrounds/cta-gateway.png',
+  eventosHero:           '/images/eventos/hero-council.jpg',
+  eventosQuote:          '/images/eventos/quote-brotherhood.jpg',
+  contactoHero:          '/images/contacto/hero-listening.jpg',
 } as const;
 
 export type AuthAtmosphereVariant = 'login' | 'register' | 'default';
@@ -35,17 +45,17 @@ export const AUTH_ATMOSPHERE: Record<
   login: {
     src: LANDING_IMAGES.statueAligned,
     objectPosition: 'center 22%',
-    quote: 'Vuelve al sistema. Retoma la arquitectura que estás construyendo.',
+    quote: 'El orden precede al poder. Retoma tu construcción.',
   },
   register: {
     src: LANDING_IMAGES.statueBroken,
     objectPosition: 'center 26%',
-    quote: 'Todo cambio profundo empieza reconociendo la fragmentación.',
+    quote: 'El propósito no se descubre, se construye.',
   },
   default: {
     src: LANDING_IMAGES.statueClean,
     objectPosition: 'center 20%',
-    quote: 'El poder real exige alineación entre identidad, propósito y acción.',
+    quote: 'Ningún hombre es libre si no es dueño de sí mismo.',
   },
 };
 

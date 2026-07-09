@@ -62,7 +62,7 @@ export default function LoginPage() {
       showNav
       atmosphere="login"
       title="Iniciar sesión"
-      description="Accede con tu correo electrónico y contraseña."
+      description="Retoma tu proceso donde lo dejaste."
       footer={
         <AuthFooterLink
           text="¿Primera vez aquí?"

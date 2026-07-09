@@ -23,9 +23,11 @@ import { LucideFlame } from '@/components/icons/lucide/flame';
 import { LucideExternalLink } from '@/components/icons/lucide/external-link';
 import { LucideEye } from '@/components/icons/lucide/eye';
 import { LucideEyeOff } from '@/components/icons/lucide/eye-off';
+import { LucideFingerprint } from '@/components/icons/lucide/fingerprint';
 import { LucideGlobe } from '@/components/icons/lucide/globe';
 import { LucideHelm } from '@/components/icons/lucide/helm';
 import { LucideIkigai } from '@/components/icons/lucide/ikigai';
+import { LucideLaurelWreath } from '@/components/icons/lucide/laurel-wreath';
 import { LucideLayoutDashboard } from '@/components/icons/lucide/layout-dashboard';
 import { LucideLayoutGrid } from '@/components/icons/lucide/layout-grid';
 import { LucideLogOut } from '@/components/icons/lucide/log-out';
@@ -80,10 +82,12 @@ export const ICON_REGISTRY = {
   'external-link': LucideExternalLink,
   eye: LucideEye,
   'eye-off': LucideEyeOff,
+  fingerprint: LucideFingerprint,
   globe: LucideGlobe,
   helm: LucideHelm,
   ikigai: LucideIkigai,
   instagram: SocialInstagram,
+  'laurel-wreath': LucideLaurelWreath,
   'layout-dashboard': LucideLayoutDashboard,
   'layout-grid': LucideLayoutGrid,
   linkedin: SocialLinkedin,

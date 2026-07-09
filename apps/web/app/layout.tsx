@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
-import { Barlow_Condensed, Geist, Hanken_Grotesk } from 'next/font/google';
+import { Barlow_Condensed, Geist, Hanken_Grotesk, Noto_Serif } from 'next/font/google';
 import './globals.css';
 import { AuthSessionProvider } from '@/components/auth-session-provider';
 import { cn } from '@/lib/utils';
@@ -24,6 +24,14 @@ const hanken = Hanken_Grotesk({
   display: 'swap',
 });
 
+/** Classical Greek — Quiénes Somos concept cards (Bitte BC has no Greek glyphs) */
+const notoSerif = Noto_Serif({
+  subsets: ['latin', 'greek'],
+  weight: ['400', '600'],
+  variable: '--font-noto-serif',
+  display: 'swap',
+});
+
 export const viewport = {
   themeColor: '#0a0a0a',
   width: 'device-width',
@@ -33,11 +41,11 @@ export const viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: 'Maximus Kratos — Sistema Operativo para la Vida',
+    default: 'Maximus Kratos: Sistema Integral de Transformación Masculina',
     template: '%s | Maximus Kratos',
   },
   description:
-    'Maximus Kratos analiza quién eres, identifica quién puedes llegar a ser y construye un sistema personalizado para llevarte ahí.',
+    'Una metodología de autodescubrimiento y arquitectura personal que alinea Espíritu, Mente y Cuerpo bajo el rigor físico y la rendición de cuentas.',
   manifest: '/manifest.webmanifest',
   appleWebApp: {
     capable: true,
@@ -51,9 +59,9 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'es_CL',
     siteName: 'Maximus Kratos',
-    title: 'Maximus Kratos — Sistema Operativo para la Vida',
+    title: 'Maximus Kratos: Sistema Integral de Transformación Masculina',
     description:
-      'Maximus Kratos analiza quién eres, identifica quién puedes llegar a ser y construye un sistema personalizado para llevarte ahí.',
+      'Una metodología de autodescubrimiento y arquitectura personal que alinea Espíritu, Mente y Cuerpo bajo el rigor físico y la rendición de cuentas.',
   },
 };
 
@@ -65,7 +73,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={cn('dark', bitteFallback.variable, hanken.variable, 'font-sans', geist.variable)}
+      className={cn('dark', bitteFallback.variable, hanken.variable, notoSerif.variable, 'font-sans', geist.variable)}
     >
       <body>
         <Script id="reload-scroll-top" strategy="beforeInteractive">

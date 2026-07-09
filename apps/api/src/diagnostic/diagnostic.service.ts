@@ -33,14 +33,14 @@ const DIMENSIONS = [
 const ARCHETYPE_MATRIX: { dims: string[]; slug: string }[] = [
   { dims: ['mentality', 'habits'], slug: 'guerrero' },
   { dims: ['habits', 'mentality'], slug: 'guerrero' },
-  { dims: ['finances', 'environment'], slug: 'constructor' },
-  { dims: ['environment', 'finances'], slug: 'constructor' },
+  { dims: ['finances', 'environment'], slug: 'mago' },
+  { dims: ['environment', 'finances'], slug: 'mago' },
   { dims: ['identity', 'relationships'], slug: 'rey' },
   { dims: ['relationships', 'identity'], slug: 'rey' },
-  { dims: ['purpose', 'relationships'], slug: 'mentor' },
-  { dims: ['relationships', 'purpose'], slug: 'mentor' },
-  { dims: ['purpose', 'ikigai'], slug: 'visionario' },
-  { dims: ['ikigai', 'purpose'], slug: 'visionario' },
+  { dims: ['purpose', 'relationships'], slug: 'amante' },
+  { dims: ['relationships', 'purpose'], slug: 'amante' },
+  { dims: ['purpose', 'ikigai'], slug: 'amante' },
+  { dims: ['ikigai', 'purpose'], slug: 'amante' },
 ];
 
 @Injectable()
@@ -672,14 +672,14 @@ export class DiagnosticService {
     const fallback: Record<string, string> = {
       mentality: 'guerrero',
       habits: 'guerrero',
-      finances: 'constructor',
-      environment: 'constructor',
+      finances: 'mago',
+      environment: 'mago',
       identity: 'rey',
-      relationships: 'mentor',
-      purpose: 'visionario',
-      ikigai: 'visionario',
+      relationships: 'amante',
+      purpose: 'amante',
+      ikigai: 'amante',
       shadow: 'rey',
-      footprint: 'visionario',
+      footprint: 'amante',
     };
     return fallback[top1] ?? 'guerrero';
   }
@@ -706,13 +706,12 @@ export class DiagnosticService {
     }
 
     const fallback: Record<string, string> = {
-      guerrero: 'constructor',
-      constructor: 'rey',
+      guerrero: 'mago',
+      mago: 'rey',
       rey: 'guerrero',
-      mentor: 'rey',
-      visionario: 'mentor',
+      amante: 'rey',
     };
-    return fallback[primary] ?? 'constructor';
+    return fallback[primary] ?? 'mago';
   }
 
   private async recalculateScores(sessionId: string): Promise<number> {

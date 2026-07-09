@@ -145,7 +145,7 @@ export function QuestionCard({ question, selection, onChange }: Props) {
             initial={reduced ? false : 'hidden'}
             animate={reduced ? undefined : 'show'}
           >
-            (Ranking — disponible en M1)
+            (Ranking: disponible en M1)
           </motion.p>
         )}
       </div>

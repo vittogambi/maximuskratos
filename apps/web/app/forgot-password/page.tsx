@@ -46,7 +46,7 @@ export default function ForgotPasswordPage() {
       description={
         sent
           ? 'Si el correo electrónico existe en nuestro sistema, recibirás un enlace para restablecer tu contraseña.'
-          : 'Ingresa tu correo electrónico y te enviaremos un enlace de recuperación.'
+          : 'Ingresa tu correo electrónico. Te enviaremos un enlace para retomar el acceso a tu cuenta.'
       }
       footer={
         <p className="auth-footer-text">

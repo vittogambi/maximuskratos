@@ -3,9 +3,9 @@ import { AethelgardLanding } from '@/components/landing/aethelgard-landing';
 import { landingFaqJsonLd } from '@/lib/landing-faq';
 
 export const metadata: Metadata = {
-  title: 'Maximus Kratos — Sistema Operativo para la Vida',
+  title: 'Maximus Kratos: Descúbrete. Alíneate. Construye.',
   description:
-    'Diseña tu arquitectura de vida con precisión. Un sistema de diagnóstico, plano estratégico y ejecución diaria para hombres que exigen soberanía real sobre su destino.',
+    'Sistema de reconstrucción personal para hombres. Define tu propósito trascendental y conviértelo en una vida coherente, significativa y con impacto. Haz tu diagnóstico inicial.',
 };
 
 export default function HomePage() {

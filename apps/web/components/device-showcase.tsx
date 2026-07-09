@@ -1,45 +1,29 @@
 import { AppIcon } from '@/components/app-icon';
+import type { AppIconName } from '@/components/icons/registry';
 import {
-  MkBlueprintScreen,
   MkDiagnosticoScreen,
-  MkEjecucionScreen,
   MkOverviewScreen,
-  MkProfileProgress,
-  MkRadarChart,
-  MkRealmSidebar,
+  MkPerfilScreen,
+  MkRutaScreen,
 } from '@/components/mk-product-mock-screens';
 
 const SHIELD_ASPECT = 131 / 123;
 
-export type DeviceShowcaseFocus = 'overview' | 'diagnostico' | 'blueprint' | 'ejecucion';
+export type DeviceShowcaseFocus = 'overview' | 'diagnostico' | 'ruta' | 'perfil';
 
-type NavItem = {
-  icon: 'layout-dashboard' | 'scan-line' | 'map' | 'calendar-check';
-  label: string;
-  id: DeviceShowcaseFocus | 'panel';
-};
-
-const DESKTOP_NAV: NavItem[] = [
-  { icon: 'layout-dashboard', label: 'Panel', id: 'panel' },
-  { icon: 'scan-line', label: 'Diagnóstico', id: 'diagnostico' },
-  { icon: 'map', label: 'Blueprint', id: 'blueprint' },
-  { icon: 'calendar-check', label: 'Misiones', id: 'ejecucion' },
+// Mirrors the real bottom-tab navigation (Inicio / Perfil / Ruta / Cuenta) —
+// the actual app shell has no sidebar, on desktop or mobile.
+const NAV_TABS: ReadonlyArray<{ icon: AppIconName; label: string; focus: DeviceShowcaseFocus | 'cuenta' }> = [
+  { icon: 'layout-dashboard', label: 'Inicio', focus: 'overview' },
+  { icon: 'user-check', label: 'Perfil', focus: 'perfil' },
+  { icon: 'map', label: 'Ruta', focus: 'ruta' },
+  { icon: 'shield', label: 'Cuenta', focus: 'cuenta' },
 ];
 
-const MOBILE_NAV = [
-  { icon: 'layout-dashboard' as const, label: 'Inicio', active: true },
-  { icon: 'calendar-check' as const, label: 'Hoy', active: false },
-  { icon: 'map' as const, label: 'Plan', active: false },
-  { icon: 'user-check' as const, label: 'Perfil', active: false },
-] as const;
-
-function navActive(item: NavItem, focus: DeviceShowcaseFocus): boolean {
-  if (focus === 'overview') return item.id === 'panel';
-  return item.id === focus;
-}
-
-function usesRealmSidebar(focus: DeviceShowcaseFocus): boolean {
-  return focus !== 'overview';
+function pageTitle(focus: DeviceShowcaseFocus): string {
+  if (focus === 'perfil') return 'Mi Perfil';
+  if (focus === 'ruta') return 'Ruta MK';
+  return 'Inicio';
 }
 
 function MkAppBrand({ variant = 'sidebar' }: { variant?: 'sidebar' | 'mobile' }) {
@@ -57,27 +41,62 @@ function MkAppBrand({ variant = 'sidebar' }: { variant?: 'sidebar' | 'mobile' })
         className="mk-app-brand__shield"
         decoding="async"
       />
-      {variant === 'sidebar' ? (
-        <div className="mk-app-brand__text">
-          <span className="mk-app-brand__name">MAXIMUS KRATOS</span>
-        </div>
-      ) : null}
     </div>
   );
 }
 
-function DesktopMainContent({ focus }: { focus: DeviceShowcaseFocus }) {
+function MkAppTopBar({ title }: { title: string }) {
+  return (
+    <div className="mk-app-ui__realtopbar">
+      <MkAppBrand variant="mobile" />
+      <span className="mk-app-ui__realtopbar-title">{title}</span>
+      <span className="mk-app-ui__realtopbar-avatar" aria-hidden>
+        M
+      </span>
+    </div>
+  );
+}
+
+function MkAppTabBar({ active }: { active: DeviceShowcaseFocus | 'cuenta' }) {
+  return (
+    <nav className="mk-app-ui__tabbar" aria-hidden>
+      {NAV_TABS.map((tab) => (
+        <div
+          key={tab.label}
+          className={`mk-app-ui__tabbar-item${tab.focus === active ? ' is-active' : ''}`}
+        >
+          <AppIcon name={tab.icon} size={13} />
+          <span>{tab.label}</span>
+        </div>
+      ))}
+    </nav>
+  );
+}
+
+function MkMainContent({ focus }: { focus: DeviceShowcaseFocus }) {
   if (focus === 'diagnostico') return <MkDiagnosticoScreen />;
-  if (focus === 'blueprint') return <MkBlueprintScreen />;
-  if (focus === 'ejecucion') return <MkEjecucionScreen />;
+  if (focus === 'ruta') return <MkRutaScreen />;
+  if (focus === 'perfil') return <MkPerfilScreen />;
   return <MkOverviewScreen />;
 }
 
-function DesktopAppScreen({ focus }: { focus: DeviceShowcaseFocus }) {
-  const realmLayout = usesRealmSidebar(focus);
-
+// The real diagnostic flow (/diagnostico) is chrome-less — no top or bottom bar.
+function MkAppScreen({ focus }: { focus: DeviceShowcaseFocus }) {
+  const chromeless = focus === 'diagnostico';
   return (
-    <div className={`mk-app-ui mk-app-ui--desktop${realmLayout ? ' mk-app-ui--pdf' : ''}`}>
+    <>
+      {!chromeless && <MkAppTopBar title={pageTitle(focus)} />}
+      <main className="mk-app-ui__main">
+        <MkMainContent focus={focus} />
+      </main>
+      {!chromeless && <MkAppTabBar active={focus} />}
+    </>
+  );
+}
+
+function DesktopAppScreen({ focus }: { focus: DeviceShowcaseFocus }) {
+  return (
+    <div className="mk-app-ui mk-app-ui--desktop">
       <header className="mk-app-ui__titlebar">
         <div className="mk-app-ui__traffic">
           <span className="mk-app-ui__traffic-dot mk-app-ui__traffic-dot--close" />
@@ -90,38 +109,12 @@ function DesktopAppScreen({ focus }: { focus: DeviceShowcaseFocus }) {
         </div>
         <div className="mk-app-ui__titlebar-spacer" />
       </header>
-
-      <div className="mk-app-ui__body">
-        <aside className={`mk-app-ui__sidebar${realmLayout ? ' mk-app-ui__sidebar--realms' : ''}`}>
-          {realmLayout ? (
-            <MkRealmSidebar activeRealm="espiritu" />
-          ) : (
-            <>
-              <MkAppBrand variant="sidebar" />
-              <nav className="mk-app-ui__nav">
-                {DESKTOP_NAV.map((item) => (
-                  <div
-                    key={item.label}
-                    className={`mk-app-ui__nav-item${navActive(item, focus) ? ' is-active' : ''}`}
-                  >
-                    <AppIcon name={item.icon} size={14} />
-                    <span>{item.label}</span>
-                  </div>
-                ))}
-              </nav>
-            </>
-          )}
-        </aside>
-
-        <main className={`mk-app-ui__main${realmLayout ? ' mk-app-ui__main--pdf' : ''}`}>
-          <DesktopMainContent focus={focus} />
-        </main>
-      </div>
+      <MkAppScreen focus={focus} />
     </div>
   );
 }
 
-function MobileAppScreen() {
+function MobileAppScreen({ focus }: { focus: DeviceShowcaseFocus }) {
   return (
     <div className="mk-app-ui mk-app-ui--mobile">
       <div className="mk-app-ui__mobile-status">
@@ -132,48 +125,17 @@ function MobileAppScreen() {
           <span />
         </span>
       </div>
-
-      <header className="mk-app-ui__mobile-header">
-        <MkAppBrand variant="mobile" />
-        <div>
-          <p className="mk-app-ui__mobile-greeting">Buenos días</p>
-          <p className="mk-app-ui__mobile-sub">Sincronizado · Móvil</p>
-        </div>
-      </header>
-
-      <article className="mk-app-ui__stat mk-app-ui__stat--accent">
-        <p className="mk-app-ui__stat-label">Índice de alineación</p>
-        <p className="mk-app-ui__stat-value">78%</p>
-      </article>
-
-      <div className="mk-mock-overview__preview mk-mock-overview__preview--mobile">
-        <MkRadarChart />
-        <MkProfileProgress label="Perfil 68%" filled={3} />
-      </div>
-
-      <nav className="mk-app-ui__mobile-nav">
-        {MOBILE_NAV.map((item) => (
-          <div
-            key={item.label}
-            className={`mk-app-ui__mobile-nav-item${item.active ? ' is-active' : ''}`}
-          >
-            <AppIcon name={item.icon} size={14} />
-            <span>{item.label}</span>
-          </div>
-        ))}
-      </nav>
+      <MkAppScreen focus={focus} />
     </div>
   );
 }
 
 type DeviceShowcaseProps = {
-  previewBadge?: boolean;
   focus?: DeviceShowcaseFocus;
   layout?: 'hero' | 'experience';
 };
 
 export function DeviceShowcase({
-  previewBadge = false,
   focus = 'overview',
   layout = 'hero',
 }: DeviceShowcaseProps) {
@@ -181,9 +143,6 @@ export function DeviceShowcase({
 
   return (
     <div className={`device-showcase-wrap${isExperience ? ' device-showcase-wrap--experience' : ''}`}>
-      {previewBadge ? (
-        <p className="device-showcase__preview-badge hud-text">Vista previa del diseño</p>
-      ) : null}
       <div
         className={`device-showcase${isExperience ? ' device-showcase--experience' : ''}`}
         aria-hidden
@@ -192,6 +151,7 @@ export function DeviceShowcase({
         {!isExperience ? <div className="device-showcase__floor" /> : null}
 
         <div className="device-showcase__compose">
+          {/* Laptop: primary on desktop/tablet; hidden on mobile hero (phone leads). */}
           <div className="device-frame device-frame--laptop">
             <div className="device-frame__rim">
               <div className="device-frame__viewport">
@@ -202,18 +162,19 @@ export function DeviceShowcase({
             {!isExperience ? <div className="device-frame__lip" /> : null}
           </div>
 
-          {!isExperience ? (
-            <div className="device-frame device-frame--phone">
-              <div className="device-frame__rim device-frame__rim--phone">
-                <div className="device-frame__island" />
-                <div className="device-frame__viewport device-frame__viewport--phone">
-                  <div className="device-frame__sheen device-frame__sheen--phone" />
-                  <MobileAppScreen />
-                </div>
-                <div className="device-frame__home-indicator" />
+          {/* Phone: always shown in hero; also used as experience media on mobile. */}
+          <div
+            className={`device-frame device-frame--phone${isExperience ? ' device-frame--phone-experience' : ''}`}
+          >
+            <div className="device-frame__rim device-frame__rim--phone">
+              <div className="device-frame__island" />
+              <div className="device-frame__viewport device-frame__viewport--phone">
+                <div className="device-frame__sheen device-frame__sheen--phone" />
+                <MobileAppScreen focus={focus} />
               </div>
+              <div className="device-frame__home-indicator" />
             </div>
-          ) : null}
+          </div>
         </div>
       </div>
     </div>

@@ -76,7 +76,7 @@ export default function ResetPasswordPage() {
   return (
     <AuthShell
       title="Nueva contraseña"
-      description="Elige una contraseña segura para tu cuenta."
+      description="Elige una contraseña segura para retomar el control de tu cuenta."
       footer={
         <p className="auth-footer-text">
           <Link href="/login" className="auth-link">

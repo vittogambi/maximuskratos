@@ -126,7 +126,7 @@ export function RutaContent() {
                 </div>
               </div>
               <div className="mk-ruta-card__lock-note">
-                Pendiente 
+                Pendiente aprobación
               </div>
             </div>
           ))}

@@ -6,7 +6,7 @@ export const legalContact = {
   /** Ej.: "Maximus Kratos SpA", "Persona natural", etc. */
   entity: siteConfig.name,
   /** Ej.: "Santiago, Chile" */
-  jurisdiction: '[País / ciudad — completar]',
+  jurisdiction: '[País / ciudad, completar]',
 } as const;
 
 export type LegalSection = {

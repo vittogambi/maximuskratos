@@ -7,15 +7,16 @@ export const designColors = {
 
 export const siteConfig = {
   name: 'Maximus Kratos',
-  tagline: 'Sistema Operativo para la Vida',
+  tagline: 'Sistema Integral de Transformación Masculina',
   description:
-    'Maximus Kratos analiza quién eres, identifica quién puedes llegar a ser y construye un sistema personalizado para llevarte ahí.',
+    'Una metodología de autodescubrimiento y arquitectura personal que alinea Espíritu, Mente y Cuerpo bajo el rigor físico y la rendición de cuentas.',
 };
 
 /** Landing section ids — must match `id` attributes on the home page */
 export const landingSections = [
-  { id: 'funcionamiento', label: 'Funcionamiento', shortLabel: 'Funcionamiento' },
-  { id: 'marco-central', label: 'Marco Central', shortLabel: 'Marco Central' },
+  { id: 'perfiles', label: 'Perfiles', shortLabel: 'Perfiles' },
+  { id: 'funcionamiento', label: 'Funcionamiento', shortLabel: 'Método' },
+  { id: 'beneficios', label: 'Beneficios', shortLabel: 'Beneficios' },
   { id: 'preguntas-frecuentes', label: 'Preguntas Frecuentes', shortLabel: 'FAQ' },
 ] as const;
 
@@ -26,8 +27,9 @@ export const publicNav = [
     shortLabel: section.shortLabel,
   })),
   { href: '/quienes-somos', label: 'Nosotros' },
-  { href: '/sistema',       label: 'El Sistema' },
-  { href: '/contacto',      label: 'Contacto' },
+  { href: '/sistema', label: 'El Sistema', shortLabel: 'Sistema' },
+  { href: '/base-conceptual', label: 'Base conceptual', shortLabel: 'Base' },
+  { href: '/contacto', label: 'Contacto' },
 ] as const;
 
 export type NavItem = (typeof publicNav)[number];
@@ -37,18 +39,15 @@ export const publicNavAuth = {
   register: { href: '/register', label: 'Comenzar' },
 } as const;
 
-export const footerPlatformNav = publicNav.slice(0, 3);
+export const footerPlatformNav = publicNav.slice(0, 4);
 
 export const footerSiteNav = [
   { href: '/quienes-somos', label: 'Nosotros' },
-  { href: '/sistema',       label: 'El Sistema' },
-  { href: '/eventos',       label: 'Eventos' },
-  { href: '/contacto',      label: 'Contacto' },
-] as const;
-
-export const footerAccessNav = [
-  { href: '/register', label: 'Crear cuenta' },
-  { href: '/login', label: 'Iniciar sesión' },
+  { href: '/sistema', label: 'El Sistema' },
+  { href: '/marco-central', label: 'Marco Central' },
+  { href: '/base-conceptual', label: 'Base conceptual' },
+  { href: '/eventos', label: 'Eventos' },
+  { href: '/contacto', label: 'Contacto' },
 ] as const;
 
 export const footerLegalNav = [

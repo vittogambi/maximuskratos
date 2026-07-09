@@ -86,7 +86,7 @@ export function PublicAuthActions({
           onClick={() => void logout()}
         >
           <AppIcon name="log-out" size={15} aria-hidden />
-          Salir
+          Cerrar sesión
         </button>
       </>
     );

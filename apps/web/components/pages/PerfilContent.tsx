@@ -123,6 +123,7 @@ export function PerfilContent() {
   const archetype = getArchetype(profile.archetypePrimary) ?? {
     slug: profile.archetypePrimary, label: profile.archetypePrimary,
     tagline: '', description: '', roman: '', symbol: '?', image: '',
+    shadow: { label: '', description: '' },
   };
   const secondaryMeta = profile.archetypeSecondary ? getArchetype(profile.archetypeSecondary) : null;
   const scores  = (profile.scores  ?? {}) as Record<string, number>;
@@ -161,7 +162,7 @@ export function PerfilContent() {
         <div className="dk-classification-banner" style={{ '--cls-color': cls.color } as React.CSSProperties}>
           <div className="dk-classification-banner__score">{mkGlobal}</div>
           <div>
-            <p className="dk-classification-banner__label">{cls.label} — {cls.title}</p>
+            <p className="dk-classification-banner__label">{cls.label} · {cls.title}</p>
             <p className="dk-classification-banner__sub">Índice Global MK · 0–100</p>
           </div>
         </div>
@@ -189,7 +190,7 @@ export function PerfilContent() {
 
         {/* Radar */}
         <section className="mk-section">
-          <p className="mk-section-eyebrow">DIMENSIONES — RADAR</p>
+          <p className="mk-section-eyebrow">DIMENSIONES · RADAR</p>
           <div className="mk-radar-card">
             <RadarProfile scores={scores} />
           </div>
@@ -201,6 +202,12 @@ export function PerfilContent() {
             <span className="dk-result-eyebrow" style={{ color: 'rgba(255,80,80,0.7)' }}>LA SOMBRA</span>
             <span className="dk-shadow-score">{shadowScore}</span>
           </div>
+          {archetype.shadow?.label && (
+            <p className="dk-shadow-section__archetype">
+              Como <strong>{archetype.label}</strong>, tu sombra toma la forma de{' '}
+              <strong>{archetype.shadow.label}</strong>: {archetype.shadow.description}
+            </p>
+          )}
           <p className="dk-shadow-section__text">
             La sombra es el conjunto de patrones inconscientes que operan contra tu avance.
           </p>

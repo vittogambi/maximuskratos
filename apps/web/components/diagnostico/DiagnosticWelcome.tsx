@@ -120,13 +120,14 @@ export function DiagnosticWelcome() {
             style={{ marginTop: '1.5rem', color: 'var(--color-text-muted)', maxWidth: '520px' }}
             variants={reduced ? undefined : introStaggerItem}
           >
-            Es una auditoría de tu realidad actual. Cinco módulos miden las dimensiones clave
-            de tu vida. Al completarla, desbloqueas tu Perfil Maestro MK.
+            Es tu punto de partida, no tu sentencia final. Cinco módulos miden las dimensiones
+            clave de tu vida. Al completarla, desbloqueas tu Perfil Maestro MK.
           </motion.p>
           <motion.ul className="dk-welcome__list" variants={reduced ? undefined : introStaggerItem}>
             {[
               '~25 minutos en la primera sesión (5 módulos)',
-              'Tu progreso se guarda en tiempo real',
+              'Tu progreso se guarda en tiempo real: puedes tomarte varios días',
+              'Responde con honestidad: un diagnóstico falso solo te miente a ti',
               'Nadie más ve tus respuestas',
             ].map((item) => (
               <li key={item} className="font-label-md dk-welcome__list-item">

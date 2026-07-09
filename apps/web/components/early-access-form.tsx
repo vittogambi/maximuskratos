@@ -9,6 +9,8 @@ type EarlyAccessFormProps = {
   successMessage?: string;
   variant?: 'primary' | 'secondary';
   className?: string;
+  /** Etiqueta de origen del lead (p. ej. 'eventos-waitlist'). */
+  source?: string;
 };
 
 export function EarlyAccessForm({
@@ -16,6 +18,7 @@ export function EarlyAccessForm({
   successMessage = 'Listo. Te avisamos cuando el diagnóstico abra.',
   variant = 'primary',
   className,
+  source,
 }: EarlyAccessFormProps) {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,7 +30,7 @@ export function EarlyAccessForm({
     setError('');
     setLoading(true);
     try {
-      await apiCreateLead({ email });
+      await apiCreateLead({ email, source });
       setDone(true);
     } catch {
       setError('No pudimos registrar tu correo. Inténtalo de nuevo.');

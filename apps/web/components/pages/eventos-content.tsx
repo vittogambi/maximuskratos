@@ -3,9 +3,10 @@
 import Link from 'next/link';
 import { AppIcon } from '@/components/app-icon';
 import type { AppIconName } from '@/components/icons/registry';
+import { EarlyAccessForm } from '@/components/early-access-form';
 import { ScrollReveal } from '@/components/motion/scroll-reveal';
 import { ScrollStaggerContainer, StaggerItem } from '@/components/motion/stagger';
-import { AuthCta } from '@/components/auth-cta';
+import { SectionIntro } from '@/components/pages/section-intro';
 import { LANDING_IMAGES } from '@/lib/assets';
 
 const EVENT_FEATURES: ReadonlyArray<{
@@ -35,28 +36,48 @@ const EVENT_FEATURES: ReadonlyArray<{
   },
 ];
 
+const EVENT_SPECS: ReadonlyArray<{ label: string; value: string }> = [
+  { label: 'Formato', value: 'Presencial · Jornada de 1 día' },
+  { label: 'Fecha', value: 'Por confirmar · 2026' },
+  { label: 'Ciudad', value: 'Por confirmar' },
+  { label: 'Cupo', value: 'Limitado · prioridad por lista' },
+];
+
+const EVENT_AGENDA: ReadonlyArray<{ num: string; title: string; body: string }> = [
+  {
+    num: '01',
+    title: 'Diagnóstico presencial',
+    body: 'Evaluación en vivo de tu estado real en espíritu, mente y cuerpo. Sin autoengaño: el punto de partida se mide, no se estima.',
+  },
+  {
+    num: '02',
+    title: 'Estrategia · tu Blueprint',
+    body: 'Construcción de tu plan estratégico individual durante la jornada: prioridades, bloqueos y las primeras decisiones de tu Ruta.',
+  },
+  {
+    num: '03',
+    title: 'Alineación y consejo',
+    body: 'Análisis de arquetipo y cierre de compromisos frente a una red de hombres con el mismo estándar de exigencia.',
+  },
+];
+
 export function EventosContent() {
   return (
     <div className="ag-landing ag-page flex min-h-full flex-col antialiased">
       <section className="ag-about-hero relative overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={LANDING_IMAGES.phase02}
+          src={LANDING_IMAGES.eventosHero}
           alt=""
           className="ag-about-hero__bg"
-          style={{ objectPosition: 'center 40%' }}
+          style={{ objectPosition: 'center 30%' }}
           aria-hidden
         />
         <div className="ag-about-hero__scrim" aria-hidden />
         <div className="ag-about-hero__content ag-container relative z-10">
           <ScrollReveal distance={16}>
             <p className="hud-text text-action-red">MK · EVENTOS</p>
-            <h1
-              className="ag-about-hero__title font-display-xl text-white"
-              style={{ fontSize: 'clamp(2.25rem, 6vw, 4rem)' }}
-            >
-              Próximamente.
-            </h1>
+            <h1 className="ag-about-hero__title ag-type-display text-white">Próximamente.</h1>
           </ScrollReveal>
           <ScrollReveal className="ag-about-hero__panel" distance={14} delay={0.08}>
             <div className="ag-panel ag-panel--wide">
@@ -67,8 +88,9 @@ export function EventosContent() {
             </div>
           </ScrollReveal>
           <ScrollReveal className="ag-about-hero__secondary" distance={12} delay={0.12}>
-            <p className="font-body-md">
-              Regístrate para recibir acceso anticipado e información de prelanzamiento.
+            <p className="ag-eventos-status font-body-md">
+              <span className="ag-eventos-status__pip" aria-hidden />
+              Sin eventos activos · Lista de espera abierta
             </p>
           </ScrollReveal>
         </div>
@@ -79,10 +101,7 @@ export function EventosContent() {
           <div className="ag-eventos-info">
             <ScrollReveal distance={14}>
               <p className="hud-text text-action-red">MK · JORNADA PRESENCIAL</p>
-              <h2
-                className="ag-eventos-info__title font-display-xl text-white"
-                style={{ fontSize: 'clamp(1.75rem, 4vw, 2.75rem)' }}
-              >
+              <h2 className="ag-eventos-info__title ag-type-section text-white">
                 Diagnóstico, estrategia y alineación en un solo día.
               </h2>
               <p className="ag-eventos-info__lead font-body-lg">
@@ -113,7 +132,8 @@ export function EventosContent() {
 
           <ScrollReveal className="ag-eventos-card-wrap" distance={14} delay={0.1}>
             <div className="ag-panel ag-eventos-card">
-              <span className="ag-panel__corner ag-panel__corner--hover" aria-hidden />
+              <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
+              <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
               <div className="ag-eventos-card__badge hud-text">Prelanzamiento · 2026</div>
               <div className="ag-eventos-card__head">
                 <div className="ag-marco-card__icon" aria-hidden>
@@ -127,32 +147,72 @@ export function EventosContent() {
                 </div>
               </div>
 
-              <ul className="ag-eventos-card__list">
-                {EVENT_FEATURES.map((item) => (
-                  <li key={item.label}>
-                    <span className="ag-prestaciones-compare__dot ag-prestaciones-compare__dot--yes" aria-hidden />
-                    {item.label}
-                  </li>
+              <dl className="ag-eventos-card__specs">
+                {EVENT_SPECS.map((spec) => (
+                  <div key={spec.label} className="ag-eventos-card__spec">
+                    <dt className="hud-text">{spec.label}</dt>
+                    <dd className="font-body-md">{spec.value}</dd>
+                  </div>
                 ))}
-              </ul>
+              </dl>
 
-              <div className="ag-eventos-card__actions">
-                <Link href="/contacto" className="ag-btn-primary font-label-lg">
-                  Solicitar Información
-                </Link>
-                <AuthCta href="/register" className="ag-eventos-card__secondary font-label-lg">
-                  Acceso anticipado
-                </AuthCta>
+              <div className="ag-eventos-card__waitlist">
+                <p className="ag-eventos-card__waitlist-label font-label-lg">
+                  Únete a la lista de espera
+                </p>
+                <p className="ag-eventos-card__waitlist-lead font-body-md">
+                  Acceso anticipado a fecha, ciudad y reserva de cupo antes del anuncio público.
+                </p>
+                <EarlyAccessForm
+                  variant="secondary"
+                  className="ag-eventos-card__waitlist-form"
+                  submitLabel="Unirme a la lista"
+                  successMessage="Estás en la lista. Te avisaremos antes del anuncio público."
+                  source="eventos-waitlist"
+                />
               </div>
+
+              <p className="ag-eventos-card__contact font-body-md">
+                ¿Tienes preguntas sobre el evento?{' '}
+                <Link href="/contacto" className="ag-eventos-card__contact-link">
+                  Escríbenos
+                </Link>
+              </p>
             </div>
           </ScrollReveal>
+        </div>
+      </section>
+
+      <section className="ag-section-inner ag-eventos-agenda" aria-labelledby="agenda-heading">
+        <div className="ag-container ag-container--narrow">
+          <SectionIntro
+            eyebrow="MK · QUÉ SE VIVIRÁ"
+            title="Tres movimientos. Un solo día."
+            lead="La jornada sigue la misma lógica del sistema: primero mirar con honestidad, después ordenar, y al final comprometerse con un plan concreto."
+            headingId="agenda-heading"
+          />
+          <ol className="ag-eventos-agenda__list">
+            {EVENT_AGENDA.map((block) => (
+              <ScrollReveal key={block.num} className="ag-eventos-agenda__item" distance={12}>
+                <span className="ag-eventos-agenda__num" aria-hidden>
+                  {block.num}
+                </span>
+                <div className="ag-eventos-agenda__copy">
+                  <h3 className="ag-eventos-agenda__title ag-type-item text-white">
+                    {block.title}
+                  </h3>
+                  <p className="ag-eventos-agenda__body font-body-md">{block.body}</p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </ol>
         </div>
       </section>
 
       <section className="ag-prestaciones-quote relative overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={LANDING_IMAGES.statueAligned}
+          src={LANDING_IMAGES.eventosQuote}
           alt=""
           className="ag-prestaciones-quote__bg"
           aria-hidden
@@ -160,17 +220,12 @@ export function EventosContent() {
         <div className="ag-prestaciones-quote__scrim" aria-hidden />
         <ScrollReveal className="ag-container relative z-10" distance={14}>
           <div className="ag-panel ag-panel--wide ag-prestaciones-quote__panel">
-            <span
-              className="font-label-lg mb-6 flex items-center justify-center gap-4 text-sm uppercase text-white/50"
-              style={{ letterSpacing: '0.3em' }}
-            >
-              <span className="h-px w-8 bg-white/30" />
-              <span className="h-px w-8 bg-white/30" />
-            </span>
+            <span className="ag-eventos-quote-rule" aria-hidden />
             <blockquote className="ag-prestaciones-quote__text font-display-xl text-white">
-              &ldquo;El hombre que actúa en comunidad de propósito multiplica su impacto.&rdquo;
+              &ldquo;Donde la voluntad flaquea, la estructura sostiene. Somos una fraternidad de
+              constructores.&rdquo;
             </blockquote>
-            <footer className="hud-text mt-6 text-action-red">Principio Maximus Kratos</footer>
+            <footer className="hud-text mt-6 text-action-red">Manifiesto MK · No Caminamos Solos</footer>
           </div>
         </ScrollReveal>
       </section>

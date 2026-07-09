@@ -62,7 +62,7 @@ export default function RegisterPage() {
       showNav
       atmosphere="register"
       title="Crea tu cuenta de fundador"
-      description="Cuenta gratis, estatus de fundador y acceso a tu panel desde hoy."
+      description="Cuenta gratuita, estatus de fundador permanente y acceso a tu panel desde hoy."
       footer={
         <AuthFooterLink
           text="¿Ya tienes cuenta?"

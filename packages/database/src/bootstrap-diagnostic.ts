@@ -58,6 +58,21 @@ async function syncQuestionnaireFromJson(
     });
     if (!dbModule) continue;
 
+    if (
+      dbModule.titleEs !== mod.titleEs ||
+      dbModule.introEs !== mod.introEs ||
+      dbModule.outroTemplateEs !== mod.outroTemplateEs
+    ) {
+      await prisma.diagnosticModule.update({
+        where: { id: dbModule.id },
+        data: {
+          titleEs: mod.titleEs,
+          introEs: mod.introEs,
+          outroTemplateEs: mod.outroTemplateEs,
+        },
+      });
+    }
+
     for (const jq of mod.questions) {
       const dbQ =
         dbModule.questions.find((q) => q.textEs === jq.textEs) ??

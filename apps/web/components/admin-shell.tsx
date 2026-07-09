@@ -112,7 +112,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
               disabled={loggingOut}
             >
               <AppIcon name="log-out" size={14} />
-              {loggingOut ? 'Saliendo…' : 'Salir'}
+              {loggingOut ? 'Cerrando sesión…' : 'Cerrar sesión'}
             </button>
           </div>
         </div>

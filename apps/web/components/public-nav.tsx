@@ -5,26 +5,20 @@ import { usePathname } from 'next/navigation';
 import type { MouseEvent } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AppIcon } from '@/components/app-icon';
+import { handleLandingHashClick } from '@/components/landing-hash-link';
 import { Logo } from './logo';
 import { PublicAuthActions } from '@/components/public-auth-actions';
-import { landingSections, publicNav, type NavItem } from '@/lib/design';
+import { footerSiteNav, landingSections, publicNav, type NavItem } from '@/lib/design';
+import {
+  applyLandingHashFromLocation,
+  clearPendingLandingHash,
+  hashFromHref,
+  normalizeLandingHash,
+  peekPendingLandingHash,
+  writeLandingHash,
+} from '@/lib/landing-nav';
 
 const LANDING_SECTION_IDS = landingSections.map((section) => section.id);
-
-const LEGACY_HASH_MAP: Record<string, string> = {
-  '#sistema': '#funcionamiento',
-  '#marco': '#marco-central',
-  '#faq': '#preguntas-frecuentes',
-};
-
-function normalizeHash(hash: string): string {
-  return LEGACY_HASH_MAP[hash] ?? hash;
-}
-
-function hashFromHref(href: string): string | null {
-  const i = href.indexOf('#');
-  return i === -1 ? null : href.slice(i);
-}
 
 function isActiveLink(href: string, pathname: string, activeHash: string): boolean {
   const linkHash = hashFromHref(href);
@@ -32,15 +26,6 @@ function isActiveLink(href: string, pathname: string, activeHash: string): boole
     return pathname === '/' && activeHash === linkHash;
   }
   return pathname === href;
-}
-
-function scrollToSection(hash: string) {
-  const id = hash.replace('#', '');
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function writeHash(hash: string) {
-  window.history.replaceState(null, '', hash ? `/${hash}` : '/');
 }
 
 function isPageReload(): boolean {
@@ -52,18 +37,32 @@ function isPageReload(): boolean {
 function useActiveSection(pathname: string) {
   const [activeHash, setActiveHash] = useState('');
   const clickedRef = useRef(false);
+  const sectionNavLockRef = useRef(false);
+
+  const runSectionNavigation = useCallback((hash: string) => {
+    const normalized = normalizeLandingHash(hash);
+    clickedRef.current = true;
+    sectionNavLockRef.current = true;
+    setActiveHash(normalized);
+    writeLandingHash(normalized);
+    applyLandingHashFromLocation((found) => {
+      window.setTimeout(() => {
+        clickedRef.current = false;
+        if (found) sectionNavLockRef.current = false;
+      }, found ? 1200 : 150);
+      if (!found) sectionNavLockRef.current = false;
+    });
+  }, []);
 
   const setActiveHashFromNav = useCallback((hash: string) => {
-    clickedRef.current = true;
-    setActiveHash(hash);
     if (pathname === '/') {
-      writeHash(hash);
-      scrollToSection(hash);
+      runSectionNavigation(hash);
+      return;
     }
-    window.setTimeout(() => {
-      clickedRef.current = false;
-    }, 800);
-  }, [pathname]);
+    clickedRef.current = true;
+    sectionNavLockRef.current = true;
+    setActiveHash(hash);
+  }, [pathname, runSectionNavigation]);
 
   useEffect(() => {
     if (pathname !== '/') {
@@ -75,19 +74,19 @@ function useActiveSection(pathname: string) {
       if ('scrollRestoration' in window.history) {
         window.history.scrollRestoration = 'manual';
       }
-      if (window.location.hash) writeHash('');
+      clearPendingLandingHash();
+      if (window.location.hash) writeLandingHash('');
       window.scrollTo({ top: 0, behavior: 'auto' });
       setActiveHash('');
     } else {
-      let hash = window.location.hash;
+      const pending = peekPendingLandingHash();
+      const locationHash =
+        typeof window !== 'undefined' && window.location.hash
+          ? normalizeLandingHash(window.location.hash)
+          : null;
+      const hash = pending ?? locationHash;
       if (hash) {
-        const normalized = normalizeHash(hash);
-        if (normalized !== hash) {
-          writeHash(normalized);
-          hash = normalized;
-        }
-        setActiveHash(hash);
-        requestAnimationFrame(() => scrollToSection(hash));
+        runSectionNavigation(hash);
       } else {
         setActiveHash('');
       }
@@ -96,11 +95,12 @@ function useActiveSection(pathname: string) {
     const activationLine = () => Math.round(window.innerHeight * 0.18);
 
     const updateActiveSection = () => {
-      if (clickedRef.current) return;
+      if (clickedRef.current || sectionNavLockRef.current) return;
+      if (peekPendingLandingHash()) return;
 
       if (window.scrollY < 200) {
         setActiveHash('');
-        if (window.location.hash) writeHash('');
+        if (window.location.hash) writeLandingHash('');
         return;
       }
 
@@ -118,9 +118,9 @@ function useActiveSection(pathname: string) {
       const next = activeId ? `#${activeId}` : '';
       setActiveHash(next);
       if (next) {
-        if (window.location.hash !== next) writeHash(next);
+        if (window.location.hash !== next) writeLandingHash(next);
       } else if (window.location.hash) {
-        writeHash('');
+        writeLandingHash('');
       }
     };
 
@@ -131,15 +131,15 @@ function useActiveSection(pathname: string) {
       window.removeEventListener('scroll', updateActiveSection);
       window.removeEventListener('resize', updateActiveSection);
     };
-  }, [pathname]);
+  }, [pathname, runSectionNavigation]);
 
   useEffect(() => {
     const onHashChange = () => {
       let hash = window.location.hash;
       if (pathname === '/' && hash) {
-        const normalized = normalizeHash(hash);
+        const normalized = normalizeLandingHash(hash);
         if (normalized !== hash) {
-          writeHash(normalized);
+          writeLandingHash(normalized);
           hash = normalized;
         }
       }
@@ -151,8 +151,10 @@ function useActiveSection(pathname: string) {
 
   const clearHomeNav = useCallback(() => {
     clickedRef.current = true;
+    sectionNavLockRef.current = false;
+    clearPendingLandingHash();
     setActiveHash('');
-    writeHash('');
+    writeLandingHash('');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     window.setTimeout(() => {
       clickedRef.current = false;
@@ -169,15 +171,7 @@ function handleHashClick(
   setActiveHashFromNav: (hash: string) => void,
   onNavigate?: () => void,
 ) {
-  const linkHash = hashFromHref(href);
-  if (!linkHash) return;
-
-  setActiveHashFromNav(linkHash);
-  onNavigate?.();
-
-  if (pathname === '/') {
-    e.preventDefault();
-  }
+  handleLandingHashClick(e, href, pathname, setActiveHashFromNav, onNavigate);
 }
 
 function NavLink({
@@ -196,6 +190,7 @@ function NavLink({
   return (
     <Link
       href={link.href}
+      scroll={false}
       className={`public-nav__link${isActiveLink(link.href, pathname, activeHash) ? ' is-active' : ''}`}
       onClick={(e) => handleHashClick(e, link.href, pathname, setActiveHashFromNav)}
     >
@@ -228,6 +223,7 @@ export function PublicNav() {
 
   const landingLinks = publicNav.slice(0, 3);
   const pageLinks = publicNav.slice(3);
+  const drawerLandingLinks = publicNav.slice(0, 4);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -364,10 +360,11 @@ export function PublicNav() {
 
         <nav className="mobile-drawer__links" aria-label="Navegación móvil">
           <p className="mobile-drawer__group-label">Plataforma</p>
-          {landingLinks.map((link) => (
+          {drawerLandingLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
+              scroll={false}
               className={`mobile-drawer__link${isActiveLink(link.href, pathname, activeHash) ? ' is-active' : ''}`}
               onClick={(e) => handleHashClick(e, link.href, pathname, setActiveHashFromNav, () => setOpen(false))}
             >
@@ -375,7 +372,7 @@ export function PublicNav() {
             </Link>
           ))}
           <p className="mobile-drawer__group-label">Sitio</p>
-          {pageLinks.map((link) => (
+          {footerSiteNav.map((link) => (
             <Link
               key={link.href}
               href={link.href}

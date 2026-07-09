@@ -1,21 +1,7 @@
-function MkSegmentProgress({ filled, total = 5 }: { filled: number; total?: number }) {
-  return (
-    <div className="mk-mock-segments" aria-hidden>
-      {Array.from({ length: total }, (_, i) => (
-        <span key={i} className={`mk-mock-segments__cell${i < filled ? ' is-filled' : ''}`} />
-      ))}
-    </div>
-  );
-}
+import { AppIcon } from '@/components/app-icon';
+import { ARCHETYPES } from '@/lib/archetypes';
 
-export function MkProfileProgress({ label, filled, total = 5 }: { label: string; filled: number; total?: number }) {
-  return (
-    <div className="mk-mock-profile-progress">
-      <span className="mk-mock-profile-progress__label">{label}</span>
-      <MkSegmentProgress filled={filled} total={total} />
-    </div>
-  );
-}
+const REY = ARCHETYPES.rey;
 
 export function MkRadarChart() {
   const points = '50,8 78,28 72,58 48,68 22,52';
@@ -47,169 +33,173 @@ export function MkRadarChart() {
   );
 }
 
-export function MkRealmSidebar({ activeRealm = 'espiritu' }: { activeRealm?: 'espiritu' | 'mente' | 'fisico' }) {
-  const espirituItems = ['Visión', 'Valores', 'Estándares', 'La Sombra', 'Ikigai', 'Huella Personal'];
-
+function MkArchetypeBanner({ compact = false }: { compact?: boolean }) {
   return (
-    <nav className="mk-mock-realms" aria-hidden>
-      <p className="mk-mock-realms__menu">Menú</p>
-      <div className={`mk-mock-realms__group${activeRealm === 'espiritu' ? ' is-active' : ''}`}>
-        <p className="mk-mock-realms__realm">
-          <span className="mk-mock-realms__icon">◆</span> Espíritu
-        </p>
-        {activeRealm === 'espiritu' ? (
-          <ul className="mk-mock-realms__sub">
-            {espirituItems.map((item, i) => (
-              <li key={item} className={i === 0 ? 'is-active' : undefined}>
-                {item}
-              </li>
-            ))}
-          </ul>
-        ) : null}
+    <div className={`mk-mock-archetype-banner${compact ? ' mk-mock-archetype-banner--compact' : ''}`}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={REY.image}
+        alt=""
+        className="mk-mock-archetype-banner__img"
+        decoding="async"
+      />
+      <div className="mk-mock-archetype-banner__copy">
+        <p className="mk-mock-archetype-banner__roman">{REY.roman.split(' · ')[0]}</p>
+        <p className="mk-mock-archetype-banner__name">{REY.label}</p>
+        <p className="mk-mock-archetype-banner__tagline">{REY.tagline}</p>
       </div>
-      <p className={`mk-mock-realms__realm${activeRealm === 'mente' ? ' is-active' : ''}`}>
-        <span className="mk-mock-realms__icon">◆</span> Mente
-      </p>
-      <p className={`mk-mock-realms__realm${activeRealm === 'fisico' ? ' is-active' : ''}`}>
-        <span className="mk-mock-realms__icon">◆</span> Físico
-      </p>
-    </nav>
+    </div>
   );
 }
+
+// ── Diagnóstico — matches the real chrome-less /diagnostico question flow ────
+
+const DIAGNOSTICO_SCALE_OPTIONS = [
+  { order: 1, text: 'Una historia de víctima o resignación.' },
+  { order: 3, text: 'Una historia mixta; a veces asumo responsabilidad, a veces culpo al contexto.' },
+  { order: 5, text: 'Una historia de responsabilidad, crecimiento y dominio personal.' },
+] as const;
 
 export function MkDiagnosticoScreen() {
   return (
     <div className="mk-mock-diagnostico">
-      <div className="mk-mock-diagnostico__card">
-        <div className="mk-mock-diagnostico__head">
-          <span className="mk-mock-diagnostico__title">Visión</span>
-          <MkProfileProgress label="Avance de diagnóstico 68%" filled={3} />
+      <div className="mk-mock-diagnostico__rail">
+        <div className="mk-mock-diagnostico__rail-info">
+          <span>Mentalidad e Identidad</span>
+          <span>6 / 6</span>
         </div>
-        <p className="mk-mock-diagnostico__section">Sección 1 · Mentalidad e Identidad</p>
-        <p className="mk-mock-diagnostico__question">
-          ¿Mis decisiones diarias reflejan al hombre que digo que quiero llegar a ser?
-        </p>
-        <ul className="mk-mock-diagnostico__options">
-          <li>Casi nunca</li>
-          <li>A veces</li>
-          <li className="is-selected">Casi siempre</li>
-        </ul>
-        <div className="mk-mock-diagnostico__foot">
-          <span className="mk-mock-diagnostico__pager" aria-hidden>
-            <span />
-            <span />
-            <span className="is-active" />
-            <span />
-            <span />
-          </span>
-          <span className="mk-mock-diagnostico__accept">Aceptar</span>
+        <div className="mk-mock-diagnostico__rail-track">
+          <div className="mk-mock-diagnostico__rail-fill" style={{ width: '24%' }} />
         </div>
       </div>
-    </div>
-  );
-}
-
-export function MkBlueprintScreen() {
-  return (
-    <div className="mk-mock-blueprint">
-      <div className="mk-mock-blueprint__grid">
-        <article className="mk-mock-tile">
-          <MkProfileProgress label="Visión 100%" filled={5} />
-          <p className="mk-mock-tile__quote">Lo que desearía ser en 5 años es…</p>
-          <p className="mk-mock-tile__value">Un médico profesional</p>
-        </article>
-
-        <article className="mk-mock-tile">
-          <MkProfileProgress label="Valores 50%" filled={2} />
-          <div className="mk-mock-tags">
-            <span>Determinación</span>
-            <span>Responsabilidad</span>
-            <span>Valentía</span>
-          </div>
-        </article>
-
-        <article className="mk-mock-tile mk-mock-tile--radar">
-          <MkProfileProgress label="La Sombra 80%" filled={4} />
-          <div className="mk-mock-tile__split">
-            <ul className="mk-mock-shadow-list">
-              <li>A. 90% Patrones</li>
-              <li>B. 70% Emociones</li>
-              <li>C. 80% Proyección</li>
-            </ul>
-            <MkRadarChart />
-          </div>
-        </article>
-
-        <article className="mk-mock-tile mk-mock-tile--accent">
-          <MkProfileProgress label="Huella Personal 0%" filled={0} />
-          <p className="mk-mock-tile__banner">
-            Yo, [Nombre], he venido al mundo para dejar sello en quienes toco.
-          </p>
-        </article>
-      </div>
-    </div>
-  );
-}
-
-export function MkEjecucionScreen() {
-  return (
-    <div className="mk-mock-ejecucion">
-      <div className="mk-mock-ejecucion__head">
-        <MkProfileProgress label="Estándares 42%" filled={2} />
-        <span className="mk-mock-ejecucion__streak">Racha · 12 días</span>
-      </div>
-      <div className="mk-mock-ejecucion__grid">
-        <div className="mk-mock-mini">
-          <span>Mis Valores</span>
-          <strong>Determinación</strong>
-        </div>
-        <div className="mk-mock-mini">
-          <span>Mis Acciones</span>
-          <strong>3 hoy</strong>
-        </div>
-        <div className="mk-mock-mini">
-          <span>Mis Hábitos</span>
-          <strong>5 activos</strong>
-        </div>
-        <div className="mk-mock-mini">
-          <span>5 Reglas</span>
-          <strong>2 cumplidas</strong>
-        </div>
-      </div>
-      <ul className="mk-mock-diagnostico__options mk-mock-ejecucion__missions">
-        <li className="is-selected">Revisión matutina · Espíritu</li>
-        <li>Bloque de enfoque · 90 min</li>
-        <li>Entrenamiento · Cuerpo</li>
+      <p className="mk-mock-diagnostico__badge">
+        <AppIcon name="brain" size={8} />
+        Mentalidad e Identidad
+      </p>
+      <p className="mk-mock-diagnostico__question">
+        ¿Qué historia me cuento a mí mismo cuando las cosas se ponen difíciles?
+      </p>
+      <p className="mk-mock-diagnostico__context">
+        Cuando todo se complica, ¿qué historia te cuentas: de víctima o de responsable?
+      </p>
+      <ul className="mk-mock-diagnostico__options">
+        {DIAGNOSTICO_SCALE_OPTIONS.map((opt) => (
+          <li key={opt.order} className={opt.order === 5 ? 'is-selected' : undefined}>
+            <span className="mk-mock-diagnostico__option-num">{opt.order}</span>
+            <span className="mk-mock-diagnostico__option-text">{opt.text}</span>
+            <span className="mk-mock-diagnostico__option-check" aria-hidden>
+              ✓
+            </span>
+          </li>
+        ))}
       </ul>
+      <div className="mk-mock-diagnostico__cta">Continuar →</div>
+      <p className="mk-mock-diagnostico__exit">Guardar y salir</p>
     </div>
   );
 }
+
+// ── Inicio — matches the real /panel archetype-ready state ───────────────────
 
 export function MkOverviewScreen() {
   return (
     <div className="mk-mock-overview">
-      <div className="mk-mock-overview__head">
-        <MkProfileProgress label="Avance de perfil 68%" filled={3} />
-        <span className="mk-mock-overview__index">Índice 78%</span>
+      <p className="mk-mock-eyebrow">TU ARQUETIPO</p>
+      <MkArchetypeBanner />
+      <div className="mk-app-ui__stats">
+        <article className="mk-app-ui__stat mk-app-ui__stat--accent">
+          <p className="mk-app-ui__stat-label">Global MK</p>
+          <p className="mk-app-ui__stat-value">78</p>
+        </article>
+        <article className="mk-app-ui__stat">
+          <p className="mk-app-ui__stat-label">Claridad</p>
+          <p className="mk-app-ui__stat-value">74</p>
+        </article>
+        <article className="mk-app-ui__stat">
+          <p className="mk-app-ui__stat-label">Ejecución</p>
+          <p className="mk-app-ui__stat-value">61</p>
+        </article>
+        <article className="mk-app-ui__stat">
+          <p className="mk-app-ui__stat-label">Estabilidad</p>
+          <p className="mk-app-ui__stat-value">68</p>
+        </article>
       </div>
-      <div className="mk-mock-blueprint mk-mock-blueprint--compact">
-        <div className="mk-mock-blueprint__grid">
-          <article className="mk-mock-tile">
-            <MkProfileProgress label="Visión" filled={5} />
-            <p className="mk-mock-tile__value">Arquetipo Rey</p>
-          </article>
-          <article className="mk-mock-tile mk-mock-tile--radar">
-            <MkProfileProgress label="La Sombra" filled={4} />
-            <MkRadarChart />
-          </article>
-          <article className="mk-mock-tile mk-mock-tile--accent">
-            <p className="mk-mock-tile__banner">Plano de Vida activo</p>
-          </article>
-          <article className="mk-mock-tile">
-            <MkProfileProgress label="Misiones hoy" filled={2} />
-            <p className="mk-mock-tile__value">3 pendientes</p>
-          </article>
+      <p className="mk-mock-cta">Ver mi perfil completo →</p>
+    </div>
+  );
+}
+
+// ── Ruta MK — matches the real /ruta system of sequential auditorías ─────────
+
+const RUTA_MODULES = [
+  { icon: 'brain', name: 'Mentalidad e Identidad', status: '✓' },
+  { icon: 'activity', name: 'Hábitos y Acciones', status: '62%' },
+  { icon: 'target', name: 'Soberanía Financiera', status: '—' },
+] as const;
+
+export function MkRutaScreen() {
+  return (
+    <div className="mk-mock-ruta">
+      <p className="mk-mock-eyebrow">SISTEMA DE AUDITORÍAS</p>
+      <div className="mk-mock-ruta-card">
+        <div className="mk-mock-ruta-card__head">
+          <div>
+            <p className="mk-mock-ruta-card__id">E-AUD-001</p>
+            <p className="mk-mock-ruta-card__name">Auditoría Inicial</p>
+          </div>
+          <span className="mk-mock-ruta-card__badge">En progreso</span>
         </div>
+        <ul className="mk-mock-ruta-card__modules">
+          {RUTA_MODULES.map((mod) => (
+            <li key={mod.name}>
+              <AppIcon name={mod.icon} size={8} />
+              <span>{mod.name}</span>
+              <span>{mod.status}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="mk-mock-ruta-card__track">
+          <div className="mk-mock-ruta-card__fill" style={{ width: '48%' }} />
+        </div>
+      </div>
+      <div className="mk-mock-ruta-card mk-mock-ruta-card--locked">
+        <div className="mk-mock-ruta-card__head">
+          <div>
+            <p className="mk-mock-ruta-card__id">E-AUD-002</p>
+            <p className="mk-mock-ruta-card__name">Auditoría II</p>
+          </div>
+          <span className="mk-mock-ruta-card__badge mk-mock-ruta-card__badge--locked">Bloqueada</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Mi Perfil — matches the real /perfil archetype + radar + sombra dashboard ─
+
+export function MkPerfilScreen() {
+  return (
+    <div className="mk-mock-perfil">
+      <MkArchetypeBanner compact />
+      <p className="mk-mock-eyebrow">DIMENSIONES · RADAR</p>
+      <div className="mk-mock-perfil-radar-row">
+        <MkRadarChart />
+        <div className="mk-mock-perfil-scores">
+          <span>Identidad · 74</span>
+          <span>Hábitos · 61</span>
+          <span>Relaciones · 68</span>
+        </div>
+      </div>
+      <div>
+        <div className="mk-mock-perfil-shadow-head">
+          <p className="mk-mock-eyebrow" style={{ color: 'rgba(255,90,90,0.75)', margin: 0 }}>
+            LA SOMBRA
+          </p>
+          <span className="mk-mock-perfil-shadow-score">31</span>
+        </div>
+        <p className="mk-mock-perfil-shadow-text">
+          {REY.shadow.label}: domina en vez de sostener.
+        </p>
       </div>
     </div>
   );

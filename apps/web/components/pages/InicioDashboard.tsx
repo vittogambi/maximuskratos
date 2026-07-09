@@ -45,7 +45,7 @@ function InProgressDashboard({ progress }: { progress: DiagnosticProgressDto }) 
       {/* Hero progress card */}
       <div className="mk-progress-hero">
         <div className="mk-progress-hero__top">
-          <p className="mk-section-eyebrow">AUDITORIA INICIAL · E-AUD-001</p>
+          <p className="mk-section-eyebrow">AUDITORÍA INICIAL · E-AUD-001</p>
           <span className="mk-progress-hero__pct">{Math.round(completionPct)}%</span>
         </div>
         <h2 className="mk-progress-hero__title">En construcción.</h2>
@@ -109,7 +109,7 @@ function InProgressDashboard({ progress }: { progress: DiagnosticProgressDto }) 
 
       {/* Locked profile teaser */}
       <div className="mk-locked-teaser">
-        <p className="mk-section-eyebrow" style={{ color: 'rgba(200,0,0,0.6)' }}>PERFIL MAESTRO — BLOQUEADO</p>
+        <p className="mk-section-eyebrow" style={{ color: 'rgba(200,0,0,0.6)' }}>PERFIL MAESTRO · BLOQUEADO</p>
         <p className="mk-locked-teaser__body">
           Tu arquetipo, fortalezas y prioridades a 90 días se revelan al completar la auditoría.
         </p>
@@ -168,10 +168,10 @@ function ProfileDashboard({ profile }: { profile: NonNullable<MasterProfileDto> 
         </div>
         <p className="mk-sombra-card__text">
           {shadowScore < 30
-            ? 'Sombra contenida — buena conciencia de tus patrones.'
+            ? 'Sombra contenida: buena conciencia de tus patrones.'
             : shadowScore < 60
-            ? 'Sombra activa — algunos patrones están limitando tu potencial.'
-            : 'Sombra dominante — tu cuello de botella más crítico.'}
+            ? 'Sombra activa: algunos patrones están limitando tu potencial.'
+            : 'Sombra dominante: tu cuello de botella más crítico.'}
         </p>
         <div className="mk-sombra-card__track">
           <div className="mk-sombra-card__fill" style={{ width: `${Math.min(100, shadowScore)}%` }} />
@@ -185,7 +185,7 @@ function ProfileDashboard({ profile }: { profile: NonNullable<MasterProfileDto> 
           <div className="mk-ruta-teaser__item mk-ruta-teaser__item--done">
             <div className="mk-ruta-teaser__dot" />
             <div>
-              <p className="mk-ruta-teaser__label">Auditoría I — E-AUD-001</p>
+              <p className="mk-ruta-teaser__label">Auditoría I · E-AUD-001</p>
               <p className="mk-ruta-teaser__sub">Completada</p>
             </div>
           </div>

@@ -247,6 +247,11 @@ function PanelStateB({ email, profile }: { email: string; profile: MasterProfile
                 {meta?.tagline && (
                   <p className="font-body-sm" style={{ margin: '0.25rem 0 0', color: 'rgba(255,255,255,0.4)', fontStyle: 'italic' }}>{meta.tagline}</p>
                 )}
+                {meta?.shadow?.label && (
+                  <p className="font-body-sm" style={{ margin: '0.5rem 0 0', color: 'rgba(255,120,120,0.55)' }}>
+                    Sombra: {meta.shadow.label}
+                  </p>
+                )}
               </div>
             </div>
           );

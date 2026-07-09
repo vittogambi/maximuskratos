@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Maximus Kratos',
     short_name: 'MK',
-    description: 'Sistema Operativo para la Vida — tu perfil, tu ruta, tu arquetipo.',
+    description: 'Sistema Integral de Transformación Masculina: tu perfil, tu ruta, tu arquetipo.',
     start_url: '/panel',
     display: 'standalone',
     background_color: '#0a0a0a',

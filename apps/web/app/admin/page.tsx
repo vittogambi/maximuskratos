@@ -165,7 +165,7 @@ export default function AdminDashboardPage() {
                   {recentLeads.length === 0 ? (
                     <tr>
                       <td colSpan={4} className="admin-table__empty">
-                        Sin leads — el formulario de contacto alimenta esta vista.
+                        Sin leads. El formulario de contacto alimenta esta vista.
                       </td>
                     </tr>
                   ) : null}

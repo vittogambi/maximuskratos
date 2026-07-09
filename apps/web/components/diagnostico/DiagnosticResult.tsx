@@ -133,6 +133,7 @@ export function DiagnosticResult() {
     roman: '',
     symbol: '?',
     image: '',
+    shadow: { label: '', description: '' },
   };
   const secondaryMeta = profile.archetypeSecondary ? getArchetype(profile.archetypeSecondary) : null;
 
@@ -225,6 +226,12 @@ export function DiagnosticResult() {
             <span className="dk-result-eyebrow" style={{ color: 'rgba(255,80,80,0.7)' }}>LA SOMBRA</span>
             <span className="dk-shadow-score">{shadowScore}</span>
           </div>
+          {archetype.shadow?.label && (
+            <p className="dk-shadow-section__archetype">
+              Como <strong>{archetype.label}</strong>, tu sombra toma la forma de{' '}
+              <strong>{archetype.shadow.label}</strong>: {archetype.shadow.description}
+            </p>
+          )}
           <p className="dk-shadow-section__text">
             La sombra es el conjunto de patrones inconscientes que operan contra tu avance.
             Cuanto más alto su índice, más energía consumen sin que lo notes.

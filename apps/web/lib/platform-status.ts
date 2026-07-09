@@ -57,7 +57,7 @@ export const PLATFORM_MODULES: readonly PlatformModule[] = [
     id: 'diagnostico',
     nombre: 'Diagnóstico digital',
     descripcion:
-      'Evaluación estructurada en Espíritu, Mente y Cuerpo con índice de alineación.',
+      'Evaluación estructurada en Espíritu, Mente y Cuerpo con índice de alineación inicial.',
     estado: 'en-desarrollo',
     fase: 'Fase 2',
   },
@@ -65,7 +65,7 @@ export const PLATFORM_MODULES: readonly PlatformModule[] = [
     id: 'plano-vida',
     nombre: 'Plano de Vida y propósito',
     descripcion:
-      'Arquetipo, declaración de propósito y hoja de ruta a 30, 90 y 365 días.',
+      'Arquetipo, declaración de propósito y hoja de ruta a 40 días, 3, 6, 9 y 12 meses.',
     estado: 'en-desarrollo',
     fase: 'Fase 2',
   },
@@ -92,7 +92,7 @@ export const PANEL_MODULES: readonly PanelModule[] = [
     id: 'diagnostico',
     nombre: 'Diagnóstico',
     descripcion:
-      'Evaluación en Espíritu, Mente y Cuerpo con índice de alineación.',
+      'Evaluación en Espíritu, Mente y Cuerpo con índice de alineación inicial.',
     estado: 'proximamente',
     icon: 'scan-line',
   },

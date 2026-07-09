@@ -2,36 +2,45 @@
 
 import Link from 'next/link';
 import { AuthCta } from '@/components/auth-cta';
+import { LandingHashLink } from '@/components/landing-hash-link';
 import { useAuthSession } from '@/components/auth-session-provider';
 import { FooterSocialBar } from './footer-social-bar';
 import { Logo } from './logo';
 import {
-  footerAccessNav,
   footerLegalNav,
   footerPlatformNav,
   footerSiteNav,
   publicNavAuth,
   siteConfig,
 } from '@/lib/design';
+import { PLATFORM_STATUS_LINE } from '@/lib/platform-status';
 
 function FooterNavColumn({
   title,
   links,
   ariaLabel,
+  useLandingHash = false,
 }: {
   title: string;
   links: ReadonlyArray<{ href: string; label: string }>;
   ariaLabel: string;
+  useLandingHash?: boolean;
 }) {
   return (
     <div className="site-footer__col">
       <p className="site-footer__col-title">{title}</p>
       <nav className="site-footer__col-links" aria-label={ariaLabel}>
-        {links.map((link) => (
-          <Link key={link.href + link.label} href={link.href} className="site-footer__link">
-            {link.label}
-          </Link>
-        ))}
+        {links.map((link) =>
+          useLandingHash ? (
+            <LandingHashLink key={link.href + link.label} href={link.href} className="site-footer__link">
+              {link.label}
+            </LandingHashLink>
+          ) : (
+            <Link key={link.href + link.label} href={link.href} className="site-footer__link">
+              {link.label}
+            </Link>
+          ),
+        )}
       </nav>
     </div>
   );
@@ -57,30 +66,33 @@ export function PublicFooter() {
                 Diagnóstico, plan estratégico y ejecución diaria para hombres que buscan
                 alineación real.
               </p>
+              <p className="site-footer__status">
+                <span className="site-footer__status-pip" aria-hidden />
+                {PLATFORM_STATUS_LINE}
+              </p>
               <FooterSocialBar />
               <AuthCta href={publicNavAuth.register.href} className="site-footer__cta">
                 {publicNavAuth.register.label}
               </AuthCta>
+              {showGuestAccess ? (
+                <Link href={publicNavAuth.login.href} className="site-footer__login">
+                  ¿Ya tienes cuenta? {publicNavAuth.login.label}
+                </Link>
+              ) : null}
             </div>
 
             <div className="site-footer__nav">
               <FooterNavColumn
-                title="Plataforma"
+                title="Explora"
                 links={footerPlatformNav}
-                ariaLabel="Enlaces de plataforma"
+                ariaLabel="Secciones de la página principal"
+                useLandingHash
               />
               <FooterNavColumn
                 title="Sitio"
                 links={footerSiteNav}
                 ariaLabel="Enlaces del sitio"
               />
-              {showGuestAccess ? (
-                <FooterNavColumn
-                  title="Acceso"
-                  links={footerAccessNav}
-                  ariaLabel="Enlaces de acceso"
-                />
-              ) : null}
             </div>
           </div>
         </div>
