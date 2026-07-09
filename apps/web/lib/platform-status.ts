@@ -18,10 +18,6 @@ export type PanelModule = {
   icon: AppIconName;
 };
 
-/** Hero status line — flip when Programa Fundador closes. */
-export const PLATFORM_STATUS_LINE =
-  'El sistema se despliega por etapas. Programa Fundador abierto.';
-
 export const PLATFORM_STATUS_LABELS: Record<PlatformModuleStatus, string> = {
   disponible: 'Disponible',
   proximamente: 'Próximamente',

@@ -186,11 +186,12 @@ function NavLink({
   setActiveHashFromNav: (hash: string) => void;
 }) {
   const short = 'shortLabel' in link ? link.shortLabel : link.label;
+  const linkHash = hashFromHref(link.href);
 
   return (
     <Link
       href={link.href}
-      scroll={false}
+      scroll={linkHash ? false : true}
       className={`public-nav__link${isActiveLink(link.href, pathname, activeHash) ? ' is-active' : ''}`}
       onClick={(e) => handleHashClick(e, link.href, pathname, setActiveHashFromNav)}
     >

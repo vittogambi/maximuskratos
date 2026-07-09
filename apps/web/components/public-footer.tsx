@@ -13,7 +13,6 @@ import {
   publicNavAuth,
   siteConfig,
 } from '@/lib/design';
-import { PLATFORM_STATUS_LINE } from '@/lib/platform-status';
 
 function FooterNavColumn({
   title,
@@ -65,10 +64,6 @@ export function PublicFooter() {
               <p className="site-footer__desc">
                 Diagnóstico, plan estratégico y ejecución diaria para hombres que buscan
                 alineación real.
-              </p>
-              <p className="site-footer__status">
-                <span className="site-footer__status-pip" aria-hidden />
-                {PLATFORM_STATUS_LINE}
               </p>
               <FooterSocialBar />
               <AuthCta href={publicNavAuth.register.href} className="site-footer__cta">
