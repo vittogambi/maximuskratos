@@ -8,74 +8,130 @@ export type ArchetypeShadow = {
 export type ArchetypeMeta = {
   slug: ArchetypeSlug;
   label: string;
+  /** Función principal del arquetipo. */
   tagline: string;
   description: string;
+  /** Expresión en equilibrio. */
+  balanced: string;
   roman: string;
   symbol: string;
   image: string;
+  /** Resumen combinado de sombra (otras vistas). */
   shadow: ArchetypeShadow;
+  /** Dos polos de sombra. */
+  shadowPoles: readonly [ArchetypeShadow, ArchetypeShadow];
+  /** Relación con la plataforma. */
+  platform: string;
 };
 
 export const ARCHETYPES: Record<ArchetypeSlug, ArchetypeMeta> = {
   rey: {
     slug: 'rey',
     label: 'El Rey',
-    tagline: 'Sostiene el orden; no lo domina.',
+    tagline: 'Da orden, dirección y responsabilidad.',
     description:
-      'Tu presencia impone estructura y los demás confían en tu palabra. El poder, para MK, no es para dominar ni por vanidad, sino para sostener: un hombre fuerte es un escudo para los suyos. El riesgo: convertir esa soberanía en control, o cederla por evitar el conflicto.',
+      'El Rey sano no controla todo lo que lo rodea. Construye condiciones para que algo pueda prosperar y asume el peso de las decisiones que le corresponden.',
+    balanced: 'Ordena, protege y dirige.',
     roman: 'I · IDENTIDAD × RELACIONES',
     symbol: '♛',
     image: '/images/archetypes/rey.png',
     shadow: {
-      label: 'El Tirano / El Débil',
+      label: 'Tirano / Débil',
       description:
-        'Dominar en vez de sostener, o abdicar la autoridad por miedo al conflicto: las dos formas de traicionar el poder como deber.',
+        'El Tirano utiliza la autoridad para someter. El Débil abandona su responsabilidad para evitar conflicto, juicio o fracaso.',
     },
+    shadowPoles: [
+      {
+        label: 'Tirano',
+        description: 'Utiliza la autoridad para someter.',
+      },
+      {
+        label: 'Débil',
+        description: 'Abandona su responsabilidad para evitar conflicto, juicio o fracaso.',
+      },
+    ],
+    platform: 'En Perfil Maestro: soberanía, orden y peso de las decisiones.',
   },
   guerrero: {
     slug: 'guerrero',
     label: 'El Guerrero',
-    tagline: 'La excelencia es un hábito, no un instante.',
+    tagline: 'Convierte una decisión en acción sostenida.',
     description:
-      'Actúas bajo presión y no negocias tus estándares. No es la perfección lo que persigues, sino la virtud en la acción: cada hábito sostenido es un ladrillo en la construcción de quien decides ser. El riesgo: confundir disciplina con dureza, o fuerza con castigo.',
+      'El Guerrero entrega disciplina, límites, coraje y capacidad de actuar incluso cuando no existe comodidad.',
+    balanced: 'Protege, ejecuta y persevera.',
     roman: 'II · MENTALIDAD × HÁBITOS',
     symbol: '⚔',
     image: '/images/archetypes/guerrero.png',
     shadow: {
-      label: 'El Sádico / El Masoquista',
+      label: 'Sádico / Masoquista',
       description:
-        'Usar la fuerza para herir en vez de proteger, o volver la disciplina un castigo contra sí mismo.',
+        'El Sádico utiliza la fuerza para destruir. El Masoquista convierte la disciplina en castigo y termina luchando contra sí mismo.',
     },
+    shadowPoles: [
+      {
+        label: 'Sádico',
+        description: 'Utiliza la fuerza para destruir.',
+      },
+      {
+        label: 'Masoquista',
+        description: 'Convierte la disciplina en castigo y termina luchando contra sí mismo.',
+      },
+    ],
+    platform: 'En Perfil Maestro: disciplina, límites y ejecución bajo presión.',
   },
   mago: {
     slug: 'mago',
     label: 'El Mago',
-    tagline: 'Diseña los sistemas; no los sufre.',
+    tagline: 'Comprende, relaciona y diseña sistemas.',
     description:
-      'Piensas en estructuras, no en eventos sueltos. Diseñas tu entorno y tus recursos para que trabajen a tu favor, dejando de ser un habitante pasivo del caos para ser arquitecto de tu propio destino. El riesgo: usar esa inteligencia para controlar en vez de construir.',
+      'El Mago observa patrones, interpreta la realidad y convierte conocimiento en estructuras útiles.',
+    balanced: 'Comprende, transforma y construye.',
     roman: 'III · FINANZAS × ENTORNO',
     symbol: '✦',
     image: '/images/archetypes/mago.png',
     shadow: {
-      label: 'El Manipulador / El Inocente',
+      label: 'Manipulador / Inocente',
       description:
-        'Usar el conocimiento de los sistemas para manipular, o esconderse en la ingenuidad para no asumir el peso de ser arquitecto de algo.',
+        'El Manipulador utiliza el conocimiento para controlar. El Inocente evita comprender para no asumir responsabilidad.',
     },
+    shadowPoles: [
+      {
+        label: 'Manipulador',
+        description: 'Utiliza el conocimiento para controlar.',
+      },
+      {
+        label: 'Inocente',
+        description: 'Evita comprender para no asumir responsabilidad.',
+      },
+    ],
+    platform: 'En Perfil Maestro: patrones, estructuras y diseño del entorno.',
   },
   amante: {
     slug: 'amante',
     label: 'El Amante',
-    tagline: 'Vive desde el propósito trascendental.',
+    tagline: 'Conecta la vida con significado, presencia y deseo.',
     description:
-      'Tu entusiasmo mueve a quienes te rodean y conectas profundo con lo que te importa. Sin un propósito trascendental que alinee esa voluntad, la pasión se dispersa en cualquier dirección. El riesgo: perseguir la intensidad sin sostener ningún compromiso.',
+      'El Amante permite vincularse profundamente con personas, experiencias, belleza, propósito y creación.',
+    balanced: 'Conecta, aprecia y da sentido.',
     roman: 'IV · PROPÓSITO × IKIGAI',
     symbol: '♥',
     image: '/images/archetypes/amante.png',
     shadow: {
-      label: 'El Adicto / El Impotente',
+      label: 'Adicto / Impotente',
       description:
-        'Perderse en el exceso y la búsqueda constante de sensación, o reprimir el deseo hasta quedar desconectado de todo.',
+        'El Adicto queda sometido a la búsqueda de estímulo. El Impotente se desconecta del deseo para evitar exposición, pérdida o dolor.',
     },
+    shadowPoles: [
+      {
+        label: 'Adicto',
+        description: 'Queda sometido a la búsqueda de estímulo.',
+      },
+      {
+        label: 'Impotente',
+        description: 'Se desconecta del deseo para evitar exposición, pérdida o dolor.',
+      },
+    ],
+    platform: 'En Perfil Maestro: vínculo, sentido y presencia en lo que construyes.',
   },
 };
 

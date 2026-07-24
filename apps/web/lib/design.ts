@@ -28,6 +28,7 @@ export const publicNav = [
   })),
   { href: '/quienes-somos', label: 'Nosotros' },
   { href: '/sistema', label: 'El Sistema', shortLabel: 'Sistema' },
+  { href: '/precios', label: 'Precios' },
   { href: '/base-conceptual', label: 'Base conceptual', shortLabel: 'Base' },
   { href: '/contacto', label: 'Contacto' },
 ] as const;
@@ -41,11 +42,32 @@ export const publicNavAuth = {
 
 export const footerPlatformNav = publicNav.slice(0, 4);
 
+/** Drawer mobile: anclas de la landing */
+export const drawerConoceMkNav = footerPlatformNav;
+
+/** Drawer mobile: páginas de producto */
+export const drawerPlataformaNav = [
+  { href: '/sistema', label: 'El Sistema' },
+  { href: '/precios', label: 'Precios' },
+] as const;
+
+/** Drawer mobile: resto del sitio (sin duplicar El Sistema / Precios) */
+export const drawerSitioNav = [
+  { href: '/quienes-somos', label: 'Nosotros' },
+  { href: '/marco-central', label: 'Marco Central' },
+  { href: '/ikigai', label: 'IKIGAI' },
+  { href: '/base-conceptual', label: 'Base conceptual' },
+  { href: '/eventos', label: 'Eventos' },
+  { href: '/contacto', label: 'Contacto' },
+] as const;
+
 export const footerSiteNav = [
   { href: '/quienes-somos', label: 'Nosotros' },
   { href: '/sistema', label: 'El Sistema' },
   { href: '/marco-central', label: 'Marco Central' },
+  { href: '/ikigai', label: 'IKIGAI' },
   { href: '/base-conceptual', label: 'Base conceptual' },
+  { href: '/precios', label: 'Precios' },
   { href: '/eventos', label: 'Eventos' },
   { href: '/contacto', label: 'Contacto' },
 ] as const;

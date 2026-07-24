@@ -62,8 +62,10 @@ export function PublicFooter() {
                 {siteConfig.tagline}
               </p>
               <p className="site-footer__desc">
-                Diagnóstico, plan estratégico y ejecución diaria para hombres que buscan
-                alineación real.
+                Sistema de reconstrucción personal para hombres que buscan alineación real.
+              </p>
+              <p className="site-footer__status">
+                Acceso anticipado abierto. Diagnóstico y apps próximamente.
               </p>
               <FooterSocialBar />
               <AuthCta href={publicNavAuth.register.href} className="site-footer__cta">

@@ -8,7 +8,14 @@ import { AppIcon } from '@/components/app-icon';
 import { handleLandingHashClick } from '@/components/landing-hash-link';
 import { Logo } from './logo';
 import { PublicAuthActions } from '@/components/public-auth-actions';
-import { footerSiteNav, landingSections, publicNav, type NavItem } from '@/lib/design';
+import {
+  drawerConoceMkNav,
+  drawerPlataformaNav,
+  drawerSitioNav,
+  landingSections,
+  publicNav,
+  type NavItem,
+} from '@/lib/design';
 import {
   applyLandingHashFromLocation,
   clearPendingLandingHash,
@@ -224,7 +231,6 @@ export function PublicNav() {
 
   const landingLinks = publicNav.slice(0, 3);
   const pageLinks = publicNav.slice(3);
-  const drawerLandingLinks = publicNav.slice(0, 4);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -360,8 +366,8 @@ export function PublicNav() {
         </div>
 
         <nav className="mobile-drawer__links" aria-label="Navegación móvil">
-          <p className="mobile-drawer__group-label">Plataforma</p>
-          {drawerLandingLinks.map((link) => (
+          <p className="mobile-drawer__group-label">Conoce MK</p>
+          {drawerConoceMkNav.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -372,8 +378,19 @@ export function PublicNav() {
               {link.label}
             </Link>
           ))}
+          <p className="mobile-drawer__group-label">Plataforma</p>
+          {drawerPlataformaNav.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`mobile-drawer__link${isActiveLink(link.href, pathname, activeHash) ? ' is-active' : ''}`}
+              onClick={() => setOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
           <p className="mobile-drawer__group-label">Sitio</p>
-          {footerSiteNav.map((link) => (
+          {drawerSitioNav.map((link) => (
             <Link
               key={link.href}
               href={link.href}

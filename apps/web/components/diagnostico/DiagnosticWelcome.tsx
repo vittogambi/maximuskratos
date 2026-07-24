@@ -106,7 +106,7 @@ export function DiagnosticWelcome() {
             DIAGNÓSTICO MAESTRO
           </motion.p>
           <motion.p className="dk-welcome__phase" variants={reduced ? undefined : introStaggerItem}>
-            AUDITORÍA INICIAL · E-AUD-001
+            AUDITORÍA INICIAL
           </motion.p>
           <motion.h1
             className="font-display-xl"

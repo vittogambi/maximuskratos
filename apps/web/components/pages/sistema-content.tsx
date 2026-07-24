@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { DeviceShowcase, type DeviceShowcaseFocus } from '@/components/device-showcase';
 import { AppIcon } from '@/components/app-icon';
 import type { AppIconName } from '@/components/icons/registry';
@@ -7,11 +8,8 @@ import { ScrollReveal } from '@/components/motion/scroll-reveal';
 import { ScrollStaggerContainer, StaggerItem } from '@/components/motion/stagger';
 import { SectionIntro } from '@/components/pages/section-intro';
 import { SubpageCta } from '@/components/pages/subpage-cta';
-import {
-  PLATFORM_MODULES,
-  PLATFORM_STATUS_LABELS,
-  type PlatformModuleStatus,
-} from '@/lib/platform-status';
+import { MkDomainsBridge } from '@/components/pages/mk-domains-bridge';
+import { LANDING_DOMAINS_SECTION } from '@/lib/landing-copy';
 
 const EXPERIENCES: ReadonlyArray<{
   num: string;
@@ -32,20 +30,59 @@ const EXPERIENCES: ReadonlyArray<{
   },
   {
     num: '02',
+    eyebrow: 'AUTOCONOCIMIENTO',
+    title: 'Tu Perfil Maestro.',
+    body: 'Una lectura integral de tu sistema: índices de Alineación y Profundidad, resultado por pilar y por ámbito. El arquetipo queda como referencia interpretativa.',
+    specs: ['Índices de Alineación y Profundidad', 'Pilares y ámbitos', 'Arquetipo de referencia'],
+    focus: 'perfil',
+    reverse: true,
+  },
+  {
+    num: '03',
     eyebrow: 'DIRECCIÓN',
     title: 'Sigue tu Ruta MK.',
     body: 'Auditorías secuenciales. Cada una revela una capa más del sistema, en orden.',
     specs: ['Auditorías en orden', 'Progreso medible', 'Desbloqueo por etapas'],
     focus: 'ruta',
-    reverse: true,
   },
   {
-    num: '03',
-    eyebrow: 'AUTOCONOCIMIENTO',
-    title: 'Tu Perfil Maestro.',
-    body: 'Arquetipo, sombra y radar de las 8 dimensiones. Sin relleno.',
-    specs: ['Arquetipo dominante', 'Trabajo de sombra', 'Radar de 8 dimensiones'],
-    focus: 'perfil',
+    num: '04',
+    eyebrow: 'PANEL Y CONTINUIDAD',
+    title: 'Tu proceso no se reinicia.',
+    body: 'Panel personal con tus índices y evolución, el progreso por etapas y el historial completo. MK conserva el contexto y las prioridades vigentes del proceso.',
+    specs: ['Índices y evolución', 'Progreso por etapas', 'Historial del proceso'],
+    focus: 'overview',
+    reverse: true,
+  },
+];
+
+/** Product status stream (Linear / Now→Next style): short names + status, no dual brochure columns. */
+const STATUS_STREAM: ReadonlyArray<{
+  id: string;
+  label: string;
+  tone: 'live' | 'next';
+  items: ReadonlyArray<{ title: string; status: string }>;
+}> = [
+  {
+    id: 'hoy',
+    label: 'HOY',
+    tone: 'live',
+    items: [
+      { title: 'Cuenta de fundador', status: 'Abierto' },
+      { title: 'Panel de acceso anticipado', status: 'Abierto' },
+      { title: 'Exploración del método', status: 'Abierto' },
+    ],
+  },
+  {
+    id: 'lanzamiento',
+    label: 'LANZAMIENTO',
+    tone: 'next',
+    items: [
+      { title: 'Diagnóstico y auditorías', status: 'Próximo' },
+      { title: 'Perfil Maestro y Ruta MK', status: 'Próximo' },
+      { title: 'App iOS y Android', status: 'Próximo' },
+      { title: 'Misiones, métricas y notificaciones', status: 'Próximo' },
+    ],
   },
 ];
 
@@ -58,25 +95,19 @@ const ECOSYSTEM_NODES: ReadonlyArray<{
 }> = [
   {
     icon: 'globe',
-    title: 'Plataforma web',
+    title: 'Sitio y cuenta',
     status: 'Disponible hoy',
     statusTone: 'live',
-    body: 'Cuenta, diagnóstico y panel personal desde cualquier navegador.',
+    body: 'Explora el método y crea tu cuenta de fundador desde cualquier navegador.',
   },
   {
     icon: 'layout-grid',
-    title: 'App iOS / Android',
-    status: 'En desarrollo',
+    title: 'Webapp y app móvil',
+    status: 'Próximamente',
     statusTone: 'dev',
-    body: 'Misiones diarias, métricas y notificaciones para la ejecución en el día a día.',
+    body: 'Diagnóstico, panel completo y app iOS/Android se lanzan juntos bajo una sola cuenta.',
   },
 ];
-
-const MODULE_STATUS_TONE: Record<PlatformModuleStatus, string> = {
-  disponible: 'is-live',
-  proximamente: 'is-next',
-  'en-desarrollo': 'is-dev',
-};
 
 export function SistemaContent() {
   return (
@@ -92,10 +123,14 @@ export function SistemaContent() {
             <h1 className="ag-sistema-hero__title font-display-xl text-white">
               El tablero de control de tu transformación.
             </h1>
+            <p className="ag-sistema-hero__lead font-body-lg">
+              No es un curso ni una biblioteca de contenido. Es la plataforma donde vivirá tu
+              proceso. Hoy puedes reservar tu lugar como fundador.
+            </p>
             <div className="ag-sistema-hero__pills" aria-label="Estado de la plataforma">
-              <span className="ag-sistema-pill ag-sistema-pill--app">Web · disponible hoy</span>
-              <span className="ag-sistema-pill">App · en desarrollo</span>
-              <span className="ag-sistema-pill">Una sola cuenta</span>
+              <span className="ag-sistema-pill ag-sistema-pill--app">Acceso anticipado abierto</span>
+              <span className="ag-sistema-pill">Diagnóstico próximamente</span>
+              <span className="ag-sistema-pill">Web y app en preparación</span>
             </div>
           </ScrollReveal>
 
@@ -105,15 +140,22 @@ export function SistemaContent() {
         </div>
       </section>
 
-      <section className="ag-sistema-experiences" aria-label="Experiencias del sistema">
+      <section className="ag-sistema-experiences" aria-labelledby="experiencias-heading">
         <div className="ag-container ag-sistema-experiences__inner">
+          <SectionIntro
+            eyebrow="MK · EL RECORRIDO"
+            title="Qué construye el sistema."
+            lead="Así se verá el recorrido cuando abra la plataforma. Vista previa del producto en construcción."
+            headingId="experiencias-heading"
+          />
+
           {EXPERIENCES.map((exp) => (
             <ScrollReveal
               key={exp.num}
-              className={`ag-sistema-exp ag-phase-row${exp.reverse ? ' ag-sistema-exp--reverse' : ''}`}
+              className={`ag-sistema-exp${exp.reverse ? ' ag-sistema-exp--reverse' : ''}`}
               distance={18}
             >
-              <div className={`ag-sistema-exp__copy${exp.reverse ? ' lg:order-2' : ' lg:order-1'}`}>
+              <div className="ag-sistema-exp__copy">
                 <p className="hud-text text-action-red">
                   {exp.num} · {exp.eyebrow}
                 </p>
@@ -127,7 +169,7 @@ export function SistemaContent() {
                   ))}
                 </ul>
               </div>
-              <div className={`ag-sistema-exp__media${exp.reverse ? ' lg:order-1' : ' lg:order-2'}`}>
+              <div className="ag-sistema-exp__media">
                 <DeviceShowcase focus={exp.focus} layout="experience" />
               </div>
             </ScrollReveal>
@@ -135,14 +177,51 @@ export function SistemaContent() {
         </div>
       </section>
 
-   
+      <section className="ag-section-inner ag-sistema-status" aria-labelledby="status-heading">
+        <div className="ag-container ag-container--narrow">
+          <SectionIntro
+            eyebrow="MK · ESTADO DEL SISTEMA"
+            title="Qué está abierto. Qué viene después."
+            lead="Hoy reservas tu lugar. El diagnóstico y las apps se activan en el lanzamiento."
+            headingId="status-heading"
+          />
+
+          <div className="ag-sistema-status__stream">
+            {STATUS_STREAM.map((group) => (
+              <div key={group.id} className="ag-sistema-status__group">
+                <p
+                  className={`hud-text ag-sistema-status__group-label${
+                    group.tone === 'live' ? ' text-action-red' : ''
+                  }`}
+                >
+                  {group.label}
+                </p>
+                <ul className="ag-sistema-status__list">
+                  {group.items.map((item) => (
+                    <li key={item.title} className="ag-sistema-status__row">
+                      <span className="ag-sistema-status__name font-headline-sm">{item.title}</span>
+                      <span
+                        className={`ag-sistema-status__mark font-label-lg${
+                          group.tone === 'live' ? ' is-live' : ' is-next'
+                        }`}
+                      >
+                        {item.status}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="ag-section-inner ag-sistema-ecosystem" aria-labelledby="eco-heading">
         <div className="ag-container">
           <SectionIntro
             eyebrow="MK · ECOSISTEMA"
             title="Una cuenta. Un sistema."
-            lead="Tu progreso vive en un solo lugar y te sigue en cada dispositivo."
+            lead="Tu acceso de fundador es el mismo hilo que seguirá en la webapp y en la app móvil."
             headingId="eco-heading"
           />
 
@@ -171,8 +250,32 @@ export function SistemaContent() {
           <ScrollReveal className="ag-sistema-eco__sync" distance={10} delay={0.08}>
             <AppIcon name="activity" size={16} aria-hidden />
             <span className="font-body-md">
-              Sincronizado: el mismo perfil, la misma ruta y el mismo índice en web y app.
+              La misma cuenta seguirá en web y app cuando lancemos ambas.
             </span>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      <section className="ag-section-inner ag-sistema-model-brief" aria-labelledby="modelo-heading">
+        <div className="ag-container">
+          <SectionIntro
+            eyebrow="MK · EL MODELO"
+            title="Tres pilares. Cuatro ámbitos."
+            lead="El modelo que la plataforma ejecutará cuando abra."
+            headingId="modelo-heading"
+          />
+
+          <MkDomainsBridge className="ag-sistema-model-brief__bridge" />
+
+          <p className="ag-sistema-model-brief__close font-body-md">
+            {LANDING_DOMAINS_SECTION.leadClose}
+          </p>
+
+          <ScrollReveal className="ag-sistema-model-brief__link" distance={10}>
+            <Link href="/marco-central" className="ag-inline-link font-label-lg">
+              Ver el Marco Central
+              <AppIcon name="arrow-right" size={14} />
+            </Link>
           </ScrollReveal>
         </div>
       </section>

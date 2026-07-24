@@ -4,7 +4,7 @@ import { SistemaContent } from '@/components/pages/sistema-content';
 export const metadata: Metadata = {
   title: 'El Sistema',
   description:
-    'Visualiza tu tablero de control: claridad, dirección y consistencia en una plataforma que se activa por etapas.',
+    'Maximus Kratos: acceso anticipado abierto. Diagnóstico, Perfil Maestro, Ruta MK y apps se lanzan juntos próximamente.',
 };
 
 export default function SistemaPage() {

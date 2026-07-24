@@ -52,6 +52,37 @@ model Subscription {
   @@map("subscriptions")
 }
 
+model Plan {
+  id                String   @id @default(uuid())
+  code              String   @unique
+  name              String
+  periodMonths      Int      @map("period_months")
+  priceAmount       Int      @map("price_amount")
+  currency          String   @default("CLP")
+  discountPct       Int?     @map("discount_pct")
+  conditions        String?
+  benefits          Json
+  active            Boolean  @default(true)
+  sortOrder         Int      @default(0) @map("sort_order")
+  highlightLabel    String?  @map("highlight_label")
+  promoText         String?  @map("promo_text")
+  trialDaysOverride Int?     @map("trial_days_override")
+  autoRenews        Boolean  @default(true) @map("auto_renews")
+  providerId        String?  @map("provider_id")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  @@map("plans")
+}
+
+model BillingSettings {
+  id        String   @id @default(uuid())
+  trialDays Int      @default(30) @map("trial_days")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("billing_settings")
+}
+
 model RefreshToken {
   id        String    @id @default(uuid())
   userId    String    @map("user_id")

@@ -37,6 +37,59 @@ const DEMO_LEADS = [
   },
 ] as const;
 
+const PLAN_BENEFITS = [
+  'Diagnóstico completo en Espíritu, Mente y Cuerpo',
+  'Perfil Maestro MK: arquetipo, sombra e índices del sistema',
+  'Ruta MK y actualizaciones de la plataforma bajo la misma cuenta',
+] as const;
+
+const BILLING_PLANS = [
+  {
+    code: 'mensual',
+    name: 'Mensual',
+    periodMonths: 1,
+    priceAmount: 29990,
+    discountPct: null,
+    sortOrder: 0,
+    highlightLabel: null,
+    promoText: null,
+  },
+  {
+    // Decoy: poco ahorro vs mensual para el mismo tipo de compromiso corto.
+    // Hace que el salto al semestral se sienta claramente superior.
+    code: 'trimestral',
+    name: 'Trimestral',
+    periodMonths: 3,
+    priceAmount: 84990,
+    discountPct: 5,
+    sortOrder: 1,
+    highlightLabel: null,
+    promoText: null,
+  },
+  {
+    // Target: sweet spot compromiso / precio. Única opción empujada.
+    code: 'semestral',
+    name: 'Semestral',
+    periodMonths: 6,
+    priceAmount: 139990,
+    discountPct: 22,
+    sortOrder: 2,
+    highlightLabel: 'Recomendado',
+    promoText: null,
+  },
+  {
+    // Mejor unitario, pero sin badge que compita con el target.
+    code: 'anual',
+    name: 'Anual',
+    periodMonths: 12,
+    priceAmount: 239990,
+    discountPct: 33,
+    sortOrder: 3,
+    highlightLabel: null,
+    promoText: null,
+  },
+] as const;
+
 const DEMO_USERS = [
   {
     email: 'demo.user1@maximuskratos.local',
@@ -88,8 +141,39 @@ async function main() {
     }
   }
 
+  const existingSettings = await prisma.billingSettings.findFirst();
+  const settings =
+    existingSettings ?? (await prisma.billingSettings.create({ data: { trialDays: 30 } }));
+
+  for (const plan of BILLING_PLANS) {
+    await prisma.plan.upsert({
+      where: { code: plan.code },
+      update: {
+        name: plan.name,
+        periodMonths: plan.periodMonths,
+        priceAmount: plan.priceAmount,
+        discountPct: plan.discountPct,
+        sortOrder: plan.sortOrder,
+        highlightLabel: plan.highlightLabel,
+        promoText: plan.promoText,
+        benefits: PLAN_BENEFITS,
+      },
+      create: {
+        code: plan.code,
+        name: plan.name,
+        periodMonths: plan.periodMonths,
+        priceAmount: plan.priceAmount,
+        discountPct: plan.discountPct,
+        sortOrder: plan.sortOrder,
+        highlightLabel: plan.highlightLabel,
+        promoText: plan.promoText,
+        benefits: PLAN_BENEFITS,
+      },
+    });
+  }
+
   const trialEnd = new Date();
-  trialEnd.setDate(trialEnd.getDate() + 14);
+  trialEnd.setDate(trialEnd.getDate() + settings.trialDays);
 
   for (const demo of DEMO_USERS) {
     const passwordHash = await bcrypt.hash(demo.password, 12);
@@ -125,6 +209,7 @@ async function main() {
   console.log(`Seeded admin: ${adminEmail}`);
   console.log(`Seeded ${DEMO_LEADS.length} demo leads (if missing)`);
   console.log(`Seeded ${DEMO_USERS.length} demo users`);
+  console.log(`Seeded ${BILLING_PLANS.length} billing plans + settings (trial: ${settings.trialDays}d)`);
 }
 
 main()

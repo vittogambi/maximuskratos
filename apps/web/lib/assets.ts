@@ -34,6 +34,8 @@ export const LANDING_IMAGES = {
   eventosHero:           '/images/eventos/hero-council.jpg',
   eventosQuote:          '/images/eventos/quote-brotherhood.jpg',
   contactoHero:          '/images/contacto/hero-listening.jpg',
+  ikigaiDiagram:           '/images/ikigai/ikigai-diagram.png',
+  ikigaiHero:              '/images/ikigai/ikigai-hero.png',
 } as const;
 
 export type AuthAtmosphereVariant = 'login' | 'register' | 'default';

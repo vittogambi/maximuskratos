@@ -216,6 +216,108 @@ export async function downloadAdminLeadsCsv(accessToken: string): Promise<void> 
   URL.revokeObjectURL(url);
 }
 
+// ─── Billing ──────────────────────────────────────────────────────────────────
+
+export type Plan = {
+  id: string;
+  code: string;
+  name: string;
+  periodMonths: number;
+  priceAmount: number;
+  currency: string;
+  discountPct: number | null;
+  conditions: string | null;
+  benefits: string[];
+  active: boolean;
+  sortOrder: number;
+  highlightLabel: string | null;
+  promoText: string | null;
+  trialDaysOverride: number | null;
+  autoRenews: boolean;
+  providerId: string | null;
+  monthlyEquivalent: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type PublicPlansResponse = {
+  trialDays: number;
+  plans: Plan[];
+};
+
+export type PlanInput = {
+  code?: string;
+  name?: string;
+  periodMonths?: number;
+  priceAmount?: number;
+  currency?: string;
+  discountPct?: number | null;
+  conditions?: string | null;
+  benefits?: string[];
+  active?: boolean;
+  sortOrder?: number;
+  highlightLabel?: string | null;
+  promoText?: string | null;
+  trialDaysOverride?: number | null;
+  autoRenews?: boolean;
+  providerId?: string | null;
+};
+
+export async function apiBillingPlans(): Promise<PublicPlansResponse> {
+  const res = await fetch(`${apiBaseUrl()}/api/v1/billing/plans`);
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+
+export async function apiAdminPlans(accessToken: string): Promise<Plan[]> {
+  const res = await fetch(`${apiBaseUrl()}/api/v1/admin/plans`, {
+    headers: authHeaders(accessToken),
+    credentials: 'include',
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+
+export async function apiAdminCreatePlan(accessToken: string, data: PlanInput): Promise<Plan> {
+  const res = await fetch(`${apiBaseUrl()}/api/v1/admin/plans`, {
+    method: 'POST',
+    headers: { ...authHeaders(accessToken), 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+
+export async function apiAdminUpdatePlan(
+  accessToken: string,
+  id: string,
+  data: PlanInput,
+): Promise<Plan> {
+  const res = await fetch(`${apiBaseUrl()}/api/v1/admin/plans/${id}`, {
+    method: 'PATCH',
+    headers: { ...authHeaders(accessToken), 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+
+export async function apiAdminUpdateBillingSettings(
+  accessToken: string,
+  trialDays: number,
+): Promise<{ trialDays: number }> {
+  const res = await fetch(`${apiBaseUrl()}/api/v1/admin/billing-settings`, {
+    method: 'PATCH',
+    headers: { ...authHeaders(accessToken), 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ trialDays }),
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+
 export function getApiDocsUrl(): string {
   return `${API_ORIGIN}/api/v1/docs`;
 }

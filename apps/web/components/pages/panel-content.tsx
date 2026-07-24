@@ -180,7 +180,7 @@ function PanelStateA({ progress }: { progress: DiagnosticProgressDto }) {
           }}
         >
           <p className="hud-text" style={{ letterSpacing: '0.1em', fontSize: '11px', color: '#ff0000' }}>
-            PERFIL MAESTRO — BLOQUEADO
+            PERFIL MAESTRO BLOQUEADO
           </p>
           <p className="font-body-md" style={{ color: 'var(--color-text-muted, #a0a0a0)', margin: 0 }}>
             Tu arquetipo, fortalezas, cuello de botella y prioridades a 90 días

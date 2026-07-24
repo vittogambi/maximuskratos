@@ -7,7 +7,8 @@ import { AppIcon } from '@/components/app-icon';
 import { useAuthSession } from '@/components/auth-session-provider';
 import { apiDiagnosticProfile, apiDiagnosticProgress, type DiagnosticProgressDto, type MasterProfileDto } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth-storage';
-import { getArchetype } from '@/lib/archetypes';
+import { computePillarScores, PILLARS, PRESENTATION_INDICES } from '@/lib/mk-system';
+import { isFounderAccessPhase } from '@/lib/product-phase';
 import { KpiCard } from '@/components/charts/KpiCard';
 
 // Lazy-load recharts to keep first paint fast
@@ -45,7 +46,7 @@ function InProgressDashboard({ progress }: { progress: DiagnosticProgressDto }) 
       {/* Hero progress card */}
       <div className="mk-progress-hero">
         <div className="mk-progress-hero__top">
-          <p className="mk-section-eyebrow">AUDITORÍA INICIAL · E-AUD-001</p>
+          <p className="mk-section-eyebrow">AUDITORÍA INICIAL</p>
           <span className="mk-progress-hero__pct">{Math.round(completionPct)}%</span>
         </div>
         <h2 className="mk-progress-hero__title">En construcción.</h2>
@@ -123,32 +124,39 @@ function InProgressDashboard({ progress }: { progress: DiagnosticProgressDto }) 
 function ProfileDashboard({ profile }: { profile: NonNullable<MasterProfileDto> }) {
   const scores  = (profile.scores  ?? {}) as Record<string, number>;
   const indices = (profile.indices ?? {}) as Record<string, number>;
-  const mkGlobal    = Math.round(indices.mk_global  ?? 0);
-  const clarity     = Math.round(indices.clarity    ?? 0);
-  const execution   = Math.round(indices.execution  ?? 0);
-  const stability   = Math.round(indices.stability  ?? 0);
-  const shadowScore = Math.round(scores.shadow      ?? 0);
-  const archetype   = getArchetype(profile.archetypePrimary);
+  const alineacion  = Math.round(indices[PRESENTATION_INDICES.alineacion.sourceKey]  ?? 0);
+  const profundidad = Math.round(indices[PRESENTATION_INDICES.profundidad.sourceKey] ?? 0);
+  const execution   = Math.round(indices[PRESENTATION_INDICES.ejecucion.sourceKey]   ?? 0);
+  const stability   = Math.round(indices[PRESENTATION_INDICES.estabilidad.sourceKey] ?? 0);
+  const shadowScore = Math.round(scores.shadow ?? 0);
+  const pillarScores = computePillarScores(scores);
 
   return (
     <div className="mk-dashboard">
-      {/* Archetype greeting */}
-      {archetype && (
-        <div className="mk-archetype-greeting">
-          <p className="mk-section-eyebrow">TU ARQUETIPO</p>
-          <p className="mk-archetype-greeting__name">{archetype.label}</p>
-          <p className="mk-archetype-greeting__tagline">{archetype.tagline}</p>
+      {/* Resumen del sistema: pilares */}
+      <section className="mk-section">
+        <p className="mk-section-eyebrow">RESUMEN DEL SISTEMA</p>
+        <div className="sys-pillars">
+          {PILLARS.map((pillar) => (
+            <div key={pillar.key} className="sys-pillar-card">
+              <span className="sys-pillar-card__icon">
+                <AppIcon name={pillar.icon} size={20} />
+              </span>
+              <span className="sys-pillar-card__label">{pillar.label}</span>
+              <span className="sys-pillar-card__score">{pillarScores[pillar.key] ?? '—'}</span>
+            </div>
+          ))}
         </div>
-      )}
+      </section>
 
       {/* KPI strip */}
       <section className="mk-section">
         <p className="mk-section-eyebrow">ÍNDICES</p>
         <div className="mk-kpi-strip">
-          <KpiCard label="Global MK"  value={mkGlobal}   isGlobal />
-          <KpiCard label="Claridad"   value={clarity} />
-          <KpiCard label="Ejecución"  value={execution} />
-          <KpiCard label="Estabilidad" value={stability} />
+          <KpiCard label={PRESENTATION_INDICES.alineacion.label}  value={alineacion}  isGlobal />
+          <KpiCard label={PRESENTATION_INDICES.profundidad.label} value={profundidad} />
+          <KpiCard label={PRESENTATION_INDICES.ejecucion.label}   value={execution} />
+          <KpiCard label={PRESENTATION_INDICES.estabilidad.label} value={stability} />
         </div>
       </section>
 
@@ -185,7 +193,7 @@ function ProfileDashboard({ profile }: { profile: NonNullable<MasterProfileDto> 
           <div className="mk-ruta-teaser__item mk-ruta-teaser__item--done">
             <div className="mk-ruta-teaser__dot" />
             <div>
-              <p className="mk-ruta-teaser__label">Auditoría I · E-AUD-001</p>
+              <p className="mk-ruta-teaser__label">Auditoría I</p>
               <p className="mk-ruta-teaser__sub">Completada</p>
             </div>
           </div>
@@ -210,6 +218,32 @@ function ProfileDashboard({ profile }: { profile: NonNullable<MasterProfileDto> 
   );
 }
 
+// ── Founder / early access ───────────────────────────────────────────────────
+
+function FounderAccessDashboard({ email }: { email: string }) {
+  return (
+    <div className="mk-dashboard">
+      <div className="mk-progress-hero">
+        <p className="mk-section-eyebrow">PROGRAMA FUNDADOR</p>
+        <h2 className="mk-progress-hero__title">Acceso anticipado.</h2>
+        <p className="mk-progress-hero__sub">
+          Tu lugar está reservado{email ? ` (${email})` : ''}. El diagnóstico, el Perfil Maestro y
+          la Ruta se activan cuando lancemos la webapp y la app móvil juntas. Serás de los primeros
+          en entrar.
+        </p>
+        <Link href="/sistema" className="mk-btn-primary">
+          Explorar el sistema →
+        </Link>
+        <p className="mk-progress-hero__sub" style={{ marginTop: '1rem' }}>
+          <Link href="/marco-central" style={{ color: 'rgba(255,255,255,0.55)', textDecoration: 'underline' }}>
+            Ver el Marco Central
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+}
+
 // ── Main export ──────────────────────────────────────────────────────────────
 
 export function InicioDashboard() {
@@ -226,6 +260,19 @@ export function InicioDashboard() {
     if (!token) { setLoaded(true); return; }
 
     const step = user.onboardingStep ?? 'TERMS_PENDING';
+
+    // Early access: no diagnostic progress for the public panel yet.
+    if (isFounderAccessPhase()) {
+      if (step === 'PROFILE_COMPLETE' || step === 'BLUEPRINT_READY') {
+        apiDiagnosticProfile(token)
+          .then((p) => setProfile(p))
+          .catch(() => {})
+          .finally(() => setLoaded(true));
+      } else {
+        setLoaded(true);
+      }
+      return;
+    }
 
     if (DIAGNOSTIC_IN_PROGRESS_STEPS.has(step)) {
       apiDiagnosticProgress(token)
@@ -245,6 +292,11 @@ export function InicioDashboard() {
   if (!loaded || status !== 'authenticated') return <DashboardSkeleton />;
 
   const step = user?.onboardingStep ?? 'TERMS_PENDING';
+
+  if (isFounderAccessPhase()) {
+    if (profile) return <ProfileDashboard profile={profile} />;
+    return <FounderAccessDashboard email={user?.email ?? ''} />;
+  }
 
   if (DIAGNOSTIC_IN_PROGRESS_STEPS.has(step)) {
     return <InProgressDashboard progress={progress} />;

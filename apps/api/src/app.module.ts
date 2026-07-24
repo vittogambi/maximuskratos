@@ -16,6 +16,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { APP_GUARD } from '@nestjs/core';
 import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
+import { BillingModule } from './billing/billing.module';
 import { DiagnosticModule } from './diagnostic/diagnostic.module';
 import { HealthController } from './health/health.controller';
 import { LeadsModule } from './leads/leads.module';
@@ -46,6 +47,7 @@ import { PrismaModule } from './prisma/prisma.module';
     AuthModule,
     LeadsModule,
     AdminModule,
+    BillingModule,
     DiagnosticModule,
   ],
   controllers: [HealthController],

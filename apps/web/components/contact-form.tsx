@@ -152,7 +152,7 @@ export function ContactForm({
       <button type="submit" className={submitClassName} disabled={loading}>
         {loading ? 'Enviando…' : 'Enviar mensaje'}
       </button>
-      <p className="contact-form__hint">Respondemos en 24–48 horas hábiles.</p>
+      <p className="contact-form__hint">Respondemos en 24 a 48 horas hábiles.</p>
     </form>
   );
 }

@@ -5,9 +5,10 @@ import type { ComponentPropsWithRef } from 'react';
 const badgeVariants = cva('badge', {
   variants: {
     variant: {
-      admin: 'badge--admin',
-      user:  'badge--user',
-      muted: 'badge--muted',
+      admin:   'badge--admin',
+      user:    'badge--user',
+      muted:   'badge--muted',
+      success: 'badge--success',
     },
   },
   defaultVariants: {

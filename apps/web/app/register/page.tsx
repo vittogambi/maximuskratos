@@ -12,6 +12,15 @@ import { apiMe, apiRegister } from '@/lib/api';
 import { useRequireGuest } from '@/lib/use-require-guest';
 import { setAccessToken } from '@/lib/auth-storage';
 
+function RegisterDescription() {
+  return (
+    <>
+      Estatus de fundador permanente y acceso a tu panel desde hoy. El diagnóstico y la
+      plataforma completa se activan en el lanzamiento. Sin tarjeta de crédito.
+    </>
+  );
+}
+
 export default function RegisterPage() {
   const router = useRouter();
   const { refresh, status: authStatus, user } = useAuthSession();
@@ -62,7 +71,7 @@ export default function RegisterPage() {
       showNav
       atmosphere="register"
       title="Crea tu cuenta de fundador"
-      description="Cuenta gratuita, estatus de fundador permanente y acceso a tu panel desde hoy."
+      description={<RegisterDescription />}
       footer={
         <AuthFooterLink
           text="¿Ya tienes cuenta?"

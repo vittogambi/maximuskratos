@@ -75,7 +75,7 @@ export function EventosContent() {
         />
         <div className="ag-about-hero__scrim" aria-hidden />
         <div className="ag-about-hero__content ag-container relative z-10">
-          <ScrollReveal distance={16}>
+          <ScrollReveal className="ag-about-hero__intro text-center" distance={16}>
             <p className="hud-text text-action-red">MK · EVENTOS</p>
             <h1 className="ag-about-hero__title ag-type-display text-white">Próximamente.</h1>
           </ScrollReveal>
@@ -87,10 +87,10 @@ export function EventosContent() {
               </p>
             </div>
           </ScrollReveal>
-          <ScrollReveal className="ag-about-hero__secondary" distance={12} delay={0.12}>
+          <ScrollReveal className="ag-about-hero__secondary text-center" distance={12} delay={0.12}>
             <p className="ag-eventos-status font-body-md">
               <span className="ag-eventos-status__pip" aria-hidden />
-              Sin eventos activos · Lista de espera abierta
+              Sin eventos activos. Lista de espera abierta
             </p>
           </ScrollReveal>
         </div>
@@ -134,7 +134,7 @@ export function EventosContent() {
             <div className="ag-panel ag-eventos-card">
               <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
               <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
-              <div className="ag-eventos-card__badge hud-text">Prelanzamiento · 2026</div>
+              <div className="ag-eventos-card__badge hud-text">Prelanzamiento 2026</div>
               <div className="ag-eventos-card__head">
                 <div className="ag-marco-card__icon" aria-hidden>
                   <AppIcon name="calendar" size={24} />
@@ -222,7 +222,7 @@ export function EventosContent() {
           <div className="ag-panel ag-panel--wide ag-prestaciones-quote__panel">
             <span className="ag-eventos-quote-rule" aria-hidden />
             <blockquote className="ag-prestaciones-quote__text font-display-xl text-white">
-              &ldquo;Donde la voluntad flaquea, la estructura sostiene. Somos una fraternidad de
+              &ldquo;Donde la voluntad se agota, la estructura sostiene. Somos una fraternidad de
               constructores.&rdquo;
             </blockquote>
             <footer className="hud-text mt-6 text-action-red">Manifiesto MK · No Caminamos Solos</footer>

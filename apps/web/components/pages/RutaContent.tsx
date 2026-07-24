@@ -6,6 +6,7 @@ import { AppIcon } from '@/components/app-icon';
 import { useAuthSession } from '@/components/auth-session-provider';
 import { apiDiagnosticProgress, type DiagnosticProgressDto } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth-storage';
+import { isFounderAccessPhase } from '@/lib/product-phase';
 
 const DIAGNOSTIC_IN_PROGRESS_STEPS = new Set([
   'TERMS_PENDING',
@@ -15,9 +16,9 @@ const DIAGNOSTIC_IN_PROGRESS_STEPS = new Set([
 
 // Future auditorias — locked, pending client approval
 const FUTURE_AUDITORIAS = [
-  { id: 'E-AUD-002', name: 'Auditoría II', sub: 'Propósito e identidad avanzada' },
-  { id: 'E-AUD-003', name: 'Auditoría III', sub: 'Entorno y relaciones' },
-  { id: 'E-AUD-004', name: 'Auditoría IV', sub: 'Soberanía financiera' },
+  { id: 'aud-2', num: '02', name: 'Auditoría II', sub: 'Propósito e identidad avanzada' },
+  { id: 'aud-3', num: '03', name: 'Auditoría III', sub: 'Entorno y relaciones' },
+  { id: 'aud-4', num: '04', name: 'Auditoría IV', sub: 'Soberanía financiera' },
 ];
 
 export function RutaContent() {
@@ -42,9 +43,27 @@ export function RutaContent() {
   }, [status, user]);
 
   const step = user?.onboardingStep ?? 'TERMS_PENDING';
-  const isInProgress = DIAGNOSTIC_IN_PROGRESS_STEPS.has(step);
+  const isInProgress = !isFounderAccessPhase() && DIAGNOSTIC_IN_PROGRESS_STEPS.has(step);
   const isComplete = step === 'PROFILE_COMPLETE' || step === 'BLUEPRINT_READY';
   const auditoria1Pct = progress?.completionPct ?? 0;
+
+  if (isFounderAccessPhase() && !isComplete) {
+    return (
+      <div className="mk-dashboard">
+        <div className="mk-progress-hero">
+          <p className="mk-section-eyebrow">RUTA MK</p>
+          <h2 className="mk-progress-hero__title">Disponible en el lanzamiento.</h2>
+          <p className="mk-progress-hero__sub">
+            Las auditorías y el progreso por etapas se activan cuando abramos la plataforma. Tu
+            cuenta de fundador ya está lista.
+          </p>
+          <Link href="/sistema" className="mk-btn-primary">
+            Explorar el sistema →
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mk-dashboard">
@@ -62,7 +81,7 @@ export function RutaContent() {
       <div className={`mk-ruta-card${isComplete ? ' mk-ruta-card--done' : ''}`}>
         <div className="mk-ruta-card__header">
           <div>
-            <p className="mk-ruta-card__eyebrow">E-AUD-001</p>
+            <p className="mk-ruta-card__eyebrow">01</p>
             <h3 className="mk-ruta-card__name">Auditoría Inicial</h3>
             <p className="mk-ruta-card__sub">Mentalidad · Hábitos · Entorno · Finanzas · Relaciones</p>
           </div>
@@ -117,7 +136,7 @@ export function RutaContent() {
             <div key={a.id} className="mk-ruta-card mk-ruta-card--locked">
               <div className="mk-ruta-card__header">
                 <div>
-                  <p className="mk-ruta-card__eyebrow">{a.id}</p>
+                  <p className="mk-ruta-card__eyebrow">{a.num}</p>
                   <h3 className="mk-ruta-card__name">{a.name}</h3>
                   <p className="mk-ruta-card__sub">{a.sub}</p>
                 </div>

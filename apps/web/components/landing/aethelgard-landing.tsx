@@ -10,20 +10,26 @@ import { ScrollStaggerContainer, StaggerItem } from '@/components/motion/stagger
 import { AuthCta } from '@/components/auth-cta';
 import { PublicFooter } from '@/components/public-footer';
 import { PublicNav } from '@/components/public-nav';
+import { TrialBadge } from '@/components/trial-badge';
+import { MkDomainsBridge } from '@/components/pages/mk-domains-bridge';
 import { applyLandingHashFromLocation } from '@/lib/landing-nav';
 import { LANDING_IMAGES } from '@/lib/assets';
 import { LANDING_FAQ_ITEMS } from '@/lib/landing-faq';
+import { DOMAINS } from '@/lib/mk-system';
 import {
   LANDING_BENEFITS,
   LANDING_CLOSE,
   LANDING_DIAGNOSTIC_CTA,
+  LANDING_DOMAINS_SECTION,
   LANDING_HERO,
+  LANDING_HERO_STATUS,
   LANDING_METHOD_STEPS,
   LANDING_PROBLEM,
   LANDING_PROFILES,
   LANDING_PROFILES_CLOSE,
   LANDING_REALMS,
   LANDING_REALMS_CLOSE,
+  LANDING_WHAT_IS,
 } from '@/lib/landing-copy';
 
 const PHASE_IMAGES = {
@@ -38,6 +44,7 @@ function FaqItem({
   id,
   question,
   answer,
+  link,
   isOpen,
   onToggle,
   reduced,
@@ -45,6 +52,7 @@ function FaqItem({
   id: string;
   question: string;
   answer: string;
+  link?: { href: string; label: string };
   isOpen: boolean;
   onToggle: () => void;
   reduced: boolean;
@@ -88,6 +96,12 @@ function FaqItem({
         style={{ overflow: 'hidden' }}
       >
         <p className="ag-faq-item__answer-text font-body-md">{answer}</p>
+        {link && (
+          <Link href={link.href} className="ag-inline-link font-label-md">
+            {link.label}
+            <AppIcon name="arrow-right" size={14} />
+          </Link>
+        )}
       </motion.div>
     </article>
   );
@@ -207,7 +221,9 @@ export function AethelgardLanding() {
             <div className="ag-hero-overlay pointer-events-none relative z-10 flex flex-col justify-between">
               <HeroReveal className="ag-hero-title-zone">
                 <HeroRevealItem distance={18}>
-                  <p className="hud-text mb-4 text-center text-action-red">MAXIMUS KRATOS</p>
+                  <p className="hud-text ag-hero-title__eyebrow text-center text-action-red">
+                    MAXIMUS KRATOS
+                  </p>
                   <h1 className="ag-hero-title cinematic-shadow">
                     {LANDING_HERO.lines.map((line) => (
                       <span key={line} className="ag-hero-title__line">
@@ -215,7 +231,7 @@ export function AethelgardLanding() {
                       </span>
                     ))}
                   </h1>
-                  <p className="ag-hero-title__lead font-body-lg cinematic-shadow mt-4 max-w-xl text-center text-white/85">
+                  <p className="ag-hero-title__lead font-body-lg cinematic-shadow max-w-xl text-center text-white/85">
                     {LANDING_HERO.lead}
                   </p>
                 </HeroRevealItem>
@@ -226,9 +242,15 @@ export function AethelgardLanding() {
                     <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
                     <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
                     <p className="ag-panel__body font-body-lg">{LANDING_HERO.panel}</p>
+                    <p className="ag-hero-status-badge hud-text" aria-label="Estado de la plataforma">
+                      {LANDING_HERO_STATUS.badge}
+                    </p>
                     <AuthCta href={LANDING_DIAGNOSTIC_CTA.href} className="btn-primary font-label-lg">
                       {LANDING_DIAGNOSTIC_CTA.label}
                     </AuthCta>
+                    <p className="ag-hero-cta-note font-body-sm">
+                      Acceso anticipado. Estatus de fundador permanente
+                    </p>
                   </div>
                 </HeroRevealItem>
               </HeroReveal>
@@ -280,30 +302,22 @@ export function AethelgardLanding() {
           {/* ── 3. Perfiles ────────────────────────────────────────────── */}
           <section id="perfiles" className="ag-section-inner ag-landing-profiles">
             <div className="ag-container mx-auto w-full max-w-6xl">
-              <ScrollReveal className="text-center" distance={16}>
+              <ScrollReveal className="ag-landing-profiles__head text-center" distance={16}>
                 <p className="hud-text text-action-red">¿TE RECONOCES?</p>
                 <h2 className="ag-type-section text-white">
                   ¿Te reconoces en alguno de estos estados?
                 </h2>
               </ScrollReveal>
 
-              <ScrollStaggerContainer className="ag-profile-rail">
+              <ScrollStaggerContainer className="ag-profile-grid" stagger={0.08}>
                 {LANDING_PROFILES.map((card) => (
-                  <StaggerItem key={card.num} distance={16}>
-                    <div className="ag-profile-rail__item group">
-                      <span className="ag-profile-rail__node" aria-hidden />
-                      <div className="ag-crisis-card">
-                        <div className="ag-crisis-card__head">
-                          <span className="ag-profile-rail__num hud-text" aria-hidden>
-                            {card.num}
-                          </span>
-                          <h3 className="ag-profile-rail__title ag-type-item">{card.title}</h3>
-                        </div>
-                        <div className="ag-crisis-card__body">
-                          <p className="font-body-md text-white/70">{card.body}</p>
-                        </div>
-                      </div>
-                    </div>
+                  <StaggerItem key={card.num} className="ag-profile-grid__item" distance={14}>
+                    <article className="ag-panel ag-panel--marco ag-profile-card group h-full">
+                      <span className="ag-panel__corner ag-panel__corner--hover" aria-hidden />
+                      <p className="ag-profile-card__index hud-text text-action-red">{card.num}</p>
+                      <h3 className="ag-profile-card__title ag-panel__card-title">{card.title}</h3>
+                      <p className="ag-panel__card-body font-body-md">{card.body}</p>
+                    </article>
                   </StaggerItem>
                 ))}
               </ScrollStaggerContainer>
@@ -330,11 +344,12 @@ export function AethelgardLanding() {
                 <ScrollReveal className="ag-os-intro text-center" distance={16}>
                   <p className="hud-text text-action-red">¿QUÉ ES MAXIMUS KRATOS?</p>
                   <h2 className="ag-type-display text-white">
-                    Metodología de alineación integral
+                    {LANDING_WHAT_IS.titleLine1}
+                    <br />
+                    {LANDING_WHAT_IS.titleLine2}
                   </h2>
                   <p className="ag-os-lead font-body-lg text-xl text-white/70">
-                    Tres dimensiones. Un sistema. Cuando se alinean, el hombre deja de reaccionar a
-                    la vida y empieza a construirla.
+                    {LANDING_WHAT_IS.lead}
                   </p>
                 </ScrollReveal>
 
@@ -345,14 +360,18 @@ export function AethelgardLanding() {
                       <span className="ag-mk-realms__rail-core">Alinea</span>
                       <span className="ag-mk-realms__rail-line" />
                     </div>
-                    {LANDING_REALMS.map((realm) => (
+                    {LANDING_REALMS.map((realm, index) => (
                       <div key={realm.label} className="ag-mk-realm">
                         <div className="ag-mk-realm__node" aria-hidden />
+                        <span className="ag-mk-realm__index hud-text" aria-hidden>
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
                         <div className="ag-mk-realm__icon" aria-hidden>
                           <AppIcon name={realm.icon} size={22} />
                         </div>
                         <span className="ag-mk-realm__label font-headline-sm">{realm.label}</span>
                         <span className="ag-mk-realm__symbol hud-text">{realm.symbol}</span>
+                        <p className="ag-mk-realm__question font-body-md">{realm.question}</p>
                         <p className="ag-mk-realm__body font-body-md">{realm.body}</p>
                       </div>
                     ))}
@@ -360,6 +379,35 @@ export function AethelgardLanding() {
                   <p className="ag-landing-realms-close font-body-lg text-center text-white/75">
                     {LANDING_REALMS_CLOSE}
                   </p>
+                </ScrollReveal>
+
+                {/* ── Los cuatro ámbitos (compacto) ──────────────────────── */}
+                <ScrollReveal className="ag-mk-domains-section" distance={14}>
+                    <div className="ag-mk-domains-section__head">
+                    <p className="hud-text text-action-red">{LANDING_DOMAINS_SECTION.eyebrow}</p>
+                    <h3 className="ag-type-item text-white">{LANDING_DOMAINS_SECTION.title}</h3>
+                    <MkDomainsBridge />
+                    <p className="ag-mk-domains-section__lead font-body-md">
+                      {LANDING_DOMAINS_SECTION.leadClose}
+                    </p>
+                  </div>
+                  <div className="ag-mk-domains">
+                    {DOMAINS.map((domain) => (
+                      <div key={domain.key} className="ag-mk-domain">
+                        <div className="ag-mk-domain__icon" aria-hidden>
+                          <AppIcon name={domain.icon} size={18} />
+                        </div>
+                        <span className="ag-mk-domain__label font-headline-sm">{domain.label}</span>
+                        <p className="ag-mk-domain__question">{domain.question}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="ag-mk-domains-section__link">
+                    <Link href={LANDING_DOMAINS_SECTION.linkHref} className="ag-marco-more__link font-label-lg">
+                      {LANDING_DOMAINS_SECTION.linkLabel}
+                      <AppIcon name="arrow-right" size={16} />
+                    </Link>
+                  </div>
                 </ScrollReveal>
               </div>
             </div>
@@ -397,6 +445,13 @@ export function AethelgardLanding() {
                         </div>
                         <h3 className="ag-panel__title font-headline-md">{step.title}</h3>
                         <p className="ag-panel__body font-body-md">{step.body}</p>
+                        <p className="ag-phase-platform hud-text">{step.platform}</p>
+                        {step.link && (
+                          <Link href={step.link.href} className="ag-inline-link font-label-md">
+                            {step.link.label}
+                            <AppIcon name="arrow-right" size={14} />
+                          </Link>
+                        )}
                       </div>
                     </ScrollReveal>
                   );
@@ -502,6 +557,8 @@ export function AethelgardLanding() {
                 <AuthCta href={LANDING_DIAGNOSTIC_CTA.href} className="ag-btn-cta ag-founder-close__cta font-label-lg">
                   {LANDING_DIAGNOSTIC_CTA.labelAlt}
                 </AuthCta>
+                <p className="ag-landing-close-platform font-body-sm">{LANDING_CLOSE.platformNote}</p>
+                <TrialBadge className="ag-trial-note" />
               </div>
             </div>
           </ScrollReveal>
@@ -534,6 +591,7 @@ export function AethelgardLanding() {
                     id={item.id}
                     question={item.question}
                     answer={item.answer}
+                    link={'link' in item ? item.link : undefined}
                     isOpen={openFaqIndex === index}
                     reduced={reduced ?? false}
                     onToggle={() =>

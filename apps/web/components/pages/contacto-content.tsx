@@ -42,7 +42,7 @@ const CONTACT_INTENTS: ReadonlyArray<{
 ];
 
 const CONTACT_ASSURANCES: ReadonlyArray<{ icon: AppIconName; text: string }> = [
-  { icon: 'mail', text: 'Respondemos en 24–48 horas hábiles.' },
+  { icon: 'mail', text: 'Respondemos en 24 a 48 horas hábiles.' },
   { icon: 'shield', text: 'Sin listas de spam. Tu correo solo se usa para responderte.' },
 ];
 
@@ -141,7 +141,7 @@ export function ContactoContent() {
 
             <div className="ag-contact-alt">
               <p className="ag-contact-alt__lead font-body-md">
-                ¿Prefieres ir directo al sistema? El diagnóstico inicial es el primer paso.
+                ¿Prefieres reservar tu lugar? Crea tu cuenta de fundador.
               </p>
               <AuthCta href={LANDING_DIAGNOSTIC_CTA.href} className="ag-contact-alt__link font-label-lg">
                 {LANDING_DIAGNOSTIC_CTA.label}

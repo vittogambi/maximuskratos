@@ -144,7 +144,7 @@ export function MkRutaScreen() {
       <div className="mk-mock-ruta-card">
         <div className="mk-mock-ruta-card__head">
           <div>
-            <p className="mk-mock-ruta-card__id">E-AUD-001</p>
+            <p className="mk-mock-ruta-card__id">Auditoría I</p>
             <p className="mk-mock-ruta-card__name">Auditoría Inicial</p>
           </div>
           <span className="mk-mock-ruta-card__badge">En progreso</span>
@@ -165,7 +165,7 @@ export function MkRutaScreen() {
       <div className="mk-mock-ruta-card mk-mock-ruta-card--locked">
         <div className="mk-mock-ruta-card__head">
           <div>
-            <p className="mk-mock-ruta-card__id">E-AUD-002</p>
+            <p className="mk-mock-ruta-card__id">Auditoría II</p>
             <p className="mk-mock-ruta-card__name">Auditoría II</p>
           </div>
           <span className="mk-mock-ruta-card__badge mk-mock-ruta-card__badge--locked">Bloqueada</span>

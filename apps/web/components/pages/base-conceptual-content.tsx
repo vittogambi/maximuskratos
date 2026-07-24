@@ -105,14 +105,12 @@ export function BaseConceptualContent() {
           <ol className="ag-base-bridge__list">
             {DIAGNOSTIC_BRIDGE.map((step, index) => (
               <ScrollReveal key={step.num} className="ag-base-bridge__item" distance={12}>
-                <div className="ag-base-bridge__rail" aria-hidden>
-                  <span className="ag-base-bridge__node" />
-                  {index < DIAGNOSTIC_BRIDGE.length - 1 ? (
-                    <span className="ag-base-bridge__line" />
-                  ) : null}
-                </div>
-                <div className="ag-base-bridge__copy">
-                  <p className="hud-text text-action-red">{step.num}</p>
+                <span className="ag-base-bridge__node" aria-hidden />
+                <p className="ag-base-bridge__step-num hud-text text-action-red">{step.num}</p>
+                {index < DIAGNOSTIC_BRIDGE.length - 1 ? (
+                  <span className="ag-base-bridge__line" aria-hidden />
+                ) : null}
+                <div className="ag-base-bridge__detail">
                   <h3 className="ag-base-bridge__title ag-type-item text-white">{step.title}</h3>
                   <p className="ag-base-bridge__body font-body-md">{step.body}</p>
                 </div>

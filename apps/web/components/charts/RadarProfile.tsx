@@ -7,27 +7,15 @@ import {
   PolarAngleAxis,
   ResponsiveContainer,
 } from 'recharts';
-
-const DIM_LABELS: Record<string, string> = {
-  mentality:     'Mentalidad',
-  identity:      'Identidad',
-  habits:        'Hábitos',
-  environment:   'Entorno',
-  finances:      'Finanzas',
-  relationships: 'Relaciones',
-  purpose:       'Propósito',
-  ikigai:        'Ikigai',
-};
-
-const DIM_ORDER = ['mentality', 'identity', 'habits', 'environment', 'finances', 'relationships', 'purpose', 'ikigai'];
+import { DIMENSION_LABELS, DIMENSION_ORDER } from '@/lib/mk-system';
 
 type Props = {
   scores: Record<string, number>;
 };
 
 export function RadarProfile({ scores }: Props) {
-  const data = DIM_ORDER.filter((d) => scores[d] !== undefined).map((dim) => ({
-    subject: DIM_LABELS[dim] ?? dim,
+  const data = DIMENSION_ORDER.filter((d) => scores[d] !== undefined).map((dim) => ({
+    subject: DIMENSION_LABELS[dim] ?? dim,
     value: Math.min(100, Math.max(0, Math.round(scores[dim] ?? 0))),
     fullMark: 100,
   }));

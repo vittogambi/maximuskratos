@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { SubscriptionStatus } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { createHash, randomBytes } from 'crypto';
 import { Response } from 'express';
@@ -50,10 +51,19 @@ export class AuthService {
     }
 
     const passwordHash = await bcrypt.hash(dto.password, 12);
+
+    // Early access: reserve founder access without starting the trial clock.
+    // trialEnd is set when the platform launches (then + billing trialDays).
     const user = await this.prisma.user.create({
       data: {
         email: dto.email.toLowerCase(),
         passwordHash,
+        subscription: {
+          create: {
+            status: SubscriptionStatus.TRIAL,
+            trialEnd: null,
+          },
+        },
       },
     });
 

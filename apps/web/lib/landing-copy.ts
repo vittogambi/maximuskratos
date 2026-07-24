@@ -1,17 +1,35 @@
 import type { AppIconName } from '@/components/icons/registry';
+import { isEarlyAccessMode } from '@/lib/product-phase';
 
-/** Primary landing CTA: register → post-auth diagnostic flow */
-export const LANDING_DIAGNOSTIC_CTA = {
-  href: '/register',
-  label: 'Haz tu diagnóstico inicial',
-  labelAlt: 'Quiero hacer mi diagnóstico inicial',
-} as const;
+/** Primary public CTA: early access account or full diagnostic. */
+export const LANDING_PRIMARY_CTA = isEarlyAccessMode()
+  ? ({
+      href: '/register',
+      label: 'Crear cuenta de fundador',
+      labelAlt: 'Crear mi cuenta',
+    } as const)
+  : ({
+      href: '/register',
+      label: 'Haz tu diagnóstico inicial',
+      labelAlt: 'Quiero hacer mi diagnóstico inicial',
+    } as const);
+
+/** @deprecated Prefer LANDING_PRIMARY_CTA — kept as alias during migration. */
+export const LANDING_DIAGNOSTIC_CTA = LANDING_PRIMARY_CTA;
 
 /** Shared close block for public subpages */
-export const SUBPAGE_DIAGNOSTIC_CTA = {
-  title: 'Haz tu diagnóstico inicial',
-  lead: 'Antes de construir, hay que mirar con honestidad. El diagnóstico MK identifica tu estado actual, tus principales bloqueos y las áreas que requieren prioridad.',
-} as const;
+export const SUBPAGE_PRIMARY_CTA = isEarlyAccessMode()
+  ? ({
+      title: 'Reserva tu acceso de fundador',
+      lead: 'La plataforma completa llega pronto: diagnóstico, Perfil Maestro y Ruta. Hoy puedes crear tu cuenta y asegurar tu lugar.',
+    } as const)
+  : ({
+      title: 'Haz tu diagnóstico inicial',
+      lead: 'Antes de construir, hay que mirar con honestidad. El diagnóstico MK identifica tu estado actual, tus principales bloqueos y las áreas que requieren prioridad.',
+    } as const);
+
+/** @deprecated Prefer SUBPAGE_PRIMARY_CTA */
+export const SUBPAGE_DIAGNOSTIC_CTA = SUBPAGE_PRIMARY_CTA;
 
 export const LANDING_HERO = {
   lines: ['Descúbrete.', 'Alíneate.', 'Construye.'] as const,
@@ -32,7 +50,7 @@ export const LANDING_PROBLEM = {
     'Tienen potencial, pero lo dispersan entre urgencias, hábitos, deuda, cansancio, culpa, aislamiento o falta de propósito.',
   ] as const,
   close:
-    'MK nace para ayudar al hombre que sabe que puede ser más, pero necesita ordenar su vida desde la raíz.',
+    'Esa fragmentación no se queda en la teoría: se manifiesta en tu mentalidad, tus relaciones, tus finanzas y tu cuerpo. MK nace para ayudar al hombre que sabe que puede ser más, pero necesita ordenar su vida desde la raíz.',
 } as const;
 
 export const LANDING_PROFILES = [
@@ -65,68 +83,105 @@ export const LANDING_REALMS: ReadonlyArray<{
   label: string;
   icon: AppIconName;
   symbol: string;
+  question: string;
   body: string;
 }> = [
   {
-    label: 'Cuerpo',
-    icon: 'muscles',
-    symbol: 'Base física',
-    body: 'El cuerpo es la primera escuela del autodominio. Entrenar, alimentarse y cuidar la salud no es vanidad: es construir la base física para sostener una vida exigente.',
+    label: 'Espíritu',
+    icon: 'flame',
+    symbol: 'El norte',
+    question: '¿Quién soy y qué es verdadero para mí?',
+    body: 'Visión, valores, propósito e identidad. Define el norte que sostiene todo lo demás.',
   },
   {
     label: 'Mente',
     icon: 'brain',
     symbol: 'Orden y ejecución',
-    body: 'La mente ordena, decide y ejecuta. Aquí trabajamos hábitos, planificación, finanzas, relaciones, gestión emocional y toma de decisiones.',
+    question: '¿Cómo pienso, decido y ejecuto?',
+    body: 'Hábitos, planificación, decisiones y gestión emocional. Convierte el norte en acción.',
   },
   {
-    label: 'Espíritu',
-    icon: 'flame',
-    symbol: 'El norte',
-    body: 'El espíritu define el norte. Aquí se clarifican visión, valores, propósito, estándares, obstáculos internos e identidad.',
+    label: 'Cuerpo',
+    icon: 'muscles',
+    symbol: 'Base física',
+    question: '¿Tengo la energía para sostenerlo?',
+    body: 'Entrenamiento, nutrición, descanso y salud. La base física de una vida exigente.',
   },
 ];
 
 export const LANDING_REALMS_CLOSE =
-  'Cuando cuerpo, mente y espíritu se alinean, el hombre deja de reaccionar a la vida y empieza a construirla.';
+  'Cuando espíritu, mente y cuerpo se alinean, el hombre deja de reaccionar a la vida y empieza a construirla.';
 
-export const LANDING_METHOD_STEPS = [
+/** Sección compacta tras los pilares: los 4 ámbitos donde esas capacidades se manifiestan. */
+export const LANDING_DOMAINS_SECTION = {
+  eyebrow: 'LOS CUATRO ÁMBITOS',
+  title: 'Los pilares se manifiestan en cuatro ámbitos de tu vida.',
+  leadInternalLabel: 'Dimensiones internas',
+  leadInternalItems: ['Espíritu', 'Mente', 'Cuerpo'] as const,
+  leadExternalLabel: 'Ámbitos de la vida',
+  leadExternalItems: ['Mentalidad', 'Relaciones', 'Finanzas', 'Salud física'] as const,
+  leadClose: 'Ahí es donde esas dimensiones se manifiestan y se ponen a prueba.',
+  linkLabel: 'Ver el modelo completo',
+  linkHref: '/marco-central',
+} as const;
+
+export const LANDING_WHAT_IS = {
+  titleLine1: 'Una metodología de alineación integral.',
+  titleLine2: 'Una plataforma para llevarla a la práctica.',
+  lead: 'Tres dimensiones. Un sistema. Cuando se alinean, el hombre deja de reaccionar a la vida y empieza a construirla.',
+} as const;
+
+export const LANDING_METHOD_STEPS: ReadonlyArray<{
+  num: string;
+  eyebrow: string;
+  title: string;
+  body: string;
+  platform: string;
+  imageKey: 'phase01' | 'phase02' | 'phase03' | 'phase04' | 'phase05';
+  link?: { href: string; label: string };
+}> = [
   {
     num: '01',
     eyebrow: 'DIAGNÓSTICO INICIAL',
     title: 'Mira con honestidad dónde estás',
     body: 'Evaluamos tu estado actual en las áreas críticas de tu vida: propósito, hábitos, cuerpo, salud, relaciones, finanzas y ejecución.',
-    imageKey: 'phase01' as const,
+    platform: 'Dentro de MK: Diagnóstico inicial',
+    imageKey: 'phase01',
   },
   {
     num: '02',
     eyebrow: 'CLARIDAD DE PROPÓSITO',
     title: 'IKIGAI como brújula',
     body: 'Usamos la lógica del IKIGAI para identificar lo que amas, lo que sabes hacer, lo que el mundo necesita y aquello que puede transformarse en una actividad concreta y sostenible.',
-    imageKey: 'phase02' as const,
+    platform: 'Se refleja en: Perfil Maestro',
+    imageKey: 'phase02',
+    link: { href: '/ikigai', label: 'Qué es el IKIGAI en MK' },
   },
   {
     num: '03',
     eyebrow: 'ARQUITECTURA DEL SENTIDO',
     title: 'Del propósito a planes reales',
     body: 'Convertimos tu propósito en planes reales: entrenamiento, nutrición, finanzas, relaciones, hábitos, aprendizaje y proyectos.',
-    imageKey: 'phase03' as const,
+    platform: 'Se organiza en: Ruta MK',
+    imageKey: 'phase03',
   },
   {
     num: '04',
     eyebrow: 'EJECUCIÓN PROGRESIVA',
     title: 'Avanzar con orden',
     body: 'No se trata de cambiar todo en una semana. Se trata de avanzar con orden, indicadores y bitácora, para que cada acción tenga dirección.',
-    imageKey: 'phase04' as const,
+    platform: 'Se desarrolla mediante: Auditorías y progreso por etapas',
+    imageKey: 'phase04',
   },
   {
     num: '05',
     eyebrow: 'SEGUIMIENTO Y AJUSTE',
     title: 'Lo que no se mide se diluye',
     body: 'MK te ayuda a observar tu avance, corregir desviaciones y sostener el proceso.',
-    imageKey: 'phase05' as const,
+    platform: 'Se observa en: Panel personal e índices',
+    imageKey: 'phase05',
   },
-] as const;
+];
 
 export const LANDING_BENEFITS: ReadonlyArray<{
   title: string;
@@ -160,16 +215,37 @@ export const LANDING_BENEFITS: ReadonlyArray<{
   },
 ];
 
-export const LANDING_CLOSE = {
-  eyebrow: 'Esto no es motivación. Es reconstrucción.',
-  title: 'No se trata de aparentar fuerza.',
-  titleLine2: 'Se trata de convertirte en un hombre capaz de sostener lo que dice valorar.',
-  body: 'MAXIMUS KRATOS no promete una vida fácil. Promete un camino ordenado para hombres que quieren hacerse responsables de su cuerpo, su mente, su espíritu y su impacto.',
-  stepEyebrow: 'Primer paso',
-  stepTitle: 'Haz tu diagnóstico inicial',
-  stepBody:
-    'Antes de construir, hay que mirar con honestidad. El diagnóstico MK te permite identificar tu estado actual, tus principales bloqueos y las áreas que requieren prioridad.',
-} as const;
+export const LANDING_CLOSE = isEarlyAccessMode()
+  ? ({
+      eyebrow: 'Esto no es motivación. Es reconstrucción.',
+      title: 'No se trata de aparentar fuerza.',
+      titleLine2: 'Se trata de convertirte en un hombre capaz de sostener lo que dice valorar.',
+      body: 'MAXIMUS KRATOS no promete una vida fácil. Promete un camino ordenado para hombres que quieren hacerse responsables de su espíritu, su mente, su cuerpo y su impacto.',
+      stepEyebrow: 'Primer paso',
+      stepTitle: 'Asegura tu acceso de fundador',
+      stepBody:
+        'Abre tu cuenta hoy. Cuando lancemos web y app bajo la misma cuenta, entras primero.',
+      platformNote: 'Registro abierto, sin tarjeta. Te avisamos al lanzar.',
+    } as const)
+  : ({
+      eyebrow: 'Esto no es motivación. Es reconstrucción.',
+      title: 'No se trata de aparentar fuerza.',
+      titleLine2: 'Se trata de convertirte en un hombre capaz de sostener lo que dice valorar.',
+      body: 'MAXIMUS KRATOS no promete una vida fácil. Promete un camino ordenado para hombres que quieren hacerse responsables de su espíritu, su mente, su cuerpo y su impacto.',
+      stepEyebrow: 'Primer paso',
+      stepTitle: 'Haz tu diagnóstico inicial',
+      stepBody:
+        'Antes de construir, hay que mirar con honestidad. El diagnóstico MK te permite identificar tu estado actual, tus principales bloqueos y las áreas que requieren prioridad: una lectura integral de tu sistema, no una etiqueta.',
+      platformNote: 'El diagnóstico se realiza online, en la plataforma web.',
+    } as const);
+
+export const LANDING_HERO_STATUS = isEarlyAccessMode()
+  ? ({
+      badge: 'Acceso anticipado abierto. Diagnóstico y apps próximamente',
+    } as const)
+  : ({
+      badge: 'Plataforma web disponible hoy. App móvil en desarrollo',
+    } as const);
 
 export const BASE_CONCEPTUAL = {
   eyebrow: 'MK · BASE CONCEPTUAL',
@@ -179,9 +255,11 @@ export const BASE_CONCEPTUAL = {
   sectionEyebrow: 'MK · DIMENSIONES',
   sectionTitle: 'Cuatro bases. Una promesa.',
   sectionLead:
-    'Cada dimensión está respaldada por evidencia — no por retórica motivacional.',
+    'Cada dimensión está respaldada por evidencia, no por retórica motivacional.',
   close: 'Esto fundamenta la promesa.',
-  closeLead: 'El siguiente paso es mirar tu estado con honestidad.',
+  closeLead: isEarlyAccessMode()
+    ? 'El siguiente paso es reservar tu acceso de fundador.'
+    : 'El siguiente paso es mirar tu estado con honestidad.',
   pillars: [
     {
       title: 'Propósito',
