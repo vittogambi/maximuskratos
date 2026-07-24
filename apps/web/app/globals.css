@@ -5120,8 +5120,9 @@ html:has(.ag-landing) body {
 
 @media (min-width: 640px) {
   .ag-landing .ag-mk-domains-bridge {
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    gap: 1rem;
+    grid-template-columns: minmax(0, 1fr) 2rem minmax(0, 1fr);
+    gap: 0.85rem;
+    align-items: stretch;
   }
 }
 
@@ -5129,14 +5130,17 @@ html:has(.ag-landing) body {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  min-height: 100%;
+  height: 100%;
+  min-height: 13.5rem; /* shared outer mass: label + chip body */
   padding: 1rem 1.05rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.03);
+  box-sizing: border-box;
 }
 
 .ag-landing .ag-mk-domains-bridge__label {
   margin: 0;
+  flex: 0 0 auto;
   color: rgba(255, 180, 168, 0.75);
 }
 
@@ -5144,23 +5148,38 @@ html:has(.ag-landing) body {
   list-style: none;
   margin: 0;
   padding: 0;
+  flex: 1 1 auto;
   display: grid;
-  grid-template-columns: 1fr;
   gap: 0.45rem;
-  flex: 1;
-  align-content: center;
-  min-height: 7.5rem; /* equal body mass on both panels */
+  min-height: 0;
+}
+
+/* Both sides fill the same chip stage; pillars stack, domains 2×2 */
+.ag-landing .ag-mk-domains-bridge__items--pillars {
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+}
+
+.ag-landing .ag-mk-domains-bridge__items--domains {
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(4, minmax(0, 1fr));
 }
 
 @media (min-width: 640px) {
   .ag-landing .ag-mk-domains-bridge__items--domains {
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(2, minmax(0, 1fr));
   }
 }
 
 .ag-landing .ag-mk-domains-bridge__item {
   margin: 0;
-  padding: 0.55rem 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+  height: 100%;
+  padding: 0.5rem 0.65rem;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(0, 0, 0, 0.22);
   color: rgba(255, 255, 255, 0.9);
@@ -5168,18 +5187,24 @@ html:has(.ag-landing) body {
   font-size: 0.8125rem;
   font-weight: 700;
   letter-spacing: 0.03em;
-  line-height: 1.25;
+  line-height: 1.2;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .ag-landing .ag-mk-domains-bridge__arrow {
   display: flex;
   align-items: center;
   justify-content: center;
+  align-self: center;
   color: rgba(192, 1, 0, 0.85);
 }
 
 @media (max-width: 639px) {
+  .ag-landing .ag-mk-domains-bridge__side {
+    min-height: 0;
+  }
+
   .ag-landing .ag-mk-domains-bridge__arrow {
     transform: rotate(90deg);
   }
