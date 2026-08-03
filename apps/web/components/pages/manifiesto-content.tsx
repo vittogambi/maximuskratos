@@ -4,9 +4,12 @@ import Link from 'next/link';
 import { AppIcon } from '@/components/app-icon';
 import { ScrollReveal } from '@/components/motion/scroll-reveal';
 import { ScrollStaggerContainer, StaggerItem } from '@/components/motion/stagger';
+import { MkCycleHub, MkCycleOrbit } from '@/components/pages/mk-cycle-hub';
+import { SectionIntro } from '@/components/pages/section-intro';
 import { SubpageCta } from '@/components/pages/subpage-cta';
 import { PublicFaqSection } from '@/components/pages/public-faq-section';
 import { LANDING_IMAGES } from '@/lib/assets';
+import { ACTION_STEPS } from '@/lib/marco-central';
 import { MANIFIESTO_FAQ_ITEMS } from '@/lib/manifiesto-faq';
 import { DOMAINS } from '@/lib/mk-system';
 
@@ -155,34 +158,6 @@ const ALTERNATIVES = [
   {
     label: 'Apps de hábitos',
     body: 'Registran acciones. Casi nunca entienden qué dimensión profunda las origina o las bloquea.',
-  },
-] as const;
-
-const JOURNEY = [
-  {
-    num: '01',
-    title: 'Llegas fragmentado',
-    body: 'Mentalidad, relaciones, finanzas y salud física avanzan por separado. Hay esfuerzo, pero no se acumula.',
-  },
-  {
-    num: '02',
-    title: 'Haces el diagnóstico',
-    body: 'MK lee Espíritu, Mente y Cuerpo y muestra tu estado real antes de construir encima.',
-  },
-  {
-    num: '03',
-    title: 'Construyes tu arquitectura',
-    body: 'Defines dirección, prioridades y criterios. Dejas de improvisar: cada decisión se sostiene en esa arquitectura.',
-  },
-  {
-    num: '04',
-    title: 'Ejecutas la Ruta',
-    body: 'Esa arquitectura se convierte en acciones concretas. No otra lista de propósitos: trabajo diario con dirección.',
-  },
-  {
-    num: '05',
-    title: 'Mides y ajustas',
-    body: 'El sistema conserva el proceso, muestra el progreso y corrige el rumbo. El cambio deja de depender del impulso.',
   },
 ] as const;
 
@@ -457,20 +432,19 @@ export function ManifiestoContent() {
         aria-labelledby="frag-heading"
       >
         <div className="ag-container">
-          <div className="ag-about-block__shell">
-            <ScrollReveal distance={14}>
-              <AboutEyebrow>LA FRAGMENTACIÓN</AboutEyebrow>
-              <h2 id="frag-heading" className="ag-about-block__title ag-type-section text-white">
-                Una vida no puede ordenarse por partes.
-              </h2>
-              <p className="ag-about-block__lead ag-about-block__lead--emphasis font-body-lg">
+          <SectionIntro
+            eyebrow="LA FRAGMENTACIÓN"
+            title="Una vida no puede ordenarse por partes."
+            lead={
+              <>
                 Mentalidad, relaciones, finanzas y salud física se tratan por separado.
                 <span className="ag-about-block__lead-break">
                   Cada territorio recibe atención. Ninguno ve el sistema completo.
                 </span>
-              </p>
-            </ScrollReveal>
-          </div>
+              </>
+            }
+            headingId="frag-heading"
+          />
 
           <ScrollReveal className="ag-about-converge" distance={14}>
             <ul className="ag-about-converge__scatter">
@@ -607,41 +581,42 @@ export function ManifiestoContent() {
         </div>
       </section>
 
-      {/* ── 6. RECORRIDO ─────────────────────────────────────────────── */}
+      {/* ── 6. RECORRIDO (mismo ciclo que /sistema) ─────────────────── */}
       <section
-        className="ag-section-inner ag-about-block ag-about-block--dark ag-about-journey-section"
+        className="ag-section-inner ag-about-block ag-about-block--dark ag-sistema-cycle"
         aria-labelledby="journey-heading"
       >
-        <div className="ag-container ag-about-block__shell">
-          <ScrollReveal distance={14}>
-            <AboutEyebrow>EL RECORRIDO</AboutEyebrow>
-            <h2 id="journey-heading" className="ag-about-block__title ag-type-section text-white">
-              Así opera Maximus Kratos contigo.
-            </h2>
-            <p className="ag-about-block__lead font-body-lg">
-              Del esfuerzo fragmentado a un proceso con diagnóstico, dirección, ejecución y
-              seguimiento.
+        <div className="ag-container">
+          <SectionIntro
+            eyebrow="EL RECORRIDO"
+            title="Así opera Maximus Kratos contigo."
+            lead="Define, ejecuta, registra, revisa y ajusta. Del esfuerzo fragmentado a un proceso con diagnóstico, dirección, ejecución y seguimiento."
+            headingId="journey-heading"
+          />
+
+          <ScrollReveal className="ag-about-cycle ag-sistema-cycle__diagram" distance={14}>
+            <div className="ag-about-cycle__ring">
+              <MkCycleOrbit />
+              <MkCycleHub label="Ciclo de la Ruta MK" />
+
+              <ol className="ag-about-cycle__list">
+                {ACTION_STEPS.map((step, index) => (
+                  <li
+                    key={step.num}
+                    className={`ag-about-cycle__step ag-about-cycle__step--${index + 1}`}
+                  >
+                    <span className="ag-about-cycle__num hud-text">{step.num}</span>
+                    <h3 className="ag-about-cycle__title font-headline-sm">{step.title}</h3>
+                    <p className="ag-about-cycle__body font-body-md">{step.body}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <p className="ag-about-cycle__note font-body-md">
+              El ciclo no termina al completar una auditoría. Cada etapa vuelve a leer, corregir
+              y fortalecer tu arquitectura.
             </p>
           </ScrollReveal>
-
-          <ol className="ag-about-journey">
-            {JOURNEY.map((stage, index) => (
-              <ScrollReveal
-                key={stage.num}
-                className={`ag-about-journey__step ag-about-journey__step--${index + 1}`}
-                distance={10}
-              >
-                <div className="ag-about-journey__rail" aria-hidden>
-                  <span className="ag-about-journey__pip" />
-                </div>
-                <div className="ag-about-journey__copy">
-                  <span className="ag-about-journey__num hud-text">{stage.num}</span>
-                  <h3 className="ag-about-journey__title">{stage.title}</h3>
-                  <p className="ag-about-journey__body font-body-md">{stage.body}</p>
-                </div>
-              </ScrollReveal>
-            ))}
-          </ol>
         </div>
       </section>
 

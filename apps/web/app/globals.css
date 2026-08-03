@@ -6243,12 +6243,14 @@ html:has(.ag-landing) body {
 .ag-landing .ag-about-page .ag-about-tech-narrative,
 .ag-landing .ag-about-page .ag-about-tech-problems,
 .ag-landing .ag-about-page .ag-about-tech-jobs,
-.ag-landing .ag-about-page .ag-about-journey,
 .ag-landing .ag-about-page .ag-about-shield,
-.ag-landing .ag-about-page .ag-about-founder__card,
-.ag-landing .ag-about-page .ag-about-cycle,
-.ag-landing .ag-about-page .ag-about-converge {
+.ag-landing .ag-about-page .ag-about-founder__card {
   text-align: left;
+}
+
+.ag-landing .ag-about-page .ag-about-journey,
+.ag-landing .ag-about-page .ag-about-converge {
+  text-align: center;
 }
 
 /* Contrast panels keep their own internal rhythm */
@@ -6714,12 +6716,12 @@ html:has(.ag-landing) body {
 .ag-landing .ag-about-converge__chip {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.35rem;
-  padding: 1.05rem 1.1rem 1.15rem;
+  padding: 1.15rem 1.25rem 1.25rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(14, 14, 14, 0.72);
-  text-align: left;
+  text-align: center;
 }
 
 .ag-landing .ag-about-converge__chip-icon {
@@ -6737,6 +6739,8 @@ html:has(.ag-landing) body {
 }
 
 .ag-landing .ag-about-converge__chip-q {
+  max-width: 16rem;
+  margin-inline: auto;
   color: rgba(255, 255, 255, 0.42);
   line-height: 1.4;
 }
@@ -7628,97 +7632,37 @@ html:has(.ag-landing) body {
   }
 }
 
-/* ── Recorrido vertical ── */
+/* ── Recorrido: columna centrada, pasos en stack (mismo eje que el lead) ── */
 .ag-landing .ag-about-journey {
   list-style: none;
-  margin: clamp(2.25rem, 4.5vw, 3.25rem) 0 0;
+  margin: clamp(2.25rem, 4.5vw, 3.25rem) auto 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  max-width: 48rem;
-  margin-inline: auto;
+  gap: 0;
+  max-width: var(--ag-content-max);
+  width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .ag-landing .ag-about-journey__step {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1.25rem minmax(0, 1fr);
-  gap: 1.15rem;
-  padding: 0 0 1.75rem 0;
-  border: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: clamp(1.35rem, 3vw, 1.75rem) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
 }
 
 .ag-landing .ag-about-journey__step:last-child {
+  border-bottom: 0;
   padding-bottom: 0;
-}
-
-.ag-landing .ag-about-journey__rail {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  width: 1.25rem;
-}
-
-.ag-landing .ag-about-journey__rail::before {
-  content: '';
-  position: absolute;
-  top: 0.55rem;
-  bottom: -1.75rem;
-  left: 50%;
-  width: 1px;
-  transform: translateX(-50%);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.22) 0%,
-    rgba(192, 1, 0, 0.55) 100%
-  );
-}
-
-.ag-landing .ag-about-journey__step:last-child .ag-about-journey__rail::before {
-  display: none;
-}
-
-.ag-landing .ag-about-journey__pip {
-  position: relative;
-  z-index: 1;
-  margin-top: 0.4rem;
-  width: 0.65rem;
-  height: 0.65rem;
-  background: rgba(255, 255, 255, 0.28);
-  box-shadow: 0 0 0 4px rgba(10, 10, 10, 0.9);
-}
-
-.ag-landing .ag-about-journey__step--1 .ag-about-journey__pip {
-  background: rgba(255, 255, 255, 0.35);
-}
-
-.ag-landing .ag-about-journey__step--2 .ag-about-journey__pip {
-  background: rgba(255, 160, 150, 0.55);
-}
-
-.ag-landing .ag-about-journey__step--3 .ag-about-journey__pip {
-  background: rgba(220, 60, 50, 0.75);
-}
-
-.ag-landing .ag-about-journey__step--4 .ag-about-journey__pip {
-  background: rgba(200, 20, 10, 0.9);
-}
-
-.ag-landing .ag-about-journey__step--5 .ag-about-journey__pip {
-  background: #ff0000;
-  box-shadow:
-    0 0 0 4px rgba(10, 10, 10, 0.9),
-    0 0 14px rgba(255, 0, 0, 0.45);
-}
-
-.ag-landing .ag-about-journey__copy {
-  min-width: 0;
-  padding-top: 0.05rem;
 }
 
 .ag-landing .ag-about-journey__num {
   display: block;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.15rem;
   color: rgba(255, 255, 255, 0.35);
   letter-spacing: 0.14em;
 }
@@ -7728,7 +7672,7 @@ html:has(.ag-landing) body {
 }
 
 .ag-landing .ag-about-journey__title {
-  margin: 0 0 0.4rem;
+  margin: 0;
   font-family: var(--font-body);
   font-size: clamp(1.15rem, 2.2vw, 1.35rem);
   font-weight: 600;
@@ -7738,10 +7682,10 @@ html:has(.ag-landing) body {
 }
 
 .ag-landing .ag-about-journey__body {
-  margin: 0;
+  margin: 0.15rem auto 0;
+  max-width: 28rem;
   color: rgba(255, 255, 255, 0.58);
   line-height: 1.55;
-  max-width: 30rem;
 }
 
 .ag-landing .ag-about-journey__step--1 .ag-about-journey__body {
@@ -15078,7 +15022,9 @@ html:has(.ag-landing) body {
 
 /* Por qué importa */
 .ag-landing .ag-ikigai-why {
-  margin-top: clamp(1.75rem, 4vw, 2.5rem);
+  max-width: var(--ag-content-max);
+  margin: clamp(1.75rem, 4vw, 2.5rem) auto 0;
+  text-align: center;
 }
 
 .ag-landing .ag-ikigai-why__lead {
@@ -15091,20 +15037,17 @@ html:has(.ag-landing) body {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .ag-landing .ag-ikigai-why__item {
-  display: grid;
-  grid-template-columns: 2.25rem 1fr;
-  gap: 0.85rem;
-  align-items: baseline;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
   padding: 0.95rem 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.ag-landing .ag-ikigai-why__item:first-child {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
 }
 
 .ag-landing .ag-ikigai-why__num {
@@ -15113,6 +15056,7 @@ html:has(.ag-landing) body {
 
 .ag-landing .ag-ikigai-why__text {
   margin: 0;
+  max-width: 28rem;
   color: rgba(255, 255, 255, 0.78);
   line-height: 1.55;
 }
@@ -15120,6 +15064,7 @@ html:has(.ag-landing) body {
 .ag-landing .ag-ikigai-why__close {
   margin: 0 0 clamp(1.5rem, 3vw, 2rem);
   padding: clamp(1.25rem, 3vw, 1.75rem);
+  text-align: center;
 }
 
 .ag-landing .ag-ikigai-why__close p {
@@ -15129,11 +15074,13 @@ html:has(.ag-landing) body {
 }
 
 .ag-landing .ag-ikigai-why__quote {
-  margin: 0;
-  padding: 0.25rem 0 0.25rem 1.1rem;
-  border-left: 2px solid #c00100;
+  margin: 0 auto;
+  max-width: 28rem;
+  padding: 1rem 0 0;
+  border-top: 2px solid #c00100;
   color: #f5f5f5;
   line-height: 1.45;
+  text-align: center;
   text-wrap: balance;
 }
 
@@ -15221,12 +15168,16 @@ html:has(.ag-landing) body {
   display: flex;
   flex-direction: column;
   gap: 0;
-  max-width: var(--ag-max-band);
+  max-width: var(--ag-content-max);
   margin: 0 auto;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
 }
 
 .ag-landing .ag-ikigai-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 1.35rem 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -15234,8 +15185,8 @@ html:has(.ag-landing) body {
 .ag-landing .ag-ikigai-field__head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  justify-content: center;
+  gap: 0.85rem;
   margin-bottom: 0.65rem;
 }
 
@@ -15257,23 +15208,27 @@ html:has(.ag-landing) body {
 
 .ag-landing .ag-ikigai-field__label {
   margin: 0 0 0.4rem;
+  max-width: 28rem;
   color: #fff;
 }
 
 .ag-landing .ag-ikigai-field__question {
   margin: 0 0 0.65rem;
+  max-width: 28rem;
   color: rgba(247, 198, 123, 0.78);
   line-height: 1.45;
 }
 
 .ag-landing .ag-ikigai-field__body {
   margin: 0;
+  max-width: 28rem;
   color: rgba(255, 255, 255, 0.6);
   line-height: 1.6;
 }
 
 @media (min-width: 860px) {
   .ag-landing .ag-ikigai-fields {
+    max-width: var(--ag-max-band);
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0 2.5rem;
@@ -15300,35 +15255,42 @@ html:has(.ag-landing) body {
 
 /* Tensiones / desalineación */
 .ag-landing .ag-ikigai-tensions {
-  max-width: var(--ag-max-band);
+  max-width: var(--ag-content-max);
   margin: clamp(2rem, 4vw, 3rem) auto 0;
+  text-align: center;
 }
 
 .ag-landing .ag-ikigai-tensions__list {
   list-style: none;
   margin: 0 0 1.75rem;
   padding: 0;
-}
-
-.ag-landing .ag-ikigai-tensions__item {
-  display: grid;
-  grid-template-columns: 2.5rem 1fr;
-  gap: 1rem;
-  padding: 1.15rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.ag-landing .ag-ikigai-tensions__item:first-child {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.ag-landing .ag-ikigai-tensions__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 1.15rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+}
+
 .ag-landing .ag-ikigai-tensions__index {
-  padding-top: 0.2rem;
   color: rgba(255, 110, 110, 0.7);
 }
 
+.ag-landing .ag-ikigai-tensions__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  max-width: 28rem;
+}
+
 .ag-landing .ag-ikigai-tensions__title {
-  margin: 0 0 0.4rem;
+  margin: 0;
   color: #fff;
 }
 
@@ -15347,7 +15309,9 @@ html:has(.ag-landing) body {
 
 /* Qué no es */
 .ag-landing .ag-ikigai-not {
-  margin-top: clamp(1.75rem, 4vw, 2.5rem);
+  max-width: var(--ag-content-max);
+  margin: clamp(1.75rem, 4vw, 2.5rem) auto 0;
+  text-align: center;
 }
 
 .ag-landing .ag-ikigai-not__list {
@@ -15358,17 +15322,22 @@ html:has(.ag-landing) body {
 }
 
 .ag-landing .ag-ikigai-not__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
   padding: 1.1rem 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .ag-landing .ag-ikigai-not__title {
-  margin: 0 0 0.35rem;
+  margin: 0;
   color: #fff;
 }
 
 .ag-landing .ag-ikigai-not__body {
   margin: 0;
+  max-width: 28rem;
   color: rgba(255, 255, 255, 0.6);
   line-height: 1.55;
 }
@@ -15378,23 +15347,29 @@ html:has(.ag-landing) body {
   display: flex;
   flex-direction: column;
   gap: 0;
-  max-width: var(--ag-max-band);
+  max-width: var(--ag-content-max);
   margin: clamp(2rem, 4vw, 3rem) auto 0;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
 }
 
 .ag-landing .ag-ikigai-result__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
   padding: 1.1rem 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .ag-landing .ag-ikigai-result__title {
-  margin: 0 0 0.35rem;
+  margin: 0;
   color: #fff;
 }
 
 .ag-landing .ag-ikigai-result__body {
   margin: 0;
+  max-width: 28rem;
   color: rgba(255, 255, 255, 0.6);
   line-height: 1.55;
 }

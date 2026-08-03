@@ -1,12 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
+/** Owner accounts excluded from admin user lists and stats. */
+const HIDDEN_FROM_ADMIN_UI = new Set(
+  ['vittogambi14@gmail.com'].map((email) => email.toLowerCase()),
+);
+
 @Injectable()
 export class AdminService {
   constructor(private readonly prisma: PrismaService) {}
 
+  private get hiddenEmailFilter() {
+    return { email: { notIn: [...HIDDEN_FROM_ADMIN_UI] } };
+  }
+
   async listUsers() {
     const users = await this.prisma.user.findMany({
+      where: this.hiddenEmailFilter,
       orderBy: { createdAt: 'desc' },
       select: {
         id: true,
@@ -56,17 +66,19 @@ export class AdminService {
   }
 
   async stats() {
+    const since7d = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     const [userCount, leadCount, usersLast7d, leadsLast7d] = await Promise.all([
-      this.prisma.user.count(),
+      this.prisma.user.count({ where: this.hiddenEmailFilter }),
       this.prisma.lead.count(),
       this.prisma.user.count({
         where: {
-          createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
+          ...this.hiddenEmailFilter,
+          createdAt: { gte: since7d },
         },
       }),
       this.prisma.lead.count({
         where: {
-          createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
+          createdAt: { gte: since7d },
         },
       }),
     ]);

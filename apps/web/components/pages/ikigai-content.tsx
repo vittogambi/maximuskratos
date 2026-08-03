@@ -381,18 +381,12 @@ export function IkigaiContent() {
             lead="El sistema ayuda a construir, ordenar, contrastar e integrar una dirección. No entrega una revelación instantánea."
             headingId="proceso-heading"
           />
-          <ol className="ag-base-bridge__list">
-            {IKIGAI_PROCESS.map((step, index) => (
-              <ScrollReveal key={step.num} className="ag-base-bridge__item" distance={12}>
-                <span className="ag-base-bridge__node" aria-hidden />
-                <p className="ag-base-bridge__step-num hud-text text-action-red">{step.num}</p>
-                {index < IKIGAI_PROCESS.length - 1 ? (
-                  <span className="ag-base-bridge__line" aria-hidden />
-                ) : null}
-                <div className="ag-base-bridge__detail">
-                  <h3 className="ag-base-bridge__title ag-type-item text-white">{step.title}</h3>
-                  <p className="ag-base-bridge__body font-body-md">{step.body}</p>
-                </div>
+          <ol className="ag-about-journey">
+            {IKIGAI_PROCESS.map((step) => (
+              <ScrollReveal key={step.num} className="ag-about-journey__step" distance={12}>
+                <span className="ag-about-journey__num hud-text">{step.num}</span>
+                <h3 className="ag-about-journey__title">{step.title}</h3>
+                <p className="ag-about-journey__body font-body-md">{step.body}</p>
               </ScrollReveal>
             ))}
           </ol>
