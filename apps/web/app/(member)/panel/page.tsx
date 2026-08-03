@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { InicioDashboard } from '@/components/pages/InicioDashboard';
 
 export const metadata: Metadata = {
-  title: 'Inicio | Maximus Kratos',
+  title: 'Inicio',
   robots: { index: false, follow: false },
 };
 

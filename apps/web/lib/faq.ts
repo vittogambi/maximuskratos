@@ -5,8 +5,13 @@ export type PublicFaqItem = {
   link?: { href: string; label: string };
 };
 
+type FaqJsonLdItem = {
+  question: string;
+  answer: string;
+};
+
 /** JSON-LD FAQPage para páginas públicas con acordeón. */
-export function faqJsonLd(items: ReadonlyArray<PublicFaqItem>) {
+export function faqJsonLd(items: ReadonlyArray<FaqJsonLdItem>) {
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',

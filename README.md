@@ -81,7 +81,7 @@ npm run dev:web   # terminal 2
 | Variable | Description |
 |----------|-------------|
 | `NEXT_PUBLIC_API_URL` | Public API base URL (no trailing slash) |
-| `NEXT_PUBLIC_SITE_URL` | Public site URL for sitemap/SEO (no trailing slash) |
+| `NEXT_PUBLIC_SITE_URL` | Canonical site URL for sitemap, robots, Open Graph, JSON-LD (no trailing slash). Production: `https://maximus-kratos.com` |
 
 ## Deployment (Railway)
 
@@ -117,6 +117,7 @@ Do **not** put `NEXT_PUBLIC_*` on the API. You may keep `DATABASE_PUBLIC_URL` as
 | Variable | Value |
 |----------|--------|
 | `NEXT_PUBLIC_API_URL` | Public API URL, e.g. `https://api-production-xxxx.up.railway.app` (no trailing `/`) |
+| `NEXT_PUBLIC_SITE_URL` | `https://maximus-kratos.com` (canonical domain for SEO / sitemap / Open Graph; no trailing `/`) |
 | `RAILPACK_CONFIG_FILE` | `railpack.web.json` (if Web was running the API start command) |
 
 Do **not** put `DATABASE_URL`, `JWT_*`, or `CORS_*` on the Web service.

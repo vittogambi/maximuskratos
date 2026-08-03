@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { CuentaContent } from '@/components/pages/CuentaContent';
 
 export const metadata: Metadata = {
-  title: 'Cuenta | Maximus Kratos',
+  title: 'Cuenta',
   robots: { index: false, follow: false },
 };
 

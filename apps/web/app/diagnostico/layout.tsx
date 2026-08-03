@@ -1,4 +1,12 @@
 import type { ReactNode } from 'react';
+import { buildPageMetadata } from '@/lib/seo';
+
+export const metadata = buildPageMetadata({
+  title: 'Diagnóstico',
+  description: 'Diagnóstico Maestro MK. Disponible para cuentas autenticadas.',
+  path: '/diagnostico',
+  noIndex: true,
+});
 
 /** Full-screen cinematic shell — no public nav, no footer. */
 export default function DiagnosticoLayout({ children }: { children: ReactNode }) {

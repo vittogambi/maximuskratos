@@ -3,6 +3,12 @@ import Script from 'next/script';
 import { Barlow_Condensed, Geist, Hanken_Grotesk, Noto_Serif } from 'next/font/google';
 import './globals.css';
 import { AuthSessionProvider } from '@/components/auth-session-provider';
+import {
+  organizationJsonLd,
+  serializeJsonLd,
+  websiteJsonLd,
+} from '@/lib/schema';
+import { buildRootMetadata } from '@/lib/seo';
 import { cn } from '@/lib/utils';
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
@@ -24,7 +30,7 @@ const hanken = Hanken_Grotesk({
   display: 'swap',
 });
 
-/** Classical Greek — Quiénes Somos concept cards (Bitte BC has no Greek glyphs) */
+/** Classical Greek — concept cards (Bitte BC has no Greek glyphs) */
 const notoSerif = Noto_Serif({
   subsets: ['latin', 'greek'],
   weight: ['400', '600'],
@@ -39,31 +45,7 @@ export const viewport = {
   viewportFit: 'cover',
 };
 
-export const metadata: Metadata = {
-  title: {
-    default: 'Maximus Kratos: Sistema Integral de Transformación Masculina',
-    template: '%s | Maximus Kratos',
-  },
-  description:
-    'Una metodología de autodescubrimiento y arquitectura personal que alinea Espíritu, Mente y Cuerpo bajo el rigor físico y la rendición de cuentas.',
-  manifest: '/manifest.webmanifest',
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'black-translucent',
-    title: 'Maximus Kratos',
-  },
-  icons: {
-    apple: '/icons/apple-touch-icon.png',
-  },
-  openGraph: {
-    type: 'website',
-    locale: 'es_CL',
-    siteName: 'Maximus Kratos',
-    title: 'Maximus Kratos: Sistema Integral de Transformación Masculina',
-    description:
-      'Una metodología de autodescubrimiento y arquitectura personal que alinea Espíritu, Mente y Cuerpo bajo el rigor físico y la rendición de cuentas.',
-  },
-};
+export const metadata: Metadata = buildRootMetadata();
 
 export default function RootLayout({
   children,
@@ -76,6 +58,12 @@ export default function RootLayout({
       className={cn('dark', bitteFallback.variable, hanken.variable, notoSerif.variable, 'font-sans', geist.variable)}
     >
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: serializeJsonLd(organizationJsonLd(), websiteJsonLd()),
+          }}
+        />
         <Script id="reload-scroll-top" strategy="beforeInteractive">
           {`(function(){try{if('scrollRestoration'in history)history.scrollRestoration='manual';var n=performance.getEntriesByType('navigation')[0];if(n&&n.type==='reload'&&location.hash){history.replaceState(null,'',location.pathname+location.search);scrollTo(0,0);}}catch(e){}})();`}
         </Script>

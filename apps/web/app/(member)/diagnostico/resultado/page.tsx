@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { PerfilContent } from '@/components/pages/PerfilContent';
 
 export const metadata: Metadata = {
-  title: 'Tu resultado | Maximus Kratos',
+  title: 'Tu resultado',
   robots: { index: false, follow: false },
 };
 
