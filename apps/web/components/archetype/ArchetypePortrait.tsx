@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import { AppIcon } from '@/components/app-icon';
 import { getArchetype } from '@/lib/archetypes';
 
 type Props = {
@@ -48,7 +49,7 @@ export function ArchetypePortrait({ slug, size = 'md', priority = false, classNa
       )}
       {showFallback && (
         <span className="archetype-portrait__symbol" aria-hidden>
-          {meta.symbol}
+          <AppIcon name={meta.icon} size={size === 'sm' ? 20 : 32} />
         </span>
       )}
     </div>

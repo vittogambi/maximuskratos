@@ -32,7 +32,7 @@ const EVENT_FEATURES: ReadonlyArray<{
   {
     icon: 'users',
     label: 'Red de alto estándar',
-    desc: 'Conexión con hombres que comparten objetivos exigentes.',
+    desc: 'Conexión con quienes comparten objetivos exigentes.',
   },
 ];
 
@@ -57,7 +57,7 @@ const EVENT_AGENDA: ReadonlyArray<{ num: string; title: string; body: string }> 
   {
     num: '03',
     title: 'Alineación y consejo',
-    body: 'Análisis de arquetipo y cierre de compromisos frente a una red de hombres con el mismo estándar de exigencia.',
+    body: 'Análisis de arquetipo y cierre de compromisos frente a una red con el mismo estándar de exigencia.',
   },
 ];
 

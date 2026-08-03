@@ -20,6 +20,21 @@ const nextConfig: NextConfig = {
         destination: '/sistema',
         permanent: true,
       },
+      {
+        source: '/quienes-somos',
+        destination: '/manifiesto',
+        permanent: true,
+      },
+      {
+        source: '/porque-mk',
+        destination: '/manifiesto',
+        permanent: true,
+      },
+      {
+        source: '/base-conceptual',
+        destination: '/marco-central',
+        permanent: true,
+      },
     ];
   },
   images: {

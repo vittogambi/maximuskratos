@@ -1,10 +1,30 @@
 import { AppIcon } from '@/components/app-icon';
 import { ARCHETYPES } from '@/lib/archetypes';
+import { PILLARS, type PillarKey } from '@/lib/mk-system';
 
 const REY = ARCHETYPES.rey;
 
+/**
+ * Puntajes ilustrativos para las mockups de marketing (no provienen de un usuario real).
+ * Usan exactamente la taxonomía del método: los tres pilares del Marco Central.
+ */
+const MOCK_ALIGNMENT_SCORE = 78;
+const MOCK_PILLAR_SCORES: Record<PillarKey, number> = {
+  espiritu: 82,
+  mente: 74,
+  cuerpo: 65,
+};
+
+// Triángulo de 3 ejes (Espíritu / Mente / Cuerpo) a partir de MOCK_PILLAR_SCORES.
+const RADAR_FULL_MARK = '50,8 78,56 22,56';
+const RADAR_DATA_POINTS: ReadonlyArray<[number, number]> = [
+  [50, 14],
+  [71, 52],
+  [32, 50],
+];
+
 export function MkRadarChart() {
-  const points = '50,8 78,28 72,58 48,68 22,52';
+  const dataPoints = RADAR_DATA_POINTS.map(([x, y]) => `${x},${y}`).join(' ');
   const grid = [0.35, 0.55, 0.75, 1];
 
   return (
@@ -12,21 +32,15 @@ export function MkRadarChart() {
       {grid.map((scale) => (
         <polygon
           key={scale}
-          points={points}
+          points={RADAR_FULL_MARK}
           transform={`translate(50 40) scale(${scale}) translate(-50 -40)`}
           fill="none"
           stroke="rgba(255,255,255,0.12)"
           strokeWidth="0.6"
         />
       ))}
-      <polygon points={points} fill="rgba(192,1,0,0.22)" stroke="#c00100" strokeWidth="1.2" />
-      {[
-        [50, 8],
-        [78, 28],
-        [72, 58],
-        [48, 68],
-        [22, 52],
-      ].map(([cx, cy], i) => (
+      <polygon points={dataPoints} fill="rgba(192,1,0,0.22)" stroke="#c00100" strokeWidth="1.2" />
+      {RADAR_DATA_POINTS.map(([cx, cy], i) => (
         <circle key={i} cx={cx} cy={cy} r="1.8" fill="#c00100" />
       ))}
     </svg>
@@ -108,21 +122,15 @@ export function MkOverviewScreen() {
       <MkArchetypeBanner />
       <div className="mk-app-ui__stats">
         <article className="mk-app-ui__stat mk-app-ui__stat--accent">
-          <p className="mk-app-ui__stat-label">Global MK</p>
-          <p className="mk-app-ui__stat-value">78</p>
+          <p className="mk-app-ui__stat-label">Alineación general</p>
+          <p className="mk-app-ui__stat-value">{MOCK_ALIGNMENT_SCORE}</p>
         </article>
-        <article className="mk-app-ui__stat">
-          <p className="mk-app-ui__stat-label">Claridad</p>
-          <p className="mk-app-ui__stat-value">74</p>
-        </article>
-        <article className="mk-app-ui__stat">
-          <p className="mk-app-ui__stat-label">Ejecución</p>
-          <p className="mk-app-ui__stat-value">61</p>
-        </article>
-        <article className="mk-app-ui__stat">
-          <p className="mk-app-ui__stat-label">Estabilidad</p>
-          <p className="mk-app-ui__stat-value">68</p>
-        </article>
+        {PILLARS.map((pillar) => (
+          <article key={pillar.key} className="mk-app-ui__stat">
+            <p className="mk-app-ui__stat-label">{pillar.label}</p>
+            <p className="mk-app-ui__stat-value">{MOCK_PILLAR_SCORES[pillar.key]}</p>
+          </article>
+        ))}
       </div>
       <p className="mk-mock-cta">Ver mi perfil completo →</p>
     </div>
@@ -181,25 +189,25 @@ export function MkPerfilScreen() {
   return (
     <div className="mk-mock-perfil">
       <MkArchetypeBanner compact />
-      <p className="mk-mock-eyebrow">DIMENSIONES · RADAR</p>
+      <p className="mk-mock-eyebrow">PILARES · RADAR</p>
       <div className="mk-mock-perfil-radar-row">
         <MkRadarChart />
         <div className="mk-mock-perfil-scores">
-          <span>Identidad · 74</span>
-          <span>Hábitos · 61</span>
-          <span>Relaciones · 68</span>
+          {PILLARS.map((pillar) => (
+            <span key={pillar.key}>
+              {pillar.label} · {MOCK_PILLAR_SCORES[pillar.key]}
+            </span>
+          ))}
         </div>
       </div>
       <div>
         <div className="mk-mock-perfil-shadow-head">
           <p className="mk-mock-eyebrow" style={{ color: 'rgba(255,90,90,0.75)', margin: 0 }}>
-            LA SOMBRA
+            TENSIÓN DOMINANTE
           </p>
-          <span className="mk-mock-perfil-shadow-score">31</span>
+          <span className="mk-mock-perfil-shadow-score">{REY.shadow.label}</span>
         </div>
-        <p className="mk-mock-perfil-shadow-text">
-          {REY.shadow.label}: domina en vez de sostener.
-        </p>
+        <p className="mk-mock-perfil-shadow-text">{REY.shadow.description}</p>
       </div>
     </div>
   );

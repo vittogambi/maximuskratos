@@ -5,7 +5,7 @@ import { siteConfig } from '@/lib/design';
 
 export const metadata: Metadata = {
   title: 'Términos de Servicio',
-  description: `Términos y condiciones de uso de ${siteConfig.name}.`,
+  description: `Términos de Servicio de ${siteConfig.name}. Condiciones de uso del sitio y la Plataforma.`,
 };
 
 export default function TerminosPage() {

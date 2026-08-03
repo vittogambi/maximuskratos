@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -35,6 +36,8 @@ export type JwtPayload = {
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
@@ -69,6 +72,11 @@ export class AuthService {
 
     const tokens = await this.issueTokens(user.id, user.email, user.role);
     this.setRefreshCookie(res, tokens.refreshToken);
+
+    void this.mail.sendWelcomeEmail(user.email).catch((err: unknown) => {
+      const message = err instanceof Error ? err.message : String(err);
+      this.logger.warn(`Welcome email failed for ${user.email}: ${message}`);
+    });
 
     return {
       accessToken: tokens.accessToken,

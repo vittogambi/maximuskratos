@@ -25,6 +25,8 @@ import { LucideEye } from '@/components/icons/lucide/eye';
 import { LucideEyeOff } from '@/components/icons/lucide/eye-off';
 import { LucideFingerprint } from '@/components/icons/lucide/fingerprint';
 import { LucideGlobe } from '@/components/icons/lucide/globe';
+import { LucideHandshake } from '@/components/icons/lucide/handshake';
+import { LucideHeartPulse } from '@/components/icons/lucide/heart-pulse';
 import { LucideHelm } from '@/components/icons/lucide/helm';
 import { LucideIkigai } from '@/components/icons/lucide/ikigai';
 import { LucideLaurelWreath } from '@/components/icons/lucide/laurel-wreath';
@@ -37,6 +39,7 @@ import { LucideMap } from '@/components/icons/lucide/map';
 import { LucideMenu } from '@/components/icons/lucide/menu';
 import { LucideMoon } from '@/components/icons/lucide/moon';
 import { LucideMuscles } from '@/components/icons/lucide/muscles';
+import { LucideScanEye } from '@/components/icons/lucide/scan-eye';
 import { LucideScanLine } from '@/components/icons/lucide/scan-line';
 import { LucideShadow } from '@/components/icons/lucide/shadow';
 import { LucideShield } from '@/components/icons/lucide/shield';
@@ -48,6 +51,7 @@ import { LucideUserCheck } from '@/components/icons/lucide/user-check';
 import { LucideUserPlus } from '@/components/icons/lucide/user-plus';
 import { LucideUserX } from '@/components/icons/lucide/user-x';
 import { LucideUsers } from '@/components/icons/lucide/users';
+import { LucideWallet } from '@/components/icons/lucide/wallet';
 import { LucideX } from '@/components/icons/lucide/x';
 import { LucideZapOff } from '@/components/icons/lucide/zap-off';
 import { SocialInstagram } from '@/components/icons/social/instagram';
@@ -84,6 +88,8 @@ export const ICON_REGISTRY = {
   'eye-off': LucideEyeOff,
   fingerprint: LucideFingerprint,
   globe: LucideGlobe,
+  handshake: LucideHandshake,
+  'heart-pulse': LucideHeartPulse,
   helm: LucideHelm,
   ikigai: LucideIkigai,
   instagram: SocialInstagram,
@@ -98,6 +104,7 @@ export const ICON_REGISTRY = {
   menu: LucideMenu,
   moon: LucideMoon,
   muscles: LucideMuscles,
+  'scan-eye': LucideScanEye,
   'scan-line': LucideScanLine,
   shadow: LucideShadow,
   shield: LucideShield,
@@ -109,6 +116,7 @@ export const ICON_REGISTRY = {
   'user-plus': LucideUserPlus,
   'user-x': LucideUserX,
   users: LucideUsers,
+  wallet: LucideWallet,
   x: LucideX,
   youtube: SocialYoutube,
   'zap-off': LucideZapOff,

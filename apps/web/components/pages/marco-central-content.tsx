@@ -9,6 +9,7 @@ import { ScrollReveal } from '@/components/motion/scroll-reveal';
 import { ScrollStaggerContainer, StaggerItem } from '@/components/motion/stagger';
 import { SectionIntro } from '@/components/pages/section-intro';
 import { SubpageCta } from '@/components/pages/subpage-cta';
+import { PublicFaqSection } from '@/components/pages/public-faq-section';
 import {
   ARCHETYPES,
   ARCHETYPE_SLUGS,
@@ -16,14 +17,14 @@ import {
 } from '@/lib/archetypes';
 import { LANDING_IMAGES } from '@/lib/assets';
 import {
-  ACTION_STEPS,
   HDRP_BLOCKS,
   MARCO_CARDS,
   MARCO_STAGES,
-  MARCO_VIDEO,
   type MarcoCard,
 } from '@/lib/marco-central';
-import { DOMAINS, INTEGRATION_EXAMPLES, PILLARS } from '@/lib/mk-system';
+import { MARCO_CENTRAL_FAQ_ITEMS } from '@/lib/marco-central-faq';
+import { MkPillarsDomainsMatrix } from '@/components/pages/mk-pillars-domains-matrix';
+import { MODEL_INTRO } from '@/lib/mk-system';
 
 function PillarCard({
   card,
@@ -48,8 +49,8 @@ function PillarCard({
           aria-expanded={isOpen}
           aria-controls={panelId}
         >
-          <span className="ag-marco-pillar__num font-display-xl" aria-hidden>
-            {card.num}
+          <span className="ag-marco-pillar__icon" aria-hidden>
+            <AppIcon name={card.icon} size={18} />
           </span>
           <span className="ag-marco-pillar__meta">
             <span className="ag-marco-pillar__title font-headline-sm">{card.title}</span>
@@ -112,7 +113,7 @@ export function MarcoCentralContent() {
           <SectionIntro
             eyebrow="MARCO CENTRAL"
             title="El mapa detrás del método."
-            lead="Maximus Kratos estudia las dimensiones que construyen la dirección de un hombre y las ordena dentro de una misma arquitectura. Nueve pilares permiten auditar su vida. El arquetipo muestra cómo ejerce sus capacidades. La sombra revela cómo puede deformarlas. La Hoja de Ruta de Propósito integra todo en un plano que después se convierte en ejecución."
+            lead="El método completo, antes de cualquier producto."
             as="h1"
             size="display"
           />
@@ -124,8 +125,8 @@ export function MarcoCentralContent() {
         <div className="ag-container">
           <SectionIntro
             eyebrow="LA ARQUITECTURA"
-            title="Muchas preguntas. Un solo sistema."
-            lead="Cada componente de MK cumple una función distinta. Juntos convierten la reflexión personal en una estructura que puede guiar decisiones, acciones y progreso."
+            title="Cinco etapas. Un solo sistema."
+            lead="Cada pieza tiene un rol. Juntas convierten la reflexión en una estructura que guía decisiones, acciones y progreso."
             headingId="arch-heading"
           />
 
@@ -133,25 +134,25 @@ export function MarcoCentralContent() {
             <ol className="ag-marco-flow__list">
               {MARCO_STAGES.map((stage, index) => (
                 <li key={stage.num} className="ag-marco-flow__item">
+                  <div className="ag-marco-flow__rail" aria-hidden>
+                    <span className="ag-marco-flow__num">{stage.num}</span>
+                    {index < MARCO_STAGES.length - 1 ? (
+                      <span className="ag-marco-flow__connector" />
+                    ) : null}
+                  </div>
                   <article className="ag-marco-flow__node">
-                    <div className="ag-marco-flow__head">
-                      <span className="ag-marco-flow__num font-display-xl" aria-hidden>
-                        {stage.num}
-                      </span>
+                    <div className="ag-marco-flow__meta">
                       <span className="ag-marco-flow__tag hud-text">{stage.tag}</span>
-                    </div>
-                    <div className="ag-marco-flow__icon" aria-hidden>
-                      <AppIcon name={stage.icon} size={18} />
+                      <span className="ag-marco-flow__icon" aria-hidden>
+                        <AppIcon name={stage.icon} size={16} />
+                      </span>
                     </div>
                     <h3 className="ag-marco-flow__title font-headline-sm">{stage.title}</h3>
                     <p className="ag-marco-flow__body font-body-md">{stage.body}</p>
-                    <p className="ag-marco-flow__platform hud-text">
-                      En la plataforma: {stage.platform}
+                    <p className="ag-marco-flow__platform font-body-sm">
+                      Dentro de MK: {stage.platform}
                     </p>
                   </article>
-                  {index < MARCO_STAGES.length - 1 ? (
-                    <span className="ag-marco-flow__connector" aria-hidden />
-                  ) : null}
                 </li>
               ))}
             </ol>
@@ -159,106 +160,29 @@ export function MarcoCentralContent() {
         </div>
       </section>
 
-      {/* ── PILARES × ÁMBITOS ────────────────────────────────────────── */}
+      {/* ── EL MODELO MK (matriz) ─────────────────────────────────────── */}
       <section className="ag-section-inner ag-marco-matrix-section" aria-labelledby="matrix-heading">
         <div className="ag-container">
           <SectionIntro
-            eyebrow="PILARES × ÁMBITOS"
-            title="Cómo se relacionan las dimensiones internas con la vida real."
-            lead="Espíritu, Mente y Cuerpo son los tres pilares. Mentalidad, Relaciones, Finanzas y Salud física son los cuatro ámbitos donde esos pilares se manifiestan y se ponen a prueba."
+            eyebrow={MODEL_INTRO.eyebrow}
+            title={MODEL_INTRO.title}
+            lead={MODEL_INTRO.lead}
             headingId="matrix-heading"
           />
 
           <div className="ag-sistema-model__block">
-            <div className="ag-sistema-model__block-head">
-              <p className="hud-text text-action-red">MATRIZ DE RELACIÓN</p>
-              <h3 className="ag-type-item text-white">Los pilares se manifiestan en cada ámbito.</h3>
-            </div>
-            <div
-              className="ag-sistema-matrix"
-              role="img"
-              aria-label="Los tres pilares (Espíritu, Mente, Cuerpo) se conectan con los cuatro ámbitos (Mentalidad, Relaciones, Finanzas, Salud física)"
-            >
-              <div className="ag-sistema-matrix__pillars">
-                {PILLARS.map((pillar) => (
-                  <div
-                    key={pillar.key}
-                    className="ag-sistema-matrix__node ag-sistema-matrix__node--pillar"
-                  >
-                    <AppIcon name={pillar.icon} size={18} />
-                    <span>{pillar.label}</span>
-                  </div>
-                ))}
-              </div>
-              <span className="ag-sistema-matrix__connector" aria-hidden>
-                <AppIcon name="arrow-right" size={20} />
-              </span>
-              <div className="ag-sistema-matrix__domains">
-                {DOMAINS.map((domain) => (
-                  <div
-                    key={domain.key}
-                    className="ag-sistema-matrix__node ag-sistema-matrix__node--domain"
-                  >
-                    <AppIcon name={domain.icon} size={18} />
-                    <span>{domain.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="ag-sistema-model__block">
-            <div className="ag-sistema-model__block-head">
-              <p className="hud-text text-action-red">EJEMPLOS DE INTEGRACIÓN</p>
-              <h3 className="ag-type-item text-white">Cómo se ven los pilares trabajando juntos.</h3>
-            </div>
-            <ScrollStaggerContainer className="ag-sistema-integration" stagger={0.08}>
-              {INTEGRATION_EXAMPLES.map((example) => {
-                const domain = DOMAINS.find((d) => d.key === example.domain);
-                if (!domain) return null;
-                return (
-                  <StaggerItem
-                    key={example.domain}
-                    className="ag-sistema-integration__item"
-                    distance={12}
-                  >
-                    <div className="ag-panel ag-panel--marco h-full">
-                      <span className="ag-panel__corner ag-panel__corner--hover" aria-hidden />
-                      <div className="ag-panel__head ag-marco-card__head">
-                        <div className="ag-marco-card__icon" aria-hidden>
-                          <AppIcon name={domain.icon} size={22} />
-                        </div>
-                        <div>
-                          <p className="ag-panel__card-title font-headline-sm">{domain.label}</p>
-                          <p className="ag-sistema-integration__question">{domain.question}</p>
-                        </div>
-                      </div>
-                      <ul className="ag-sistema-integration__list">
-                        {PILLARS.map((pillar) => (
-                          <li key={pillar.key}>
-                            <span className="ag-sistema-integration__pillar">
-                              {pillar.label} aporta
-                            </span>
-                            {example.contributions[pillar.key]}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </StaggerItem>
-                );
-              })}
-            </ScrollStaggerContainer>
+            <MkPillarsDomainsMatrix />
           </div>
         </div>
       </section>
 
-      {/* ── LOS OCHO PILARES ─────────────────────────────────────────── */}
+      {/* ── LOS NUEVE COMPONENTES ─────────────────────────────────────── */}
       <section className="ag-section-inner ag-marco-pillars" aria-labelledby="pillars-heading">
         <div className="ag-container">
           <SectionIntro
-            eyebrow="LOS NUEVE PILARES"
-            title="Las preguntas que sostienen una vida."
-            lead="Los pilares no representan áreas independientes. Cada uno resuelve una parte de la arquitectura y modifica la manera en que los demás pueden construirse. Por eso se trabajan en un orden deliberado: del linaje a la huella."
+            eyebrow="LOS NUEVE COMPONENTES"
+            title="Los nueve componentes de la Hoja de Ruta."
+            lead="La matriz indica dónde mirar. Los nueve componentes determinan qué construir, del linaje a la huella."
             headingId="pillars-heading"
           />
 
@@ -316,7 +240,10 @@ export function MarcoCentralContent() {
                         className="ag-marco-lens__thumb"
                       />
                     </span>
-                    <span className="ag-marco-lens__card-label font-label-lg">{meta.label}</span>
+                    <span className="ag-marco-lens__card-copy">
+                      <span className="ag-marco-lens__card-label font-label-lg">{meta.label}</span>
+                      <span className="ag-marco-lens__card-tagline font-body-sm">{meta.tagline}</span>
+                    </span>
                   </button>
                 );
               })}
@@ -328,18 +255,27 @@ export function MarcoCentralContent() {
               aria-labelledby={`lens-tab-${activeArchetype}`}
               className="ag-marco-lens__panel"
             >
+              <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
+              <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
+
               <div className="ag-marco-lens__lead">
                 <p className="ag-marco-lens__function font-headline-sm">{archetype.tagline}</p>
                 <p className="ag-marco-lens__desc font-body-md">{archetype.description}</p>
               </div>
 
               <div className="ag-marco-lens__modules">
-                <article className="ag-marco-lens__module">
+                <article className="ag-marco-lens__module ag-marco-lens__module--balance">
+                  <span className="ag-marco-lens__module-icon" aria-hidden>
+                    <AppIcon name="circle-check" size={14} />
+                  </span>
                   <span className="hud-text ag-marco-lens__kicker">En equilibrio</span>
                   <p className="font-body-md">{archetype.balanced}</p>
                 </article>
                 {archetype.shadowPoles.map((pole) => (
                   <article key={pole.label} className="ag-marco-lens__module ag-marco-lens__module--shadow">
+                    <span className="ag-marco-lens__module-icon ag-marco-lens__module-icon--shadow" aria-hidden>
+                      <AppIcon name="shadow" size={14} />
+                    </span>
                     <span className="hud-text ag-marco-lens__kicker ag-marco-lens__kicker--shadow">
                       Sombra · {pole.label}
                     </span>
@@ -368,122 +304,65 @@ export function MarcoCentralContent() {
           <SectionIntro
             eyebrow="HOJA DE RUTA DE PROPÓSITO"
             title="El documento que integra el sistema."
-            lead="La Hoja de Ruta de Propósito no es una declaración inspiracional ni una descripción estática de personalidad. Es el documento maestro en el que convergen tu visión, identidad, valores, estándares, propósito, origen, huella, arquetipo y sombra."
+            lead="Convierte lo descubierto en una referencia estable para decidir qué construir, qué proteger y qué rechazar."
             headingId="hdrp-heading"
           />
 
           <ScrollReveal className="ag-marco-hdrp-body" distance={14}>
-            <p className="ag-marco-hdrp-body__lead font-body-lg">
-              Su función es darte una referencia estable para decidir qué construir, qué proteger,
-              qué corregir y qué rechazar. Cuando aparece una decisión sobre trabajo, dinero,
-              relaciones, hábitos o dirección, la HdRP permite evaluarla desde algo más sólido que
-              el impulso del momento.
-            </p>
-
-            <ul className="ag-marco-hdrp-blocks">
-              {HDRP_BLOCKS.map((block) => (
-                <li key={block.title} className="ag-marco-hdrp-blocks__item">
-                  <span className="ag-marco-hdrp-blocks__title font-label-lg">{block.title}</span>
-                  <span className="ag-marco-hdrp-blocks__body font-body-md">{block.body}</span>
-                </li>
-              ))}
-            </ul>
-
-            <aside className="ag-marco-doc" aria-label="Representación de la Hoja de Ruta">
+            <aside className="ag-marco-doc" aria-label="Contenido de la Hoja de Ruta">
+              <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
+              <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
               <div className="ag-marco-doc__chrome">
-                <span className="hud-text">HdRP · VIVA</span>
-                <span className="ag-marco-doc__status hud-text">Perfil Maestro ↔ Ruta MK</span>
+                <span className="hud-text">HdRP</span>
+                <span className="ag-marco-doc__status hud-text">Lee. Decide. Actúa</span>
               </div>
               <div className="ag-marco-doc__body">
                 <p className="ag-marco-doc__title font-headline-sm">Hoja de Ruta de Propósito</p>
-                <div className="ag-marco-doc__lines" aria-hidden>
-                  <span className="ag-marco-doc__line ag-marco-doc__line--short" />
-                  <span className="ag-marco-doc__line" />
-                  <span className="ag-marco-doc__line ag-marco-doc__line--mid" />
-                </div>
-                <div className="ag-marco-doc__sections">
-                  {HDRP_BLOCKS.slice(0, 4).map((block) => (
-                    <div key={block.title} className="ag-marco-doc__section">
-                      <span className="hud-text">{block.title}</span>
-                      <span className="ag-marco-doc__bar" aria-hidden />
-                    </div>
+                <ul className="ag-marco-doc__blocks">
+                  {HDRP_BLOCKS.map((block) => (
+                    <li key={block.title} className="ag-marco-doc__block">
+                      <span className="ag-marco-doc__block-icon" aria-hidden>
+                        <AppIcon name={block.icon} size={15} />
+                      </span>
+                      <span className="ag-marco-doc__block-copy">
+                        <span className="ag-marco-doc__block-title">{block.title}</span>
+                        <span className="ag-marco-doc__block-body font-body-md">{block.body}</span>
+                      </span>
+                    </li>
                   ))}
-                </div>
-                <div className="ag-marco-doc__foot">
-                  <span className="ag-marco-doc__chip hud-text">Arquetipo</span>
-                  <span className="ag-marco-doc__chip hud-text">Sombra</span>
-                  <span className="ag-marco-doc__chip hud-text">Prioridades</span>
-                </div>
+                </ul>
               </div>
             </aside>
           </ScrollReveal>
         </div>
       </section>
 
-      {/* ── DE LA ARQUITECTURA A LA ACCIÓN ───────────────────────────── */}
+      {/* ── DEL MARCO AL SISTEMA ─────────────────────────────────────── */}
       <section className="ag-section-inner ag-marco-action" aria-labelledby="action-heading">
         <div className="ag-container">
           <SectionIntro
-            eyebrow="DE LA ARQUITECTURA A LA ACCIÓN"
-            title="Un plano solo importa cuando modifica la forma de vivir."
-            lead="Lo descubierto en el Marco Central no permanece como contenido de lectura. MK convierte la Hoja de Ruta en prioridades, misiones, prácticas e indicadores que permiten actuar, registrar y revisar el proceso."
+            eyebrow="DEL MARCO AL SISTEMA"
+            title="Del plano a la plataforma."
+            lead="Lo que aquí se define se ejecuta en El Sistema."
             headingId="action-heading"
           />
 
-          <ScrollReveal className="ag-about-cycle ag-marco-action__cycle" distance={14}>
-            <div className="ag-about-cycle__ring">
-              <svg className="ag-about-cycle__orbit" viewBox="0 0 100 100" aria-hidden>
-                <circle cx="50" cy="50" r="38" fill="none" pathLength="100" />
-                <polygon points="50,8 47.2,13.5 52.8,13.5" className="ag-about-cycle__orbit-arrow" />
-              </svg>
-
-              <div className="ag-about-cycle__hub" aria-hidden>
-                <p className="hud-text text-action-red">CICLO</p>
-                <p className="ag-about-cycle__hub-title">Ruta</p>
-                <p className="ag-about-cycle__hub-sub">define → ajusta</p>
-              </div>
-
-              <ol className="ag-about-cycle__list">
-                {ACTION_STEPS.map((step, index) => (
-                  <li
-                    key={step.num}
-                    className={`ag-about-cycle__step ag-about-cycle__step--${index + 1}`}
-                  >
-                    <span className="ag-about-cycle__num hud-text">{step.num}</span>
-                    <h3 className="ag-about-cycle__title font-headline-sm">{step.title}</h3>
-                    <p className="ag-about-cycle__body font-body-md">{step.body}</p>
-                  </li>
-                ))}
-              </ol>
-            </div>
-            <p className="ag-about-cycle__note font-body-md">
-              El sistema no termina cuando completas una auditoría. Cada nueva etapa permite
-              volver a leer, corregir y fortalecer la arquitectura.
-            </p>
+          <ScrollReveal className="ag-marco-bridge__link" distance={10}>
+            <Link href="/sistema" className="ag-marco-more__link font-label-lg">
+              Ver cómo funciona la plataforma
+              <AppIcon name="arrow-right" size={14} />
+            </Link>
           </ScrollReveal>
         </div>
       </section>
 
-      {/* ── EL MÉTODO EXPLICADO (después de la estructura) ───────────── */}
-      <section className="ag-section-inner ag-marco-video" aria-labelledby="video-heading">
-        <div className="ag-container ag-container--narrow">
-          <SectionIntro
-            eyebrow="EL MÉTODO EXPLICADO"
-            title="Escucha cómo se conectan sus partes."
-            lead="Conoce por qué el Marco Central se construye mediante nueve pilares, cómo funcionan los arquetipos y la sombra, y de qué manera todo se integra en la Hoja de Ruta de Propósito."
-            headingId="video-heading"
-          />
-          <ScrollReveal className="ag-marco-video__frame" distance={14} delay={0.05}>
-            <iframe
-              src={MARCO_VIDEO.embedUrl}
-              title="Maximus Kratos: El Marco Central explicado"
-              allow="autoplay; encrypted-media; fullscreen"
-              allowFullScreen
-              className="ag-marco-video__iframe"
-            />
-          </ScrollReveal>
-        </div>
-      </section>
+      {/* ── FAQ ──────────────────────────────────────────────────────── */}
+      <PublicFaqSection
+        idPrefix="marco"
+        title="Preguntas sobre el método."
+        lead="Pilares, ámbitos, Hoja de Ruta, arquetipos e Ikigai."
+        items={MARCO_CENTRAL_FAQ_ITEMS}
+      />
 
       {/* ── CTA ──────────────────────────────────────────────────────── */}
       <SubpageCta />

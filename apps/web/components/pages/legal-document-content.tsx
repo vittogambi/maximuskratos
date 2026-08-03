@@ -1,11 +1,27 @@
 'use client';
 
+import Link from 'next/link';
 import { ScrollReveal } from '@/components/motion/scroll-reveal';
 import type { LegalDocument } from '@/lib/legal-content';
+import { legalContact } from '@/lib/legal-content';
 
 type LegalDocumentContentProps = {
   document: LegalDocument;
 };
+
+function LegalTocList({ document }: LegalDocumentContentProps) {
+  return (
+    <ol className="ag-legal-page__toc-list">
+      {document.sections.map((section) => (
+        <li key={section.id}>
+          <a href={`#${section.id}`} className="ag-legal-page__toc-link">
+            {section.title}
+          </a>
+        </li>
+      ))}
+    </ol>
+  );
+}
 
 export function LegalDocumentContent({ document }: LegalDocumentContentProps) {
   return (
@@ -28,25 +44,18 @@ export function LegalDocumentContent({ document }: LegalDocumentContentProps) {
       <section className="ag-legal-page__body">
         <div className="ag-container ag-legal-page__layout">
           <nav className="ag-legal-page__toc" aria-label="Índice del documento">
-            <p className="hud-text ag-legal-page__toc-label ag-legal-page__toc-label--desktop">
-              Contenido
-            </p>
-            <details className="ag-legal-page__toc-panel">
+            <div className="ag-legal-page__toc-panel ag-legal-page__toc-panel--desktop">
+              <p className="hud-text ag-legal-page__toc-label">Contenido</p>
+              <LegalTocList document={document} />
+            </div>
+            <details className="ag-legal-page__toc-panel ag-legal-page__toc-panel--mobile">
               <summary className="ag-legal-page__toc-summary">
                 <span className="hud-text ag-legal-page__toc-label">Contenido</span>
                 <span className="ag-legal-page__toc-summary-meta font-body-md">
                   {document.sections.length} secciones
                 </span>
               </summary>
-              <ol className="ag-legal-page__toc-list">
-                {document.sections.map((section) => (
-                  <li key={section.id}>
-                    <a href={`#${section.id}`} className="ag-legal-page__toc-link">
-                      {section.title}
-                    </a>
-                  </li>
-                ))}
-              </ol>
+              <LegalTocList document={document} />
             </details>
           </nav>
 
@@ -70,8 +79,34 @@ export function LegalDocumentContent({ document }: LegalDocumentContentProps) {
                     ))}
                   </ul>
                 ) : null}
+                {section.closingParagraphs?.map((paragraph) => (
+                  <p key={paragraph} className="ag-legal-page__paragraph font-body-md">
+                    {paragraph}
+                  </p>
+                ))}
               </section>
             ))}
+
+            <aside className="ag-legal-page__notice" aria-label="Documentos relacionados">
+              <p className="hud-text ag-legal-page__notice-label">También te puede interesar</p>
+              <p className="ag-legal-page__notice-body font-body-md">
+                Revisa nuestro documento relacionado y escríbenos si tienes dudas.
+              </p>
+              <p className="ag-legal-page__notice-links font-body-md">
+                <Link
+                  href={document.relatedDocument.href}
+                  className="ag-legal-page__inline-link"
+                >
+                  {document.relatedDocument.label}
+                </Link>
+                <a
+                  href={`mailto:${legalContact.email}`}
+                  className="ag-legal-page__inline-link"
+                >
+                  {legalContact.email}
+                </a>
+              </p>
+            </aside>
           </article>
         </div>
       </section>

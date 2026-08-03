@@ -105,7 +105,7 @@ function DesktopAppScreen({ focus }: { focus: DeviceShowcaseFocus }) {
         </div>
         <div className="mk-app-ui__url">
           <AppIcon name="globe" size={11} />
-          <span>app.maximuskratos.com</span>
+          <span>app.maximus-kratos.com</span>
         </div>
         <div className="mk-app-ui__titlebar-spacer" />
       </header>

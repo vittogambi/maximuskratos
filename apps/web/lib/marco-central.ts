@@ -1,17 +1,5 @@
 import type { AppIconName } from '@/components/icons/registry';
 
-/**
- * Video de profundización embebido en /marco-central.
- * Fuente: Google Drive — requiere que el archivo esté compartido como
- * "Cualquier usuario con el enlace puede ver", si no el iframe mostrará error de acceso.
- * Reemplaza driveFileId cuando se suba el video definitivo.
- */
-const MARCO_VIDEO_DRIVE_FILE_ID = '18UXKUCj-c9kYZUbWItB-pViqEhzxbNCG';
-
-export const MARCO_VIDEO = {
-  embedUrl: `https://drive.google.com/file/d/${MARCO_VIDEO_DRIVE_FILE_ID}/preview`,
-} as const;
-
 export type MarcoCard = {
   num: string;
   title: string;
@@ -37,6 +25,7 @@ export type MarcoStage = {
 
 export type HdrpBlock = {
   title: string;
+  icon: AppIconName;
   body: string;
 };
 
@@ -60,7 +49,7 @@ export const MARCO_STAGES: ReadonlyArray<MarcoStage> = [
     num: '02',
     tag: 'Auditoría profunda',
     icon: 'columns',
-    title: 'Los nueve pilares',
+    title: 'Los nueve componentes',
     body: 'Exploran las definiciones, principios, patrones y decisiones que sostienen tu forma de vivir.',
     platform: 'Auditorías de la Ruta',
   },
@@ -113,7 +102,7 @@ export const MARCO_CARDS: ReadonlyArray<MarcoCard> = [
     icon: 'helm',
     question: '¿Hacia qué vida estás construyendo?',
     apport: 'Dirección',
-    deep: 'Define la imagen del hombre que quieres llegar a ser y de la vida que deseas sostener en el corto, mediano y largo plazo. No es una lista de metas. Es una representación de cómo vives, cómo decides, qué relaciones construyes y qué clase de realidad quieres hacer posible.',
+    deep: 'Define la imagen de quien quieres llegar a ser y de la vida que deseas sostener en el corto, mediano y largo plazo. No es una lista de metas. Es una representación de cómo vives, cómo decides, qué relaciones construyes y qué clase de realidad quieres hacer posible.',
   },
   {
     num: '03',
@@ -177,26 +166,32 @@ export const MARCO_CARDS: ReadonlyArray<MarcoCard> = [
 export const HDRP_BLOCKS: ReadonlyArray<HdrpBlock> = [
   {
     title: 'Dirección',
-    body: 'La vida y el hombre que estás intentando construir.',
+    icon: 'compass',
+    body: 'La vida y la identidad que estás construyendo.',
   },
   {
     title: 'Principios',
+    icon: 'columns',
     body: 'Los valores y criterios que deben orientar tus decisiones.',
   },
   {
     title: 'Estándares',
+    icon: 'laurel-wreath',
     body: 'Las conductas mínimas necesarias para sostener lo que declaras.',
   },
   {
     title: 'Patrones',
+    icon: 'shadow',
     body: 'Las sombras, tensiones y contradicciones que debes observar.',
   },
   {
     title: 'Prioridades',
+    icon: 'target',
     body: 'Las áreas que requieren atención primero.',
   },
   {
     title: 'Compromisos',
+    icon: 'handshake',
     body: 'Las decisiones que convierten la reflexión en responsabilidad.',
   },
 ];
@@ -205,26 +200,26 @@ export const ACTION_STEPS: ReadonlyArray<ActionStep> = [
   {
     num: '01',
     title: 'Define',
-    body: 'Establece qué necesita atención y qué resultado se busca construir.',
+    body: 'Marca qué necesita atención y qué resultado buscas construir.',
   },
   {
     num: '02',
     title: 'Ejecuta',
-    body: 'Convierte prioridades en acciones concretas dentro de la vida cotidiana.',
+    body: 'Convierte esas prioridades en acciones concretas de tu día a día.',
   },
   {
     num: '03',
     title: 'Registra',
-    body: 'Conserva decisiones, avances, obstáculos y patrones repetidos.',
+    body: 'Conserva avances, obstáculos y patrones que se repiten.',
   },
   {
     num: '04',
     title: 'Revisa',
-    body: 'Compara la ejecución con la arquitectura definida.',
+    body: 'Contrasta lo hecho con el plano que definiste.',
   },
   {
     num: '05',
     title: 'Ajusta',
-    body: 'Actualiza la Ruta cuando cambia el usuario, su contexto o sus prioridades.',
+    body: 'Recalibra la Ruta cuando cambian tu contexto o tus prioridades.',
   },
 ];

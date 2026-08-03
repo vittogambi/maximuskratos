@@ -11,11 +11,10 @@ import { AuthCta } from '@/components/auth-cta';
 import { PublicFooter } from '@/components/public-footer';
 import { PublicNav } from '@/components/public-nav';
 import { TrialBadge } from '@/components/trial-badge';
-import { MkDomainsBridge } from '@/components/pages/mk-domains-bridge';
+import { MkPillarsDomainsMatrix } from '@/components/pages/mk-pillars-domains-matrix';
 import { applyLandingHashFromLocation } from '@/lib/landing-nav';
 import { LANDING_IMAGES } from '@/lib/assets';
 import { LANDING_FAQ_ITEMS } from '@/lib/landing-faq';
-import { DOMAINS } from '@/lib/mk-system';
 import {
   LANDING_BENEFITS,
   LANDING_CLOSE,
@@ -383,24 +382,13 @@ export function AethelgardLanding() {
 
                 {/* ── Los cuatro ámbitos (compacto) ──────────────────────── */}
                 <ScrollReveal className="ag-mk-domains-section" distance={14}>
-                    <div className="ag-mk-domains-section__head">
+                  <div className="ag-mk-domains-section__head">
                     <p className="hud-text text-action-red">{LANDING_DOMAINS_SECTION.eyebrow}</p>
                     <h3 className="ag-type-item text-white">{LANDING_DOMAINS_SECTION.title}</h3>
-                    <MkDomainsBridge />
+                    <MkPillarsDomainsMatrix />
                     <p className="ag-mk-domains-section__lead font-body-md">
                       {LANDING_DOMAINS_SECTION.leadClose}
                     </p>
-                  </div>
-                  <div className="ag-mk-domains">
-                    {DOMAINS.map((domain) => (
-                      <div key={domain.key} className="ag-mk-domain">
-                        <div className="ag-mk-domain__icon" aria-hidden>
-                          <AppIcon name={domain.icon} size={18} />
-                        </div>
-                        <span className="ag-mk-domain__label font-headline-sm">{domain.label}</span>
-                        <p className="ag-mk-domain__question">{domain.question}</p>
-                      </div>
-                    ))}
                   </div>
                   <div className="ag-mk-domains-section__link">
                     <Link href={LANDING_DOMAINS_SECTION.linkHref} className="ag-marco-more__link font-label-lg">
@@ -609,8 +597,8 @@ export function AethelgardLanding() {
                   Escríbenos
                 </Link>
                 {' · '}
-                <Link href="/base-conceptual" className="ag-faq-cta__link">
-                  Base conceptual
+                <Link href="/manifiesto" className="ag-faq-cta__link">
+                  Manifiesto
                 </Link>
               </p>
             </ScrollReveal>

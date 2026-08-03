@@ -7,7 +7,7 @@
       "dimensionKey": "mentality",
       "order": 1,
       "titleEs": "Mentalidad e Identidad",
-      "introEs": "Comenzamos donde todo se decide: tu mente. Aquí medimos la brecha entre el hombre que dices que quieres ser y el hombre que realmente actúa.",
+      "introEs": "Comenzamos donde todo se decide: tu mente. Aquí medimos la brecha entre quien dices que quieres ser y quien realmente actúa.",
       "outroTemplateEs": "Has completado la primera sección. Lo que revelaste aquí define el fundamento de todo lo demás.",
       "iconKey": "brain",
       "estimatedMinutes": 6,
@@ -30,14 +30,14 @@
           "order": 2,
           "type": "SCALE_1_5",
           "scaleType": "BEHAVIORAL",
-          "textEs": "¿Mis decisiones diarias reflejan al hombre que digo que quiero llegar a ser?",
+          "textEs": "¿Mis decisiones diarias reflejan a quien digo que quiero llegar a ser?",
           "contextEs": "Aquí se ve la brecha entre quién dices que quieres ser y cómo vives un martes cualquiera.",
           "options": [
             { "order": 1, "textEs": "Casi nunca; la mayoría de mis decisiones contradicen lo que digo querer.", "value": "scale_1", "scoreDeltas": { "mentality": 4, "identity": 2 }, "flags": ["BAJA_IDENTIDAD", "ALTO_AUTOENGANO"], "tags": [] },
             { "order": 2, "textEs": "Rara vez; a menudo actúo en contra de mis propias declaraciones.", "value": "scale_2", "scoreDeltas": { "mentality": 8, "identity": 4 }, "flags": [], "tags": [] },
             { "order": 3, "textEs": "A veces; hay brecha entre lo que digo y lo que hago.", "value": "scale_3", "scoreDeltas": { "mentality": 12, "identity": 6 }, "flags": [], "tags": [] },
             { "order": 4, "textEs": "Con frecuencia; mis decisiones reflejan en gran medida quién digo querer ser.", "value": "scale_4", "scoreDeltas": { "mentality": 16, "identity": 8 }, "flags": [], "tags": [] },
-            { "order": 5, "textEs": "Casi siempre; mis decisiones reflejan claramente al hombre que quiero ser.", "value": "scale_5", "scoreDeltas": { "mentality": 20, "identity": 10 }, "flags": [], "tags": [] }
+            { "order": 5, "textEs": "Casi siempre; mis decisiones reflejan claramente a quien quiero ser.", "value": "scale_5", "scoreDeltas": { "mentality": 20, "identity": 10 }, "flags": [], "tags": [] }
           ]
         },
         {
@@ -203,7 +203,7 @@
       "dimensionKey": "environment",
       "order": 3,
       "titleEs": "Toma de Decisiones y Entorno",
-      "introEs": "Un hombre es el promedio de su entorno y sus decisiones. Aquí medimos el diseño de tu vida y tu capacidad de corrección de rumbo.",
+      "introEs": "Eres el promedio de tu entorno y tus decisiones. Aquí medimos el diseño de tu vida y tu capacidad de corrección de rumbo.",
       "outroTemplateEs": "Tu entorno habla más fuerte que tus palabras. Lo que revelaste aquí muestra cómo tu contexto te moldea.",
       "iconKey": "compass",
       "estimatedMinutes": 5,

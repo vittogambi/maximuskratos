@@ -92,30 +92,45 @@ const BILLING_PLANS = [
 
 const DEMO_USERS = [
   {
-    email: 'demo.user1@maximuskratos.local',
+    email: 'demo.user1@maximus-kratos.local',
     password: 'DemoUser123!',
     onboardingStep: 'TERMS_PENDING',
     status: SubscriptionStatus.TRIAL,
   },
   {
-    email: 'demo.user2@maximuskratos.local',
+    email: 'demo.user2@maximus-kratos.local',
     password: 'DemoUser123!',
     onboardingStep: 'PROFILE_COMPLETE',
     status: SubscriptionStatus.TRIAL,
   },
   {
-    email: 'demo.user3@maximuskratos.local',
+    email: 'demo.user3@maximus-kratos.local',
     password: 'DemoUser123!',
     onboardingStep: 'BLUEPRINT_READY',
     status: SubscriptionStatus.ACTIVE,
   },
 ] as const;
 
+/** Legacy seed emails before the maximus-kratos domain rename. */
+const LEGACY_SEED_EMAILS = [
+  'admin@maximuskratos.local',
+  'demo.user1@maximuskratos.local',
+  'demo.user2@maximuskratos.local',
+  'demo.user3@maximuskratos.local',
+] as const;
+
 async function main() {
   const adminEmail = (
-    process.env.SEED_ADMIN_EMAIL ?? 'admin@maximuskratos.local'
+    process.env.SEED_ADMIN_EMAIL ?? 'admin@maximus-kratos.local'
   ).toLowerCase();
   const adminPassword = process.env.SEED_ADMIN_PASSWORD ?? 'ChangeMeAdmin123!';
+
+  const legacyRemoved = await prisma.user.deleteMany({
+    where: { email: { in: [...LEGACY_SEED_EMAILS] } },
+  });
+  if (legacyRemoved.count > 0) {
+    console.log(`Removed ${legacyRemoved.count} legacy @maximuskratos.local seed user(s)`);
+  }
 
   const adminHash = await bcrypt.hash(adminPassword, 12);
 

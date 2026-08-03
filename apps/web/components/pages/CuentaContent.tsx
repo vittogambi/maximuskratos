@@ -104,11 +104,11 @@ export function CuentaContent() {
             <span aria-hidden>›</span>
           </Link>
           <Link href="/terminos" className="mk-cuenta-link">
-            Términos y condiciones
+            Términos de Servicio
             <span aria-hidden>›</span>
           </Link>
           <Link href="/privacidad" className="mk-cuenta-link">
-            Política de privacidad
+            Política de Privacidad
             <span aria-hidden>›</span>
           </Link>
         </div>

@@ -1,12 +1,8 @@
-import { siteConfig } from '@/lib/design';
-
-/** Datos de contacto legales — editar cuando tengan datos definitivos */
+/** Datos de contacto y domicilio legales */
 export const legalContact = {
-  email: 'contacto@maximuskratos.com',
-  /** Ej.: "Maximus Kratos SpA", "Persona natural", etc. */
-  entity: siteConfig.name,
-  /** Ej.: "Santiago, Chile" */
-  jurisdiction: '[País / ciudad, completar]',
+  email: 'contacto@maximus-kratos.com',
+  entity: 'Maximus Kratos',
+  jurisdiction: 'Santiago, Chile',
 } as const;
 
 export type LegalSection = {
@@ -14,6 +10,12 @@ export type LegalSection = {
   title: string;
   paragraphs: ReadonlyArray<string>;
   list?: ReadonlyArray<string>;
+  closingParagraphs?: ReadonlyArray<string>;
+};
+
+export type LegalRelatedDocument = {
+  href: string;
+  label: string;
 };
 
 export type LegalDocument = {
@@ -22,17 +24,18 @@ export type LegalDocument = {
   lastUpdated: string;
   intro: string;
   sections: ReadonlyArray<LegalSection>;
-  footerNote: string;
+  relatedDocument: LegalRelatedDocument;
 };
-
-const sharedIntro = (topic: string) =>
-  `Este documento describe de forma general cómo ${legalContact.entity} («nosotros», «nuestro» o «la Plataforma») trata la información en relación con ${topic}. Es un borrador orientativo: debe revisarse y adaptarse con asesoría legal antes de su publicación definitiva.`;
 
 export const privacyPolicy: LegalDocument = {
   title: 'Política de Privacidad',
   eyebrow: 'MK · PRIVACIDAD',
-  lastUpdated: '9 de junio de 2026',
-  intro: sharedIntro('el uso de nuestro sitio web y servicios digitales'),
+  lastUpdated: '28 de julio de 2026',
+  intro: `Esta Política de Privacidad describe cómo ${legalContact.entity} («nosotros», «nuestro» o «la Plataforma») recopila, usa y protege la información personal cuando utilizas nuestro sitio web, cuenta de usuario y servicios digitales asociados.`,
+  relatedDocument: {
+    href: '/terminos',
+    label: 'Términos de Servicio',
+  },
   sections: [
     {
       id: 'responsable',
@@ -51,8 +54,9 @@ export const privacyPolicy: LegalDocument = {
       list: [
         'Datos de identificación y contacto: nombre, correo electrónico y otros datos que nos entregues voluntariamente.',
         'Datos de cuenta: credenciales de acceso, preferencias y actividad asociada a tu perfil.',
-        'Datos de uso: páginas visitadas, interacciones, dispositivo, navegador e información técnica similar.',
+        'Datos de uso: páginas visitadas, interacciones, dispositivo, navegador e información técnica necesaria para operar el servicio.',
         'Datos de comunicación: mensajes enviados a través de formularios de contacto o solicitudes de información.',
+        'Datos de pago: cuando contrates un servicio de pago, la información de facturación y cobro la procesa el proveedor de pagos correspondiente. Nosotros no almacenamos números completos de tarjetas.',
       ],
     },
     {
@@ -63,7 +67,7 @@ export const privacyPolicy: LegalDocument = {
         'Prestar, mantener y mejorar nuestros servicios y la experiencia en la Plataforma.',
         'Gestionar el registro de usuarios, autenticación y acceso a funcionalidades.',
         'Responder consultas, solicitudes de contacto y comunicaciones operativas.',
-        'Enviar información relevante sobre el servicio, siempre que exista una base legal o tu consentimiento.',
+        'Procesar pagos y administrar suscripciones cuando corresponda.',
         'Cumplir obligaciones legales, prevenir fraude y proteger la seguridad de la Plataforma.',
       ],
     },
@@ -71,7 +75,7 @@ export const privacyPolicy: LegalDocument = {
       id: 'base-legal',
       title: '4. Base legal',
       paragraphs: [
-        'El tratamiento de tus datos se fundamenta, según el caso, en tu consentimiento, la ejecución de un contrato o relación precontractual, el cumplimiento de obligaciones legales, o el interés legítimo de operar y asegurar la Plataforma.',
+        'El tratamiento de tus datos se fundamenta, según el caso, en tu consentimiento, la ejecución de un contrato o relación precontractual, el cumplimiento de obligaciones legales, o el interés legítimo de operar y asegurar la Plataforma, conforme a la normativa aplicable en Chile.',
         'Puedes retirar tu consentimiento cuando el tratamiento se base en él, sin que ello afecte la licitud del tratamiento previo.',
       ],
     },
@@ -79,15 +83,22 @@ export const privacyPolicy: LegalDocument = {
       id: 'cookies',
       title: '5. Cookies y tecnologías similares',
       paragraphs: [
-        'Utilizamos cookies y tecnologías similares para el funcionamiento del sitio, recordar preferencias y analizar el uso de forma agregada.',
-        'Puedes configurar tu navegador para rechazar cookies; algunas funciones podrían dejar de estar disponibles.',
+        'Utilizamos cookies y tecnologías similares necesarias para el funcionamiento del sitio, en especial para autenticación, sesión y preferencias básicas.',
+        'Puedes configurar tu navegador para rechazar cookies. Si bloqueas cookies esenciales, algunas funciones de la Plataforma podrían no estar disponibles.',
       ],
     },
     {
       id: 'comparticion',
       title: '6. Compartición y encargados',
       paragraphs: [
-        'No vendemos tus datos personales. Podemos compartirlos con proveedores que nos prestan servicios (por ejemplo, hosting, correo electrónico o analítica), siempre bajo obligaciones de confidencialidad y solo en la medida necesaria.',
+        'No vendemos tus datos personales. Podemos compartirlos con proveedores que nos prestan servicios indispensables para operar la Plataforma, siempre bajo obligaciones de confidencialidad y solo en la medida necesaria. Entre ellos pueden estar:',
+      ],
+      list: [
+        'Hosting e infraestructura técnica.',
+        'Correo electrónico transaccional (por ejemplo, Resend).',
+        'Procesamiento de pagos (por ejemplo, MercadoPago) cuando contrates servicios de pago.',
+      ],
+      closingParagraphs: [
         'También podemos divulgar información cuando la ley lo exija o para proteger derechos, seguridad o integridad de usuarios y de la Plataforma.',
       ],
     },
@@ -95,7 +106,7 @@ export const privacyPolicy: LegalDocument = {
       id: 'conservacion',
       title: '7. Conservación',
       paragraphs: [
-        'Conservamos los datos personales durante el tiempo necesario para cumplir las finalidades descritas, resolver disputas, cumplir obligaciones legales y hacer valer nuestros acuerdos.',
+        'Conservamos los datos personales mientras tu cuenta esté activa y durante el tiempo necesario para cumplir las finalidades descritas, resolver disputas, cumplir obligaciones legales y hacer valer nuestros acuerdos.',
         'Cuando ya no sean necesarios, los eliminaremos o anonimizaremos de forma razonable.',
       ],
     },
@@ -103,7 +114,7 @@ export const privacyPolicy: LegalDocument = {
       id: 'derechos',
       title: '8. Tus derechos',
       paragraphs: [
-        'Según la legislación aplicable en tu jurisdicción, puedes tener derecho a acceder, rectificar, suprimir, oponerte, limitar el tratamiento, solicitar portabilidad o revocar el consentimiento.',
+        'Conforme a la Ley N° 19.628 sobre Protección de la Vida Privada y demás normativa aplicable en Chile, puedes solicitar acceso, rectificación, cancelación o bloqueo de tus datos personales.',
         `Para ejercer estos derechos, escríbenos a ${legalContact.email} indicando tu solicitud y un medio para verificar tu identidad.`,
       ],
     },
@@ -118,7 +129,7 @@ export const privacyPolicy: LegalDocument = {
       id: 'menores',
       title: '10. Menores de edad',
       paragraphs: [
-        'La Plataforma no está dirigida a menores de edad. Si detectamos que hemos recopilado datos de un menor sin el consentimiento parental correspondiente, procederemos a eliminarlos.',
+        'La Plataforma está dirigida a mayores de 18 años. Si detectamos que hemos recopilado datos de un menor, procederemos a eliminarlos.',
       ],
     },
     {
@@ -130,15 +141,17 @@ export const privacyPolicy: LegalDocument = {
       ],
     },
   ],
-  footerNote:
-    'Este texto es un modelo genérico. Reemplaza los campos marcados como pendientes y valida el contenido con un profesional legal antes de usarlo en producción.',
 };
 
 export const termsOfService: LegalDocument = {
   title: 'Términos de Servicio',
   eyebrow: 'MK · TÉRMINOS',
-  lastUpdated: '9 de junio de 2026',
-  intro: sharedIntro('el acceso y uso de nuestro sitio web, cuenta de usuario y servicios asociados'),
+  lastUpdated: '28 de julio de 2026',
+  intro: `Estos Términos de Servicio regulan el acceso y uso del sitio web, cuenta de usuario y servicios digitales de ${legalContact.entity} («nosotros», «nuestro» o «la Plataforma»). Al usar la Plataforma, aceptas estos términos.`,
+  relatedDocument: {
+    href: '/privacidad',
+    label: 'Política de Privacidad',
+  },
   sections: [
     {
       id: 'aceptacion',
@@ -152,7 +165,8 @@ export const termsOfService: LegalDocument = {
       id: 'servicio',
       title: '2. Descripción del servicio',
       paragraphs: [
-        `${siteConfig.name} ofrece contenido, herramientas y funcionalidades digitales orientadas al desarrollo personal y profesional, según lo descrito en el sitio en cada momento.`,
+        `${legalContact.entity} ofrece contenido, herramientas y funcionalidades digitales orientadas al desarrollo personal y profesional, según lo descrito en el sitio en cada momento.`,
+        'El contenido tiene fines informativos y de acompañamiento. No prometemos resultados clínicos, médicos ni profesionales específicos.',
         'Podemos modificar, suspender o discontinuar funciones del servicio, total o parcialmente, con o sin previo aviso.',
       ],
     },
@@ -168,7 +182,9 @@ export const termsOfService: LegalDocument = {
     {
       id: 'uso-permitido',
       title: '4. Uso permitido',
-      paragraphs: ['Te comprometes a utilizar la Plataforma de forma lícita y conforme a estos términos. En particular, no debes:'],
+      paragraphs: [
+        'Te comprometes a utilizar la Plataforma de forma lícita y conforme a estos términos. En particular, no debes:',
+      ],
       list: [
         'Violar leyes aplicables ni derechos de terceros.',
         'Intentar acceder sin autorización a sistemas, cuentas o datos.',
@@ -198,6 +214,7 @@ export const termsOfService: LegalDocument = {
       title: '7. Pagos y suscripciones',
       paragraphs: [
         'Algunos servicios pueden requerir pago. Los precios, condiciones y métodos de pago se informarán antes de la contratación.',
+        'Los pagos se procesan a través de proveedores externos, como MercadoPago, cuando corresponda.',
         'Salvo que la ley exija lo contrario o se indique expresamente, los pagos no son reembolsables una vez confirmado el acceso al servicio contratado.',
       ],
     },
@@ -206,7 +223,7 @@ export const termsOfService: LegalDocument = {
       title: '8. Descargo de responsabilidad',
       paragraphs: [
         'La Plataforma y su contenido se ofrecen «tal cual» y «según disponibilidad», sin garantías de ningún tipo, expresas o implícitas.',
-        'No garantizamos resultados específicos derivados del uso del servicio. El contenido tiene fines informativos y de acompañamiento; no sustituye asesoría médica, psicológica, legal ni profesional especializada.',
+        'No garantizamos resultados específicos derivados del uso del servicio. El contenido no sustituye asesoría médica, psicológica, legal ni profesional especializada.',
       ],
     },
     {
@@ -229,8 +246,8 @@ export const termsOfService: LegalDocument = {
       id: 'ley',
       title: '11. Ley aplicable y jurisdicción',
       paragraphs: [
-        `Estos términos se regirán por las leyes de ${legalContact.jurisdiction}, sin perjuicio de normas imperativas de protección al consumidor que puedan aplicarte.`,
-        'Cualquier controversia se someterá a los tribunales competentes del domicilio del responsable, salvo disposición legal en contrario.',
+        'Estos términos se regirán por las leyes de Chile, sin perjuicio de normas imperativas de protección al consumidor que puedan aplicarte.',
+        'Cualquier controversia se someterá a los tribunales competentes de Santiago, Chile, salvo disposición legal en contrario.',
       ],
     },
     {
@@ -249,6 +266,4 @@ export const termsOfService: LegalDocument = {
       ],
     },
   ],
-  footerNote:
-    'Este texto es un modelo genérico. Reemplaza los campos marcados como pendientes y valida el contenido con un profesional legal antes de usarlo en producción.',
 };

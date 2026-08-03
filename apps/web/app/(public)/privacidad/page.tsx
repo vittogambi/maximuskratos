@@ -5,7 +5,7 @@ import { siteConfig } from '@/lib/design';
 
 export const metadata: Metadata = {
   title: 'Política de Privacidad',
-  description: `Política de privacidad de ${siteConfig.name}. Información sobre el tratamiento de datos personales.`,
+  description: `Política de Privacidad de ${siteConfig.name}. Cómo tratamos tus datos personales en Santiago, Chile.`,
 };
 
 export default function PrivacidadPage() {

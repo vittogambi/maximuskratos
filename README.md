@@ -58,7 +58,7 @@ npm run dev:web   # terminal 2
 
 | Email | Password |
 |-------|----------|
-| `admin@maximuskratos.local` | `ChangeMeAdmin123!` |
+| `admin@maximus-kratos.local` | `ChangeMeAdmin123!` |
 
 ## Environment
 
@@ -74,7 +74,7 @@ npm run dev:web   # terminal 2
 | `PORT` | API port (default 4000) |
 | `WEB_URL` | Public web URL for password-reset links (e.g. `http://localhost:3000`) |
 | `RESEND_API_KEY` | Optional — sends reset emails via Resend; without it, reset URL is logged |
-| `RESEND_FROM` | Sender address for Resend (default onboarding@resend.dev) |
+| `RESEND_FROM` | Sender address for Resend (use `Maximus Kratos <contacto@maximus-kratos.com>` in prod; default onboarding@resend.dev) |
 
 **Web** (`apps/web/.env.local`)
 

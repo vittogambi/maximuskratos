@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { SistemaContent } from '@/components/pages/sistema-content';
+import { faqJsonLd } from '@/lib/faq';
+import { SISTEMA_FAQ_ITEMS } from '@/lib/sistema-faq';
 
 export const metadata: Metadata = {
   title: 'El Sistema',
@@ -8,5 +10,13 @@ export const metadata: Metadata = {
 };
 
 export default function SistemaPage() {
-  return <SistemaContent />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(SISTEMA_FAQ_ITEMS)) }}
+      />
+      <SistemaContent />
+    </>
+  );
 }

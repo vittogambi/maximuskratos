@@ -11,7 +11,7 @@ export const LANDING_FAQ_ITEMS = [
     id: 'necesito-crisis',
     question: '¿Necesito estar en crisis para entrar?',
     answer:
-      'No. MK sirve tanto para hombres que necesitan reconstruirse como para hombres funcionales que buscan mayor propósito, orden e impacto.',
+      'No. MK sirve tanto si necesitas reconstruirte como si ya funcionas y buscas mayor propósito, orden e impacto.',
   },
   {
     id: 'es-religioso',
@@ -23,7 +23,7 @@ export const LANDING_FAQ_ITEMS = [
     id: 'diferencia-habitos',
     question: '¿Qué diferencia a MK de un programa de hábitos o fitness?',
     answer:
-      'MK no parte desde la productividad ni desde la estética. Parte desde la pregunta central: qué hombre estás llamado a construir y qué vida concreta debe sostener esa identidad.',
+      'MK no parte desde la productividad ni desde la estética. Parte desde la pregunta central: quién estás llamado a construir y qué vida concreta debe sostener esa identidad.',
   },
   {
     id: 'es-app',

@@ -26,10 +26,9 @@ export const publicNav = [
     label: section.label,
     shortLabel: section.shortLabel,
   })),
-  { href: '/quienes-somos', label: 'Nosotros' },
+  { href: '/manifiesto', label: 'Manifiesto' },
   { href: '/sistema', label: 'El Sistema', shortLabel: 'Sistema' },
   { href: '/precios', label: 'Precios' },
-  { href: '/base-conceptual', label: 'Base conceptual', shortLabel: 'Base' },
   { href: '/contacto', label: 'Contacto' },
 ] as const;
 
@@ -53,20 +52,18 @@ export const drawerPlataformaNav = [
 
 /** Drawer mobile: resto del sitio (sin duplicar El Sistema / Precios) */
 export const drawerSitioNav = [
-  { href: '/quienes-somos', label: 'Nosotros' },
+  { href: '/manifiesto', label: 'Manifiesto' },
   { href: '/marco-central', label: 'Marco Central' },
   { href: '/ikigai', label: 'IKIGAI' },
-  { href: '/base-conceptual', label: 'Base conceptual' },
   { href: '/eventos', label: 'Eventos' },
   { href: '/contacto', label: 'Contacto' },
 ] as const;
 
 export const footerSiteNav = [
-  { href: '/quienes-somos', label: 'Nosotros' },
+  { href: '/manifiesto', label: 'Manifiesto' },
   { href: '/sistema', label: 'El Sistema' },
   { href: '/marco-central', label: 'Marco Central' },
   { href: '/ikigai', label: 'IKIGAI' },
-  { href: '/base-conceptual', label: 'Base conceptual' },
   { href: '/precios', label: 'Precios' },
   { href: '/eventos', label: 'Eventos' },
   { href: '/contacto', label: 'Contacto' },

@@ -1,3 +1,5 @@
+import type { AppIconName } from '@/components/icons/registry';
+
 export type ArchetypeSlug = 'rey' | 'guerrero' | 'mago' | 'amante';
 
 export type ArchetypeShadow = {
@@ -14,7 +16,7 @@ export type ArchetypeMeta = {
   /** Expresión en equilibrio. */
   balanced: string;
   roman: string;
-  symbol: string;
+  icon: AppIconName;
   image: string;
   /** Resumen combinado de sombra (otras vistas). */
   shadow: ArchetypeShadow;
@@ -33,7 +35,7 @@ export const ARCHETYPES: Record<ArchetypeSlug, ArchetypeMeta> = {
       'El Rey sano no controla todo lo que lo rodea. Construye condiciones para que algo pueda prosperar y asume el peso de las decisiones que le corresponden.',
     balanced: 'Ordena, protege y dirige.',
     roman: 'I · IDENTIDAD × RELACIONES',
-    symbol: '♛',
+    icon: 'crown',
     image: '/images/archetypes/rey.png',
     shadow: {
       label: 'Tirano / Débil',
@@ -60,7 +62,7 @@ export const ARCHETYPES: Record<ArchetypeSlug, ArchetypeMeta> = {
       'El Guerrero entrega disciplina, límites, coraje y capacidad de actuar incluso cuando no existe comodidad.',
     balanced: 'Protege, ejecuta y persevera.',
     roman: 'II · MENTALIDAD × HÁBITOS',
-    symbol: '⚔',
+    icon: 'sword',
     image: '/images/archetypes/guerrero.png',
     shadow: {
       label: 'Sádico / Masoquista',
@@ -87,7 +89,7 @@ export const ARCHETYPES: Record<ArchetypeSlug, ArchetypeMeta> = {
       'El Mago observa patrones, interpreta la realidad y convierte conocimiento en estructuras útiles.',
     balanced: 'Comprende, transforma y construye.',
     roman: 'III · FINANZAS × ENTORNO',
-    symbol: '✦',
+    icon: 'sparkles',
     image: '/images/archetypes/mago.png',
     shadow: {
       label: 'Manipulador / Inocente',
@@ -114,7 +116,7 @@ export const ARCHETYPES: Record<ArchetypeSlug, ArchetypeMeta> = {
       'El Amante permite vincularse profundamente con personas, experiencias, belleza, propósito y creación.',
     balanced: 'Conecta, aprecia y da sentido.',
     roman: 'IV · PROPÓSITO × IKIGAI',
-    symbol: '♥',
+    icon: 'heart-pulse',
     image: '/images/archetypes/amante.png',
     shadow: {
       label: 'Adicto / Impotente',

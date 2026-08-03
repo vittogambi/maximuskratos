@@ -6,10 +6,9 @@ const baseUrl =
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     '',
-    '/quienes-somos',
+    '/manifiesto',
     '/sistema',
     '/marco-central',
-    '/base-conceptual',
     '/ikigai',
     '/precios',
     '/eventos',

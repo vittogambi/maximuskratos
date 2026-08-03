@@ -62,7 +62,7 @@ export function PublicFooter() {
                 {siteConfig.tagline}
               </p>
               <p className="site-footer__desc">
-                Sistema de reconstrucción personal para hombres que buscan alineación real.
+                Sistema de reconstrucción personal para hombres. Alineación real, no motivación vacía.
               </p>
               <p className="site-footer__status">
                 Acceso anticipado abierto. Diagnóstico y apps próximamente.

@@ -26,7 +26,7 @@ export class ReengagementService {
   /** Runs every 4 hours to check for sessions that need a nudge. */
   @Cron(CronExpression.EVERY_4_HOURS)
   async sendReengagementNudges(): Promise<void> {
-    const appUrl = this.config.get<string>('APP_URL') ?? 'https://maximuskratos.com';
+    const appUrl = this.config.get<string>('APP_URL') ?? 'https://maximus-kratos.com';
     const resumeUrl = `${appUrl}/diagnostico`;
     const now = Date.now();
 

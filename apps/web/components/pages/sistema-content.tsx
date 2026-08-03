@@ -8,8 +8,10 @@ import { ScrollReveal } from '@/components/motion/scroll-reveal';
 import { ScrollStaggerContainer, StaggerItem } from '@/components/motion/stagger';
 import { SectionIntro } from '@/components/pages/section-intro';
 import { SubpageCta } from '@/components/pages/subpage-cta';
-import { MkDomainsBridge } from '@/components/pages/mk-domains-bridge';
-import { LANDING_DOMAINS_SECTION } from '@/lib/landing-copy';
+import { PublicFaqSection } from '@/components/pages/public-faq-section';
+import { MkCycleHub, MkCycleOrbit } from '@/components/pages/mk-cycle-hub';
+import { ACTION_STEPS } from '@/lib/marco-central';
+import { SISTEMA_FAQ_ITEMS } from '@/lib/sistema-faq';
 
 const EXPERIENCES: ReadonlyArray<{
   num: string;
@@ -23,17 +25,17 @@ const EXPERIENCES: ReadonlyArray<{
   {
     num: '01',
     eyebrow: 'CLARIDAD',
-    title: 'Descubre quién eres.',
-    body: 'Diagnóstico en Espíritu, Mente y Cuerpo. Sin autoengaño.',
-    specs: ['3 dimensiones', 'Preguntas estructuradas', 'Índice de alineación'],
+    title: 'Mira con honestidad dónde estás.',
+    body: 'Un diagnóstico estructurado en Espíritu, Mente y Cuerpo. Detecta tensiones y desequilibrios antes de construir nada encima.',
+    specs: ['Espíritu, Mente y Cuerpo', 'Preguntas estructuradas', 'Primera lectura del sistema'],
     focus: 'diagnostico',
   },
   {
     num: '02',
-    eyebrow: 'AUTOCONOCIMIENTO',
+    eyebrow: 'SÍNTESIS',
     title: 'Tu Perfil Maestro.',
-    body: 'Una lectura integral de tu sistema: índices de Alineación y Profundidad, resultado por pilar y por ámbito. El arquetipo queda como referencia interpretativa.',
-    specs: ['Índices de Alineación y Profundidad', 'Pilares y ámbitos', 'Arquetipo de referencia'],
+    body: 'El diagnóstico se vuelve una lectura clara: índices de Alineación y Profundidad, resultado por pilar y por ámbito. Mide coherencia, no tu valor.',
+    specs: ['Índice de alineación', 'Índice de profundidad', 'Pilares y ámbitos', 'Arquetipo de referencia'],
     focus: 'perfil',
     reverse: true,
   },
@@ -41,16 +43,16 @@ const EXPERIENCES: ReadonlyArray<{
     num: '03',
     eyebrow: 'DIRECCIÓN',
     title: 'Sigue tu Ruta MK.',
-    body: 'Auditorías secuenciales. Cada una revela una capa más del sistema, en orden.',
-    specs: ['Auditorías en orden', 'Progreso medible', 'Desbloqueo por etapas'],
+    body: 'Auditorías en orden. Cada etapa profundiza una capa del sistema y desbloquea la siguiente cuando corresponde.',
+    specs: ['Auditorías secuenciales', 'Progreso medible', 'Desbloqueo por etapas'],
     focus: 'ruta',
   },
   {
     num: '04',
-    eyebrow: 'PANEL Y CONTINUIDAD',
+    eyebrow: 'CONTINUIDAD',
     title: 'Tu proceso no se reinicia.',
-    body: 'Panel personal con tus índices y evolución, el progreso por etapas y el historial completo. MK conserva el contexto y las prioridades vigentes del proceso.',
-    specs: ['Índices y evolución', 'Progreso por etapas', 'Historial del proceso'],
+    body: 'El panel conserva diagnóstico, prioridades, acciones e historial. Ves cómo evoluciona tu sistema sin empezar de cero.',
+    specs: ['Índices y evolución', 'Prioridades vigentes', 'Historial del proceso'],
     focus: 'overview',
     reverse: true,
   },
@@ -144,8 +146,8 @@ export function SistemaContent() {
         <div className="ag-container ag-sistema-experiences__inner">
           <SectionIntro
             eyebrow="MK · EL RECORRIDO"
-            title="Qué construye el sistema."
-            lead="Así se verá el recorrido cuando abra la plataforma. Vista previa del producto en construcción."
+            title="Así se ve el recorrido."
+            lead="Vista previa del producto en construcción. Diagnóstico, perfil, ruta y panel bajo una sola cuenta."
             headingId="experiencias-heading"
           />
 
@@ -174,6 +176,41 @@ export function SistemaContent() {
               </div>
             </ScrollReveal>
           ))}
+        </div>
+      </section>
+
+      <section className="ag-section-inner ag-sistema-cycle" aria-labelledby="cycle-heading">
+        <div className="ag-container">
+          <SectionIntro
+            eyebrow="MK · CÓMO OPERA"
+            title="El sistema no se detiene después de un diagnóstico."
+            lead="Define, ejecuta, registra, revisa y ajusta. El ciclo que mantiene tu Ruta MK viva mientras cambian tus prioridades."
+            headingId="cycle-heading"
+          />
+
+          <ScrollReveal className="ag-about-cycle ag-sistema-cycle__diagram" distance={14}>
+            <div className="ag-about-cycle__ring">
+              <MkCycleOrbit />
+              <MkCycleHub label="Ciclo de la Ruta MK" />
+
+              <ol className="ag-about-cycle__list">
+                {ACTION_STEPS.map((step, index) => (
+                  <li
+                    key={step.num}
+                    className={`ag-about-cycle__step ag-about-cycle__step--${index + 1}`}
+                  >
+                    <span className="ag-about-cycle__num hud-text">{step.num}</span>
+                    <h3 className="ag-about-cycle__title font-headline-sm">{step.title}</h3>
+                    <p className="ag-about-cycle__body font-body-md">{step.body}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <p className="ag-about-cycle__note font-body-md">
+              El ciclo no termina al completar una auditoría. Cada etapa vuelve a leer, corregir
+              y fortalecer tu arquitectura.
+            </p>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -257,22 +294,41 @@ export function SistemaContent() {
       </section>
 
       <section className="ag-section-inner ag-sistema-model-brief" aria-labelledby="modelo-heading">
-        <div className="ag-container">
+        <div className="ag-container ag-container--narrow">
           <SectionIntro
-            eyebrow="MK · EL MODELO"
-            title="Tres pilares. Cuatro ámbitos."
-            lead="El modelo que la plataforma ejecutará cuando abra."
+            eyebrow="MK · BASE METODOLÓGICA"
+            title="El método detrás de la plataforma."
+            lead="Diagnóstico, Perfil Maestro y Ruta MK no son piezas sueltas. Leen la misma arquitectura: tres pilares en cuatro ámbitos de tu vida. El mapa completo está en el Marco Central."
             headingId="modelo-heading"
           />
 
-          <MkDomainsBridge className="ag-sistema-model-brief__bridge" />
+          <ScrollReveal className="ag-sistema-formula" distance={10}>
+            <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
+            <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
+            <div className="ag-sistema-formula__row">
+              <div className="ag-sistema-formula__term">
+                <span className="ag-sistema-formula__value">3</span>
+                <span className="ag-sistema-formula__label">Pilares</span>
+              </div>
+              <span className="ag-sistema-formula__op" aria-hidden>
+                ×
+              </span>
+              <div className="ag-sistema-formula__term">
+                <span className="ag-sistema-formula__value">4</span>
+                <span className="ag-sistema-formula__label">Ámbitos</span>
+              </div>
+              <span className="ag-sistema-formula__op ag-sistema-formula__op--arrow" aria-hidden>
+                →
+              </span>
+              <div className="ag-sistema-formula__term ag-sistema-formula__term--result">
+                <span className="ag-sistema-formula__value">12</span>
+                <span className="ag-sistema-formula__label">Celdas</span>
+              </div>
+            </div>
+          </ScrollReveal>
 
-          <p className="ag-sistema-model-brief__close font-body-md">
-            {LANDING_DOMAINS_SECTION.leadClose}
-          </p>
-
-          <ScrollReveal className="ag-sistema-model-brief__link" distance={10}>
-            <Link href="/marco-central" className="ag-inline-link font-label-lg">
+          <ScrollReveal className="ag-sistema-model-brief__link" distance={10} delay={0.05}>
+            <Link href="/marco-central" className="ag-marco-more__link font-label-lg">
               Ver el Marco Central
               <AppIcon name="arrow-right" size={14} />
             </Link>
@@ -280,7 +336,19 @@ export function SistemaContent() {
         </div>
       </section>
 
-      <SubpageCta />
+      <PublicFaqSection
+        idPrefix="sistema"
+        title="Preguntas sobre la plataforma."
+        lead="Diagnóstico, acceso de fundador, apps y cómo se relacionan las páginas de MK."
+        items={SISTEMA_FAQ_ITEMS}
+      />
+
+      <SubpageCta>
+        <Link href="/precios" className="ag-marco-more__link font-label-lg">
+          Ver precios
+          <AppIcon name="arrow-right" size={14} />
+        </Link>
+      </SubpageCta>
     </div>
   );
 }

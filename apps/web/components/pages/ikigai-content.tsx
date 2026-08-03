@@ -122,7 +122,7 @@ const IKIGAI_PROCESS: ReadonlyArray<{ num: string; title: string; body: string }
   {
     num: '03',
     title: 'Relacionas',
-    body: 'El sistema identifica coincidencias, campos débiles, contradicciones y actividades que aparecen repetidamente en distintas dimensiones. Habla de desalineación, tensión, campos insuficientemente desarrollados e hipótesis todavía no comprobadas.',
+    body: 'Contrastas actividades entre campos. El sistema te ayuda a ver coincidencias, campos débiles, contradicciones y patrones que se repiten. Aparecen desalineación, tensión, áreas poco desarrolladas e hipótesis todavía no comprobadas.',
   },
   {
     num: '04',
@@ -137,7 +137,7 @@ const IKIGAI_PROCESS: ReadonlyArray<{ num: string; title: string; body: string }
   {
     num: '06',
     title: 'Integras',
-    body: 'El resultado se conecta con Nombre, apellido y linaje, Visión, Valores, Estándares, Identidad, Dificultades, Factores de la personalidad y Huella Personal dentro del Perfil Maestro.',
+    body: 'El resultado se integra al Perfil Maestro junto al resto de pilares del Espíritu, del linaje a la huella.',
   },
 ];
 
@@ -235,40 +235,7 @@ export function IkigaiContent() {
         </div>
       </section>
 
-      {/* 3. SU LUGAR DENTRO DE MK */}
-      <section className="ag-section-inner ag-about-block ag-about-block--dark" aria-labelledby="place-heading">
-        <div className="ag-container">
-          <SectionIntro
-            eyebrow="DENTRO DE MK"
-            title="Una pieza del Marco Central."
-            lead="El IKIGAI pertenece al pilar Espíritu. Responde a la pregunta que da sentido a las demás capacidades: ¿por qué vale la pena utilizar tu mente, tu cuerpo, tu tiempo y tus recursos?"
-            headingId="place-heading"
-          />
-          <ScrollReveal className="ag-ikigai-place" distance={14}>
-            <p className="font-body-md ag-ikigai-place__intro">
-              No funciona solo. Se lee junto al resto de pilares: del linaje a la huella.
-            </p>
-            <ol className="ag-ikigai-place__path" aria-label="Orden de los pilares del Marco Central">
-              {MK_PILLAR_PATH.map((name) => (
-                <li
-                  key={name}
-                  className={`ag-ikigai-place__chip${name === 'IKIGAI' ? ' ag-ikigai-place__chip--focus' : ''}`}
-                >
-                  <span className="font-label-lg">{name}</span>
-                </li>
-              ))}
-            </ol>
-            <div className="ag-ikigai-place__cta">
-              <Link href="/marco-central" className="ag-inline-link font-label-lg">
-                Ver el Marco Central
-                <AppIcon name="arrow-right" size={14} />
-              </Link>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* 4. LA INTERSECCIÓN */}
+      {/* 3. LA INTERSECCIÓN */}
       <section className="ag-section-inner ag-about-block" aria-labelledby="campos-heading">
         <div className="ag-container">
           <SectionIntro
@@ -316,6 +283,39 @@ export function IkigaiContent() {
               El centro no siempre aparece como una respuesta perfecta. A veces aparece como una
               dirección suficientemente sólida para comenzar a probar.
             </p>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* 4. SU LUGAR DENTRO DE MK — después del modelo, antes de las fracturas */}
+      <section className="ag-section-inner ag-about-block ag-about-block--dark" aria-labelledby="place-heading">
+        <div className="ag-container">
+          <SectionIntro
+            eyebrow="DENTRO DE MK"
+            title="Una pieza del Marco Central."
+            lead="El IKIGAI pertenece al pilar Espíritu. Responde a la pregunta que da sentido a las demás capacidades: ¿por qué vale la pena utilizar tu mente, tu cuerpo, tu tiempo y tus recursos?"
+            headingId="place-heading"
+          />
+          <ScrollReveal className="ag-ikigai-place" distance={14}>
+            <p className="font-body-md ag-ikigai-place__intro">
+              No funciona solo. Se lee junto al resto de pilares del Espíritu: del linaje a la huella.
+            </p>
+            <ol className="ag-ikigai-place__path" aria-label="Orden de los pilares del Marco Central">
+              {MK_PILLAR_PATH.map((name) => (
+                <li
+                  key={name}
+                  className={`ag-ikigai-place__chip${name === 'IKIGAI' ? ' ag-ikigai-place__chip--focus' : ''}`}
+                >
+                  <span className="font-label-lg">{name}</span>
+                </li>
+              ))}
+            </ol>
+            <div className="ag-ikigai-place__cta">
+              <Link href="/marco-central" className="ag-inline-link font-label-lg">
+                Ver el Marco Central
+                <AppIcon name="arrow-right" size={14} />
+              </Link>
+            </div>
           </ScrollReveal>
         </div>
       </section>
@@ -419,15 +419,12 @@ export function IkigaiContent() {
           </ScrollStaggerContainer>
           <ScrollReveal className="ag-ikigai-result__integration" distance={12}>
             <p className="font-body-lg">
-              Tu mapa de IKIGAI se incorpora al Perfil Maestro y se relaciona con Nombre, apellido
-              y linaje, Visión, Valores, Estándares, Identidad, Dificultades, Factores de la
-              personalidad y Huella Personal. Deja de ser un ejercicio aislado y se convierte en una
-              referencia para tus prioridades y decisiones.
+              Tu mapa de IKIGAI se integra al Perfil Maestro y deja de ser un ejercicio aislado.
+              Se convierte en referencia para prioridades y decisiones.
             </p>
             <p className="font-body-md ag-ikigai-result__depth">
-              Con el tiempo, la profundidad con la que has trabajado esta dimensión se refleja en
-              tu Índice de Profundidad: una lectura del trabajo interior acumulado, no una nota
-              que define tu razón de existir.
+              Con el tiempo, ese trabajo también alimenta el Índice de profundidad de tu Perfil
+              Maestro: evidencia del trabajo interior acumulado, no una calificación de tu propósito.
             </p>
           </ScrollReveal>
         </div>
@@ -439,7 +436,7 @@ export function IkigaiContent() {
           <SectionIntro
             eyebrow="DESPUÉS DEL EJERCICIO"
             title="Una dirección debe modificar decisiones."
-            lead="El sistema puede utilizar el IKIGAI para ayudarte a evaluar:"
+            lead="El sistema usa tu IKIGAI para ayudarte a evaluar:"
             headingId="decisions-heading"
           />
           <ScrollReveal className="ag-ikigai-decisions" distance={12}>
