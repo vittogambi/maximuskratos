@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { useAuthSession } from '@/components/auth-session-provider';
+import { AppReveal, useAppEntranceOnce } from '@/components/motion/app-reveal';
+import { MOTION_SESSION } from '@/components/motion/tokens';
 import { formatAdminDate } from '@/lib/admin-format';
 import { isEarlyAccessMode } from '@/lib/product-phase';
 import { useTrialDays } from '@/lib/use-trial-days';
@@ -28,9 +30,11 @@ export function CuentaContent() {
   const earlyAccess = isEarlyAccessMode();
   /** Trial clock only runs after launch; until then there is no end date to show. */
   const trialPending = status === 'TRIAL' && (earlyAccess || !subscription?.trialEnd);
+  const { shouldAnimate: entrance } = useAppEntranceOnce(`${MOTION_SESSION.dashboardEntrance}:cuenta`);
 
   return (
     <div className="mk-dashboard">
+      <AppReveal active={entrance}>
       {/* User info */}
       <div className="mk-cuenta-avatar-row">
         <div className="mk-cuenta-avatar">
@@ -129,6 +133,7 @@ export function CuentaContent() {
       >
         Maximus Kratos · {new Date().getFullYear()}
       </p>
+      </AppReveal>
     </div>
   );
 }

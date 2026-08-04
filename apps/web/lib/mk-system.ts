@@ -85,7 +85,7 @@ export type Domain = {
   label: string;
   icon: AppIconName;
   question: string;
-  /** Diferencia el ámbito del pilar homónimo (Mente/Mentalidad, Cuerpo/Salud física). */
+  /** Lectura corta del territorio (detalle desktop). */
   distinction: string;
 };
 
@@ -97,29 +97,28 @@ export const DOMAINS: readonly Domain[] = [
     icon: 'scan-eye',
     question: '¿Cómo interpreto y enfrento la realidad?',
     distinction:
-      'No es el pilar Mente. Es el territorio de creencias, patrones internos y formas de enfrentar lo que ocurre.',
+      'Creencias, patrones internos y formas de enfrentar lo que ocurre.',
   },
   {
     key: 'relaciones',
     label: 'Relaciones',
     icon: 'handshake',
     question: '¿Con quién construyo y sirvo?',
-    distinction: 'Territorio de vínculos: cómo construyes, cuidas y sirves a otros.',
+    distinction: 'Vínculos: cómo construyes, cuidas y sirves a otros.',
   },
   {
     key: 'financiero',
     label: 'Finanzas',
     icon: 'wallet',
     question: '¿Cómo genero y administro recursos?',
-    distinction: 'Territorio de recursos: generación, administración y dirección del dinero.',
+    distinction: 'Recursos: generación, administración y dirección del dinero.',
   },
   {
     key: 'corporal',
     label: 'Salud física',
     icon: 'heart-pulse',
     question: '¿Cómo cuido y desarrollo mi salud física?',
-    distinction:
-      'No es el pilar Cuerpo. Es el territorio donde se cuidan entrenamiento, nutrición, descanso y salud.',
+    distinction: 'Entrenamiento, nutrición, descanso y salud en el cuerpo.',
   },
 ] as const;
 

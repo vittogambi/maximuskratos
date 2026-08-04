@@ -1,11 +1,20 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useInView, useReducedMotion } from 'motion/react';
 import { DeviceShowcase, type DeviceShowcaseFocus } from '@/components/device-showcase';
 import { AppIcon } from '@/components/app-icon';
 import type { AppIconName } from '@/components/icons/registry';
 import { ScrollReveal } from '@/components/motion/scroll-reveal';
 import { ScrollStaggerContainer, StaggerItem } from '@/components/motion/stagger';
+import {
+  MOTION_DISTANCE,
+  MOTION_DURATION,
+  MOTION_EASE,
+  MOTION_STAGGER,
+  MOTION_VIEWPORT,
+} from '@/components/motion/tokens';
 import { SectionIntro } from '@/components/pages/section-intro';
 import { SubpageCta } from '@/components/pages/subpage-cta';
 import { PublicFaqSection } from '@/components/pages/public-faq-section';
@@ -111,6 +120,68 @@ const ECOSYSTEM_NODES: ReadonlyArray<{
   },
 ];
 
+function SistemaCycleDiagram() {
+  const reduced = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, {
+    once: true,
+    amount: 0.35,
+    margin: MOTION_VIEWPORT.margin,
+  });
+  const [activeStep, setActiveStep] = useState(-1);
+
+  useEffect(() => {
+    if (!inView || reduced) {
+      if (reduced) setActiveStep(ACTION_STEPS.length);
+      return;
+    }
+    setActiveStep(0);
+    let i = 0;
+    const id = window.setInterval(() => {
+      i += 1;
+      if (i >= ACTION_STEPS.length) {
+        window.clearInterval(id);
+        setActiveStep(ACTION_STEPS.length);
+        return;
+      }
+      setActiveStep(i);
+    }, 420);
+    return () => window.clearInterval(id);
+  }, [inView, reduced]);
+
+  return (
+    <ScrollReveal className="ag-about-cycle ag-sistema-cycle__diagram" density="default">
+      <div ref={ref} className="ag-about-cycle__ring">
+        <MkCycleOrbit />
+        <MkCycleHub label="Ciclo de la Ruta MK" />
+
+        <ol className="ag-about-cycle__list">
+          {ACTION_STEPS.map((step, index) => {
+            const lit = activeStep >= index;
+            const focused = activeStep === index;
+            return (
+              <li
+                key={step.num}
+                className={`ag-about-cycle__step ag-about-cycle__step--${index + 1}${
+                  lit ? ' is-lit' : ''
+                }${focused ? ' is-focus' : ''}`}
+              >
+                <span className="ag-about-cycle__num hud-text">{step.num}</span>
+                <h3 className="ag-about-cycle__title font-headline-sm">{step.title}</h3>
+                <p className="ag-about-cycle__body font-body-md">{step.body}</p>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+      <p className="ag-about-cycle__note font-body-md">
+        El ciclo no termina al completar una auditoría. Cada etapa vuelve a leer, corregir
+        y fortalecer tu arquitectura.
+      </p>
+    </ScrollReveal>
+  );
+}
+
 export function SistemaContent() {
   return (
     <div className="ag-landing ag-page ag-sistema-page flex min-h-full flex-col antialiased">
@@ -120,7 +191,7 @@ export function SistemaContent() {
           aria-hidden
         />
         <div className="ag-container ag-sistema-hero__stack relative z-10">
-          <ScrollReveal className="ag-sistema-hero__intro text-center" distance={16}>
+          <ScrollReveal className="ag-sistema-hero__intro text-center" density="spacious">
             <p className="hud-text text-action-red">MK · EL SISTEMA</p>
             <h1 className="ag-sistema-hero__title font-display-xl text-white">
               El tablero de control de tu transformación.
@@ -136,7 +207,7 @@ export function SistemaContent() {
             </div>
           </ScrollReveal>
 
-          <ScrollReveal className="ag-sistema-hero__preview" distance={14} delay={0.06}>
+          <ScrollReveal className="ag-sistema-hero__preview" density="default" delay={0.06}>
             <DeviceShowcase focus="overview" layout="hero" />
           </ScrollReveal>
         </div>
@@ -155,7 +226,7 @@ export function SistemaContent() {
             <ScrollReveal
               key={exp.num}
               className={`ag-sistema-exp${exp.reverse ? ' ag-sistema-exp--reverse' : ''}`}
-              distance={18}
+              density="default"
             >
               <div className="ag-sistema-exp__copy">
                 <p className="hud-text text-action-red">
@@ -188,29 +259,7 @@ export function SistemaContent() {
             headingId="cycle-heading"
           />
 
-          <ScrollReveal className="ag-about-cycle ag-sistema-cycle__diagram" distance={14}>
-            <div className="ag-about-cycle__ring">
-              <MkCycleOrbit />
-              <MkCycleHub label="Ciclo de la Ruta MK" />
-
-              <ol className="ag-about-cycle__list">
-                {ACTION_STEPS.map((step, index) => (
-                  <li
-                    key={step.num}
-                    className={`ag-about-cycle__step ag-about-cycle__step--${index + 1}`}
-                  >
-                    <span className="ag-about-cycle__num hud-text">{step.num}</span>
-                    <h3 className="ag-about-cycle__title font-headline-sm">{step.title}</h3>
-                    <p className="ag-about-cycle__body font-body-md">{step.body}</p>
-                  </li>
-                ))}
-              </ol>
-            </div>
-            <p className="ag-about-cycle__note font-body-md">
-              El ciclo no termina al completar una auditoría. Cada etapa vuelve a leer, corregir
-              y fortalecer tu arquitectura.
-            </p>
-          </ScrollReveal>
+          <SistemaCycleDiagram />
         </div>
       </section>
 
@@ -262,29 +311,48 @@ export function SistemaContent() {
             headingId="eco-heading"
           />
 
-          <ScrollStaggerContainer className="ag-sistema-eco__grid" stagger={0.08}>
-            {ECOSYSTEM_NODES.map((node) => (
-              <StaggerItem key={node.title} distance={14} className="ag-sistema-eco__item">
-                <div className="ag-panel ag-panel--marco ag-sistema-eco__card h-full">
-                  <span className="ag-panel__corner ag-panel__corner--hover" aria-hidden />
-                  <div className="ag-sistema-eco__head">
-                    <div className="ag-marco-card__icon" aria-hidden>
-                      <AppIcon name={node.icon} size={22} />
+          <div className="ag-sistema-eco">
+            <motion.div
+              className="ag-sistema-eco__continuity"
+              aria-hidden
+              initial={{ scaleX: 0, opacity: 0 }}
+              whileInView={{ scaleX: 1, opacity: 1 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{
+                type: 'tween',
+                duration: MOTION_DURATION.reveal,
+                ease: MOTION_EASE.enter,
+              }}
+              style={{ transformOrigin: 'left center' }}
+            />
+            <ScrollStaggerContainer
+              className="ag-sistema-eco__grid"
+              stagger={MOTION_STAGGER.base}
+              itemCount={ECOSYSTEM_NODES.length}
+            >
+              {ECOSYSTEM_NODES.map((node) => (
+                <StaggerItem key={node.title} distance={MOTION_DISTANCE.sm} className="ag-sistema-eco__item">
+                  <div className="ag-panel ag-panel--marco ag-sistema-eco__card h-full">
+                    <span className="ag-panel__corner ag-panel__corner--hover" aria-hidden />
+                    <div className="ag-sistema-eco__head">
+                      <div className="ag-marco-card__icon" aria-hidden>
+                        <AppIcon name={node.icon} size={22} />
+                      </div>
+                      <span
+                        className={`ag-sistema-eco__status ${node.statusTone === 'live' ? 'is-live' : 'is-dev'}`}
+                      >
+                        {node.status}
+                      </span>
                     </div>
-                    <span
-                      className={`ag-sistema-eco__status ${node.statusTone === 'live' ? 'is-live' : 'is-dev'}`}
-                    >
-                      {node.status}
-                    </span>
+                    <p className="ag-panel__card-title font-headline-sm">{node.title}</p>
+                    <p className="ag-panel__card-body font-body-md">{node.body}</p>
                   </div>
-                  <p className="ag-panel__card-title font-headline-sm">{node.title}</p>
-                  <p className="ag-panel__card-body font-body-md">{node.body}</p>
-                </div>
-              </StaggerItem>
-            ))}
-          </ScrollStaggerContainer>
+                </StaggerItem>
+              ))}
+            </ScrollStaggerContainer>
+          </div>
 
-          <ScrollReveal className="ag-sistema-eco__sync" distance={10} delay={0.08}>
+          <ScrollReveal className="ag-sistema-eco__sync" density="tight" delay={0.08}>
             <AppIcon name="activity" size={16} aria-hidden />
             <span className="font-body-md">
               La misma cuenta seguirá en web y app cuando lancemos ambas.
@@ -302,7 +370,7 @@ export function SistemaContent() {
             headingId="modelo-heading"
           />
 
-          <ScrollReveal className="ag-sistema-formula" distance={10}>
+          <ScrollReveal className="ag-sistema-formula" density="tight">
             <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
             <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
             <div className="ag-sistema-formula__row">
@@ -327,7 +395,7 @@ export function SistemaContent() {
             </div>
           </ScrollReveal>
 
-          <ScrollReveal className="ag-sistema-model-brief__link" distance={10} delay={0.05}>
+          <ScrollReveal className="ag-sistema-model-brief__link" density="tight" delay={0.05}>
             <Link href="/marco-central" className="ag-marco-more__link font-label-lg">
               Ver el Marco Central
               <AppIcon name="arrow-right" size={14} />

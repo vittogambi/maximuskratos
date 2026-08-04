@@ -21,6 +21,10 @@ export const LANDING_IMAGES = {
   statueBroken:   '/images/landing/statue-broken.jpg',
   statueAligned:  '/images/landing/statue-aligned.jpg',
   statueSovereign: '/images/landing/statue-sovereign.jpg',
+  /** Hero signature: pre-beam dark still (composition matches beam video). */
+  statueBeamDark: '/images/landing/statue-beam-dark.jpg?v=7',
+  /** Hero signature: illuminated still after beam. */
+  statueBeamLit:  '/images/landing/statue-beam-lit.jpg?v=7',
   phase01:        '/images/landing/phase-01.jpg',
   phase02:        '/images/landing/phase-02.jpg',
   phase03:        '/images/landing/phase-03.jpg',
@@ -36,6 +40,11 @@ export const LANDING_IMAGES = {
   contactoHero:          '/images/contacto/hero-listening.jpg',
   ikigaiDiagram:           '/images/ikigai/ikigai-diagram.png',
   ikigaiHero:              '/images/ikigai/ikigai-hero.png',
+} as const;
+
+/** Hero darkness-to-direction beam clip (~3s, cut before fade-back). */
+export const LANDING_VIDEO = {
+  statueBeam: '/video/statue-beam.mp4?v=7',
 } as const;
 
 export type AuthAtmosphereVariant = 'login' | 'register' | 'default';

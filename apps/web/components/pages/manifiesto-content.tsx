@@ -4,6 +4,9 @@ import Link from 'next/link';
 import { AppIcon } from '@/components/app-icon';
 import { ScrollReveal } from '@/components/motion/scroll-reveal';
 import { ScrollStaggerContainer, StaggerItem } from '@/components/motion/stagger';
+import { TextRevealLine } from '@/components/motion/text-reveal';
+import { AnimatedDivider } from '@/components/motion/animated-divider';
+import { MOTION_DISTANCE, MOTION_STAGGER } from '@/components/motion/tokens';
 import { MkCycleHub, MkCycleOrbit } from '@/components/pages/mk-cycle-hub';
 import { SectionIntro } from '@/components/pages/section-intro';
 import { SubpageCta } from '@/components/pages/subpage-cta';
@@ -207,13 +210,17 @@ export function ManifiestoContent() {
         </div>
         <div className="ag-about-hero__scrim" aria-hidden />
         <div className="ag-about-hero__content ag-container relative z-10">
-          <ScrollReveal className="ag-about-hero__intro text-center" distance={16}>
+          <ScrollReveal className="ag-about-hero__intro text-center" density="spacious">
             <p className="hud-text text-action-red">MANIFIESTO</p>
             <h1 className="ag-about-hero__title ag-type-display text-white">
-              Construimos sistemas,
-              <br />
-              no discursos.
+              <TextRevealLine startWhen="mount" delay={0.08}>
+                Construimos sistemas,
+              </TextRevealLine>
+              <TextRevealLine startWhen="mount" delay={0.32}>
+                no discursos.
+              </TextRevealLine>
             </h1>
+            <AnimatedDivider className="ag-about-hero__rule" origin="center" startWhen="mount" />
             <p className="ag-about-hero__origin font-body-lg">
               Hay voluntad de cambiar, pero sin un sistema que sostenga ese cambio.
               Maximus Kratos nació para construir ese orden.
@@ -225,7 +232,7 @@ export function ManifiestoContent() {
       {/* ── DEL NOMBRE ───────────────────────────────────────────────── */}
       <section className="ag-section-inner ag-about-block" aria-labelledby="name-heading">
         <div className="ag-container ag-about-block__shell">
-          <ScrollReveal distance={14}>
+          <ScrollReveal density="default">
             <AboutEyebrow>DEL NOMBRE</AboutEyebrow>
             <h2 id="name-heading" className="ag-about-block__title ag-type-section text-white">
               Maximus Kratos
@@ -234,10 +241,14 @@ export function ManifiestoContent() {
               Dos raíces clásicas. Una sola idea: soberanía máxima al servicio de lo que construyes.
             </p>
           </ScrollReveal>
-          <ScrollReveal distance={12} delay={0.05}>
-            <div className="ag-about-name">
-              {NAME_ETIMOLOGY.map((item) => (
-                <article key={item.term} className="ag-about-name__card">
+          <ScrollStaggerContainer
+            className="ag-about-name"
+            stagger={MOTION_STAGGER.base}
+            itemCount={NAME_ETIMOLOGY.length}
+          >
+            {NAME_ETIMOLOGY.map((item) => (
+              <StaggerItem key={item.term} className="h-full" distance={MOTION_DISTANCE.sm + 2}>
+                <article className="ag-about-name__card">
                   <span className="ag-about-name__corner ag-about-name__corner--tl" aria-hidden />
                   <span className="ag-about-name__corner ag-about-name__corner--br" aria-hidden />
                   <p className="hud-text text-action-red">{item.origin}</p>
@@ -245,17 +256,19 @@ export function ManifiestoContent() {
                   <p className="ag-about-name__meaning">{item.meaning}</p>
                   <p className="ag-about-name__body font-body-md">{item.body}</p>
                 </article>
-              ))}
-            </div>
+              </StaggerItem>
+            ))}
+          </ScrollStaggerContainer>
+          <ScrollReveal density="tight" delay={0.05}>
             <p className="ag-about-name__close font-body-lg">
               En combinación: <span className="ag-about-name__close-em">Soberanía máxima</span>.
               Una masculinidad que retoma el mando de su propia vida para servir a otros.
             </p>
           </ScrollReveal>
 
-          <ScrollReveal className="ag-about-emblem" distance={12} delay={0.08}>
+          <ScrollReveal className="ag-about-emblem" density="tight" delay={0.08}>
             <p className="hud-text text-action-red">EL EMBLEMA</p>
-            <div className="ag-about-emblem__stage">
+            <div className="ag-about-emblem__stage ag-about-emblem__stage--spotlight">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/brand/mk-shield.png"
@@ -278,57 +291,67 @@ export function ManifiestoContent() {
       {/* ── DEFINICIÓN (video: qué / por qué / cómo) ──────────────────── */}
       <section className="ag-section-inner ag-about-block ag-about-block--dark" aria-labelledby="define-heading">
         <div className="ag-container ag-about-block__shell">
-          <ScrollReveal distance={14}>
+          <ScrollReveal density="default">
             <AboutEyebrow>LA DEFINICIÓN</AboutEyebrow>
             <h2 id="define-heading" className="ag-about-block__title ag-type-section text-white">
               Qué es. Por qué existe. Cómo opera.
             </h2>
           </ScrollReveal>
 
-          <ScrollReveal className="ag-about-define" distance={12} delay={0.04}>
-            <article className="ag-about-define__card">
-              <p className="hud-text text-action-red">{MK_DEFINITION.what.label}</p>
-              <HighlightedBody
-                className="ag-about-define__body font-body-lg"
-                body={MK_DEFINITION.what.body}
-                highlight={MK_DEFINITION.what.highlight}
-              />
-            </article>
+          <ScrollStaggerContainer
+            className="ag-about-define"
+            stagger={MOTION_STAGGER.base}
+            itemCount={3}
+          >
+            <StaggerItem className="h-full" distance={MOTION_DISTANCE.sm + 2}>
+              <article className="ag-about-define__card">
+                <p className="hud-text text-action-red">{MK_DEFINITION.what.label}</p>
+                <HighlightedBody
+                  className="ag-about-define__body font-body-lg"
+                  body={MK_DEFINITION.what.body}
+                  highlight={MK_DEFINITION.what.highlight}
+                />
+              </article>
+            </StaggerItem>
 
-            <article className="ag-about-define__card">
-              <p className="hud-text text-action-red">{MK_DEFINITION.why.label}</p>
-              <HighlightedBody
-                className="ag-about-define__body font-body-lg"
-                body={MK_DEFINITION.why.body}
-                highlight={MK_DEFINITION.why.highlight}
-              />
-            </article>
+            <StaggerItem className="h-full" distance={MOTION_DISTANCE.sm + 2}>
+              <article className="ag-about-define__card">
+                <p className="hud-text text-action-red">{MK_DEFINITION.why.label}</p>
+                <HighlightedBody
+                  className="ag-about-define__body font-body-lg"
+                  body={MK_DEFINITION.why.body}
+                  highlight={MK_DEFINITION.why.highlight}
+                />
+              </article>
+            </StaggerItem>
 
-            <article className="ag-about-define__card ag-about-define__card--axes">
-              <p className="hud-text text-action-red">{MK_DEFINITION.how.label}</p>
-              <p className="ag-about-define__lead font-body-md">{MK_DEFINITION.how.lead}</p>
-              <ol className="ag-about-define__axes">
-                {MK_DEFINITION.how.axes.map((axis, index) => (
-                  <li key={axis.title} className="ag-about-define__axis">
-                    <span className="ag-about-define__axis-num hud-text">
-                      {index === 0 ? 'I' : 'II'}
-                    </span>
-                    <div>
-                      <h3 className="ag-about-define__axis-title">{axis.title}</h3>
-                      <p className="ag-about-define__axis-body font-body-md">{axis.body}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </article>
-          </ScrollReveal>
+            <StaggerItem className="h-full" distance={MOTION_DISTANCE.sm + 2}>
+              <article className="ag-about-define__card ag-about-define__card--axes">
+                <p className="hud-text text-action-red">{MK_DEFINITION.how.label}</p>
+                <p className="ag-about-define__lead font-body-md">{MK_DEFINITION.how.lead}</p>
+                <ol className="ag-about-define__axes">
+                  {MK_DEFINITION.how.axes.map((axis, index) => (
+                    <li key={axis.title} className="ag-about-define__axis">
+                      <span className="ag-about-define__axis-num hud-text">
+                        {index === 0 ? 'I' : 'II'}
+                      </span>
+                      <div>
+                        <h3 className="ag-about-define__axis-title">{axis.title}</h3>
+                        <p className="ag-about-define__axis-body font-body-md">{axis.body}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </article>
+            </StaggerItem>
+          </ScrollStaggerContainer>
         </div>
       </section>
 
       {/* ── FUNDAMENTO GRIEGO ────────────────────────────────────────── */}
       <section className="ag-section-inner ag-about-block">
         <div className="ag-container ag-about-block__shell">
-          <ScrollReveal distance={14}>
+          <ScrollReveal density="default">
             <AboutEyebrow>EL FUNDAMENTO</AboutEyebrow>
             <h2 className="ag-about-block__title ag-type-section text-white">
               No inventamos la idea. La rescatamos.
@@ -338,10 +361,14 @@ export function ManifiestoContent() {
               práctica: ordenar espíritu, mente y cuerpo bajo un mismo propósito.
             </p>
           </ScrollReveal>
-          <ScrollReveal distance={12} delay={0.05}>
-            <div className="ag-about-concepts">
-              {GREEK_CONCEPTS.map((concept) => (
-                <article key={concept.term} className="ag-about-concept">
+          <ScrollStaggerContainer
+            className="ag-about-concepts"
+            stagger={MOTION_STAGGER.base}
+            itemCount={GREEK_CONCEPTS.length}
+          >
+            {GREEK_CONCEPTS.map((concept) => (
+              <StaggerItem key={concept.term} className="h-full" distance={MOTION_DISTANCE.sm + 2}>
+                <article className="ag-about-concept">
                   <span className="ag-about-concept__corner ag-about-concept__corner--tl" aria-hidden />
                   <span className="ag-about-concept__corner ag-about-concept__corner--br" aria-hidden />
                   <div className="ag-about-concept__header">
@@ -356,10 +383,10 @@ export function ManifiestoContent() {
                   <p className="ag-about-concept__body font-body-md">{concept.body}</p>
                   <span className="ag-about-concept__bar" aria-hidden />
                 </article>
-              ))}
-            </div>
-          </ScrollReveal>
-          <ScrollReveal distance={10} delay={0.08}>
+              </StaggerItem>
+            ))}
+          </ScrollStaggerContainer>
+          <ScrollReveal density="tight" delay={0.08}>
             <p className="ag-about-block__lead ag-about-concepts__close font-body-md">
               Así te conviertes en arquitecto de ti mismo y de tu mundo: constructor de
               orden, belleza y solidez para tu vida, tu familia y tu legado.
@@ -380,8 +407,12 @@ export function ManifiestoContent() {
         </div>
         <div className="ag-about-block__bg-scrim pointer-events-none absolute inset-0" aria-hidden />
         <div className="ag-container ag-about-contrast__shell relative z-10">
-          <div className="ag-about-contrast__grid">
-            <ScrollReveal className="ag-about-contrast__col" distance={14}>
+          <ScrollStaggerContainer
+            className="ag-about-contrast__grid"
+            stagger={MOTION_STAGGER.base}
+            itemCount={2}
+          >
+            <StaggerItem className="ag-about-contrast__col" distance={MOTION_DISTANCE.sm + 2}>
               <article className="ag-panel ag-about-contrast__panel h-full">
                 <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
                 <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
@@ -400,9 +431,9 @@ export function ManifiestoContent() {
                   ))}
                 </ul>
               </article>
-            </ScrollReveal>
+            </StaggerItem>
 
-            <ScrollReveal className="ag-about-contrast__col" distance={14} delay={0.06}>
+            <StaggerItem className="ag-about-contrast__col" distance={MOTION_DISTANCE.sm + 2}>
               <article className="ag-panel ag-about-contrast__panel h-full">
                 <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
                 <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
@@ -421,8 +452,8 @@ export function ManifiestoContent() {
                   ))}
                 </ul>
               </article>
-            </ScrollReveal>
-          </div>
+            </StaggerItem>
+          </ScrollStaggerContainer>
         </div>
       </section>
 
@@ -446,7 +477,7 @@ export function ManifiestoContent() {
             headingId="frag-heading"
           />
 
-          <ScrollReveal className="ag-about-converge" distance={14}>
+          <ScrollReveal className="ag-about-converge" density="default">
             <ul className="ag-about-converge__scatter">
               {DOMAINS.map((domain) => (
                 <li key={domain.key} className="ag-about-converge__chip">
@@ -473,7 +504,7 @@ export function ManifiestoContent() {
           </ScrollReveal>
 
           <div className="ag-about-block__shell">
-            <ScrollReveal className="ag-about-cost" distance={12} delay={0.04}>
+            <ScrollReveal className="ag-about-cost" density="tight" delay={0.04}>
               <p className="hud-text text-action-red ag-about-cost__eyebrow">EL COSTO REAL</p>
               <p className="ag-about-cost__lead">
                 <span className="ag-about-cost__lead-main">
@@ -496,7 +527,7 @@ export function ManifiestoContent() {
               </ul>
             </ScrollReveal>
 
-            <ScrollReveal className="ag-about-cost__link" distance={10} delay={0.06}>
+            <ScrollReveal className="ag-about-cost__link" density="tight" delay={0.06}>
               <Link href="/marco-central" className="ag-marco-more__link font-label-lg">
                 Así se observa: el modelo completo
                 <AppIcon name="arrow-right" size={14} />
@@ -512,7 +543,7 @@ export function ManifiestoContent() {
         aria-labelledby="tech-heading"
       >
         <div className="ag-container ag-about-block__shell">
-          <ScrollReveal distance={14}>
+          <ScrollReveal density="default">
             <AboutEyebrow>POR QUÉ TECNOLOGÍA</AboutEyebrow>
             <h2 id="tech-heading" className="ag-about-block__title ag-type-section text-white">
               El método necesita algo que no olvide.
@@ -523,9 +554,13 @@ export function ManifiestoContent() {
             </p>
           </ScrollReveal>
 
-          <ScrollStaggerContainer className="ag-about-capabilities" stagger={0.06}>
+          <ScrollStaggerContainer
+            className="ag-about-capabilities"
+            stagger={MOTION_STAGGER.base}
+            itemCount={TECH_CAPABILITIES.length}
+          >
             {TECH_CAPABILITIES.map((item) => (
-              <StaggerItem key={item.title} className="ag-about-capabilities__item" distance={10}>
+              <StaggerItem key={item.title} className="ag-about-capabilities__item" distance={MOTION_DISTANCE.sm}>
                 <article className="ag-about-capability">
                   <span className="ag-about-capability__num hud-text">{item.num}</span>
                   <h3 className="ag-about-capability__title">{item.title}</h3>
@@ -543,7 +578,7 @@ export function ManifiestoContent() {
         aria-labelledby="alt-heading"
       >
         <div className="ag-container ag-about-block__shell">
-          <ScrollReveal distance={14}>
+          <ScrollReveal density="default">
             <AboutEyebrow>CONTEXTO</AboutEyebrow>
             <h2 id="alt-heading" className="ag-about-block__title ag-type-section text-white">
               No compite con lo que ya usas.
@@ -555,29 +590,37 @@ export function ManifiestoContent() {
             </p>
           </ScrollReveal>
 
-          <ScrollReveal className="ag-about-alts-wrap" distance={12} delay={0.04}>
-            <ul className="ag-about-alts">
-              {ALTERNATIVES.map((item) => (
-                <li key={item.label} className="ag-about-alt">
-                  <span className="ag-about-alt__label font-label-lg">{item.label}</span>
-                  <p className="ag-about-alt__body font-body-md">{item.body}</p>
-                </li>
-              ))}
-            </ul>
+          <ScrollStaggerContainer
+            className="ag-about-alts-wrap"
+            stagger={MOTION_STAGGER.base}
+            itemCount={2}
+          >
+            <StaggerItem distance={MOTION_DISTANCE.sm + 2}>
+              <ul className="ag-about-alts">
+                {ALTERNATIVES.map((item) => (
+                  <li key={item.label} className="ag-about-alt">
+                    <span className="ag-about-alt__label font-label-lg">{item.label}</span>
+                    <p className="ag-about-alt__body font-body-md">{item.body}</p>
+                  </li>
+                ))}
+              </ul>
+            </StaggerItem>
 
-            <div className="ag-about-alt-mk">
-              <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
-              <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
-              <p className="hud-text text-action-red">MAXIMUS KRATOS</p>
-              <p className="ag-about-alt-mk__title">
-                Esa capa es el sistema.
-              </p>
-              <p className="ag-about-alt-mk__body font-body-md">
-                No reemplaza un curso ni un coach. Les da continuidad: diagnóstico, dirección y
-                ejecución quedan conectados en un solo proceso.
-              </p>
-            </div>
-          </ScrollReveal>
+            <StaggerItem distance={MOTION_DISTANCE.sm + 2}>
+              <div className="ag-about-alt-mk">
+                <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
+                <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
+                <p className="hud-text text-action-red">MAXIMUS KRATOS</p>
+                <p className="ag-about-alt-mk__title">
+                  Esa capa es el sistema.
+                </p>
+                <p className="ag-about-alt-mk__body font-body-md">
+                  No reemplaza un curso ni un coach. Les da continuidad: diagnóstico, dirección y
+                  ejecución quedan conectados en un solo proceso.
+                </p>
+              </div>
+            </StaggerItem>
+          </ScrollStaggerContainer>
         </div>
       </section>
 
@@ -594,7 +637,7 @@ export function ManifiestoContent() {
             headingId="journey-heading"
           />
 
-          <ScrollReveal className="ag-about-cycle ag-sistema-cycle__diagram" distance={14}>
+          <ScrollReveal className="ag-about-cycle ag-sistema-cycle__diagram" density="default">
             <div className="ag-about-cycle__ring">
               <MkCycleOrbit />
               <MkCycleHub label="Ciclo de la Ruta MK" />

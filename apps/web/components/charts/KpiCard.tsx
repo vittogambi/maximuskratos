@@ -1,5 +1,8 @@
 'use client';
 
+import { MotionNumber } from '@/components/motion/motion-number';
+import { ProgressReveal } from '@/components/motion/progress-reveal';
+
 type Classification = {
   label: string;
   color: string;
@@ -16,9 +19,11 @@ type Props = {
   label: string;
   value: number;
   isGlobal?: boolean;
+  /** Animate value/bar on first reveal. */
+  animateEntrance?: boolean;
 };
 
-export function KpiCard({ label, value, isGlobal = false }: Props) {
+export function KpiCard({ label, value, isGlobal = false, animateEntrance = false }: Props) {
   const { label: clsLabel, color } = classify(value);
   const pct = Math.min(100, Math.max(0, value));
 
@@ -33,14 +38,28 @@ export function KpiCard({ label, value, isGlobal = false }: Props) {
         )}
       </div>
       <div className="mk-kpi-card__value" style={{ color: isGlobal ? color : undefined }}>
-        {value}
+        {animateEntrance ? (
+          <MotionNumber to={value} startWhen="mount" />
+        ) : (
+          value
+        )}
       </div>
-      <div className="mk-kpi-card__bar">
-        <div
-          className="mk-kpi-card__bar-fill"
-          style={{ width: `${pct}%`, background: color }}
+      {animateEntrance ? (
+        <ProgressReveal
+          value={pct}
+          className="mk-kpi-card__bar"
+          fillClassName="mk-kpi-card__bar-fill"
+          fillStyle={{ background: color }}
+          startWhen="mount"
         />
-      </div>
+      ) : (
+        <div className="mk-kpi-card__bar">
+          <div
+            className="mk-kpi-card__bar-fill"
+            style={{ width: `${pct}%`, background: color }}
+          />
+        </div>
+      )}
     </div>
   );
 }

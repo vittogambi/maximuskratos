@@ -1,3 +1,7 @@
+'use client';
+
+import { motion, useInView, useReducedMotion } from 'motion/react';
+import { useRef } from 'react';
 import { AppIcon } from '@/components/app-icon';
 import type { AppIconName } from '@/components/icons/registry';
 import {
@@ -6,6 +10,12 @@ import {
   MkPerfilScreen,
   MkRutaScreen,
 } from '@/components/mk-product-mock-screens';
+import {
+  MOTION_DISTANCE,
+  MOTION_DURATION,
+  MOTION_EASE,
+  MOTION_VIEWPORT,
+} from '@/components/motion/tokens';
 
 const SHIELD_ASPECT = 131 / 123;
 
@@ -140,9 +150,19 @@ export function DeviceShowcase({
   layout = 'hero',
 }: DeviceShowcaseProps) {
   const isExperience = layout === 'experience';
+  const reduced = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, {
+    once: true,
+    amount: 0.25,
+    margin: MOTION_VIEWPORT.margin,
+  });
 
   return (
-    <div className={`device-showcase-wrap${isExperience ? ' device-showcase-wrap--experience' : ''}`}>
+    <div
+      ref={ref}
+      className={`device-showcase-wrap${isExperience ? ' device-showcase-wrap--experience' : ''}`}
+    >
       <div
         className={`device-showcase${isExperience ? ' device-showcase--experience' : ''}`}
         aria-hidden
@@ -151,20 +171,53 @@ export function DeviceShowcase({
         {!isExperience ? <div className="device-showcase__floor" /> : null}
 
         <div className="device-showcase__compose">
-          {/* Laptop: primary on desktop/tablet; hidden on mobile hero (phone leads). */}
-          <div className="device-frame device-frame--laptop">
+          <motion.div
+            className="device-frame device-frame--laptop"
+            initial={reduced ? false : { opacity: 0, y: MOTION_DISTANCE.sm, scale: 1.02 }}
+            animate={
+              inView || reduced
+                ? { opacity: 1, y: 0, scale: 1 }
+                : { opacity: 0, y: MOTION_DISTANCE.sm, scale: 1.02 }
+            }
+            transition={{
+              type: 'tween',
+              duration: MOTION_DURATION.reveal,
+              ease: MOTION_EASE.enter,
+            }}
+          >
             <div className="device-frame__rim">
-              <div className="device-frame__viewport">
+              <motion.div
+                className="device-frame__viewport"
+                initial={reduced ? false : { opacity: 0 }}
+                animate={inView || reduced ? { opacity: 1 } : { opacity: 0 }}
+                transition={{
+                  type: 'tween',
+                  duration: MOTION_DURATION.interaction,
+                  ease: MOTION_EASE.enter,
+                  delay: reduced ? 0 : 0.12,
+                }}
+              >
                 <div className="device-frame__sheen" />
                 <DesktopAppScreen focus={focus} />
-              </div>
+              </motion.div>
             </div>
             {!isExperience ? <div className="device-frame__lip" /> : null}
-          </div>
+          </motion.div>
 
-          {/* Phone: always shown in hero; also used as experience media on mobile. */}
-          <div
+          <motion.div
             className={`device-frame device-frame--phone${isExperience ? ' device-frame--phone-experience' : ''}`}
+            initial={reduced ? false : { opacity: 0, y: MOTION_DISTANCE.md, scale: 1.02 }}
+            animate={
+              inView || reduced
+                ? { opacity: 1, y: 0, scale: 1 }
+                : { opacity: 0, y: MOTION_DISTANCE.md, scale: 1.02 }
+            }
+            transition={{
+              type: 'tween',
+              duration: MOTION_DURATION.reveal,
+              ease: MOTION_EASE.enter,
+              delay: reduced ? 0 : 0.1,
+            }}
           >
             <div className="device-frame__rim device-frame__rim--phone">
               <div className="device-frame__island" />
@@ -174,7 +227,7 @@ export function DeviceShowcase({
               </div>
               <div className="device-frame__home-indicator" />
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>

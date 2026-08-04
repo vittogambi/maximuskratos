@@ -67,6 +67,9 @@ export default function RootLayout({
         <Script id="reload-scroll-top" strategy="beforeInteractive">
           {`(function(){try{if('scrollRestoration'in history)history.scrollRestoration='manual';var n=performance.getEntriesByType('navigation')[0];if(n&&n.type==='reload'&&location.hash){history.replaceState(null,'',location.pathname+location.search);scrollTo(0,0);}}catch(e){}})();`}
         </Script>
+        <Script id="mk-intro-flag" strategy="beforeInteractive">
+          {`(function(){try{var p=location.pathname;var publicPaths=['/','/manifiesto','/marco-central','/sistema','/precios','/contacto','/eventos','/ikigai','/privacidad','/terminos'];var isPublic=publicPaths.indexOf(p)!==-1;if(!isPublic)return;if(sessionStorage.getItem('mk_intro_seen'))return;if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){sessionStorage.setItem('mk_intro_seen','1');return;}document.documentElement.setAttribute('data-mk-intro','1');}catch(e){}})();`}
+        </Script>
         <AuthSessionProvider>{children}</AuthSessionProvider>
       </body>
     </html>

@@ -101,11 +101,13 @@ export default function LoginPage() {
               Olvidé mi contraseña
             </Link>
           </p>
-          {error ? (
-            <p className="auth-error" role="alert">
-              {error}
-            </p>
-          ) : null}
+          <div className="auth-form__error-slot">
+            {error ? (
+              <p className="auth-error" role="alert" style={{ width: '100%' }}>
+                {error}
+              </p>
+            ) : null}
+          </div>
           <AuthSubmitButton loading={loading} loadingLabel="Entrando…">
             Entrar
           </AuthSubmitButton>

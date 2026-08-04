@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useReducedMotion } from 'motion/react';
 import { ScrollStaggerContainer, StaggerItem } from '@/components/motion/stagger';
+import { MOTION_DISTANCE, MOTION_STAGGER } from '@/components/motion/tokens';
 import { FaqAccordionItem } from '@/components/pages/faq-accordion-item';
 import { SectionIntro } from '@/components/pages/section-intro';
 import type { PublicFaqItem } from '@/lib/faq';
@@ -33,9 +34,13 @@ export function PublicFaqSection({
     <section className="ag-faq-section ag-section-inner" aria-labelledby={headingId}>
       <div className="ag-container ag-container--narrow">
         <SectionIntro eyebrow={eyebrow} title={title} lead={lead} headingId={headingId} />
-        <ScrollStaggerContainer className="ag-faq-list" stagger={0.06}>
+        <ScrollStaggerContainer
+          className="ag-faq-list"
+          stagger={MOTION_STAGGER.base}
+          itemCount={items.length}
+        >
           {items.map((item, index) => (
-            <StaggerItem key={item.id} distance={10}>
+            <StaggerItem key={item.id} distance={MOTION_DISTANCE.sm}>
               <FaqAccordionItem
                 id={`${idPrefix}-${item.id}`}
                 question={item.question}

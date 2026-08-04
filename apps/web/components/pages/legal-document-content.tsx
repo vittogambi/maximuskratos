@@ -28,7 +28,7 @@ export function LegalDocumentContent({ document }: LegalDocumentContentProps) {
     <div className="ag-landing ag-page ag-legal-page flex min-h-full flex-col antialiased">
       <section className="ag-legal-page__hero">
         <div className="ag-container ag-legal-page__hero-inner">
-          <ScrollReveal distance={16}>
+          <ScrollReveal density="spacious">
             <p className="hud-text text-action-red">{document.eyebrow}</p>
             <h1 className="ag-legal-page__title ag-type-display text-white">
               {document.title}

@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { AppIcon } from '@/components/app-icon';
 import { useAuthSession } from '@/components/auth-session-provider';
+import { AppReveal, useAppEntranceOnce } from '@/components/motion/app-reveal';
+import { APP_MOTION } from '@/components/motion/tokens';
 import { apiDiagnosticProfile, apiDiagnosticProgress, type DiagnosticProgressDto, type MasterProfileDto } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth-storage';
 import { computePillarScores, PILLARS, PRESENTATION_INDICES } from '@/lib/mk-system';
@@ -121,7 +123,13 @@ function InProgressDashboard({ progress }: { progress: DiagnosticProgressDto }) 
 
 // ── Profile-ready dashboard ──────────────────────────────────────────────────
 
-function ProfileDashboard({ profile }: { profile: NonNullable<MasterProfileDto> }) {
+function ProfileDashboard({
+  profile,
+  entrance,
+}: {
+  profile: NonNullable<MasterProfileDto>;
+  entrance: boolean;
+}) {
   const scores  = (profile.scores  ?? {}) as Record<string, number>;
   const indices = (profile.indices ?? {}) as Record<string, number>;
   const alineacion  = Math.round(indices[PRESENTATION_INDICES.alineacion.sourceKey]  ?? 0);
@@ -130,116 +138,125 @@ function ProfileDashboard({ profile }: { profile: NonNullable<MasterProfileDto> 
   const stability   = Math.round(indices[PRESENTATION_INDICES.estabilidad.sourceKey] ?? 0);
   const shadowScore = Math.round(scores.shadow ?? 0);
   const pillarScores = computePillarScores(scores);
+  const stagger = APP_MOTION.stagger.base;
 
   return (
     <div className="mk-dashboard">
-      {/* Resumen del sistema: pilares */}
-      <section className="mk-section">
-        <p className="mk-section-eyebrow">RESUMEN DEL SISTEMA</p>
-        <div className="sys-pillars">
-          {PILLARS.map((pillar) => (
-            <div key={pillar.key} className="sys-pillar-card">
-              <span className="sys-pillar-card__icon">
-                <AppIcon name={pillar.icon} size={20} />
-              </span>
-              <span className="sys-pillar-card__label">{pillar.label}</span>
-              <span className="sys-pillar-card__score">{pillarScores[pillar.key] ?? '—'}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* KPI strip */}
-      <section className="mk-section">
-        <p className="mk-section-eyebrow">ÍNDICES</p>
-        <div className="mk-kpi-strip">
-          <KpiCard label={PRESENTATION_INDICES.alineacion.label}  value={alineacion}  isGlobal />
-          <KpiCard label={PRESENTATION_INDICES.profundidad.label} value={profundidad} />
-          <KpiCard label={PRESENTATION_INDICES.ejecucion.label}   value={execution} />
-          <KpiCard label={PRESENTATION_INDICES.estabilidad.label} value={stability} />
-        </div>
-      </section>
-
-      {/* Radar */}
-      <section className="mk-section">
-        <p className="mk-section-eyebrow">PERFIL DE DIMENSIONES</p>
-        <div className="mk-radar-card">
-          <RadarProfile scores={scores} />
-        </div>
-      </section>
-
-      {/* Sombra */}
-      <section className="mk-sombra-card">
-        <div className="mk-sombra-card__header">
-          <p className="mk-section-eyebrow" style={{ color: 'rgba(255,80,80,0.7)' }}>LA SOMBRA</p>
-          <span className="mk-sombra-card__score">{shadowScore}</span>
-        </div>
-        <p className="mk-sombra-card__text">
-          {shadowScore < 30
-            ? 'Sombra contenida: buena conciencia de tus patrones.'
-            : shadowScore < 60
-            ? 'Sombra activa: algunos patrones están limitando tu potencial.'
-            : 'Sombra dominante: tu cuello de botella más crítico.'}
-        </p>
-        <div className="mk-sombra-card__track">
-          <div className="mk-sombra-card__fill" style={{ width: `${Math.min(100, shadowScore)}%` }} />
-        </div>
-      </section>
-
-      {/* Ruta teaser */}
-      <section className="mk-section">
-        <p className="mk-section-eyebrow">RUTA MK</p>
-        <div className="mk-ruta-teaser">
-          <div className="mk-ruta-teaser__item mk-ruta-teaser__item--done">
-            <div className="mk-ruta-teaser__dot" />
-            <div>
-              <p className="mk-ruta-teaser__label">Auditoría I</p>
-              <p className="mk-ruta-teaser__sub">Completada</p>
-            </div>
+      <AppReveal active={entrance} delay={0}>
+        <section className="mk-section">
+          <p className="mk-section-eyebrow">RESUMEN DEL SISTEMA</p>
+          <div className="sys-pillars">
+            {PILLARS.map((pillar) => (
+              <div key={pillar.key} className="sys-pillar-card">
+                <span className="sys-pillar-card__icon">
+                  <AppIcon name={pillar.icon} size={20} />
+                </span>
+                <span className="sys-pillar-card__label">{pillar.label}</span>
+                <span className="sys-pillar-card__score">{pillarScores[pillar.key] ?? '—'}</span>
+              </div>
+            ))}
           </div>
-          {['Auditoría II', 'Auditoría III', 'Blueprint 90 días'].map((name) => (
-            <div key={name} className="mk-ruta-teaser__item mk-ruta-teaser__item--locked">
-              <div className="mk-ruta-teaser__dot mk-ruta-teaser__dot--locked" />
+        </section>
+      </AppReveal>
+
+      <AppReveal active={entrance} delay={stagger}>
+        <section className="mk-section">
+          <p className="mk-section-eyebrow">ÍNDICES</p>
+          <div className="mk-kpi-strip">
+            <KpiCard label={PRESENTATION_INDICES.alineacion.label}  value={alineacion}  isGlobal animateEntrance={entrance} />
+            <KpiCard label={PRESENTATION_INDICES.profundidad.label} value={profundidad} animateEntrance={entrance} />
+            <KpiCard label={PRESENTATION_INDICES.ejecucion.label}   value={execution} animateEntrance={entrance} />
+            <KpiCard label={PRESENTATION_INDICES.estabilidad.label} value={stability} animateEntrance={entrance} />
+          </div>
+        </section>
+      </AppReveal>
+
+      <AppReveal active={entrance} delay={stagger * 2}>
+        <section className="mk-section">
+          <p className="mk-section-eyebrow">PERFIL DE DIMENSIONES</p>
+          <div className="mk-radar-card">
+            <RadarProfile scores={scores} />
+          </div>
+        </section>
+      </AppReveal>
+
+      <AppReveal active={entrance} delay={stagger * 3}>
+        <section className="mk-sombra-card">
+          <div className="mk-sombra-card__header">
+            <p className="mk-section-eyebrow" style={{ color: 'rgba(255,80,80,0.7)' }}>LA SOMBRA</p>
+            <span className="mk-sombra-card__score">{shadowScore}</span>
+          </div>
+          <p className="mk-sombra-card__text">
+            {shadowScore < 30
+              ? 'Sombra contenida: buena conciencia de tus patrones.'
+              : shadowScore < 60
+              ? 'Sombra activa: algunos patrones están limitando tu potencial.'
+              : 'Sombra dominante: tu cuello de botella más crítico.'}
+          </p>
+          <div className="mk-sombra-card__track">
+            <div className="mk-sombra-card__fill" style={{ width: `${Math.min(100, shadowScore)}%` }} />
+          </div>
+        </section>
+      </AppReveal>
+
+      <AppReveal active={entrance} delay={stagger * 4}>
+        <section className="mk-section">
+          <p className="mk-section-eyebrow">RUTA MK</p>
+          <div className="mk-ruta-teaser">
+            <div className="mk-ruta-teaser__item mk-ruta-teaser__item--done">
+              <div className="mk-ruta-teaser__dot" />
               <div>
-                <p className="mk-ruta-teaser__label">{name}</p>
-                <p className="mk-ruta-teaser__sub">Pendiente aprobación</p>
+                <p className="mk-ruta-teaser__label">Auditoría I</p>
+                <p className="mk-ruta-teaser__sub">Completada</p>
               </div>
             </div>
-          ))}
-        </div>
-        <Link href="/ruta" className="mk-btn-ghost">Ver ruta completa →</Link>
-      </section>
+            {['Auditoría II', 'Auditoría III', 'Blueprint 90 días'].map((name) => (
+              <div key={name} className="mk-ruta-teaser__item mk-ruta-teaser__item--locked">
+                <div className="mk-ruta-teaser__dot mk-ruta-teaser__dot--locked" />
+                <div>
+                  <p className="mk-ruta-teaser__label">{name}</p>
+                  <p className="mk-ruta-teaser__sub">Pendiente aprobación</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <Link href="/ruta" className="mk-btn-ghost">Ver ruta completa →</Link>
+        </section>
+      </AppReveal>
 
-      {/* Deep-dive CTA */}
-      <Link href="/perfil" className="mk-btn-primary" style={{ textAlign: 'center' }}>
-        Ver mi perfil completo →
-      </Link>
+      <AppReveal active={entrance} delay={stagger * 5}>
+        <Link href="/perfil" className="mk-btn-primary" style={{ textAlign: 'center' }}>
+          Ver mi perfil completo →
+        </Link>
+      </AppReveal>
     </div>
   );
 }
 
 // ── Founder / early access ───────────────────────────────────────────────────
 
-function FounderAccessDashboard({ email }: { email: string }) {
+function FounderAccessDashboard({ email, entrance }: { email: string; entrance: boolean }) {
   return (
     <div className="mk-dashboard">
-      <div className="mk-progress-hero">
-        <p className="mk-section-eyebrow">PROGRAMA FUNDADOR</p>
-        <h2 className="mk-progress-hero__title">Acceso anticipado.</h2>
-        <p className="mk-progress-hero__sub">
-          Tu lugar está reservado{email ? ` (${email})` : ''}. El diagnóstico, el Perfil Maestro y
-          la Ruta se activan cuando lancemos la webapp y la app móvil juntas. Serás de los primeros
-          en entrar.
-        </p>
-        <Link href="/sistema" className="mk-btn-primary">
-          Explorar el sistema →
-        </Link>
-        <p className="mk-progress-hero__sub" style={{ marginTop: '1rem' }}>
-          <Link href="/marco-central" style={{ color: 'rgba(255,255,255,0.55)', textDecoration: 'underline' }}>
-            Ver el Marco Central
+      <AppReveal active={entrance}>
+        <div className="mk-progress-hero">
+          <p className="mk-section-eyebrow">PROGRAMA FUNDADOR</p>
+          <h2 className="mk-progress-hero__title">Acceso anticipado.</h2>
+          <p className="mk-progress-hero__sub">
+            Tu lugar está reservado{email ? ` (${email})` : ''}. El diagnóstico, el Perfil Maestro y
+            la Ruta se activan cuando lancemos la webapp y la app móvil juntas. Serás de los primeros
+            en entrar.
+          </p>
+          <Link href="/sistema" className="mk-btn-primary">
+            Explorar el sistema →
           </Link>
-        </p>
-      </div>
+          <p className="mk-progress-hero__sub" style={{ marginTop: '1rem' }}>
+            <Link href="/marco-central" style={{ color: 'rgba(255,255,255,0.55)', textDecoration: 'underline' }}>
+              Ver el Marco Central
+            </Link>
+          </p>
+        </div>
+      </AppReveal>
     </div>
   );
 }
@@ -251,6 +268,7 @@ export function InicioDashboard() {
   const [progress, setProgress] = useState<DiagnosticProgressDto>(null);
   const [profile,  setProfile]  = useState<MasterProfileDto>(null);
   const [loaded,   setLoaded]   = useState(false);
+  const { shouldAnimate: entrance } = useAppEntranceOnce();
 
   useEffect(() => {
     if (status !== 'authenticated' || !user) return;
@@ -294,8 +312,8 @@ export function InicioDashboard() {
   const step = user?.onboardingStep ?? 'TERMS_PENDING';
 
   if (isFounderAccessPhase()) {
-    if (profile) return <ProfileDashboard profile={profile} />;
-    return <FounderAccessDashboard email={user?.email ?? ''} />;
+    if (profile) return <ProfileDashboard profile={profile} entrance={entrance} />;
+    return <FounderAccessDashboard email={user?.email ?? ''} entrance={entrance} />;
   }
 
   if (DIAGNOSTIC_IN_PROGRESS_STEPS.has(step)) {
@@ -303,7 +321,7 @@ export function InicioDashboard() {
   }
 
   if (profile) {
-    return <ProfileDashboard profile={profile} />;
+    return <ProfileDashboard profile={profile} entrance={entrance} />;
   }
 
   // Recovery or unknown state

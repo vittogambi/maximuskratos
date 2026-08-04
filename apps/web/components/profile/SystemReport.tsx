@@ -2,7 +2,10 @@
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { AppIcon } from '@/components/app-icon';
+import { AppReveal } from '@/components/motion/app-reveal';
+import { MotionNumber } from '@/components/motion/motion-number';
 import {
   areasNeedingStrength,
   computeDomainScores,
@@ -19,6 +22,8 @@ import {
 } from '@/lib/mk-system';
 import { ScoreBar } from '@/components/profile/ScoreBar';
 import { SystemMap } from '@/components/profile/SystemMap';
+
+const PROFILE_VIEW_KEY = 'mk_profile_indices_seen';
 
 const RadarProfile = dynamic(
   () => import('@/components/charts/RadarProfile').then((m) => ({ default: m.RadarProfile })),
@@ -89,6 +94,20 @@ export function SystemReport({ scores, indices, archetype, secondaryArchetype }:
   const estabilidad = Math.round(indices[PRESENTATION_INDICES.estabilidad.sourceKey] ?? 0);
   const shadowScore = Math.round(scores.shadow ?? 0);
   const cls = classify(alineacion);
+  const [firstView, setFirstView] = useState(false);
+
+  useEffect(() => {
+    try {
+      if (localStorage.getItem(PROFILE_VIEW_KEY)) {
+        setFirstView(false);
+        return;
+      }
+      localStorage.setItem(PROFILE_VIEW_KEY, '1');
+      setFirstView(true);
+    } catch {
+      setFirstView(false);
+    }
+  }, []);
 
   const pillarScores = computePillarScores(scores);
   const domainScores = computeDomainScores(scores);
@@ -112,6 +131,7 @@ export function SystemReport({ scores, indices, archetype, secondaryArchetype }:
   return (
     <div className="sys-report">
       {/* Encabezado: clasificación + índices de Alineación y Profundidad */}
+      <AppReveal active={firstView}>
       <section className="sys-header">
         <div className="sys-header__top">
           <p className="dk-result-eyebrow">PERFIL MAESTRO MK</p>
@@ -122,29 +142,34 @@ export function SystemReport({ scores, indices, archetype, secondaryArchetype }:
         <p className="sys-header__title">{cls.title}</p>
         <div className="sys-header__indices">
           <div className="sys-index" style={{ '--cls-color': cls.color } as React.CSSProperties}>
-            <span className="sys-index__value">{alineacion}</span>
+            <span className="sys-index__value">
+              {firstView ? <MotionNumber to={alineacion} startWhen="mount" /> : alineacion}
+            </span>
             <span className="sys-index__label">Índice de Alineación</span>
           </div>
           <div className="sys-index">
-            <span className="sys-index__value">{profundidad}</span>
+            <span className="sys-index__value">
+              {firstView ? <MotionNumber to={profundidad} startWhen="mount" /> : profundidad}
+            </span>
             <span className="sys-index__label">Índice de Profundidad</span>
           </div>
         </div>
         <div className="dk-indices-row">
           <div className="dk-index-item">
             <span className="dk-index-item__value" style={{ color: ejecucion >= 60 ? '#cc0000' : '#444' }}>
-              {ejecucion}
+              {firstView ? <MotionNumber to={ejecucion} startWhen="mount" /> : ejecucion}
             </span>
             <span className="dk-index-item__label">EJECUCIÓN</span>
           </div>
           <div className="dk-index-item">
             <span className="dk-index-item__value" style={{ color: estabilidad >= 60 ? '#cc0000' : '#444' }}>
-              {estabilidad}
+              {firstView ? <MotionNumber to={estabilidad} startWhen="mount" /> : estabilidad}
             </span>
             <span className="dk-index-item__label">ESTABILIDAD</span>
           </div>
         </div>
       </section>
+      </AppReveal>
 
       {/* Resultado por pilar */}
       <section className="dk-result-section">

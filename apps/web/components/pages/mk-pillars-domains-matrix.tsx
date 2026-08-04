@@ -1,8 +1,23 @@
 'use client';
 
 import { useId, useRef, useState, type KeyboardEvent } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import {
+  AnimatePresence,
+  motion,
+  useInView,
+  useReducedMotion,
+} from 'motion/react';
 import { AppIcon } from '@/components/app-icon';
+import {
+  MOTION_DISTANCE,
+  MOTION_DURATION,
+  MOTION_EASE,
+  MOTION_STAGGER,
+  MOTION_VIEWPORT,
+  getBoundedStagger,
+  interactionChevronTransition,
+  interactionContentTransition,
+} from '@/components/motion/tokens';
 import { cn } from '@/lib/cn';
 import {
   DOMAINS,
@@ -31,10 +46,28 @@ export function MkPillarsDomainsMatrix({
 }: MkPillarsDomainsMatrixProps) {
   const baseId = useId();
   const reduceMotion = useReducedMotion();
+  const stageRef = useRef<HTMLDivElement>(null);
+  const assembled = useInView(stageRef, {
+    once: true,
+    amount: 0.25,
+    margin: MOTION_VIEWPORT.margin,
+  });
   const [activeDomain, setActiveDomain] = useState<DomainKey>('mentalidad');
   const [activePillar, setActivePillar] = useState<PillarKey>('espiritu');
   const [openMobileDomain, setOpenMobileDomain] = useState<DomainKey | null>('mentalidad');
   const cellRefs = useRef(new Map<string, HTMLButtonElement>());
+  const cellCount = PILLARS.length * DOMAINS.length;
+  const cellStagger = getBoundedStagger(cellCount, MOTION_STAGGER.tight, MOTION_STAGGER.maxTail);
+
+  function assembleTransition(delay: number) {
+    if (reduceMotion) return { duration: 0 };
+    return {
+      type: 'tween' as const,
+      duration: MOTION_DURATION.reveal,
+      ease: MOTION_EASE.enter,
+      delay,
+    };
+  }
 
   const activeContribution =
     INTEGRATION_EXAMPLES.find((item) => item.domain === activeDomain)?.contributions[activePillar] ??
@@ -83,9 +116,27 @@ export function MkPillarsDomainsMatrix({
         <p className="ag-mk-matrix__distinction font-body-md">{MODEL_DISTINCTION}</p>
       ) : null}
 
-      <div className="ag-mk-matrix__stage">
-        <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
-        <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
+      <motion.div
+        ref={stageRef}
+        className="ag-mk-matrix__stage"
+        initial={reduceMotion ? false : { opacity: 0.92 }}
+        animate={assembled || reduceMotion ? { opacity: 1 } : { opacity: 0.92 }}
+        transition={assembleTransition(0)}
+      >
+        <motion.span
+          className="ag-panel__corner ag-panel__corner--tl"
+          aria-hidden
+          initial={reduceMotion ? false : { opacity: 0, scale: 0.6 }}
+          animate={assembled || reduceMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.6 }}
+          transition={assembleTransition(0)}
+        />
+        <motion.span
+          className="ag-panel__corner ag-panel__corner--br"
+          aria-hidden
+          initial={reduceMotion ? false : { opacity: 0, scale: 0.6 }}
+          animate={assembled || reduceMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.6 }}
+          transition={assembleTransition(0.06)}
+        />
         <div className="ag-mk-matrix__ambient" aria-hidden />
 
         <div
@@ -93,34 +144,60 @@ export function MkPillarsDomainsMatrix({
           role="grid"
           aria-label="Matriz de relación entre pilares y ámbitos"
         >
-          <div className="ag-mk-matrix__corner" role="columnheader">
+          <motion.div
+            className="ag-mk-matrix__corner"
+            role="columnheader"
+            initial={reduceMotion ? false : { opacity: 0 }}
+            animate={assembled || reduceMotion ? { opacity: 1 } : { opacity: 0 }}
+            transition={assembleTransition(0.08)}
+          >
             <AppIcon name="crosshair" size={16} className="ag-mk-matrix__corner-icon" />
-          </div>
+          </motion.div>
 
-          {DOMAINS.map((domain) => (
-            <div
+          {DOMAINS.map((domain, domainHeadIndex) => (
+            <motion.button
               key={`head-${domain.key}`}
+              type="button"
               role="columnheader"
               className={cn(
                 'ag-mk-matrix__domain-head',
                 activeDomain === domain.key && 'is-active',
               )}
+              aria-pressed={activeDomain === domain.key}
+              onClick={() => selectCell(domain.key, activePillar)}
+              initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+              animate={
+                assembled || reduceMotion
+                  ? { opacity: 1, y: 0 }
+                  : { opacity: 0, y: 8 }
+              }
+              transition={assembleTransition(0.12 + domainHeadIndex * 0.04)}
             >
               <span className="ag-mk-matrix__domain-icon">
                 <AppIcon name={domain.icon} size={15} aria-hidden />
               </span>
               <span className="ag-mk-matrix__domain-label">{domain.label}</span>
-            </div>
+            </motion.button>
           ))}
 
           {PILLARS.flatMap((pillar, pillarIndex) => [
-            <div
+            <motion.button
               key={`row-${pillar.key}`}
+              type="button"
               role="rowheader"
               className={cn(
                 'ag-mk-matrix__pillar-head',
                 activePillar === pillar.key && 'is-active',
               )}
+              aria-pressed={activePillar === pillar.key}
+              onClick={() => selectCell(activeDomain, pillar.key)}
+              initial={reduceMotion ? false : { opacity: 0, x: -8 }}
+              animate={
+                assembled || reduceMotion
+                  ? { opacity: 1, x: 0 }
+                  : { opacity: 0, x: -8 }
+              }
+              transition={assembleTransition(0.22 + pillarIndex * 0.05)}
             >
               <span className="ag-mk-matrix__pillar-icon">
                 <AppIcon name={pillar.icon} size={15} aria-hidden />
@@ -129,18 +206,19 @@ export function MkPillarsDomainsMatrix({
                 <span className="ag-mk-matrix__pillar-label">{pillar.label}</span>
                 <span className="ag-mk-matrix__pillar-verb">{pillar.verb}</span>
               </div>
-            </div>,
+            </motion.button>,
             ...DOMAINS.map((domain, domainIndex) => {
               const isRow = activePillar === pillar.key;
               const isCol = activeDomain === domain.key;
               const isActive = isRow && isCol;
               const cellKey = `${domain.key}:${pillar.key}`;
+              const cellIndex = pillarIndex * DOMAINS.length + domainIndex;
               const text =
                 INTEGRATION_EXAMPLES.find((item) => item.domain === domain.key)?.contributions[
                   pillar.key
                 ] ?? '';
               return (
-                <button
+                <motion.button
                   key={cellKey}
                   ref={(node) => {
                     if (node) cellRefs.current.set(cellKey, node);
@@ -159,9 +237,12 @@ export function MkPillarsDomainsMatrix({
                   )}
                   onClick={() => selectCell(domain.key, pillar.key)}
                   onKeyDown={(event) => handleCellKeyDown(event, domainIndex, pillarIndex)}
+                  initial={reduceMotion ? false : { opacity: 0 }}
+                  animate={assembled || reduceMotion ? { opacity: 1 } : { opacity: 0 }}
+                  transition={assembleTransition(0.38 + cellIndex * cellStagger)}
                 >
                   <span className="ag-mk-matrix__cell-text">{text}</span>
-                </button>
+                </motion.button>
               );
             }),
           ])}
@@ -173,10 +254,10 @@ export function MkPillarsDomainsMatrix({
               <motion.div
                 key={`${activePillar}:${activeDomain}`}
                 className="ag-mk-matrix__detail-inner"
-                initial={reduceMotion ? undefined : { opacity: 0, y: 6 }}
+                initial={reduceMotion ? false : { opacity: 0, y: MOTION_DISTANCE.micro }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={reduceMotion ? undefined : { opacity: 0, y: -6 }}
-                transition={{ duration: reduceMotion ? 0 : 0.2, ease: [0.2, 0.8, 0.2, 1] }}
+                exit={reduceMotion ? undefined : { opacity: 0, y: -MOTION_DISTANCE.micro }}
+                transition={reduceMotion ? { duration: 0 } : interactionContentTransition}
               >
                 <div className="ag-mk-matrix__detail-badges">
                   <span className="ag-mk-matrix__detail-badge ag-mk-matrix__detail-badge--pillar">
@@ -226,34 +307,50 @@ export function MkPillarsDomainsMatrix({
                       <span className="ag-mk-matrix__acc-q">{domain.question}</span>
                     </span>
                   </span>
-                  <AppIcon name="chevron-down" size={16} className="ag-mk-matrix__acc-chevron" />
+                  <motion.span
+                    className="ag-mk-matrix__acc-chevron"
+                    animate={{ rotate: open ? 180 : 0 }}
+                    transition={reduceMotion ? { duration: 0 } : interactionChevronTransition}
+                    aria-hidden
+                  >
+                    <AppIcon name="chevron-down" size={16} />
+                  </motion.span>
                 </button>
-                <div
-                  id={panelId}
-                  className={cn('ag-mk-matrix__acc-panel', open && 'is-open')}
-                  hidden={!open}
-                >
-                  <p className="ag-mk-matrix__acc-distinction font-body-sm">{domain.distinction}</p>
-                  <ul className="ag-mk-matrix__acc-list">
-                    {PILLARS.map((pillar) => (
-                      <li key={pillar.key} className="ag-mk-matrix__acc-item">
-                        <span className="ag-mk-matrix__acc-pillar">
-                          <span className="ag-mk-matrix__acc-pillar-name">
-                            <AppIcon name={pillar.icon} size={12} aria-hidden />
-                            {pillar.label}
-                          </span>
-                          <em>{pillar.verb}</em>
-                        </span>
-                        <p className="font-body-md">{example?.contributions[pillar.key]}</p>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <AnimatePresence initial={false}>
+                  {open ? (
+                    <motion.div
+                      id={panelId}
+                      className="ag-mk-matrix__acc-panel is-open"
+                      initial={reduceMotion ? false : { height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={reduceMotion ? undefined : { height: 0, opacity: 0 }}
+                      transition={reduceMotion ? { duration: 0 } : interactionContentTransition}
+                      style={{ overflow: 'hidden' }}
+                    >
+                      <ul className="ag-mk-matrix__acc-list">
+                        {PILLARS.map((pillar) => (
+                          <li key={pillar.key} className="ag-mk-matrix__acc-item">
+                            <span className="ag-mk-matrix__acc-pillar">
+                              <span className="ag-mk-matrix__acc-pillar-name">
+                                <span className="ag-mk-matrix__acc-pillar-icon" aria-hidden>
+                                  <AppIcon name={pillar.icon} size={14} />
+                                </span>
+                                {pillar.label}
+                              </span>
+                              <em>{pillar.verb}</em>
+                            </span>
+                            <p className="font-body-md">{example?.contributions[pillar.key]}</p>
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
+                  ) : null}
+                </AnimatePresence>
               </div>
             );
           })}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

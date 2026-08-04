@@ -1,11 +1,17 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useReducedMotion } from 'motion/react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { AppIcon } from '@/components/app-icon';
 import { AuthCta } from '@/components/auth-cta';
 import { ScrollReveal } from '@/components/motion/scroll-reveal';
 import { ScrollStaggerContainer, StaggerItem } from '@/components/motion/stagger';
+import {
+  INTERACTION_SPRING,
+  MOTION_DISTANCE,
+  MOTION_STAGGER,
+  interactionContentTransition,
+} from '@/components/motion/tokens';
 import { FaqAccordionItem } from '@/components/pages/faq-accordion-item';
 import { SectionIntro } from '@/components/pages/section-intro';
 import { SubpageCta } from '@/components/pages/subpage-cta';
@@ -113,7 +119,7 @@ export function PreciosContent() {
         </div>
         <div className="ag-about-hero__scrim" aria-hidden />
         <div className="ag-about-hero__content ag-container relative z-10">
-          <ScrollReveal className="ag-about-hero__intro text-center" distance={16}>
+          <ScrollReveal className="ag-about-hero__intro text-center" density="spacious">
             <p className="hud-text text-action-red">PRECIOS</p>
             <h1 className="ag-about-hero__title ag-type-display text-white">
               Acceso anticipado de fundador.
@@ -139,7 +145,7 @@ export function PreciosContent() {
           ) : !selected ? (
             <p className="ag-precios-loading font-body-md text-center">No hay precios disponibles.</p>
           ) : (
-            <ScrollReveal className="ag-precios-offer" distance={14}>
+            <ScrollReveal className="ag-precios-offer" density="default">
               <div
                 className="ag-precios-freq"
                 role="radiogroup"
@@ -168,6 +174,16 @@ export function PreciosContent() {
                           &nbsp;
                         </span>
                       )}
+                      {active && !reduced ? (
+                        <motion.span
+                          layoutId="precios-freq-indicator"
+                          className="ag-precios-freq__indicator"
+                          transition={INTERACTION_SPRING}
+                          aria-hidden
+                        />
+                      ) : active ? (
+                        <span className="ag-precios-freq__indicator" aria-hidden />
+                      ) : null}
                     </button>
                   );
                 })}
@@ -176,45 +192,66 @@ export function PreciosContent() {
               <article className={`ag-precios-card${isTargetPlan(selected) ? ' is-target' : ''}`}>
                 <header className="ag-precios-card__head">
                   <p className="ag-precios-card__product hud-text text-action-red">MAXIMUS KRATOS</p>
-                  {isTargetPlan(selected) && selected.highlightLabel ? (
-                    <p className="ag-precios-card__nudge">{selected.highlightLabel}</p>
-                  ) : (
-                    <p className="ag-precios-card__nudge ag-precios-card__nudge--quiet">
-                      {formatPeriod(selected.periodMonths)}
-                    </p>
-                  )}
                 </header>
 
-                <div className="ag-precios-card__amount">
-                  {showAnchor && monthlyAnchor ? (
-                    <p className="ag-precios-card__compare font-body-md">
-                      Antes{' '}
-                      <span className="ag-precios-card__anchor">
-                        {formatCurrency(monthlyAnchor.monthlyEquivalent, monthlyAnchor.currency)}/mes
-                      </span>
-                    </p>
-                  ) : null}
-                  <p className="ag-precios-card__price">
-                    {formatCurrency(selected.monthlyEquivalent, selected.currency)}
-                    <span className="ag-precios-card__period">/mes</span>
-                  </p>
-                </div>
+                <div className="ag-precios-card__dynamic-slot">
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={selected.id}
+                    className="ag-precios-card__dynamic"
+                    initial={reduced ? false : { opacity: 0, y: MOTION_DISTANCE.micro }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={reduced ? undefined : { opacity: 0, y: -MOTION_DISTANCE.micro }}
+                    transition={reduced ? { duration: 0 } : interactionContentTransition}
+                  >
+                    {isTargetPlan(selected) && selected.highlightLabel ? (
+                      <p className="ag-precios-card__nudge">{selected.highlightLabel}</p>
+                    ) : (
+                      <p className="ag-precios-card__nudge ag-precios-card__nudge--quiet">
+                        {formatPeriod(selected.periodMonths)}
+                      </p>
+                    )}
 
-                <div className="ag-precios-card__meta">
-                  <p className="ag-precios-card__bill font-body-md">
-                    {formatCurrency(selected.priceAmount, selected.currency)}{' '}
-                    {formatBillingCadence(selected.periodMonths).toLowerCase()}.
-                  </p>
-                  {savings > 0 && monthlyAnchor ? (
-                    <p className="ag-precios-card__savings font-body-md">
-                      Ahorras {formatCurrency(savings, selected.currency)} en el plazo vs pagar mes a
-                      mes.
-                    </p>
-                  ) : (
-                    <p className="ag-precios-card__savings ag-precios-card__savings--muted font-body-md">
-                      Flexibilidad máxima. Sin descuento por adelanto.
-                    </p>
-                  )}
+                    <div className="ag-precios-card__amount">
+                      <p
+                        className={`ag-precios-card__compare font-body-md${showAnchor && monthlyAnchor ? '' : ' is-empty'}`}
+                      >
+                        {showAnchor && monthlyAnchor ? (
+                          <>
+                            Antes{' '}
+                            <span className="ag-precios-card__anchor">
+                              {formatCurrency(
+                                monthlyAnchor.monthlyEquivalent,
+                                monthlyAnchor.currency,
+                              )}
+                              /mes
+                            </span>
+                          </>
+                        ) : (
+                          <span aria-hidden>Antes $0/mes</span>
+                        )}
+                      </p>
+                      <p className="ag-precios-card__price">
+                        {formatCurrency(selected.monthlyEquivalent, selected.currency)}
+                        <span className="ag-precios-card__period">/mes</span>
+                      </p>
+                    </div>
+
+                    <div className="ag-precios-card__meta">
+                      <p className="ag-precios-card__bill font-body-md">
+                        {formatCurrency(selected.priceAmount, selected.currency)}{' '}
+                        {formatBillingCadence(selected.periodMonths).toLowerCase()}.
+                      </p>
+                      <p
+                        className={`ag-precios-card__savings font-body-md${savings > 0 ? '' : ' ag-precios-card__savings--muted'}`}
+                      >
+                        {savings > 0 && monthlyAnchor
+                          ? `Ahorras ${formatCurrency(savings, selected.currency)} en el plazo vs pagar mes a mes.`
+                          : 'Flexibilidad máxima. Sin descuento por adelanto.'}
+                      </p>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
                 </div>
 
                 <ul className="ag-precios-card__benefits">
@@ -247,9 +284,13 @@ export function PreciosContent() {
             title="Sin letra chica."
             headingId="prueba-heading"
           />
-          <ol className="ag-base-bridge__list">
+          <ScrollStaggerContainer
+            className="ag-base-bridge__list"
+            stagger={MOTION_STAGGER.base}
+            itemCount={TRIAL_STEPS.length}
+          >
             {TRIAL_STEPS.map((step, index) => (
-              <ScrollReveal key={step.num} className="ag-base-bridge__item" distance={12}>
+              <StaggerItem key={step.num} className="ag-base-bridge__item" distance={MOTION_DISTANCE.sm + 2}>
                 <span className="ag-base-bridge__node" aria-hidden />
                 <p className="ag-base-bridge__step-num hud-text text-action-red">{step.num}</p>
                 {index < TRIAL_STEPS.length - 1 ? (
@@ -259,9 +300,9 @@ export function PreciosContent() {
                   <h3 className="ag-base-bridge__title ag-type-item text-white">{step.title}</h3>
                   <p className="ag-base-bridge__body font-body-md">{step.body(trialDays)}</p>
                 </div>
-              </ScrollReveal>
+              </StaggerItem>
             ))}
-          </ol>
+          </ScrollStaggerContainer>
         </div>
       </section>
 
@@ -273,9 +314,13 @@ export function PreciosContent() {
             lead="Lo esencial antes de reservar tu acceso."
             headingId="precios-faq-heading"
           />
-          <ScrollStaggerContainer className="ag-faq-list" stagger={0.06}>
+          <ScrollStaggerContainer
+            className="ag-faq-list"
+            stagger={MOTION_STAGGER.base}
+            itemCount={faqItems.length}
+          >
             {faqItems.map((item, index) => (
-              <StaggerItem key={item.id} distance={10}>
+              <StaggerItem key={item.id} distance={MOTION_DISTANCE.sm}>
                 <FaqAccordionItem
                   id={`precios-${item.id}`}
                   question={item.question}

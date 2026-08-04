@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion, useReducedMotion } from 'motion/react';
+import { APP_MOTION, MOTION_EASE } from '@/components/motion/tokens';
 
 const TABS = [
   {
@@ -47,6 +49,7 @@ const TABS = [
 
 export function BottomTabBar() {
   const pathname = usePathname();
+  const reduced = useReducedMotion();
 
   return (
     <nav className="mk-bottom-tabs" aria-label="Navegación principal">
@@ -62,6 +65,19 @@ export function BottomTabBar() {
             className={`mk-tab${active ? ' mk-tab--active' : ''}`}
             aria-current={active ? 'page' : undefined}
           >
+            {active && !reduced ? (
+              <motion.span
+                className="mk-tab__indicator"
+                layoutId="mk-tab-indicator"
+                transition={{
+                  type: 'tween',
+                  duration: APP_MOTION.duration.interaction,
+                  ease: MOTION_EASE.standard,
+                }}
+              />
+            ) : active ? (
+              <span className="mk-tab__indicator" />
+            ) : null}
             <span className="mk-tab__icon">{tab.icon(active)}</span>
             <span className="mk-tab__label">{tab.label}</span>
           </Link>

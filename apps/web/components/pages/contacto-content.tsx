@@ -64,7 +64,7 @@ export function ContactoContent() {
 
         <div className="ag-container ag-contact-layout relative z-10">
           <div className="ag-contact-info">
-            <ScrollReveal distance={16}>
+            <ScrollReveal density="spacious">
               <p className="hud-text text-action-red">MK · CONTACTO</p>
               <h1 className="ag-contact-info__title ag-type-display text-white">Hablemos.</h1>
               <p className="ag-contact-info__lead font-body-lg">
@@ -73,7 +73,7 @@ export function ContactoContent() {
               </p>
             </ScrollReveal>
 
-            <ScrollReveal distance={12} delay={0.06}>
+            <ScrollReveal density="tight" delay={0.06}>
               <p className="hud-text ag-contact-info__reasons-label">Motivos de contacto</p>
               <div
                 className="ag-contact-intents"
@@ -110,7 +110,7 @@ export function ContactoContent() {
               </div>
             </ScrollReveal>
 
-            <ScrollReveal distance={10} delay={0.1}>
+            <ScrollReveal density="tight" delay={0.1}>
               <ul className="ag-contact-assurances">
                 {CONTACT_ASSURANCES.map((item) => (
                   <li key={item.text} className="ag-contact-assurances__item font-body-md">
@@ -122,7 +122,7 @@ export function ContactoContent() {
             </ScrollReveal>
           </div>
 
-          <ScrollReveal className="ag-contact-form-wrap" distance={14} delay={0.1}>
+          <ScrollReveal className="ag-contact-form-wrap" density="default" delay={0.1}>
             <div className="ag-panel ag-contact-form-panel">
               <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
               <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />

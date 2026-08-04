@@ -2,11 +2,20 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { AppIcon } from '@/components/app-icon';
 import { ArchetypePortrait } from '@/components/archetype/ArchetypePortrait';
 import { ScrollReveal } from '@/components/motion/scroll-reveal';
 import { ScrollStaggerContainer, StaggerItem } from '@/components/motion/stagger';
+import {
+  INTERACTION_SPRING,
+  MOTION_DISTANCE,
+  MOTION_DURATION,
+  MOTION_EASE,
+  MOTION_STAGGER,
+  interactionChevronTransition,
+  interactionContentTransition,
+} from '@/components/motion/tokens';
 import { SectionIntro } from '@/components/pages/section-intro';
 import { SubpageCta } from '@/components/pages/subpage-cta';
 import { PublicFaqSection } from '@/components/pages/public-faq-section';
@@ -60,7 +69,7 @@ function PillarCard({
           <motion.span
             className="ag-marco-pillar__chevron-wrap"
             animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: reduced ? 0 : 0.28, ease: [0.2, 0.8, 0.2, 1] }}
+            transition={reduced ? { duration: 0 } : interactionChevronTransition}
             aria-hidden
           >
             <AppIcon name="chevron-down" size={16} className="ag-marco-pillar__chevron" />
@@ -73,7 +82,14 @@ function PillarCard({
         aria-labelledby={`pillar-q-${card.num}`}
         initial={false}
         animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
-        transition={{ duration: reduced ? 0 : 0.32, ease: [0.2, 0.8, 0.2, 1] }}
+        transition={
+          reduced
+            ? { duration: 0 }
+            : {
+                duration: MOTION_DURATION.interaction + 0.06,
+                ease: MOTION_EASE.standard,
+              }
+        }
         style={{ overflow: 'hidden' }}
       >
         <div className="ag-marco-pillar__panel">
@@ -130,10 +146,14 @@ export function MarcoCentralContent() {
             headingId="arch-heading"
           />
 
-          <ScrollReveal className="ag-marco-flow" distance={14}>
-            <ol className="ag-marco-flow__list">
+          <div className="ag-marco-flow">
+            <ScrollStaggerContainer
+              className="ag-marco-flow__list"
+              stagger={MOTION_STAGGER.base}
+              itemCount={MARCO_STAGES.length}
+            >
               {MARCO_STAGES.map((stage, index) => (
-                <li key={stage.num} className="ag-marco-flow__item">
+                <StaggerItem key={stage.num} className="ag-marco-flow__item" distance={MOTION_DISTANCE.sm + 2}>
                   <div className="ag-marco-flow__rail" aria-hidden>
                     <span className="ag-marco-flow__num">{stage.num}</span>
                     {index < MARCO_STAGES.length - 1 ? (
@@ -153,10 +173,10 @@ export function MarcoCentralContent() {
                       Dentro de MK: {stage.platform}
                     </p>
                   </article>
-                </li>
+                </StaggerItem>
               ))}
-            </ol>
-          </ScrollReveal>
+            </ScrollStaggerContainer>
+          </div>
         </div>
       </section>
 
@@ -186,9 +206,13 @@ export function MarcoCentralContent() {
             headingId="pillars-heading"
           />
 
-          <ScrollStaggerContainer className="ag-marco-pillars__grid" stagger={0.05}>
+          <ScrollStaggerContainer
+            className="ag-marco-pillars__grid"
+            stagger={MOTION_STAGGER.base}
+            itemCount={MARCO_CARDS.length}
+          >
             {MARCO_CARDS.map((card, index) => (
-              <StaggerItem key={card.num} className="ag-marco-pillars__item" distance={10}>
+              <StaggerItem key={card.num} className="ag-marco-pillars__item" distance={MOTION_DISTANCE.sm}>
                 <PillarCard
                   card={card}
                   isOpen={openPillar === index}
@@ -213,7 +237,7 @@ export function MarcoCentralContent() {
             headingId="lenses-heading"
           />
 
-          <ScrollReveal className="ag-marco-lens" distance={14}>
+          <ScrollReveal className="ag-marco-lens" density="default">
             <div
               className="ag-marco-lens__grid"
               role="tablist"
@@ -233,6 +257,14 @@ export function MarcoCentralContent() {
                     className={`ag-marco-lens__card${selected ? ' ag-marco-lens__card--active' : ''}`}
                     onClick={() => setActiveArchetype(slug)}
                   >
+                    {selected && !reduced ? (
+                      <motion.span
+                        layoutId="marco-lens-indicator"
+                        className="ag-marco-lens__indicator"
+                        transition={INTERACTION_SPRING}
+                        aria-hidden
+                      />
+                    ) : null}
                     <span className="ag-marco-lens__media" aria-hidden>
                       <ArchetypePortrait
                         slug={slug}
@@ -258,37 +290,54 @@ export function MarcoCentralContent() {
               <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
               <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
 
-              <div className="ag-marco-lens__lead">
-                <p className="ag-marco-lens__function font-headline-sm">{archetype.tagline}</p>
-                <p className="ag-marco-lens__desc font-body-md">{archetype.description}</p>
-              </div>
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={activeArchetype}
+                  className="ag-marco-lens__panel-inner"
+                  initial={reduced ? false : { opacity: 0, y: MOTION_DISTANCE.micro }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={reduced ? undefined : { opacity: 0, y: -MOTION_DISTANCE.micro }}
+                  transition={reduced ? { duration: 0 } : interactionContentTransition}
+                >
+                  <div className="ag-marco-lens__lead">
+                    <p className="ag-marco-lens__function font-headline-sm">{archetype.tagline}</p>
+                    <p className="ag-marco-lens__desc font-body-md">{archetype.description}</p>
+                  </div>
 
-              <div className="ag-marco-lens__modules">
-                <article className="ag-marco-lens__module ag-marco-lens__module--balance">
-                  <span className="ag-marco-lens__module-icon" aria-hidden>
-                    <AppIcon name="circle-check" size={14} />
-                  </span>
-                  <span className="hud-text ag-marco-lens__kicker">En equilibrio</span>
-                  <p className="font-body-md">{archetype.balanced}</p>
-                </article>
-                {archetype.shadowPoles.map((pole) => (
-                  <article key={pole.label} className="ag-marco-lens__module ag-marco-lens__module--shadow">
-                    <span className="ag-marco-lens__module-icon ag-marco-lens__module-icon--shadow" aria-hidden>
-                      <AppIcon name="shadow" size={14} />
-                    </span>
-                    <span className="hud-text ag-marco-lens__kicker ag-marco-lens__kicker--shadow">
-                      Sombra · {pole.label}
-                    </span>
-                    <p className="font-body-md">{pole.description}</p>
-                  </article>
-                ))}
-              </div>
+                  <div className="ag-marco-lens__modules">
+                    <article className="ag-marco-lens__module ag-marco-lens__module--balance">
+                      <span className="ag-marco-lens__module-icon" aria-hidden>
+                        <AppIcon name="circle-check" size={14} />
+                      </span>
+                      <span className="hud-text ag-marco-lens__kicker">En equilibrio</span>
+                      <p className="font-body-md">{archetype.balanced}</p>
+                    </article>
+                    {archetype.shadowPoles.map((pole) => (
+                      <article
+                        key={pole.label}
+                        className="ag-marco-lens__module ag-marco-lens__module--shadow"
+                      >
+                        <span
+                          className="ag-marco-lens__module-icon ag-marco-lens__module-icon--shadow"
+                          aria-hidden
+                        >
+                          <AppIcon name="shadow" size={14} />
+                        </span>
+                        <span className="hud-text ag-marco-lens__kicker ag-marco-lens__kicker--shadow">
+                          Sombra · {pole.label}
+                        </span>
+                        <p className="font-body-md">{pole.description}</p>
+                      </article>
+                    ))}
+                  </div>
 
-              <p className="ag-marco-lens__platform font-body-sm">{archetype.platform}</p>
+                  <p className="ag-marco-lens__platform font-body-sm">{archetype.platform}</p>
+                </motion.div>
+              </AnimatePresence>
             </div>
           </ScrollReveal>
 
-          <ScrollReveal className="ag-marco-lens-close" distance={12}>
+          <ScrollReveal className="ag-marco-lens-close" density="tight">
             <p className="font-body-lg">
               El objetivo no es pertenecer a un solo arquetipo. El objetivo es reconocer qué
               capacidades están desarrolladas, cuáles permanecen ausentes y cuáles están siendo
@@ -308,7 +357,7 @@ export function MarcoCentralContent() {
             headingId="hdrp-heading"
           />
 
-          <ScrollReveal className="ag-marco-hdrp-body" distance={14}>
+          <ScrollReveal className="ag-marco-hdrp-body" density="default">
             <aside className="ag-marco-doc" aria-label="Contenido de la Hoja de Ruta">
               <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
               <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
@@ -318,9 +367,27 @@ export function MarcoCentralContent() {
               </div>
               <div className="ag-marco-doc__body">
                 <p className="ag-marco-doc__title font-headline-sm">Hoja de Ruta de Propósito</p>
-                <ul className="ag-marco-doc__blocks">
+                <div className="ag-marco-doc__route" aria-hidden>
+                  <motion.span
+                    className="ag-marco-doc__route-line"
+                    initial={reduced ? false : { scaleY: 0 }}
+                    whileInView={{ scaleY: 1 }}
+                    viewport={{ once: true, amount: 0.4 }}
+                    transition={{
+                      type: 'tween',
+                      duration: MOTION_DURATION.reveal,
+                      ease: MOTION_EASE.enter,
+                    }}
+                    style={{ transformOrigin: 'top center' }}
+                  />
+                </div>
+                <ScrollStaggerContainer
+                  className="ag-marco-doc__blocks"
+                  stagger={MOTION_STAGGER.tight}
+                  itemCount={HDRP_BLOCKS.length}
+                >
                   {HDRP_BLOCKS.map((block) => (
-                    <li key={block.title} className="ag-marco-doc__block">
+                    <StaggerItem key={block.title} className="ag-marco-doc__block" distance={MOTION_DISTANCE.sm}>
                       <span className="ag-marco-doc__block-icon" aria-hidden>
                         <AppIcon name={block.icon} size={15} />
                       </span>
@@ -328,9 +395,9 @@ export function MarcoCentralContent() {
                         <span className="ag-marco-doc__block-title">{block.title}</span>
                         <span className="ag-marco-doc__block-body font-body-md">{block.body}</span>
                       </span>
-                    </li>
+                    </StaggerItem>
                   ))}
-                </ul>
+                </ScrollStaggerContainer>
               </div>
             </aside>
           </ScrollReveal>
@@ -347,7 +414,7 @@ export function MarcoCentralContent() {
             headingId="action-heading"
           />
 
-          <ScrollReveal className="ag-marco-bridge__link" distance={10}>
+          <ScrollReveal className="ag-marco-bridge__link" density="tight">
             <Link href="/sistema" className="ag-marco-more__link font-label-lg">
               Ver cómo funciona la plataforma
               <AppIcon name="arrow-right" size={14} />

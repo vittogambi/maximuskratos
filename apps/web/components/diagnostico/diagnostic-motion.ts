@@ -1,7 +1,15 @@
-/** Shared motion tokens for the diagnostic player — aligned with globals.css + UX spec. */
-export const DIAGNOSTIC_EASE = [0.2, 0, 0, 1] as const;
-export const DIAGNOSTIC_EASE_OUT = [0.4, 0, 1, 1] as const;
-export const OPTION_STAGGER_S = 0.06;
+/**
+ * Diagnostic player motion — choreography kept, eases/durations from shared tokens.
+ */
+import {
+  MOTION_DURATION,
+  MOTION_EASE,
+  MOTION_STAGGER,
+} from '@/components/motion/tokens';
+
+export const DIAGNOSTIC_EASE = MOTION_EASE.enter;
+export const DIAGNOSTIC_EASE_OUT = MOTION_EASE.exit;
+export const OPTION_STAGGER_S = MOTION_STAGGER.tight;
 
 export const questionScreenVariants = {
   initial: { opacity: 0, y: 16 },
@@ -13,7 +21,7 @@ export const questionScreenVariants = {
   exit: {
     opacity: 0,
     y: -12,
-    transition: { duration: 0.22, ease: DIAGNOSTIC_EASE_OUT },
+    transition: { duration: MOTION_DURATION.micro, ease: DIAGNOSTIC_EASE_OUT },
   },
 };
 
@@ -26,14 +34,17 @@ export const moduleIntroVariants = {
   exit: {
     opacity: 0,
     y: -8,
-    transition: { duration: 0.28, ease: DIAGNOSTIC_EASE_OUT },
+    transition: { duration: MOTION_DURATION.interaction, ease: DIAGNOSTIC_EASE_OUT },
   },
 };
 
 export const introStaggerContainer = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.08, delayChildren: 0.04 },
+    transition: {
+      staggerChildren: MOTION_STAGGER.base,
+      delayChildren: 0.04,
+    },
   },
 };
 
@@ -51,7 +62,7 @@ export const introIconItem = {
   show: {
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.45, ease: [0.2, 0.8, 0.2, 1] as const },
+    transition: { duration: 0.45, ease: MOTION_EASE.standard },
   },
 };
 
@@ -67,7 +78,7 @@ export const optionListItem = {
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.3, ease: DIAGNOSTIC_EASE },
+    transition: { duration: MOTION_DURATION.interaction, ease: DIAGNOSTIC_EASE },
   },
 };
 
@@ -83,7 +94,10 @@ export const outroBodyVariants = {
 export const outroStaggerContainer = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.1, delayChildren: 0.06 },
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: MOTION_STAGGER.delayChildren,
+    },
   },
 };
 
@@ -111,6 +125,6 @@ export const reasonBoxVariants = {
     opacity: 1,
     height: 'auto',
     marginTop: '1.25rem',
-    transition: { duration: 0.3, ease: DIAGNOSTIC_EASE },
+    transition: { duration: MOTION_DURATION.interaction, ease: DIAGNOSTIC_EASE },
   },
 };

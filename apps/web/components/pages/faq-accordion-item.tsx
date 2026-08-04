@@ -3,6 +3,12 @@
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import { AppIcon } from '@/components/app-icon';
+import {
+  MOTION_DISTANCE,
+  MOTION_DURATION,
+  MOTION_EASE,
+  interactionChevronTransition,
+} from '@/components/motion/tokens';
 
 type FaqAccordionItemProps = {
   id: string;
@@ -40,7 +46,7 @@ export function FaqAccordionItem({
           <motion.span
             className="ag-faq-item__chevron-wrap"
             animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: reduced ? 0 : 0.28, ease: [0.2, 0.8, 0.2, 1] }}
+            transition={reduced ? { duration: 0 } : interactionChevronTransition}
             aria-hidden
           >
             <AppIcon name="chevron-down" size={18} className="ag-faq-item__chevron" />
@@ -56,19 +62,40 @@ export function FaqAccordionItem({
           height: isOpen ? 'auto' : 0,
           opacity: isOpen ? 1 : 0,
         }}
-        transition={{
-          duration: reduced ? 0 : 0.32,
-          ease: [0.2, 0.8, 0.2, 1],
-        }}
+        transition={
+          reduced
+            ? { duration: 0 }
+            : {
+                duration: MOTION_DURATION.interaction + 0.06,
+                ease: MOTION_EASE.standard,
+              }
+        }
         style={{ overflow: 'hidden' }}
       >
-        <p className="ag-faq-item__answer-text font-body-md">{answer}</p>
-        {link ? (
-          <Link href={link.href} className="ag-inline-link font-label-md">
-            {link.label}
-            <AppIcon name="arrow-right" size={14} />
-          </Link>
-        ) : null}
+        <motion.div
+          initial={false}
+          animate={
+            reduced || isOpen
+              ? { opacity: 1, y: 0 }
+              : { opacity: 0, y: MOTION_DISTANCE.micro }
+          }
+          transition={
+            reduced
+              ? { duration: 0 }
+              : {
+                  duration: MOTION_DURATION.interaction,
+                  ease: MOTION_EASE.standard,
+                }
+          }
+        >
+          <p className="ag-faq-item__answer-text font-body-md">{answer}</p>
+          {link ? (
+            <Link href={link.href} className="ag-inline-link font-label-md">
+              {link.label}
+              <AppIcon name="arrow-right" size={14} />
+            </Link>
+          ) : null}
+        </motion.div>
       </motion.div>
     </article>
   );

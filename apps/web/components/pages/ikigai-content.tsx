@@ -5,6 +5,7 @@ import { AppIcon } from '@/components/app-icon';
 import type { AppIconName } from '@/components/icons/registry';
 import { ScrollReveal } from '@/components/motion/scroll-reveal';
 import { ScrollStaggerContainer, StaggerItem } from '@/components/motion/stagger';
+import { MOTION_DISTANCE, MOTION_STAGGER } from '@/components/motion/tokens';
 import { SectionIntro } from '@/components/pages/section-intro';
 import { SubpageCta } from '@/components/pages/subpage-cta';
 import { LANDING_IMAGES } from '@/lib/assets';
@@ -185,7 +186,7 @@ export function IkigaiContent() {
         </div>
         <div className="ag-about-hero__scrim" aria-hidden />
         <div className="ag-about-hero__content ag-container relative z-10">
-          <ScrollReveal className="ag-about-hero__intro text-center" distance={16}>
+          <ScrollReveal className="ag-about-hero__intro text-center" density="spacious">
             <p className="hud-text text-action-red">ESPÍRITU</p>
             <h1 className="ag-about-hero__title ag-type-display text-white">IKIGAI: tu razón de ser.</h1>
             <p className="ag-about-hero__origin font-body-lg">
@@ -206,7 +207,7 @@ export function IkigaiContent() {
             lead="Una persona puede ser disciplinada, productiva y competente sin saber hacia qué está dirigiendo esa capacidad."
             headingId="why-heading"
           />
-          <ScrollReveal className="ag-ikigai-why" distance={12}>
+          <ScrollReveal className="ag-ikigai-why" density="default">
             <p className="hud-text text-action-red ag-ikigai-why__lead">Cuando falta un eje de propósito</p>
             <ol className="ag-ikigai-why__list">
               {WHY_POINTS.map((point, index) => (
@@ -244,7 +245,7 @@ export function IkigaiContent() {
             lead="El IKIGAI se construye contrastando actividades reales desde cuatro perspectivas. No se trata de imaginar conceptos abstractos, sino de observar dónde tu experiencia comienza a mostrar coincidencias."
             headingId="campos-heading"
           />
-          <ScrollReveal className="ag-ikigai-diagram-wrap" distance={14}>
+          <ScrollReveal className="ag-ikigai-diagram-wrap" density="default">
             <figure className="ag-ikigai-diagram">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -259,9 +260,13 @@ export function IkigaiContent() {
               </figcaption>
             </figure>
           </ScrollReveal>
-          <ScrollStaggerContainer className="ag-ikigai-fields" stagger={0.07}>
+          <ScrollStaggerContainer
+            className="ag-ikigai-fields"
+            stagger={MOTION_STAGGER.base}
+            itemCount={IKIGAI_FIELDS.length}
+          >
             {IKIGAI_FIELDS.map((field) => (
-              <StaggerItem key={field.num} distance={12}>
+              <StaggerItem key={field.num} distance={MOTION_DISTANCE.sm + 2}>
                 <article className="ag-ikigai-field">
                   <div className="ag-ikigai-field__head">
                     <span className="ag-ikigai-field__num font-display-xl" aria-hidden>
@@ -278,7 +283,7 @@ export function IkigaiContent() {
               </StaggerItem>
             ))}
           </ScrollStaggerContainer>
-          <ScrollReveal className="ag-ikigai-section-close" distance={10}>
+          <ScrollReveal className="ag-ikigai-section-close" density="tight">
             <p className="font-body-lg">
               El centro no siempre aparece como una respuesta perfecta. A veces aparece como una
               dirección suficientemente sólida para comenzar a probar.
@@ -296,7 +301,7 @@ export function IkigaiContent() {
             lead="El IKIGAI pertenece al pilar Espíritu. Responde a la pregunta que da sentido a las demás capacidades: ¿por qué vale la pena utilizar tu mente, tu cuerpo, tu tiempo y tus recursos?"
             headingId="place-heading"
           />
-          <ScrollReveal className="ag-ikigai-place" distance={14}>
+          <ScrollReveal className="ag-ikigai-place" density="default">
             <p className="font-body-md ag-ikigai-place__intro">
               No funciona solo. Se lee junto al resto de pilares del Espíritu: del linaje a la huella.
             </p>
@@ -329,7 +334,7 @@ export function IkigaiContent() {
             lead="Las cuatro dimensiones deben observarse juntas. Una sola no basta para sostener una dirección."
             headingId="tension-heading"
           />
-          <ScrollReveal className="ag-ikigai-tensions" distance={14}>
+          <ScrollReveal className="ag-ikigai-tensions" density="default">
             <ol className="ag-ikigai-tensions__list">
               {TENSIONS.map((item, index) => (
                 <li key={item.title} className="ag-ikigai-tensions__item">
@@ -359,7 +364,7 @@ export function IkigaiContent() {
             title="Antes de construirlo, conviene eliminar algunas confusiones."
             headingId="no-es-heading"
           />
-          <ScrollReveal className="ag-ikigai-not" distance={12}>
+          <ScrollReveal className="ag-ikigai-not" density="default">
             <ul className="ag-ikigai-not__list">
               {IKIGAI_NOT.map((item) => (
                 <li key={item.title} className="ag-ikigai-not__item">
@@ -381,15 +386,19 @@ export function IkigaiContent() {
             lead="El sistema ayuda a construir, ordenar, contrastar e integrar una dirección. No entrega una revelación instantánea."
             headingId="proceso-heading"
           />
-          <ol className="ag-about-journey">
+          <ScrollStaggerContainer
+            className="ag-about-journey"
+            stagger={MOTION_STAGGER.base}
+            itemCount={IKIGAI_PROCESS.length}
+          >
             {IKIGAI_PROCESS.map((step) => (
-              <ScrollReveal key={step.num} className="ag-about-journey__step" distance={12}>
+              <StaggerItem key={step.num} className="ag-about-journey__step" distance={MOTION_DISTANCE.sm + 2}>
                 <span className="ag-about-journey__num hud-text">{step.num}</span>
                 <h3 className="ag-about-journey__title">{step.title}</h3>
                 <p className="ag-about-journey__body font-body-md">{step.body}</p>
-              </ScrollReveal>
+              </StaggerItem>
             ))}
-          </ol>
+          </ScrollStaggerContainer>
         </div>
       </section>
 
@@ -401,9 +410,13 @@ export function IkigaiContent() {
             title="No recibes una etiqueta. Obtienes un mapa de dirección."
             headingId="result-heading"
           />
-          <ScrollStaggerContainer className="ag-ikigai-result" stagger={0.06}>
+          <ScrollStaggerContainer
+            className="ag-ikigai-result"
+            stagger={MOTION_STAGGER.base}
+            itemCount={RESULT_ITEMS.length}
+          >
             {RESULT_ITEMS.map((item) => (
-              <StaggerItem key={item.title} distance={10}>
+              <StaggerItem key={item.title} distance={MOTION_DISTANCE.sm}>
                 <article className="ag-ikigai-result__item">
                   <h3 className="ag-ikigai-result__title font-headline-sm">{item.title}</h3>
                   <p className="ag-ikigai-result__body font-body-md">{item.body}</p>
@@ -411,7 +424,7 @@ export function IkigaiContent() {
               </StaggerItem>
             ))}
           </ScrollStaggerContainer>
-          <ScrollReveal className="ag-ikigai-result__integration" distance={12}>
+          <ScrollReveal className="ag-ikigai-result__integration" density="tight">
             <p className="font-body-lg">
               Tu mapa de IKIGAI se integra al Perfil Maestro y deja de ser un ejercicio aislado.
               Se convierte en referencia para prioridades y decisiones.
@@ -433,7 +446,7 @@ export function IkigaiContent() {
             lead="El sistema usa tu IKIGAI para ayudarte a evaluar:"
             headingId="decisions-heading"
           />
-          <ScrollReveal className="ag-ikigai-decisions" distance={12}>
+          <ScrollReveal className="ag-ikigai-decisions" density="default">
             <ul className="ag-ikigai-decisions__list">
               {DECISION_AREAS.map((area) => (
                 <li key={area} className="font-label-lg">

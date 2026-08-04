@@ -6,6 +6,7 @@ import type { AppIconName } from '@/components/icons/registry';
 import { EarlyAccessForm } from '@/components/early-access-form';
 import { ScrollReveal } from '@/components/motion/scroll-reveal';
 import { ScrollStaggerContainer, StaggerItem } from '@/components/motion/stagger';
+import { MOTION_DISTANCE, MOTION_STAGGER } from '@/components/motion/tokens';
 import { SectionIntro } from '@/components/pages/section-intro';
 import { LANDING_IMAGES } from '@/lib/assets';
 
@@ -75,11 +76,11 @@ export function EventosContent() {
         />
         <div className="ag-about-hero__scrim" aria-hidden />
         <div className="ag-about-hero__content ag-container relative z-10">
-          <ScrollReveal className="ag-about-hero__intro text-center" distance={16}>
+          <ScrollReveal className="ag-about-hero__intro text-center" density="spacious">
             <p className="hud-text text-action-red">MK · EVENTOS</p>
             <h1 className="ag-about-hero__title ag-type-display text-white">Próximamente.</h1>
           </ScrollReveal>
-          <ScrollReveal className="ag-about-hero__panel" distance={14} delay={0.08}>
+          <ScrollReveal className="ag-about-hero__panel" density="default" delay={0.08}>
             <div className="ag-panel ag-panel--wide">
               <p className="ag-panel__body font-body-lg">
                 Estamos preparando el primer evento presencial de Maximus Kratos: una jornada
@@ -87,7 +88,7 @@ export function EventosContent() {
               </p>
             </div>
           </ScrollReveal>
-          <ScrollReveal className="ag-about-hero__secondary text-center" distance={12} delay={0.12}>
+          <ScrollReveal className="ag-about-hero__secondary text-center" density="tight" delay={0.12}>
             <p className="ag-eventos-status font-body-md">
               <span className="ag-eventos-status__pip" aria-hidden />
               Sin eventos activos. Lista de espera abierta
@@ -99,7 +100,7 @@ export function EventosContent() {
       <section className="ag-section-inner ag-eventos-section">
         <div className="ag-container ag-eventos-layout">
           <div className="ag-eventos-info">
-            <ScrollReveal distance={14}>
+            <ScrollReveal density="default">
               <p className="hud-text text-action-red">MK · JORNADA PRESENCIAL</p>
               <h2 className="ag-eventos-info__title ag-type-section text-white">
                 Diagnóstico, estrategia y alineación en un solo día.
@@ -110,9 +111,13 @@ export function EventosContent() {
               </p>
             </ScrollReveal>
 
-            <ScrollStaggerContainer className="ag-eventos-highlights" stagger={0.07}>
+            <ScrollStaggerContainer
+              className="ag-eventos-highlights"
+              stagger={MOTION_STAGGER.base}
+              itemCount={EVENT_FEATURES.length}
+            >
               {EVENT_FEATURES.map((item) => (
-                <StaggerItem key={item.label} distance={10} className="ag-eventos-highlights__item">
+                <StaggerItem key={item.label} distance={MOTION_DISTANCE.sm + 2} className="ag-eventos-highlights__item">
                   <div className="ag-panel ag-panel--marco ag-eventos-highlight group h-full">
                     <span className="ag-panel__corner ag-panel__corner--hover" aria-hidden />
                     <div className="ag-eventos-highlight__head">
@@ -130,7 +135,7 @@ export function EventosContent() {
             </ScrollStaggerContainer>
           </div>
 
-          <ScrollReveal className="ag-eventos-card-wrap" distance={14} delay={0.1}>
+          <ScrollReveal className="ag-eventos-card-wrap" density="default" delay={0.1}>
             <div className="ag-panel ag-eventos-card">
               <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
               <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
@@ -191,9 +196,13 @@ export function EventosContent() {
             lead="La jornada sigue la misma lógica del sistema: primero mirar con honestidad, después ordenar, y al final comprometerse con un plan concreto."
             headingId="agenda-heading"
           />
-          <ol className="ag-eventos-agenda__list">
+          <ScrollStaggerContainer
+            className="ag-eventos-agenda__list"
+            stagger={MOTION_STAGGER.base}
+            itemCount={EVENT_AGENDA.length}
+          >
             {EVENT_AGENDA.map((block) => (
-              <ScrollReveal key={block.num} className="ag-eventos-agenda__item" distance={12}>
+              <StaggerItem key={block.num} className="ag-eventos-agenda__item" distance={MOTION_DISTANCE.sm + 2}>
                 <span className="ag-eventos-agenda__num" aria-hidden>
                   {block.num}
                 </span>
@@ -203,9 +212,9 @@ export function EventosContent() {
                   </h3>
                   <p className="ag-eventos-agenda__body font-body-md">{block.body}</p>
                 </div>
-              </ScrollReveal>
+              </StaggerItem>
             ))}
-          </ol>
+          </ScrollStaggerContainer>
         </div>
       </section>
 
@@ -218,7 +227,7 @@ export function EventosContent() {
           aria-hidden
         />
         <div className="ag-prestaciones-quote__scrim" aria-hidden />
-        <ScrollReveal className="ag-container relative z-10" distance={14}>
+        <ScrollReveal className="ag-container relative z-10" density="default">
           <div className="ag-panel ag-panel--wide ag-prestaciones-quote__panel">
             <span className="ag-eventos-quote-rule" aria-hidden />
             <blockquote className="ag-prestaciones-quote__text font-display-xl text-white">

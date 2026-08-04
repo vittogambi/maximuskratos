@@ -2,13 +2,20 @@
 
 import { motion, useReducedMotion } from 'motion/react';
 import type { HTMLMotionProps } from 'motion/react';
+import { MOTION_DURATION, MOTION_EASE } from './tokens';
 
 interface FadeInProps extends HTMLMotionProps<'div'> {
   delay?: number;
   duration?: number;
 }
 
-export function FadeIn({ children, delay = 0, duration = 0.4, style, ...props }: FadeInProps) {
+export function FadeIn({
+  children,
+  delay = 0,
+  duration = MOTION_DURATION.reveal,
+  style,
+  ...props
+}: FadeInProps) {
   const reduced = useReducedMotion();
   return (
     <motion.div
@@ -17,7 +24,7 @@ export function FadeIn({ children, delay = 0, duration = 0.4, style, ...props }:
       transition={{
         duration: reduced ? 0 : duration,
         delay: reduced ? 0 : delay,
-        ease: [0.2, 0, 0, 1],
+        ease: MOTION_EASE.enter,
       }}
       style={style}
       {...props}

@@ -2,6 +2,7 @@
 
 import { useInView, useReducedMotion, animate } from 'motion/react';
 import { useEffect, useRef } from 'react';
+import { MOTION_DURATION, MOTION_EASE } from './tokens';
 
 interface NumberCounterProps {
   to: number;
@@ -13,9 +14,10 @@ interface NumberCounterProps {
   startWhen?: 'inView' | 'mount';
 }
 
+/** @deprecated Prefer MotionNumber for new call sites. */
 export function NumberCounter({
   to,
-  duration = 1.5,
+  duration = MOTION_DURATION.heroMedia,
   className,
   suffix = '',
   prefix = '',
@@ -36,7 +38,7 @@ export function NumberCounter({
 
     const controls = animate(0, to, {
       duration,
-      ease: [0.2, 0, 0.2, 1],
+      ease: MOTION_EASE.enter,
       onUpdate(v) {
         if (ref.current) {
           ref.current.textContent = `${prefix}${Math.round(v)}${suffix}`;

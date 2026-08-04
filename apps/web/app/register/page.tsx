@@ -57,9 +57,13 @@ export default function RegisterPage() {
 
   if (status === 'authenticated' && user) {
     return (
-      <AuthShell title="Redirigiendo" description="Un momento…">
+      <AuthShell title="Cuenta lista" description="Entrando a tu panel de fundador.">
         <div className="auth-loading">
-          <span className="auth-spinner" aria-hidden />
+          <div className="auth-success-mark" aria-hidden>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/mk-mark.svg" alt="" width={40} height={40} />
+            <span className="auth-success-mark__line" />
+          </div>
           <p>Preparando tu sesión</p>
         </div>
       </AuthShell>
@@ -105,7 +109,9 @@ export default function RegisterPage() {
               disabled={loading}
             />
           </label>
-          <AuthFormError message={error} context="register" />
+          <div className="auth-form__error-slot">
+            <AuthFormError message={error} context="register" />
+          </div>
           <AuthSubmitButton loading={loading} loadingLabel="Creando cuenta…">
             Crear cuenta de fundador
           </AuthSubmitButton>
