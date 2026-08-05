@@ -11,6 +11,16 @@ export function formatCurrency(amount: number, currency: string): string {
   }
 }
 
+/**
+ * Precio público sin símbolo de moneda (p. ej. 29.990).
+ * Reduce saliencia del "pain of paying" vs $29.990 (Yang, Kimes & Sessarego, Cornell / IJHM).
+ */
+export function formatPricePlain(amount: number): string {
+  return new Intl.NumberFormat('es-CL', {
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
 /** "1" -> "Mensual", "3" -> "Trimestral", etc. Cae a "Cada N meses" para valores no estándar. */
 export function formatPeriod(periodMonths: number): string {
   switch (periodMonths) {

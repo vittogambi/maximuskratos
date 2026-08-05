@@ -283,7 +283,10 @@ export function SistemaContent() {
 
           <div className="ag-sistema-status__stream">
             {STATUS_STREAM.map((group) => (
-              <div key={group.id} className="ag-sistema-status__group">
+              <div
+                key={group.id}
+                className={`ag-sistema-status__group ag-sistema-status__group--${group.tone}`}
+              >
                 <p
                   className={`hud-text ag-sistema-status__group-label${
                     group.tone === 'live' ? ' text-action-red' : ''
@@ -416,7 +419,6 @@ export function SistemaContent() {
       <PublicFaqSection
         idPrefix="sistema"
         title="Preguntas sobre la plataforma."
-        lead="Diagnóstico, acceso de fundador, apps y cómo se relacionan las páginas de MK."
         items={SISTEMA_FAQ_ITEMS}
       />
 

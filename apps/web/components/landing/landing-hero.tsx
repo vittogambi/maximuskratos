@@ -55,8 +55,11 @@ export function LandingHero() {
                 </span>
               ))}
             </p>
-            <p className="ag-hero-title__lead font-body-lg cinematic-shadow mx-auto max-w-xl text-center text-white/85">
+            <p className="ag-hero-title__lead ag-hero-title__lead--full font-body-lg cinematic-shadow mx-auto max-w-xl text-center text-white/85">
               {LANDING_HERO.lead}
+            </p>
+            <p className="ag-hero-title__lead ag-hero-title__lead--short font-body-md cinematic-shadow mx-auto text-center text-white/85">
+              {LANDING_HERO.leadMobile}
             </p>
           </HeroRevealItem>
         </div>

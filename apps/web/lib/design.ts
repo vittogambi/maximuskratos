@@ -1,3 +1,5 @@
+import { LANDING_SEO_DESCRIPTION } from '@/lib/landing-copy';
+
 /** Accent colors from /DESIGN.md — use in data viz, not hardcoded hex in components */
 export const designColors = {
   action: '#ff0000',
@@ -8,8 +10,7 @@ export const designColors = {
 export const siteConfig = {
   name: 'Maximus Kratos',
   tagline: 'App y plataforma web de desarrollo personal para hombres',
-  description:
-    'Diagnóstico, propósito y ejecución dentro de un mismo sistema. Detecta la distancia entre lo que valoras y cómo vives, define un propósito trascendental y conviértelo en una Ruta MK que puedas ejecutar, revisar y medir.',
+  description: LANDING_SEO_DESCRIPTION,
 };
 
 /** Landing section ids — must match `id` attributes on the home page */

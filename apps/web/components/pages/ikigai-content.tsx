@@ -338,7 +338,7 @@ export function IkigaiContent() {
             <ol className="ag-ikigai-tensions__list">
               {TENSIONS.map((item, index) => (
                 <li key={item.title} className="ag-ikigai-tensions__item">
-                  <span className="ag-ikigai-tensions__index hud-text" aria-hidden>
+                  <span className="ag-ikigai-tensions__index" aria-hidden>
                     {String(index + 1).padStart(2, '0')}
                   </span>
                   <div className="ag-ikigai-tensions__copy">
@@ -387,15 +387,17 @@ export function IkigaiContent() {
             headingId="proceso-heading"
           />
           <ScrollStaggerContainer
-            className="ag-about-journey"
+            className="ag-about-journey ag-ikigai-process"
             stagger={MOTION_STAGGER.base}
             itemCount={IKIGAI_PROCESS.length}
           >
             {IKIGAI_PROCESS.map((step) => (
               <StaggerItem key={step.num} className="ag-about-journey__step" distance={MOTION_DISTANCE.sm + 2}>
                 <span className="ag-about-journey__num hud-text">{step.num}</span>
-                <h3 className="ag-about-journey__title">{step.title}</h3>
-                <p className="ag-about-journey__body font-body-md">{step.body}</p>
+                <div className="ag-ikigai-process__copy">
+                  <h3 className="ag-about-journey__title">{step.title}</h3>
+                  <p className="ag-about-journey__body font-body-md">{step.body}</p>
+                </div>
               </StaggerItem>
             ))}
           </ScrollStaggerContainer>
@@ -415,11 +417,16 @@ export function IkigaiContent() {
             stagger={MOTION_STAGGER.base}
             itemCount={RESULT_ITEMS.length}
           >
-            {RESULT_ITEMS.map((item) => (
+            {RESULT_ITEMS.map((item, index) => (
               <StaggerItem key={item.title} distance={MOTION_DISTANCE.sm}>
                 <article className="ag-ikigai-result__item">
-                  <h3 className="ag-ikigai-result__title font-headline-sm">{item.title}</h3>
-                  <p className="ag-ikigai-result__body font-body-md">{item.body}</p>
+                  <span className="ag-ikigai-result__index" aria-hidden>
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <div className="ag-ikigai-result__copy">
+                    <h3 className="ag-ikigai-result__title font-headline-sm">{item.title}</h3>
+                    <p className="ag-ikigai-result__body font-body-md">{item.body}</p>
+                  </div>
                 </article>
               </StaggerItem>
             ))}

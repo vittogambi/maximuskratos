@@ -49,9 +49,17 @@ export const LANDING_HERO = {
   signatureLines: ['Descúbrete. Alíneate.', 'Construye.'] as const,
   signature: 'Descúbrete. Alíneate. Construye.',
   lead: 'Detecta la distancia entre lo que valoras y cómo estás viviendo. Define un propósito trascendental que ordene tus prioridades y conviértelo en una Ruta MK con decisiones, planes y acciones que puedas revisar y medir.',
+  /** Mobile-only: gap insight only; H1 already carries purpose → executable route. */
+  leadMobile: 'Detecta la distancia entre lo que valoras y cómo vives.',
   secondaryCta: { href: '/#funcionamiento', label: 'Ver cómo funciona' } as const,
   previewLabel: 'Vista previa del producto en desarrollo',
 } as const;
+
+/** SEO/GEO: siteConfig, root meta, JSON-LD, llms.txt. Keep in sync with hero H1 + lead. */
+export const LANDING_SEO_DESCRIPTION = `${LANDING_HERO.lines.join(' ')}. ${LANDING_HERO.lead}`;
+
+/** Homepage meta description: promise + early-access status clause. */
+export const LANDING_HOME_META_DESCRIPTION = `${LANDING_SEO_DESCRIPTION} Sitio disponible hoy; webapp y apps para iOS y Android en desarrollo.`;
 
 /** Estado real de la plataforma, mostrado como líneas cortas junto al CTA del hero. */
 export const LANDING_HERO_STATUS_PILLS: ReadonlyArray<string> = isEarlyAccessMode()
@@ -161,6 +169,9 @@ export const LANDING_DIFFERENTIATION = {
   eyebrow: 'UNA SOLA PLATAFORMA',
   title: 'Una estructura continua para dirigir tu proceso',
   body: 'MK conecta lo que normalmente aparece separado: diagnóstico, propósito, prioridades, ejecución y revisión dentro de una misma infraestructura. Lo que descubres sobre ti se convierte en prioridades, decisiones y acciones que puedes revisar en la misma plataforma.',
+  /** Mobile-only: keep the stack, drop the second clause. */
+  bodyMobile:
+    'MK conecta diagnóstico, propósito, prioridades, ejecución y revisión en una misma plataforma.',
 } as const;
 
 export const LANDING_DIFFERENTIATION_TABLE: ReadonlyArray<{
@@ -260,8 +271,8 @@ export const LANDING_GATEWAYS_CLOSE =
 // ── 7. Estado del producto ──────────────────────────────────────────────
 export const LANDING_PRODUCT_STATUS_INTRO = {
   eyebrow: 'ESTADO DEL PRODUCTO',
-  title: 'Qué puedes usar hoy. Qué está en desarrollo.',
-  lead: 'Antes de crear tu cuenta, esto es lo que ya funciona y lo que todavía falta por activar.',
+  title: 'Qué puedes usar hoy',
+  lead: 'Y qué falta por activar antes de crear tu cuenta.',
 } as const;
 
 export const LANDING_PRODUCT_STATUS_AVAILABLE: ReadonlyArray<string> = [
@@ -281,7 +292,7 @@ export const LANDING_PRODUCT_STATUS_UPCOMING: ReadonlyArray<string> = [
 export const LANDING_PRECIOS_INTRO = {
   eyebrow: 'PRECIOS',
   title: 'Acceso anticipado de fundador.',
-  lead: 'Planes previstos al lanzamiento. Registrarte hoy no activa ningún cobro.',
+  lead: 'Sin cobro al registrarte. Precios al lanzamiento.',
 } as const;
 
 // ── 9. Cierre / CTA final ───────────────────────────────────────────────

@@ -42,8 +42,8 @@ export function SubpageCta({
           <StaggerItem distance={MOTION_DISTANCE.hero}>
             <h2 className="ag-sistema-cta__title ag-type-section text-white">{title}</h2>
           </StaggerItem>
-          <StaggerItem distance={MOTION_DISTANCE.md}>
-            <p className="ag-sistema-cta__lead font-body-md">{lead}</p>
+          <StaggerItem distance={MOTION_DISTANCE.md} className="ag-sistema-cta__actions">
+            <p className="ag-sistema-cta__lead font-body-md text-center">{lead}</p>
             <AuthCta href={LANDING_PRIMARY_CTA.href} className="ag-btn-cta font-label-lg">
               {ctaLabel}
             </AuthCta>

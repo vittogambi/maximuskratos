@@ -1,4 +1,5 @@
 import { siteConfig } from '@/lib/design';
+import { LANDING_HERO } from '@/lib/landing-copy';
 import { legalContact } from '@/lib/legal-content';
 import { absoluteUrl, getSiteUrl } from '@/lib/site-url';
 
@@ -13,6 +14,8 @@ export function GET() {
   const body = `# ${siteConfig.name}
 
 > ${siteConfig.tagline}
+
+${LANDING_HERO.signature}
 
 ${siteConfig.description}
 

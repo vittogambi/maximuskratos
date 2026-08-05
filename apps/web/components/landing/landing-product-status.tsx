@@ -42,7 +42,10 @@ export function LandingProductStatus() {
 
         <div className="ag-sistema-status__stream">
           {GROUPS.map((group) => (
-            <div key={group.id} className="ag-sistema-status__group">
+            <div
+              key={group.id}
+              className={`ag-sistema-status__group ag-sistema-status__group--${group.tone}`}
+            >
               <p
                 className={`hud-text ag-sistema-status__group-label${
                   group.tone === 'live' ? ' text-action-red' : ''

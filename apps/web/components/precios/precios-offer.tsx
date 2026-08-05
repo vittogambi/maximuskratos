@@ -15,11 +15,10 @@ import { apiBillingPlans, type Plan } from '@/lib/api';
 import {
   findMonthlyAnchor,
   formatChargedEvery,
-  formatCurrency,
   formatPeriod,
+  formatPricePlain,
   monthlyEquivalentFromTotal,
   periodSavingsPctVsMonthly,
-  periodSavingsVsMonthly,
 } from '@/lib/billing-format';
 import { LANDING_FOUNDER_CTA_NOTE, LANDING_PRIMARY_CTA } from '@/lib/landing-copy';
 
@@ -40,14 +39,11 @@ function isTargetPlan(plan: Plan): boolean {
   return label.includes('recomend') || label.includes('elegido') || plan.periodMonths === 6;
 }
 
+/** Badge corto en el selector (estilo SaaS: Save 20%). */
 function tabSaveLabel(plan: Plan, monthlyAnchor: Plan | null): string | null {
   if (!monthlyAnchor || plan.periodMonths <= 1) return null;
   const pct = periodSavingsPctVsMonthly(plan, monthlyAnchor.priceAmount);
-  const save = pct > 0 ? `Ahorra ${pct}%` : null;
-  const recommended =
-    isTargetPlan(plan) && plan.highlightLabel ? plan.highlightLabel : null;
-  if (save && recommended) return `${save} · ${recommended}`;
-  return save ?? recommended;
+  return pct > 0 ? `−${pct}%` : null;
 }
 
 type PreciosOfferProps = {
@@ -85,11 +81,6 @@ export function PreciosOffer({ compact = false, ctaLabel }: PreciosOfferProps) {
     return selected?.benefits ?? [];
   }, [selected, compact]);
 
-  const savings = useMemo(() => {
-    if (!selected || !monthlyAnchor || selected.periodMonths <= 1) return 0;
-    return periodSavingsVsMonthly(selected, monthlyAnchor.priceAmount);
-  }, [selected, monthlyAnchor]);
-
   const selectedMonthly = selected
     ? monthlyEquivalentFromTotal(selected.priceAmount, selected.periodMonths)
     : 0;
@@ -123,7 +114,7 @@ export function PreciosOffer({ compact = false, ctaLabel }: PreciosOfferProps) {
             >
               <span className="ag-precios-freq__name">{formatPeriod(plan.periodMonths)}</span>
               <span className="ag-precios-freq__rate">
-                {formatCurrency(rate, plan.currency)}
+                {formatPricePlain(rate)}
                 <span>/mes</span>
               </span>
               {save ? (
@@ -149,12 +140,6 @@ export function PreciosOffer({ compact = false, ctaLabel }: PreciosOfferProps) {
       </div>
 
       <article className={`ag-precios-card${isTargetPlan(selected) ? ' is-target' : ''}`}>
-        {!compact ? (
-          <header className="ag-precios-card__head">
-            <p className="ag-precios-card__product hud-text text-action-red">MAXIMUS KRATOS</p>
-          </header>
-        ) : null}
-
         <div className="ag-precios-card__dynamic-slot">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
@@ -165,29 +150,17 @@ export function PreciosOffer({ compact = false, ctaLabel }: PreciosOfferProps) {
               exit={reduced ? undefined : { opacity: 0, y: -MOTION_DISTANCE.micro }}
               transition={reduced ? { duration: 0 } : interactionContentTransition}
             >
-              {!compact && isTargetPlan(selected) && selected.highlightLabel ? (
-                <p className="ag-precios-card__nudge">{selected.highlightLabel}</p>
-              ) : !compact ? (
-                <p className="ag-precios-card__nudge ag-precios-card__nudge--quiet">
-                  {formatPeriod(selected.periodMonths)}
-                </p>
-              ) : null}
-
               <div className="ag-precios-card__amount">
                 <p className="ag-precios-card__price">
-                  {formatCurrency(selectedMonthly, selected.currency)}
+                  {formatPricePlain(selectedMonthly)}
                   <span className="ag-precios-card__period">/mes</span>
                 </p>
-              </div>
-
-              <div className="ag-precios-card__meta">
-                <p className="ag-precios-card__bill font-body-md">
-                  {formatCurrency(selected.priceAmount, selected.currency)} cobrados{' '}
-                  {formatChargedEvery(selected.periodMonths)}.
-                  {savings > 0
-                    ? ` Ahorras ${formatCurrency(savings, selected.currency)}.`
-                    : null}
-                </p>
+                {selected.periodMonths > 1 ? (
+                  <p className="ag-precios-card__bill-cadence font-body-md">
+                    {formatPricePlain(selected.priceAmount)}{' '}
+                    {formatChargedEvery(selected.periodMonths)}
+                  </p>
+                ) : null}
               </div>
             </motion.div>
           </AnimatePresence>

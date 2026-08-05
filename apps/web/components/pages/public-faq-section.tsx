@@ -11,7 +11,7 @@ import type { PublicFaqItem } from '@/lib/faq';
 type PublicFaqSectionProps = {
   eyebrow?: string;
   title: string;
-  lead: string;
+  lead?: string;
   items: ReadonlyArray<PublicFaqItem>;
   /** Prefijo único para ids del acordeón (evita choques entre páginas). */
   idPrefix: string;

@@ -10,7 +10,12 @@ export function LandingDifferentiation() {
         <SectionIntro
           eyebrow={LANDING_DIFFERENTIATION.eyebrow}
           title={LANDING_DIFFERENTIATION.title}
-          lead={LANDING_DIFFERENTIATION.body}
+          lead={
+            <>
+              <span className="ag-landing-diff__lead--full">{LANDING_DIFFERENTIATION.body}</span>
+              <span className="ag-landing-diff__lead--short">{LANDING_DIFFERENTIATION.bodyMobile}</span>
+            </>
+          }
           headingId="diferenciacion-heading"
         />
 
