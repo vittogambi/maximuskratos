@@ -16376,6 +16376,114 @@ html:has(.ag-landing) body {
   color: rgba(255, 255, 255, 0.5);
 }
 
+.ag-landing .ag-precios-skeleton__freq {
+  pointer-events: none;
+}
+
+.ag-landing .ag-precios-skeleton__tab {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.25rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ag-landing .ag-precios-skeleton__tab:last-child {
+  border-bottom: none;
+}
+
+@media (min-width: 640px) {
+  .ag-landing .ag-precios-skeleton__tab {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 0.45rem;
+    min-height: 4.5rem;
+    padding: 0.9rem 0.5rem;
+    border-bottom: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .ag-landing .ag-precios-skeleton__tab:last-child {
+    border-right: none;
+  }
+}
+
+.ag-landing .ag-precios-skeleton__bone {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 25%,
+    rgba(255, 255, 255, 0.09) 50%,
+    rgba(255, 255, 255, 0.04) 75%
+  );
+  background-size: 200% 100%;
+  animation: mk-shimmer 1.4s ease infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ag-landing .ag-precios-skeleton__bone {
+    animation: none;
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.ag-landing .ag-precios-skeleton__bone--name {
+  height: 0.7rem;
+  width: 4.5rem;
+}
+
+.ag-landing .ag-precios-skeleton__bone--rate {
+  height: 0.65rem;
+  width: 3.5rem;
+}
+
+.ag-landing .ag-precios-skeleton__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  max-width: 28rem;
+  padding: 1.75rem 1.25rem;
+}
+
+.ag-landing .ag-precios-skeleton__bone--price {
+  height: 2.75rem;
+  width: 10rem;
+}
+
+.ag-landing .ag-precios-skeleton__bone--cadence {
+  height: 0.75rem;
+  width: 12rem;
+}
+
+.ag-landing .ag-precios-skeleton__benefits {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.65rem;
+  width: 100%;
+  max-width: 20rem;
+  margin-top: 0.5rem;
+}
+
+.ag-landing .ag-precios-skeleton__bone--line {
+  height: 0.7rem;
+  width: 100%;
+}
+
+.ag-landing .ag-precios-skeleton__bone--short {
+  width: 70%;
+}
+
+.ag-landing .ag-precios-skeleton__bone--cta {
+  height: 2.75rem;
+  width: min(100%, 16rem);
+  margin-top: 0.5rem;
+}
+
 .ag-landing .ag-precios-offer__more {
   margin: 1.25rem 0 0;
 }

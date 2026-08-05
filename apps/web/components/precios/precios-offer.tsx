@@ -52,6 +52,38 @@ type PreciosOfferProps = {
   ctaLabel?: string;
 };
 
+function PreciosOfferSkeleton({ compact }: { compact: boolean }) {
+  return (
+    <div
+      className={`ag-precios-offer ag-precios-skeleton${compact ? ' ag-precios-offer--compact' : ''}`}
+      aria-busy="true"
+      aria-live="polite"
+    >
+      <span className="sr-only">Cargando precios</span>
+      <div className="ag-precios-freq ag-precios-skeleton__freq" aria-hidden>
+        {Array.from({ length: 4 }, (_, i) => (
+          <div key={i} className="ag-precios-skeleton__tab">
+            <span className="ag-precios-skeleton__bone ag-precios-skeleton__bone--name" />
+            <span className="ag-precios-skeleton__bone ag-precios-skeleton__bone--rate" />
+          </div>
+        ))}
+      </div>
+      <div className="ag-precios-card ag-precios-skeleton__card" aria-hidden>
+        <span className="ag-precios-skeleton__bone ag-precios-skeleton__bone--price" />
+        <span className="ag-precios-skeleton__bone ag-precios-skeleton__bone--cadence" />
+        {!compact ? (
+          <div className="ag-precios-skeleton__benefits">
+            <span className="ag-precios-skeleton__bone ag-precios-skeleton__bone--line" />
+            <span className="ag-precios-skeleton__bone ag-precios-skeleton__bone--line" />
+            <span className="ag-precios-skeleton__bone ag-precios-skeleton__bone--line ag-precios-skeleton__bone--short" />
+          </div>
+        ) : null}
+        <span className="ag-precios-skeleton__bone ag-precios-skeleton__bone--cta" />
+      </div>
+    </div>
+  );
+}
+
 export function PreciosOffer({ compact = false, ctaLabel }: PreciosOfferProps) {
   const reduced = useReducedMotion();
   const [plans, setPlans] = useState<Plan[]>([]);
@@ -86,7 +118,7 @@ export function PreciosOffer({ compact = false, ctaLabel }: PreciosOfferProps) {
     : 0;
 
   if (loading) {
-    return <p className="ag-precios-loading font-body-md text-center">Cargando…</p>;
+    return <PreciosOfferSkeleton compact={compact} />;
   }
 
   if (!selected) {
