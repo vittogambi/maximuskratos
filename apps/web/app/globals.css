@@ -5373,19 +5373,37 @@ html:has(.ag-landing) body {
 
 /* ── Hero: statue + headline layout ── */
 /*
- * Beam source assets (video + both stills) are pre-cropped so the face sits
- * at the horizontal center at a 1.6 aspect ratio. Plain center cover keeps
- * it centered on every viewport without per-breakpoint overrides.
+ * Unpadded 16:9 beam. Same crop on img + video so handoff never jumps.
+ *
+ * Face sits at 35.6% from the left in the source. On phones the box is
+ * far narrower than the image (16:9), so object-fit:cover already has
+ * plenty of horizontal slack and object-position alone can center it.
+ *
+ * On 16:9-or-wider desktop monitors, cover has ZERO horizontal slack
+ * (image exactly fills the width) — object-position can't move the face
+ * at all there. Centering requires actually zooming in past the cover
+ * fit, then shifting, which is what the transform below does:
+ * transform-origin pins the source's left edge, scale(1.32) is the
+ * measured amount needed to bring the face to ~center on a 16:9 screen
+ * without exposing empty edges (verified at 1440/1920/2560 widths).
  */
-.ag-landing .ag-hero-bg__beam {
+.ag-landing .ag-sticky-bg .ag-hero-bg__beam {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   max-width: none;
   object-fit: cover;
-  object-position: 50% 38%;
-  backface-visibility: hidden;
+  object-position: 30% 34%;
+  -webkit-user-drag: none;
+}
+
+@media (min-width: 768px) {
+  .ag-landing .ag-sticky-bg .ag-hero-bg__beam {
+    object-position: 0% 50%;
+    transform: scale(1.32);
+    transform-origin: 0% 50%;
+  }
 }
 
 .ag-landing .ag-hero-bg__scrim {

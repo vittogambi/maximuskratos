@@ -56,6 +56,8 @@ export default function RootLayout({
     <html
       lang="es"
       className={cn('dark', bitteFallback.variable, hanken.variable, notoSerif.variable, 'font-sans', geist.variable)}
+      // The mk-intro-flag beforeInteractive script sets data-mk-intro pre-hydration.
+      suppressHydrationWarning
     >
       <body>
         <script

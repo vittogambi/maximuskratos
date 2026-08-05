@@ -50,8 +50,8 @@ function waitForIntro(): Promise<void> {
 }
 
 /**
- * Homepage signature: play the beam once, hold the peak frame, then hand off
- * to the high-res JPEG (same face mid as the video — no lateral jump).
+ * Homepage signature: dark still → beam once → illuminated still stays.
+ * Initial paint is always dark (SSR/client match). Lit flips only after mount.
  */
 export function HeroBeamMedia() {
   const reduced = useReducedMotion();
@@ -59,17 +59,15 @@ export function HeroBeamMedia() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const runId = useRef(0);
 
-  /** Video layer over the stills; fades out after handoff. */
+  /** Always false on first paint so SSR HTML matches hydration. */
   const [videoOpacity, setVideoOpacity] = useState(0);
-  /** Lit still on top of dark once the peak is reached / motion skipped. */
-  const [showLitStill, setShowLitStill] = useState(
-    () => Boolean(reduced) || beamPlayedThisDocument,
-  );
+  const [showLitStill, setShowLitStill] = useState(false);
 
   const mx = useMotionValue(0);
   const sx = useSpring(mx, { stiffness: 90, damping: 24, mass: 0.55 });
 
   useEffect(() => {
+    // Soft-nav return or a11y: land on the illuminated still, no replay.
     if (reduced || prefersDataSaver() || beamPlayedThisDocument) {
       setVideoOpacity(0);
       setShowLitStill(true);
@@ -92,7 +90,7 @@ export function HeroBeamMedia() {
       } catch {
         /* ignore */
       }
-      // Lit is already under the video (same crop). Reveal it, then fade video.
+      // Reveal lit under the video, then fade the soft clip away. Lit stays.
       setShowLitStill(true);
       beamPlayedThisDocument = true;
       handoffTimer = window.setTimeout(() => {
@@ -139,6 +137,7 @@ export function HeroBeamMedia() {
         await v.play();
       } catch {
         setShowLitStill(true);
+        beamPlayedThisDocument = true;
         return;
       }
 
@@ -182,7 +181,7 @@ export function HeroBeamMedia() {
 
     const onMove = (e: PointerEvent) => {
       const rect = el.getBoundingClientRect();
-      mx.set(((e.clientX - rect.left) / rect.width - 0.5) * 5);
+      mx.set(((e.clientX - rect.left) / rect.width - 0.5) * 4);
     };
     const onLeave = () => mx.set(0);
     el.addEventListener('pointermove', onMove);
@@ -200,29 +199,55 @@ export function HeroBeamMedia() {
       <motion.div
         className="ag-hero-bg__media"
         style={{ position: 'absolute', inset: 0, x: sx }}
-        initial={reduced ? false : { scale: 1.03, y: 10 }}
+        initial={reduced ? false : { scale: 1.02, y: 8 }}
         animate={{ scale: 1, y: 0 }}
         transition={reduced ? { duration: 0 } : { ...heroMediaTransition, duration: MOTION_DURATION.heroMedia }}
       >
-        {/* Both stills always mounted — no src swap flash at handoff. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={LANDING_IMAGES.statueBeamDark}
-          alt=""
-          aria-hidden
-          className="ag-hero-bg__beam"
-          decoding="async"
-          style={{ opacity: showLitStill ? 0 : 1 }}
-        />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={LANDING_IMAGES.statueBeamLit}
-          alt="Estatua"
-          className="ag-hero-bg__beam"
-          fetchPriority="high"
-          decoding="async"
-          style={{ opacity: showLitStill ? 1 : 0 }}
-        />
+        {/* Dark → lit stills always mounted; video crossfades on top at peak. */}
+        <picture>
+          <source
+            type="image/webp"
+            media="(max-width: 767px)"
+            srcSet={LANDING_IMAGES.statueBeamDarkSmWebp}
+          />
+          <source type="image/webp" srcSet={LANDING_IMAGES.statueBeamDarkWebp} />
+          <source
+            type="image/jpeg"
+            media="(max-width: 767px)"
+            srcSet={LANDING_IMAGES.statueBeamDarkSm}
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={LANDING_IMAGES.statueBeamDark}
+            alt=""
+            aria-hidden
+            className="ag-hero-bg__beam"
+            decoding="async"
+            style={{ opacity: showLitStill ? 0 : 1 }}
+          />
+        </picture>
+        <picture>
+          <source
+            type="image/webp"
+            media="(max-width: 767px)"
+            srcSet={LANDING_IMAGES.statueBeamLitSmWebp}
+          />
+          <source
+            type="image/jpeg"
+            media="(max-width: 767px)"
+            srcSet={LANDING_IMAGES.statueBeamLitSm}
+          />
+          <source media="(min-width: 768px)" srcSet={LANDING_IMAGES.statueBeamLitHd} />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={LANDING_IMAGES.statueBeamLit}
+            alt="Estatua"
+            className="ag-hero-bg__beam"
+            fetchPriority="high"
+            decoding="async"
+            style={{ opacity: showLitStill ? 1 : 0 }}
+          />
+        </picture>
 
         <video
           ref={videoRef}
