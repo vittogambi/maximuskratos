@@ -25,7 +25,7 @@ export const LANDING_FOUNDER_CTA_NOTE =
 
 /** Definición del estatus de fundador (FAQ y textos que lo expliquen, no bajo cada CTA). */
 export const LANDING_FOUNDER_STATUS =
-  'Estatus de fundador: identificación permanente dentro de tu cuenta, acceso prioritario a las primeras versiones y posibilidad de participar en pruebas y ciclos de retroalimentación.';
+  'El estatus de fundador queda identificado permanentemente dentro de tu cuenta. También incluye acceso prioritario a las primeras versiones y la posibilidad de participar en pruebas y ciclos de retroalimentación.';
 
 /** Shared close block for public subpages */
 export const SUBPAGE_PRIMARY_CTA = isEarlyAccessMode()
@@ -294,27 +294,3 @@ export const LANDING_PRECIOS_INTRO = {
   title: 'Acceso anticipado de fundador.',
   lead: 'Sin cobro al registrarte. Precios al lanzamiento.',
 } as const;
-
-// ── 9. Cierre / CTA final ───────────────────────────────────────────────
-export const LANDING_CLOSE = isEarlyAccessMode()
-  ? ({
-      eyebrow: 'COHERENCIA CON CRITERIO',
-      title: 'Diagnóstico, dirección y Ruta MK',
-      titleLine2: 'en una sola plataforma personal.',
-      body: 'Maximus Kratos reúne la auditoría de tu realidad, el propósito que ordena tus prioridades y la ejecución revisable dentro de tu cuenta.',
-      stepEyebrow: 'Primer paso',
-      stepTitle: 'Crea tu cuenta de fundador',
-      stepBody: null,
-      platformNote: LANDING_FOUNDER_CTA_NOTE,
-    } as const)
-  : ({
-      eyebrow: 'La reconstrucción no depende de la motivación.',
-      title: 'Construir coherencia entre lo que valoras y cómo vives',
-      titleLine2: 'pesa más que aparentar fuerza.',
-      body: 'MAXIMUS KRATOS ofrece un camino ordenado para hacerte responsable de tu espíritu, tu mente, tu cuerpo y tu impacto.',
-      stepEyebrow: 'Primer paso',
-      stepTitle: 'Haz tu diagnóstico inicial',
-      stepBody:
-        'Antes de construir, hay que mirar con honestidad. El diagnóstico MK te permite identificar tu estado actual, tus principales bloqueos y las áreas que requieren prioridad: una lectura integral de tu sistema, no una etiqueta.',
-      platformNote: 'El diagnóstico se realiza online, en la plataforma web.',
-    } as const);

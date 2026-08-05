@@ -1,83 +1,85 @@
 import { isEarlyAccessMode } from '@/lib/product-phase';
-import { LANDING_FOUNDER_STATUS } from '@/lib/landing-copy';
 
+/**
+ * Landing FAQ (acceso anticipado). Use `\n\n` between paragraphs for readable open states.
+ * Order follows visitor doubt sequence: what → now → when → founder → money → privacy → scope → fit → religion → differentiation.
+ */
 export const LANDING_FAQ_ITEMS = [
   {
     id: 'es-app',
     question: '¿Maximus Kratos es una app?',
     answer: isEarlyAccessMode()
-      ? 'Maximus Kratos será una app móvil y una plataforma web de desarrollo personal para hombres. El sistema conecta diagnóstico, propósito, prioridades, ejecución y revisión dentro de una misma cuenta. Hoy puedes explorar el método y crear tu cuenta de fundador; el diagnóstico, la webapp y las apps para iOS y Android están en desarrollo.'
-      : 'Maximus Kratos es una app móvil y una plataforma web de desarrollo personal para hombres. Desde una misma cuenta conectas diagnóstico, propósito, prioridades, ejecución y revisión. Hoy usas el sistema completo desde la plataforma web; la app para iOS y Android está en desarrollo.',
+      ? 'Maximus Kratos está siendo desarrollado como una app móvil y una plataforma web de desarrollo personal para hombres. Conecta diagnóstico, propósito, prioridades, ejecución y revisión dentro de una misma cuenta.\n\nHoy puedes explorar el método y crear tu cuenta de fundador. El diagnóstico, la webapp y la app para iOS y Android todavía están en desarrollo.'
+      : 'Maximus Kratos es una app móvil y una plataforma web de desarrollo personal para hombres. Desde una misma cuenta conectas diagnóstico, propósito, prioridades, ejecución y revisión.\n\nHoy usas el sistema desde la plataforma web; la app para iOS y Android está en desarrollo.',
     link: { href: '/sistema', label: 'Conocer la plataforma' },
   },
   {
     id: 'cuenta-hoy',
     question: '¿Qué puedo hacer dentro de mi cuenta hoy?',
     answer: isEarlyAccessMode()
-      ? 'Creas una cuenta real con inicio de sesión. Dentro verás el panel de acceso anticipado y el estado de fundador. El diagnóstico, el Perfil Maestro y la Ruta MK todavía no están activos: se habilitan cuando lancemos la plataforma.'
+      ? 'Hoy puedes crear una cuenta real, iniciar sesión y acceder a tu panel de fundador. Allí verás el estado del desarrollo y las funciones que se habilitarán con el lanzamiento.\n\nEl diagnóstico, el Perfil Maestro y la Ruta MK todavía no están activos.'
       : 'Creas tu cuenta, inicias sesión y usas el diagnóstico, el Perfil Maestro y la Ruta MK desde la plataforma web.',
   },
   {
-    id: 'estatus-fundador',
-    question: '¿Qué significa el estatus de fundador?',
-    answer: LANDING_FOUNDER_STATUS,
+    id: 'cuando-disponible',
+    question: '¿Cuándo estará disponible la plataforma?',
+    answer: isEarlyAccessMode()
+      ? 'Todavía no hemos anunciado una fecha de lanzamiento. Las cuentas de fundador recibirán acceso prioritario cuando comiencen las primeras pruebas y cuando se active la plataforma completa.'
+      : 'La plataforma web ya está disponible. La app para iOS y Android se sigue desarrollando y se anunciará cuando esté lista para pruebas.',
   },
   {
-    id: 'cuando-cobro',
-    question: '¿Cuándo comenzarán a cobrarme?',
+    id: 'estatus-fundador',
+    question: '¿Qué significa tener estatus de fundador?',
+    answer:
+      'El estatus de fundador queda identificado permanentemente dentro de tu cuenta. También incluye acceso prioritario a las primeras versiones y la posibilidad de participar en pruebas y ciclos de retroalimentación.',
+  },
+  {
+    id: 'costo-cobros',
+    question: '¿Cuánto costará y cuándo comenzarán los cobros?',
     answer: isEarlyAccessMode()
-      ? 'Registrarte hoy no activa ningún cobro ni suscripción. Antes de suscribirte habrá aviso, plan, precio y confirmación explícita. La prueba de 30 días comienza cuando se active la plataforma.'
+      ? 'Crear tu cuenta hoy no activa ningún cobro ni suscripción. Los planes publicados son los precios previstos para el lanzamiento y pueden ajustarse antes de que se habiliten los pagos.\n\nAntes de suscribirte recibirás la información del plan, su precio y una solicitud de confirmación explícita. La prueba de 30 días comenzará cuando se active la plataforma.'
       : 'MK incluye un período de prueba gratuito antes de cualquier cobro. Revisa duración, planes y precios vigentes en la página de precios.',
     link: { href: '/precios', label: 'Ver planes y precios' },
   },
   {
     id: 'privacidad-respuestas',
-    question: '¿Quién puede ver mis diagnósticos y respuestas?',
+    question: '¿Quién podrá ver mis diagnósticos y respuestas?',
     answer:
-      'Tus respuestas forman parte de tu proceso personal. Estamos diseñando MK para que controles tu información y para que el acceso de terceros dependa de tu autorización.',
+      'Estamos diseñando MK para que tus diagnósticos permanezcan privados y para que cualquier acceso de asesores u otros terceros requiera tu autorización.',
   },
   {
     id: 'solo-entrenamiento',
     question: '¿MK es solo entrenamiento físico?',
     answer:
-      'No. El entrenamiento físico es una base importante, pero MK integra espíritu, mente y cuerpo.',
+      'No. La salud física forma parte del sistema, pero MK trabaja sobre tres pilares conectados: Espíritu, Mente y Cuerpo.\n\nEstos pilares se aplican a tu mentalidad, tus relaciones, tus finanzas y tu salud física.',
   },
   {
     id: 'necesito-crisis',
     question: '¿Necesito estar en crisis para entrar?',
     answer:
-      'No. MK sirve tanto si necesitas reconstruirte como si ya funcionas y buscas mayor propósito, orden e impacto.',
+      'No. Puedes utilizar MK tanto para reconstruir un área deteriorada como para ordenar una vida que ya funciona, recuperar coherencia o dirigir tu capacidad hacia una obra con mayor impacto.',
   },
   {
     id: 'es-religioso',
     question: '¿MK es religioso?',
     answer:
-      'MK trabaja con propósito, virtud, responsabilidad, servicio y trascendencia. No exige pertenecer a una iglesia ni adoptar una etiqueta religiosa.',
+      'MK trabaja con propósito, virtud, responsabilidad, servicio y trascendencia, pero no exige pertenecer a una iglesia ni adoptar una creencia o etiqueta religiosa.',
   },
   {
     id: 'diferencia-habitos',
-    question: '¿Qué diferencia a MK de un programa de hábitos o fitness?',
+    question: '¿Qué diferencia a MK de una app de hábitos o fitness?',
     answer:
-      'MK no parte desde la productividad ni desde la estética. Parte desde tu propósito trascendental y lo convierte en una Ruta MK con decisiones, planes y acciones que puedes revisar y medir.',
-  },
-  {
-    id: 'precio-prueba',
-    question: '¿Cuánto cuesta y hay período de prueba?',
-    answer: isEarlyAccessMode()
-      ? 'Hoy el registro no cobra. Los planes publicados son los previstos al lanzamiento y pueden ajustarse antes de activar cobros. Habrá 30 días de prueba cuando se active la plataforma.'
-      : 'MK incluye un período de prueba gratuito antes de cualquier cobro. Revisa duración, planes y precios vigentes en la página de precios.',
-    link: { href: '/precios', label: 'Ver planes y precios' },
-  },
-  {
-    id: 'primer-paso',
-    question: '¿Cuál es el primer paso?',
-    answer: isEarlyAccessMode()
-      ? 'Crear tu cuenta de fundador para reservar tu acceso. Te avisaremos cuando abran el diagnóstico y la plataforma completa.'
-      : 'Crear tu cuenta en la plataforma web y completar el diagnóstico inicial para saber desde dónde partes y qué debes ordenar primero.',
+      'Una app de hábitos registra conductas. MK comienza con un diagnóstico de tu situación y una dirección de propósito. Desde ahí, convierte tus prioridades en una Ruta MK con planes, acciones, hábitos y revisiones.\n\nAsí, los hábitos no aparecen aislados: responden a una dirección que tú has definido.',
   },
 ] as const;
 
 export type LandingFaqItem = (typeof LANDING_FAQ_ITEMS)[number];
+
+export const LANDING_FAQ_CLOSE = {
+  title: 'Comienza con tu cuenta de fundador',
+  lead: 'Crea tu cuenta sin tarjeta ni cobro. Te avisaremos con prioridad cuando se habiliten el diagnóstico y las primeras versiones de la plataforma.',
+  ctaLabel: 'Crear mi cuenta de fundador',
+} as const;
 
 export function landingFaqJsonLd() {
   return {
@@ -88,7 +90,7 @@ export function landingFaqJsonLd() {
       name: item.question,
       acceptedAnswer: {
         '@type': 'Answer',
-        text: item.answer,
+        text: item.answer.replace(/\n\n/g, ' '),
       },
     })),
   };

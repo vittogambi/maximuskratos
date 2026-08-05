@@ -19,9 +19,8 @@ import { LandingGateways } from '@/components/landing/landing-gateways';
 import { LandingProductStatus } from '@/components/landing/landing-product-status';
 import { LandingPrecios } from '@/components/landing/landing-precios';
 import { applyLandingHashFromLocation } from '@/lib/landing-nav';
-import { LANDING_IMAGES } from '@/lib/assets';
-import { LANDING_FAQ_ITEMS } from '@/lib/landing-faq';
-import { LANDING_CLOSE, LANDING_PRIMARY_CTA } from '@/lib/landing-copy';
+import { LANDING_FAQ_CLOSE, LANDING_FAQ_ITEMS } from '@/lib/landing-faq';
+import { LANDING_PRIMARY_CTA } from '@/lib/landing-copy';
 
 export function AethelgardLanding() {
   const reduced = useReducedMotion();
@@ -117,7 +116,7 @@ export function AethelgardLanding() {
                 Antes de dar el paso
               </h2>
               <p className="ag-faq-header__lead font-body-lg">
-                Respuestas claras sobre qué es MK, para quién es y cómo empezar.
+                Qué es MK, qué puedes hacer hoy y cómo funciona el acceso anticipado.
               </p>
             </ScrollReveal>
 
@@ -144,6 +143,13 @@ export function AethelgardLanding() {
             </ScrollStaggerContainer>
 
             <ScrollReveal className="ag-faq-footer text-center" density="tight">
+              <div className="ag-faq-close">
+                <h3 className="ag-faq-close__title font-headline-sm">{LANDING_FAQ_CLOSE.title}</h3>
+                <p className="ag-faq-close__lead font-body-md">{LANDING_FAQ_CLOSE.lead}</p>
+                <AuthCta href={LANDING_PRIMARY_CTA.href} className="btn-primary font-label-lg">
+                  {LANDING_FAQ_CLOSE.ctaLabel}
+                </AuthCta>
+              </div>
               <p className="ag-faq-footer__text font-body-md">
                 ¿Otra duda?{' '}
                 <Link href="/contacto" className="ag-faq-cta__link">
@@ -156,62 +162,6 @@ export function AethelgardLanding() {
               </p>
             </ScrollReveal>
           </div>
-        </section>
-
-        {/* ── 9b. CTA final ────────────────────────────────────────────── */}
-        <section className="ag-cta-section ag-section-inner relative flex items-center justify-center overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={LANDING_IMAGES.bgCtaGateway}
-            alt=""
-            style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              maxWidth: 'none',
-              objectFit: 'cover',
-              objectPosition: 'center 40%',
-              opacity: 0.75,
-              mixBlendMode: 'lighten',
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'linear-gradient(to top, #0e0e0e, rgba(14,14,14,0.55), transparent)',
-            }}
-          />
-          <ScrollReveal className="ag-panel ag-panel--wide relative z-10 ag-founder-close" density="spacious">
-            <p className="hud-text mb-6">{LANDING_CLOSE.eyebrow}</p>
-            <h2 className="ag-cta-title ag-type-section text-white">
-              {LANDING_CLOSE.title}
-              <br />
-              {LANDING_CLOSE.titleLine2}
-            </h2>
-            <p className="ag-landing-close-body font-body-lg text-white/75">{LANDING_CLOSE.body}</p>
-            <div className="ag-cta-step relative">
-              <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
-              <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
-              <span className="ag-cta-step__num" aria-hidden>01</span>
-              <div className="ag-landing-close-step">
-                <p className="hud-text text-action-red">{LANDING_CLOSE.stepEyebrow}</p>
-                <h3 className="ag-type-item text-white">{LANDING_CLOSE.stepTitle}</h3>
-                {LANDING_CLOSE.stepBody ? (
-                  <p className="font-body-md text-white/65">{LANDING_CLOSE.stepBody}</p>
-                ) : null}
-              </div>
-              <div className="ag-founder-close__primary">
-                <AuthCta href={LANDING_PRIMARY_CTA.href} className="ag-btn-cta ag-founder-close__cta font-label-lg">
-                  {LANDING_PRIMARY_CTA.labelAlt}
-                </AuthCta>
-                {LANDING_CLOSE.platformNote ? (
-                  <p className="ag-landing-close-platform font-body-sm">{LANDING_CLOSE.platformNote}</p>
-                ) : null}
-              </div>
-            </div>
-          </ScrollReveal>
         </section>
       </main>
 

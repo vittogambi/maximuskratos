@@ -88,7 +88,13 @@ export function FaqAccordionItem({
                 }
           }
         >
-          <p className="ag-faq-item__answer-text font-body-md">{answer}</p>
+          <div className="ag-faq-item__answer">
+            {answer.split(/\n\n+/).map((paragraph, paragraphIndex) => (
+              <p key={paragraphIndex} className="ag-faq-item__answer-text font-body-md">
+                {paragraph}
+              </p>
+            ))}
+          </div>
           {link ? (
             <Link href={link.href} className="ag-inline-link font-label-md">
               {link.label}
