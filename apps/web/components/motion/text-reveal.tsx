@@ -10,8 +10,8 @@ import {
   getBoundedStagger,
 } from './tokens';
 
-/** Soft settle for epic title cards — decisive, not bouncy. */
-const EPIC_EASE = [0.19, 1, 0.22, 1] as const;
+/** Soft continuous settle — less punchy than a hard title-card snap. */
+const EPIC_EASE = [0.22, 1, 0.36, 1] as const;
 
 interface TextRevealProps {
   /** One string per visual line. */
@@ -63,10 +63,10 @@ export function TextReveal({
   const shouldShow = startWhen === 'mount' || inView || reduced;
   const isEpic = variant === 'epic';
   const lineDuration =
-    duration ?? (isEpic ? 0.88 : MOTION_DURATION.reveal);
+    duration ?? (isEpic ? 1.05 : MOTION_DURATION.reveal);
   const stagger =
     staggerProp ??
-    getBoundedStagger(lines.length, isEpic ? 0.16 : MOTION_STAGGER.tight);
+    getBoundedStagger(lines.length, isEpic ? 0.07 : MOTION_STAGGER.tight);
 
   if (reduced) {
     return (
@@ -80,13 +80,15 @@ export function TextReveal({
     );
   }
 
+  // Epic: percentage y clears the overflow mask even when a "line" wraps on
+  // mobile (em-travel left wrapped glyphs visible). Opacity starts at 0 so the
+  // title is never readable before the reveal — same as desktop.
+  // Never animate letter-spacing: it reflows wrapped lines mid-reveal.
   const initial = isEpic
     ? {
-        // Opacity stays high for LCP; the mask + transform do the reveal.
-        opacity: lcpSafe ? 1 : 0,
-        y: '1.15em',
-        scale: 0.92,
-        letterSpacing: '0.22em',
+        opacity: 0,
+        y: '100%',
+        scale: 0.985,
       }
     : lcpSafe
       ? { opacity: 0.92, y: '0.55em' }
@@ -97,7 +99,6 @@ export function TextReveal({
         opacity: 1,
         y: 0,
         scale: 1,
-        letterSpacing: '0.04em',
       }
     : { opacity: 1, y: 0 };
 
@@ -124,30 +125,12 @@ export function TextReveal({
             transition={
               isEpic
                 ? {
-                    y: {
-                      type: 'tween',
-                      duration: lineDuration,
-                      ease: EPIC_EASE,
-                      delay: delay + i * stagger,
-                    },
-                    scale: {
-                      type: 'tween',
-                      duration: lineDuration,
-                      ease: EPIC_EASE,
-                      delay: delay + i * stagger,
-                    },
-                    opacity: {
-                      type: 'tween',
-                      duration: lineDuration * 0.55,
-                      ease: MOTION_EASE.enter,
-                      delay: delay + i * stagger,
-                    },
-                    letterSpacing: {
-                      type: 'tween',
-                      duration: lineDuration * 1.1,
-                      ease: EPIC_EASE,
-                      delay: delay + i * stagger,
-                    },
+                    // One shared curve for y / scale / opacity so lines feel like
+                    // a continuous wave instead of discrete section hits.
+                    type: 'tween',
+                    duration: lineDuration,
+                    ease: EPIC_EASE,
+                    delay: delay + i * stagger,
                   }
                 : {
                     type: 'tween',

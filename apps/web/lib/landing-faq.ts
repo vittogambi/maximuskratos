@@ -1,6 +1,41 @@
 import { isEarlyAccessMode } from '@/lib/product-phase';
+import { LANDING_FOUNDER_STATUS } from '@/lib/landing-copy';
 
 export const LANDING_FAQ_ITEMS = [
+  {
+    id: 'es-app',
+    question: '¿Maximus Kratos es una app?',
+    answer: isEarlyAccessMode()
+      ? 'Maximus Kratos será una app móvil y una plataforma web de desarrollo personal para hombres. El sistema conecta diagnóstico, propósito, prioridades, ejecución y revisión dentro de una misma cuenta. Hoy puedes explorar el método y crear tu cuenta de fundador; el diagnóstico, la webapp y las apps para iOS y Android están en desarrollo.'
+      : 'Maximus Kratos es una app móvil y una plataforma web de desarrollo personal para hombres. Desde una misma cuenta conectas diagnóstico, propósito, prioridades, ejecución y revisión. Hoy usas el sistema completo desde la plataforma web; la app para iOS y Android está en desarrollo.',
+    link: { href: '/sistema', label: 'Conocer la plataforma' },
+  },
+  {
+    id: 'cuenta-hoy',
+    question: '¿Qué puedo hacer dentro de mi cuenta hoy?',
+    answer: isEarlyAccessMode()
+      ? 'Creas una cuenta real con inicio de sesión. Dentro verás el panel de acceso anticipado y el estado de fundador. El diagnóstico, el Perfil Maestro y la Ruta MK todavía no están activos: se habilitan cuando lancemos la plataforma.'
+      : 'Creas tu cuenta, inicias sesión y usas el diagnóstico, el Perfil Maestro y la Ruta MK desde la plataforma web.',
+  },
+  {
+    id: 'estatus-fundador',
+    question: '¿Qué significa el estatus de fundador?',
+    answer: LANDING_FOUNDER_STATUS,
+  },
+  {
+    id: 'cuando-cobro',
+    question: '¿Cuándo comenzarán a cobrarme?',
+    answer: isEarlyAccessMode()
+      ? 'Registrarte hoy no activa ningún cobro ni suscripción. Antes de suscribirte habrá aviso, plan, precio y confirmación explícita. La prueba de 30 días comienza cuando se active la plataforma.'
+      : 'MK incluye un período de prueba gratuito antes de cualquier cobro. Revisa duración, planes y precios vigentes en la página de precios.',
+    link: { href: '/precios', label: 'Ver planes y precios' },
+  },
+  {
+    id: 'privacidad-respuestas',
+    question: '¿Quién puede ver mis diagnósticos y respuestas?',
+    answer:
+      'Tus respuestas forman parte de tu proceso personal. Estamos diseñando MK para que controles tu información y para que el acceso de terceros dependa de tu autorización.',
+  },
   {
     id: 'solo-entrenamiento',
     question: '¿MK es solo entrenamiento físico?',
@@ -26,18 +61,11 @@ export const LANDING_FAQ_ITEMS = [
       'MK no parte desde la productividad ni desde la estética. Parte desde la pregunta central: quién estás llamado a construir y qué vida concreta debe sostener esa identidad.',
   },
   {
-    id: 'es-app',
-    question: '¿MK es una app? ¿Cómo se usa?',
-    answer: isEarlyAccessMode()
-      ? 'Hoy puedes crear tu cuenta de fundador y explorar el método en el sitio. El diagnóstico, el Perfil Maestro y la Ruta abrirán pronto, junto con la webapp y la app para iOS y Android, bajo la misma cuenta.'
-      : 'MK es una plataforma web: creas tu cuenta y desde el navegador haces el diagnóstico, construyes tu Perfil Maestro y avanzas por tu Ruta. La app para iOS y Android está en desarrollo; usará tu misma cuenta y añadirá misiones diarias, métricas de ejecución y notificaciones.',
-    link: { href: '/sistema', label: 'Conocer la plataforma' },
-  },
-  {
     id: 'precio-prueba',
     question: '¿Cuánto cuesta y hay período de prueba?',
-    answer:
-      'MK incluye un período de prueba gratuito antes de cualquier cobro. Revisa duración, planes y precios vigentes en la página de precios.',
+    answer: isEarlyAccessMode()
+      ? 'Hoy el registro no cobra. Los planes publicados son los previstos al lanzamiento y pueden ajustarse antes de activar cobros. Habrá 30 días de prueba cuando se active la plataforma.'
+      : 'MK incluye un período de prueba gratuito antes de cualquier cobro. Revisa duración, planes y precios vigentes en la página de precios.',
     link: { href: '/precios', label: 'Ver planes y precios' },
   },
   {

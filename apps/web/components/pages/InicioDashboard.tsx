@@ -243,12 +243,13 @@ function FounderAccessDashboard({ email, entrance }: { email: string; entrance: 
           <p className="mk-section-eyebrow">PROGRAMA FUNDADOR</p>
           <h2 className="mk-progress-hero__title">Acceso anticipado.</h2>
           <p className="mk-progress-hero__sub">
-            Tu lugar está reservado{email ? ` (${email})` : ''}. El diagnóstico, el Perfil Maestro y
-            la Ruta se activan cuando lancemos la webapp y la app móvil juntas. Serás de los primeros
-            en entrar.
+            Tu cuenta de fundador está activa{email ? ` (${email})` : ''}. Hoy tienes identificación
+            permanente de fundador, acceso prioritario a las primeras versiones y posibilidad de
+            participar en pruebas y ciclos de retroalimentación. El diagnóstico, el Perfil Maestro y
+            la Ruta se activan cuando lancemos la webapp y la app móvil juntas.
           </p>
           <Link href="/sistema" className="mk-btn-primary">
-            Explorar el sistema →
+            Ver la vista previa →
           </Link>
           <p className="mk-progress-hero__sub" style={{ marginTop: '1rem' }}>
             <Link href="/marco-central" style={{ color: 'rgba(255,255,255,0.55)', textDecoration: 'underline' }}>

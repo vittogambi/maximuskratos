@@ -25,7 +25,7 @@ Jurisdiction: ${legalContact.jurisdiction}
 
 - Home: ${absoluteUrl('/')}
 - Manifiesto: ${absoluteUrl('/manifiesto')}
-- El Sistema: ${absoluteUrl('/sistema')}
+- Producto: ${absoluteUrl('/sistema')}
 - Marco Central: ${absoluteUrl('/marco-central')}
 - IKIGAI: ${absoluteUrl('/ikigai')}
 - Precios: ${absoluteUrl('/precios')}

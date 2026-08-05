@@ -5,7 +5,7 @@ import { buildPageMetadata } from '@/lib/seo';
 import { SISTEMA_FAQ_ITEMS } from '@/lib/sistema-faq';
 
 export const metadata = buildPageMetadata({
-  title: 'El Sistema',
+  title: 'Producto',
   description:
     'Maximus Kratos: acceso anticipado abierto. Diagnóstico, Perfil Maestro, Ruta MK y apps se lanzan juntos próximamente.',
   path: '/sistema',
@@ -21,7 +21,7 @@ export default function SistemaPage() {
             faqJsonLd(SISTEMA_FAQ_ITEMS),
             breadcrumbJsonLd([
               { name: 'Inicio', path: '/' },
-              { name: 'El Sistema', path: '/sistema' },
+              { name: 'Producto', path: '/sistema' },
             ]),
           ),
         }}

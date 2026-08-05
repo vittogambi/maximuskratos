@@ -1,11 +1,11 @@
 import type { PublicFaqItem } from '@/lib/faq';
 import { isEarlyAccessMode } from '@/lib/product-phase';
 
-/** FAQ de /sistema: producto, acceso y recorrido. */
+/** FAQ de /sistema (Producto): acceso y recorrido. */
 export const SISTEMA_FAQ_ITEMS: ReadonlyArray<PublicFaqItem> = [
   {
     id: 'que-incluye',
-    question: '¿Qué incluye El Sistema de Maximus Kratos?',
+    question: '¿Qué incluye el Producto de Maximus Kratos?',
     answer:
       'La plataforma donde vivirá tu proceso: diagnóstico, Perfil Maestro, Ruta MK y panel de continuidad, bajo una sola cuenta en web y app.',
   },
@@ -33,9 +33,9 @@ export const SISTEMA_FAQ_ITEMS: ReadonlyArray<PublicFaqItem> = [
   },
   {
     id: 'tres-paginas',
-    question: '¿Qué diferencia hay entre Manifiesto, Marco Central y El Sistema?',
+    question: '¿Qué diferencia hay entre Manifiesto, Marco Central y Producto?',
     answer:
-      'El Manifiesto explica por qué existe MK y qué defiende. El Marco Central explica el método y sus piezas. El Sistema muestra qué vas a usar, cómo se ve y cuándo está disponible.',
+      'El Manifiesto explica por qué existe MK y qué defiende. El Marco Central explica el método y sus piezas. Producto muestra qué vas a usar, cómo se ve y cuándo está disponible.',
     link: { href: '/manifiesto', label: 'Leer el Manifiesto' },
   },
   {

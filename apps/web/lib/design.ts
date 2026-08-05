@@ -7,62 +7,74 @@ export const designColors = {
 
 export const siteConfig = {
   name: 'Maximus Kratos',
-  tagline: 'Sistema Integral de Transformación Masculina',
+  tagline: 'App y plataforma web de desarrollo personal para hombres',
   description:
-    'Una metodología de autodescubrimiento y arquitectura personal que alinea Espíritu, Mente y Cuerpo bajo el rigor físico y la rendición de cuentas.',
+    'Diagnóstico, propósito y ejecución dentro de un mismo sistema. Detecta la distancia entre lo que valoras y cómo vives, define un propósito trascendental y conviértelo en una Ruta MK que puedas ejecutar, revisar y medir.',
 };
 
 /** Landing section ids — must match `id` attributes on the home page */
 export const landingSections = [
-  { id: 'perfiles', label: 'Perfiles', shortLabel: 'Perfiles' },
-  { id: 'funcionamiento', label: 'Funcionamiento', shortLabel: 'Método' },
-  { id: 'beneficios', label: 'Beneficios', shortLabel: 'Beneficios' },
-  { id: 'preguntas-frecuentes', label: 'Preguntas Frecuentes', shortLabel: 'FAQ' },
+  { id: 'funcionamiento', label: 'Cómo funciona', shortLabel: 'Funciona' },
+  { id: 'perfiles', label: 'Para quién', shortLabel: 'Para quién' },
+  { id: 'precios', label: 'Precios', shortLabel: 'Precios' },
 ] as const;
 
-export const publicNav = [
-  ...landingSections.map((section) => ({
-    href: `/#${section.id}` as const,
-    label: section.label,
-    shortLabel: section.shortLabel,
-  })),
-  { href: '/manifiesto', label: 'Manifiesto' },
-  { href: '/sistema', label: 'El Sistema', shortLabel: 'Sistema' },
-  { href: '/precios', label: 'Precios' },
-  { href: '/contacto', label: 'Contacto' },
+/** Topbar: anclas a la izquierda del divisor */
+export const publicNavLanding = [
+  {
+    href: '/#funcionamiento' as const,
+    label: 'Cómo funciona',
+    shortLabel: 'Funciona',
+  },
+  {
+    href: '/#perfiles' as const,
+    label: 'Para quién',
+    shortLabel: 'Para quién',
+  },
 ] as const;
+
+/** Topbar: producto, método y precios (sin Manifiesto) */
+export const publicNavPages = [
+  { href: '/sistema' as const, label: 'Producto', shortLabel: 'Producto' },
+  { href: '/marco-central' as const, label: 'Método' },
+  { href: '/#precios' as const, label: 'Precios', shortLabel: 'Precios' },
+] as const;
+
+export const publicNav = [...publicNavLanding, ...publicNavPages] as const;
 
 export type NavItem = (typeof publicNav)[number];
 
 export const publicNavAuth = {
   login: { href: '/login', label: 'Iniciar sesión' },
-  register: { href: '/register', label: 'Comenzar' },
+  register: { href: '/register', label: 'Acceso anticipado' },
 } as const;
 
-export const footerPlatformNav = publicNav.slice(0, 4);
+export const footerPlatformNav = publicNavLanding;
 
 /** Drawer mobile: anclas de la landing */
-export const drawerConoceMkNav = footerPlatformNav;
+export const drawerConoceMkNav = landingSections.map((section) => ({
+  href: `/#${section.id}` as const,
+  label: section.label,
+}));
 
-/** Drawer mobile: páginas de producto */
+/** Drawer mobile: Producto, Método, Manifiesto */
 export const drawerPlataformaNav = [
-  { href: '/sistema', label: 'El Sistema' },
-  { href: '/precios', label: 'Precios' },
+  { href: '/sistema', label: 'Producto' },
+  { href: '/marco-central', label: 'Método' },
+  { href: '/manifiesto', label: 'Manifiesto' },
 ] as const;
 
-/** Drawer mobile: resto del sitio (sin duplicar El Sistema / Precios) */
+/** Drawer mobile: resto del sitio */
 export const drawerSitioNav = [
-  { href: '/manifiesto', label: 'Manifiesto' },
-  { href: '/marco-central', label: 'Marco Central' },
   { href: '/ikigai', label: 'IKIGAI' },
   { href: '/eventos', label: 'Eventos' },
   { href: '/contacto', label: 'Contacto' },
 ] as const;
 
 export const footerSiteNav = [
+  { href: '/sistema', label: 'Producto' },
+  { href: '/marco-central', label: 'Método' },
   { href: '/manifiesto', label: 'Manifiesto' },
-  { href: '/sistema', label: 'El Sistema' },
-  { href: '/marco-central', label: 'Marco Central' },
   { href: '/ikigai', label: 'IKIGAI' },
   { href: '/precios', label: 'Precios' },
   { href: '/eventos', label: 'Eventos' },
@@ -83,4 +95,3 @@ export const socialLinks = [
 
 /** @deprecated Use footerSiteNav */
 export const footerNav = footerSiteNav;
-

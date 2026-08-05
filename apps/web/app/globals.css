@@ -4535,9 +4535,15 @@ html:has(.ag-landing) body {
 }
 
 .ag-landing .ag-hero-cta-note {
-  margin: 0.85rem 0 0;
+  margin: 0.85rem auto 0;
+  max-width: 26rem;
   color: rgba(255, 255, 255, 0.5);
   text-align: center;
+}
+
+.ag-landing .ag-hero-actions-group .ag-hero-status {
+  margin-top: 0;
+  margin-bottom: clamp(1rem, 2.5vw, 1.35rem);
 }
 
 .ag-landing .ag-phase-platform {
@@ -4915,21 +4921,37 @@ html:has(.ag-landing) body {
 }
 
 .ag-landing .ag-crisis-intro {
-  margin-bottom: 0;
+  margin-bottom: clamp(2.5rem, 6vw, 4rem);
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 0;
   width: 100%;
   text-align: center;
 }
 
+.ag-landing .ag-crisis-intro .hud-text {
+  margin: 0 0 clamp(0.85rem, 2vw, 1.15rem);
+}
+
+.ag-landing .ag-crisis-intro .ag-crisis-title {
+  margin: 0 0 clamp(1rem, 2.5vw, 1.35rem);
+}
+
 .ag-landing .ag-crisis-lead {
-  font-size: clamp(1.0625rem, 2.5vw, 1.5rem);
-  line-height: 1.55;
+  font-size: clamp(1rem, 2.2vw, 1.1875rem);
+  line-height: 1.6;
   width: 100%;
-  max-width: 42rem;
-  margin-inline: auto;
+  max-width: 28rem;
+  margin: 0 auto;
   text-align: center;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+@media (max-width: 639px) {
+  .ag-landing .ag-crisis-lead {
+    max-width: 22rem;
+  }
 }
 
 .ag-landing .ag-crisis-cards {
@@ -5080,51 +5102,6 @@ html:has(.ag-landing) body {
   }
 }
 
-.ag-landing .ag-mk-realms__rail {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .ag-landing .ag-mk-realms__rail {
-    position: absolute;
-    top: 1.75rem;
-    left: 12%;
-    right: 12%;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    gap: 0;
-    pointer-events: none;
-    transform: translateY(-50%);
-  }
-
-  .ag-landing .ag-mk-realms__rail-line {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      rgba(247, 198, 123, 0.15),
-      rgba(247, 198, 123, 0.65) 50%,
-      rgba(247, 198, 123, 0.15)
-    );
-  }
-
-  .ag-landing .ag-mk-realms__rail-core {
-    flex-shrink: 0;
-    padding: 0.3rem 0.85rem;
-    border: 1px solid rgba(247, 198, 123, 0.35);
-    background: rgba(14, 14, 14, 0.92);
-    font-family: var(--font-display);
-    font-size: 0.625rem;
-    font-style: italic;
-    font-weight: 600;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--color-mk-gold);
-    white-space: nowrap;
-  }
-}
-
 .ag-landing .ag-mk-realm {
   position: relative;
   z-index: 1;
@@ -5213,53 +5190,57 @@ html:has(.ag-landing) body {
 }
 
 .ag-landing .ag-mk-realm__symbol {
-  margin: 0 0 0.85rem;
+  margin: 0 0 clamp(0.85rem, 2vw, 1.1rem);
   color: rgba(255, 255, 255, 0.4);
-}
-
-.ag-landing .ag-mk-realm__question {
-  margin: 0;
-  min-height: 2.6rem;
-  color: rgba(255, 255, 255, 0.82);
-  font-size: 0.875rem;
-  font-style: italic;
-  line-height: 1.4;
 }
 
 .ag-landing .ag-mk-realm__body {
   width: 100%;
   max-width: none;
-  margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  font-size: 0.875rem;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.58);
+  margin: 0;
+  padding-top: 0;
+  border-top: none;
+  font-size: clamp(0.9375rem, 1.4vw, 1rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+  text-wrap: pretty;
 }
 
 /* ── Landing: los cuatro ámbitos (compacto, tras los pilares) ── */
 .ag-landing .ag-mk-domains-section {
   margin-top: clamp(3rem, 7vw, 5rem);
+  text-align: center;
 }
 
 .ag-landing .ag-mk-domains-section__head {
   max-width: var(--ag-max-band);
   margin-inline: auto;
-  margin-bottom: clamp(1.5rem, 3vw, 2rem);
+  margin-bottom: clamp(0.85rem, 2vw, 1.15rem);
   text-align: center;
 }
 
 .ag-landing .ag-mk-domains-section__head .hud-text {
-  margin-bottom: var(--ag-stack-sm);
+  margin-bottom: 0;
 }
 
-.ag-landing .ag-mk-domains-section__head .ag-mk-matrix {
-  margin-top: var(--ag-stack-md);
+.ag-landing .ag-mk-territories {
+  margin: 0 auto clamp(1.35rem, 3vw, 1.85rem);
+  max-width: 36rem;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: clamp(0.9375rem, 1.6vw, 1.0625rem);
+  letter-spacing: 0.02em;
+  line-height: 1.7;
+  text-wrap: balance;
+}
+
+.ag-landing .ag-mk-territories__sep {
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 400;
 }
 
 .ag-landing .ag-mk-domains-section__lead {
   max-width: 32rem;
-  margin: var(--ag-stack-md) auto 0;
+  margin: 0 auto;
   color: rgba(255, 255, 255, 0.58);
   line-height: 1.65;
 }
@@ -5410,22 +5391,99 @@ html:has(.ag-landing) body {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  /* Keeps a baseline veil across the whole hero (not just the bottom) so the
+     eyebrow, CTA and DeviceShowcase stay legible over the lit statue still. */
   background: linear-gradient(
     to top,
     rgba(14, 14, 14, 0.92) 0%,
     rgba(14, 14, 14, 0.35) 38%,
-    transparent 62%
+    rgba(14, 14, 14, 0.42) 62%,
+    rgba(14, 14, 14, 0.62) 100%
   );
 }
 
-.ag-landing .ag-hero-title-zone {
+.ag-landing .ag-hero-content__intro {
   display: flex;
-  height: 100vh;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  align-items: flex-end;
+}
+
+.ag-landing .ag-hero-signature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.28em;
+  margin: clamp(1rem, 2.5vw, 1.5rem) 0 0;
+  font-size: clamp(0.8rem, 1.6vw, 1rem);
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.ag-landing .ag-hero-signature__line {
+  display: block;
+}
+
+/* Desktop: keep each signature line intact so 24–32" never collapses to one long row. */
+@media (min-width: 768px) {
+  .ag-landing .ag-hero-signature__line {
+    white-space: nowrap;
+  }
+}
+
+.ag-landing .ag-hero-actions-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.ag-landing .ag-hero-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.ag-landing .ag-hero-status {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  padding: 0 1rem 10vh;
-  overflow: visible;
+  gap: 0.5rem;
+  list-style: none;
+  margin: clamp(1.25rem, 3vw, 1.75rem) 0 0;
+  padding: 0;
+}
+
+.ag-landing .ag-hero-status__pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.ag-landing .ag-hero-preview {
+  width: 100%;
+  max-width: 62rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.ag-landing .ag-hero-preview__label {
+  margin: 0 0 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (min-width: 768px) {
+  .ag-landing .ag-hero-actions {
+    flex-direction: row;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
 }
 
 .ag-landing .ag-hero-title__eyebrow {
@@ -5468,27 +5526,15 @@ html:has(.ag-landing) body {
   padding-block: 0.04em;
 }
 
-.ag-landing .ag-hero-cta-zone {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
 @media (min-width: 768px) {
   .ag-landing .ag-hero-bg__scrim {
     background: linear-gradient(
       to top,
       rgba(14, 14, 14, 0.85) 0%,
       rgba(14, 14, 14, 0.3) 28%,
-      transparent 48%
+      rgba(14, 14, 14, 0.38) 55%,
+      rgba(14, 14, 14, 0.58) 100%
     );
-  }
-
-  .ag-landing .ag-hero-title-zone {
-    align-items: flex-end;
-    justify-content: center;
-    width: 100%;
-    max-width: none;
-    padding: 0 clamp(1.5rem, 5vw, 3rem) 12vh;
   }
 
   .ag-landing .ag-hero-title {
@@ -5498,11 +5544,6 @@ html:has(.ag-landing) body {
     font-size: clamp(2.25rem, 6.5vw, 4.25rem);
     mix-blend-mode: overlay;
     opacity: 0.9;
-  }
-
-  .ag-landing .ag-hero-cta-zone {
-    padding-left: clamp(1rem, 5vw, 3rem);
-    padding-right: clamp(1rem, 5vw, 3rem);
   }
 }
 
@@ -5525,7 +5566,7 @@ html:has(.ag-landing) body {
 }
 
 .ag-landing .ag-hero-section {
-  min-height: 150vh;
+  min-height: 100vh;
   /* Keep sticky statue stacking inside this section so it cannot paint over later blocks */
   isolation: isolate;
 }
@@ -5534,16 +5575,22 @@ html:has(.ag-landing) body {
   isolation: isolate;
 }
 
-.ag-landing .ag-hero-overlay {
+/* Content flows naturally past the pinned statue (same pattern as .ag-crisis-content) —
+   the CTA and the DeviceShowcase preview no longer depend on a fixed scroll budget. */
+.ag-landing .ag-hero-content {
   margin-top: -100vh;
-  min-height: 150vh;
-}
-
-.ag-landing .ag-hero-cta-zone {
-  height: 50vh;
-  min-height: clamp(18rem, 50vh, 30rem);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(2.25rem, 5vw, 3.25rem);
   padding-inline: var(--ag-gutter);
-  padding-block: clamp(3rem, 7vh, 5rem);
+  /* Pushed below the statue's face/beam reveal on purpose — the animation is
+     the first thing visitors should see uncovered. Text starts at the
+     shoulder line, never over the face. */
+  padding-top: clamp(21rem, 58vh, 34rem);
+  padding-bottom: clamp(3rem, 7vh, 4.5rem);
 }
 
 .ag-landing .font-display-xl {
@@ -8383,8 +8430,7 @@ html:has(.ag-landing) body {
   filter: drop-shadow(0 20px 36px rgba(0, 0, 0, 0.7));
 }
 
-/* Below desktop: phone leads. The laptop's 16:10 frame is too short to show
-   archetype + KPIs + CTA without clipping — phone is the right canvas. */
+/* Desktop-only showcase: laptop on every breakpoint. */
 @media (max-width: 959px) {
   .ag-landing .device-showcase {
     padding: 0.5rem 0 1rem;
@@ -8399,34 +8445,11 @@ html:has(.ag-landing) body {
     padding: 0.25rem 0 0.75rem;
   }
 
-  .ag-landing .device-showcase:not(.device-showcase--experience) .device-frame--laptop {
-    display: none;
-  }
-
-  .ag-landing .device-showcase:not(.device-showcase--experience) .device-frame--phone {
-    position: relative;
-    right: auto;
-    bottom: auto;
-    width: min(58vw, 16rem);
+  .ag-landing .device-showcase--desktop-only .device-frame--laptop {
+    display: block;
+    width: min(100%, 28rem);
     transform: none;
     filter: drop-shadow(0 22px 40px rgba(0, 0, 0, 0.65));
-  }
-
-  /* Experience sections: phone only below desktop. */
-  .ag-landing .device-showcase--experience .device-frame--laptop {
-    display: none;
-  }
-
-  .ag-landing .device-showcase--experience .device-frame--phone,
-  .ag-landing .device-frame--phone-experience {
-    display: block;
-    position: relative;
-    right: auto;
-    bottom: auto;
-    width: min(62vw, 16.5rem);
-    margin-inline: auto;
-    transform: none;
-    filter: drop-shadow(0 22px 40px rgba(0, 0, 0, 0.6));
   }
 
   .ag-landing .device-frame__lip {
@@ -8444,13 +8467,8 @@ html:has(.ag-landing) body {
 }
 
 @media (max-width: 767px) {
-  .ag-landing .device-showcase:not(.device-showcase--experience) .device-frame--phone {
-    width: min(72vw, 14.5rem);
-  }
-
-  .ag-landing .device-showcase--experience .device-frame--phone,
-  .ag-landing .device-frame--phone-experience {
-    width: min(78vw, 15.5rem);
+  .ag-landing .device-showcase--desktop-only .device-frame--laptop {
+    width: min(100%, 22rem);
   }
 }
 
@@ -8649,6 +8667,32 @@ html:has(.ag-landing) body {
 .ag-landing .mk-app-ui--desktop {
   display: flex;
   flex-direction: column;
+}
+
+/* Product marketing stills. Device shapes stay real laptop (16/11) / phone (9/19.2).
+   Desktop: contain on pure black (stills are centered; letterboxing blends with chrome).
+   Mobile: cover crops only the baked ~16% black side margins; UI band matches 9/19.2. */
+.ag-landing .mk-app-ui--dashboard {
+  background: #000;
+}
+
+.ag-landing .mk-app-ui__dashboard-shot {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  background: #000;
+}
+
+.ag-landing .mk-app-ui__dashboard-shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 /* ── Real app shell chrome — top bar + bottom tabs, no sidebar ───────────── */
@@ -8881,8 +8925,7 @@ html:has(.ag-landing) body {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .ag-landing .device-frame--laptop,
-  .ag-landing .device-frame--phone {
+  .ag-landing .device-frame--laptop {
     transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
@@ -8890,8 +8933,14 @@ html:has(.ag-landing) body {
     transform: perspective(1400px) rotateY(-5deg) rotateX(1deg) translateY(-2px);
   }
 
-  .ag-landing .device-showcase:hover .device-frame--phone {
-    transform: perspective(1200px) rotateY(-2deg) rotateX(0deg) translateY(-3px);
+  .ag-landing .device-showcase--desktop-only:hover .device-frame--laptop {
+    transform: perspective(1400px) rotateY(-5deg) rotateX(1deg) translateY(-2px);
+  }
+
+  @media (max-width: 959px) {
+    .ag-landing .device-showcase--desktop-only:hover .device-frame--laptop {
+      transform: translateY(-2px);
+    }
   }
 }
 
@@ -10248,7 +10297,7 @@ html:has(.ag-landing) body {
 
 .ag-landing #perfiles,
 .ag-landing #funcionamiento,
-.ag-landing #beneficios,
+.ag-landing #metodo,
 .ag-landing #preguntas-frecuentes {
   scroll-margin-top: calc(var(--nav-height) + 1.25rem);
 }
@@ -10268,12 +10317,12 @@ html:has(.ag-landing) body {
   margin-bottom: var(--ag-stack-sm);
 }
 
-/* ── Profile grid — "¿Te reconoces?" archetype cards ── */
+/* ── Profile grid — puntos de partida ── */
 .ag-landing .ag-profile-grid {
   display: grid;
   grid-template-columns: 1fr;
   align-items: stretch;
-  gap: clamp(1.25rem, 3vw, 1.5rem);
+  gap: clamp(1.35rem, 3.5vw, 1.85rem);
 }
 
 .ag-landing .ag-profile-grid__item {
@@ -10285,20 +10334,37 @@ html:has(.ag-landing) body {
   position: relative;
   width: 100%;
   border-top: 2px solid rgba(192, 1, 0, 0.45);
+  padding: clamp(1.65rem, 3.5vw, 2.35rem) clamp(1.35rem, 3vw, 2rem);
+  gap: 0;
 }
 
 .ag-landing .ag-profile-card__index {
-  margin: 0 0 0.75rem;
-  letter-spacing: 0.18em;
+  margin: 0 0 clamp(1rem, 2.2vw, 1.35rem);
+  letter-spacing: 0.2em;
+  line-height: 1;
 }
 
 .ag-landing .ag-profile-card__title {
-  margin: 0 0 clamp(1rem, 2vw, 1.25rem);
+  margin: 0 0 clamp(0.85rem, 2vw, 1.15rem);
   text-wrap: balance;
+  line-height: 1.2;
+}
+
+.ag-landing .ag-profile-card__body {
+  margin: 0;
+  flex: 1;
+  font-size: clamp(0.9375rem, 1.5vw, 1.0125rem);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.68);
+  text-wrap: pretty;
 }
 
 .ag-landing .ag-profile-card:hover {
   border-top-color: rgba(192, 1, 0, 0.9);
+}
+
+.ag-landing .ag-profile-card:hover .ag-profile-card__body {
+  color: rgba(255, 255, 255, 0.78);
 }
 
 /* Premium hover lift: transform only, fine pointers only */
@@ -10359,15 +10425,16 @@ html:has(.ag-landing) body {
 @media (min-width: 768px) {
   .ag-landing .ag-profile-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(1.5rem, 3vw, 2rem);
+    gap: clamp(1.65rem, 3vw, 2.15rem);
   }
 }
 
 .ag-landing .ag-landing-profiles__close {
-  margin-top: clamp(2rem, 4vw, 3rem);
-  max-width: 38rem;
+  margin-top: clamp(2.75rem, 5.5vw, 4rem);
+  max-width: 32rem;
   margin-inline: auto;
-  line-height: 1.65;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .ag-landing .ag-landing-realms-close {
@@ -10378,6 +10445,160 @@ html:has(.ag-landing) body {
 
 .ag-landing .ag-landing-method-head {
   margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+
+.ag-landing .ag-landing-method-close {
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+.ag-landing .ag-landing-method-close p {
+  max-width: 38rem;
+  margin: 0 auto var(--ag-stack-md);
+  line-height: 1.6;
+}
+
+/* ── Diferenciación: tabla sobria (curso / mentoría / tracker / MK) ── */
+.ag-landing .ag-inside-mk {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  margin-top: clamp(2rem, 4vw, 3rem);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .ag-landing .ag-inside-mk {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.15fr);
+    gap: clamp(2.5rem, 4vw, 4rem);
+  }
+
+  .ag-landing .ag-inside-mk__showcase {
+    position: sticky;
+    top: 6.5rem;
+  }
+}
+
+.ag-landing .ag-inside-mk__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.ag-landing .ag-inside-mk__stage {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.85rem 1rem;
+  width: 100%;
+  text-align: left;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+  color: inherit;
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+
+.ag-landing .ag-inside-mk__stage:hover,
+.ag-landing .ag-inside-mk__stage:focus-visible {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.04);
+  outline: none;
+}
+
+.ag-landing .ag-inside-mk__stage.is-active {
+  border-color: rgba(255, 0, 0, 0.45);
+  background: rgba(255, 0, 0, 0.06);
+}
+
+.ag-landing .ag-inside-mk__num {
+  color: rgba(255, 180, 168, 0.7);
+  padding-top: 0.15rem;
+}
+
+.ag-landing .ag-inside-mk__stage-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.ag-landing .ag-inside-mk__stage-title {
+  color: #fff;
+}
+
+.ag-landing .ag-inside-mk__stage-body {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.ag-landing .ag-diff-table-wrap {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  overflow-x: auto;
+}
+
+.ag-landing .ag-diff-table {
+  width: 100%;
+  min-width: 28rem;
+  border-collapse: collapse;
+}
+
+.ag-landing .ag-diff-table th,
+.ag-landing .ag-diff-table td {
+  padding: 0.9rem 1.1rem;
+  text-align: left;
+  vertical-align: top;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.ag-landing .ag-diff-table thead th {
+  padding-top: 0;
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  border-bottom-color: rgba(255, 255, 255, 0.18);
+}
+
+.ag-landing .ag-diff-table tbody th {
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.62);
+  white-space: nowrap;
+}
+
+.ag-landing .ag-diff-table tr.is-mk th,
+.ag-landing .ag-diff-table tr.is-mk td {
+  color: #fff;
+  border-bottom-color: rgba(192, 1, 0, 0.35);
+}
+
+.ag-landing .ag-diff-table tr.is-mk th {
+  border-left: 2px solid #c00100;
+  padding-left: calc(1.1rem - 2px);
+}
+
+@media (max-width: 639px) {
+  .ag-landing .ag-diff-table {
+    min-width: 0;
+  }
+
+  .ag-landing .ag-diff-table th,
+  .ag-landing .ag-diff-table td {
+    padding: 0.75rem 0.6rem;
+    font-size: 0.8125rem;
+  }
+
+  .ag-landing .ag-diff-table thead th:last-child,
+  .ag-landing .ag-diff-table tbody td:last-child {
+    width: 58%;
+  }
 }
 
 .ag-landing .ag-landing-benefits {
@@ -12482,11 +12703,6 @@ html:has(.ag-landing) body {
   margin-inline: auto;
   transform: none;
   filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.55));
-}
-
-/* Phone is hero-only on desktop; experience sections use laptop there. */
-.ag-landing .device-frame--phone-experience {
-  display: none;
 }
 
 .ag-landing .device-showcase--experience .device-showcase__ambient {
@@ -15872,13 +16088,22 @@ html:has(.ag-landing) body {
 }
 
 /* ─── PRECIOS (/precios) ─────────────────────────────────────────────────── */
-.ag-landing .ag-precios-hero {
-  min-height: clamp(20rem, 46vh, 28rem);
+/* /precios opens with SectionIntro + offer (no cinematic hero). */
+.ag-landing .ag-precios-page .ag-precios-open {
+  padding-top: clamp(5.5rem, 12vw, 7.5rem);
 }
 
 .ag-landing .ag-precios-loading {
   margin-top: clamp(2.5rem, 5vw, 3.5rem);
   color: rgba(255, 255, 255, 0.5);
+}
+
+.ag-landing .ag-precios-offer__more {
+  margin: 1.25rem 0 0;
+}
+
+.ag-landing #precios {
+  scroll-margin-top: 5.5rem;
 }
 
 .ag-landing .ag-precios-offer {
@@ -16034,15 +16259,30 @@ html:has(.ag-landing) body {
 }
 
 .ag-landing .ag-precios-card__dynamic-slot {
-  /* Same footprint for Mensual (sin “Antes”) y planes con ancla/ahorro */
-  min-height: 14.5rem;
+  min-height: 0;
   margin-bottom: 0.15rem;
 }
 
 .ag-landing .ag-precios-card__dynamic {
   display: flex;
   flex-direction: column;
-  min-height: 14.5rem;
+  min-height: 0;
+}
+
+.ag-landing .ag-precios-offer--compact .ag-precios-card__dynamic-slot {
+  margin-bottom: 0;
+}
+
+.ag-landing .ag-precios-offer--compact .ag-precios-card__amount {
+  gap: 0.35rem;
+}
+
+.ag-landing .ag-precios-offer--compact .ag-precios-card__meta {
+  margin-top: 0.35rem;
+}
+
+.ag-landing .ag-precios-offer--compact .ag-precios-card__cta {
+  margin-top: 1.25rem;
 }
 
 .ag-landing .ag-precios-card__head {
@@ -16088,9 +16328,13 @@ html:has(.ag-landing) body {
 }
 
 .ag-landing .ag-precios-card__anchor {
-  text-decoration: line-through;
-  text-decoration-thickness: 1px;
-  text-decoration-color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.ag-landing .ag-precios-card__equiv-label {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.4;
 }
 
 .ag-landing .ag-precios-card__price {
@@ -16177,6 +16421,15 @@ html:has(.ag-landing) body {
   font-size: 0.7rem;
   line-height: 1.45;
   color: rgba(255, 255, 255, 0.35);
+  text-align: center;
+}
+
+.ag-landing .ag-precios-card__founder-note {
+  margin: 0.65rem 0 0;
+  max-width: 26rem;
+  margin-inline: auto;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.42);
   text-align: center;
 }
 

@@ -408,9 +408,9 @@ export function MarcoCentralContent() {
       <section className="ag-section-inner ag-marco-action" aria-labelledby="action-heading">
         <div className="ag-container">
           <SectionIntro
-            eyebrow="DEL MARCO AL SISTEMA"
+            eyebrow="DEL MARCO AL PRODUCTO"
             title="Del plano a la plataforma."
-            lead="Lo que aquí se define se ejecuta en El Sistema."
+            lead="Lo que aquí se define se ejecuta en el Producto."
             headingId="action-heading"
           />
 

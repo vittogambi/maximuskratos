@@ -15,8 +15,9 @@ import { setAccessToken } from '@/lib/auth-storage';
 function RegisterDescription() {
   return (
     <>
-      Estatus de fundador permanente y acceso a tu panel desde hoy. El diagnóstico y la
-      plataforma completa se activan en el lanzamiento. Sin tarjeta de crédito.
+      Crea tu cuenta sin tarjeta. Acceso a tu panel desde hoy, con identificación de fundador
+      y prioridad en las primeras versiones. El diagnóstico y la plataforma completa se
+      activan en el lanzamiento.
     </>
   );
 }

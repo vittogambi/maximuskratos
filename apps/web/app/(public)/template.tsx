@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from 'motion/react';
 import { usePathname } from 'next/navigation';
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import {
   MOTION_DISTANCE,
   MOTION_DURATION,
@@ -13,21 +13,33 @@ import { peekPendingLandingHash } from '@/lib/landing-nav';
 /**
  * Public route entrance: short fade + 8px rise.
  * Opacity-only when a pending landing hash is present so scroll targeting stays accurate.
+ *
+ * Motion mounts only after hydration so SSR HTML never disagrees with the first
+ * client paint (hash / prefers-reduced-motion are client-only).
  */
 export default function PublicTemplate({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const reduced = useReducedMotion();
-  const hashPending = useMemo(() => {
-    if (typeof window === 'undefined') return false;
-    if (pathname !== '/') return false;
+  const [hydrated, setHydrated] = useState(false);
+  const [hashPending, setHashPending] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (pathname !== '/') {
+      setHashPending(false);
+      return;
+    }
     try {
-      return Boolean(peekPendingLandingHash() || window.location.hash);
+      setHashPending(Boolean(peekPendingLandingHash() || window.location.hash));
     } catch {
-      return false;
+      setHashPending(false);
     }
   }, [pathname]);
 
-  if (reduced) {
+  if (!hydrated || reduced) {
     return <>{children}</>;
   }
 

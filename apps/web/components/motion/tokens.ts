@@ -61,9 +61,11 @@ export const MOTION_VIEWPORT = {
 export const HERO_GROUP_DELAY = {
   eyebrow: 0.12,
   title: 0.42,
-  /** After epic title cascade (0.62 + 2×0.18 + 0.9 ≈ 1.88s). */
-  support: 1.92,
-  actions: 2.12,
+  /** After smoothed epic title (0.48 + 0.06 + 1.1 ≈ 1.64s). */
+  support: 1.72,
+  actions: 1.92,
+  /** Product preview lands last — after the CTA has already settled. */
+  preview: 2.12,
   media: 0.04,
 } as const;
 

@@ -43,9 +43,31 @@ export function formatBillingCadence(periodMonths: number): string {
   }
 }
 
+/** Cómo se expresa el cobro del plazo (sin el verbo "se cobra"). */
+export function formatChargedEvery(periodMonths: number): string {
+  switch (periodMonths) {
+    case 1:
+      return 'cada mes';
+    case 3:
+      return 'cada 3 meses';
+    case 6:
+      return 'cada 6 meses';
+    case 12:
+      return 'una vez al año';
+    default:
+      return `cada ${periodMonths} meses`;
+  }
+}
+
 /** Plan mensural de referencia (ancla) dentro del set público. */
 export function findMonthlyAnchor(plans: ReadonlyArray<{ periodMonths: number }>) {
   return plans.find((p) => p.periodMonths === 1) ?? null;
+}
+
+/** Equivalente mensual calculado desde el total del plazo (no un campo independiente). */
+export function monthlyEquivalentFromTotal(priceAmount: number, periodMonths: number): number {
+  if (periodMonths <= 0) return priceAmount;
+  return Math.round(priceAmount / periodMonths);
 }
 
 /** Ahorro total del plazo vs pagar el ancla mes a mes durante esos meses. */
@@ -55,4 +77,15 @@ export function periodSavingsVsMonthly(
 ): number {
   if (plan.periodMonths <= 1) return 0;
   return Math.max(0, monthlyAnchorPrice * plan.periodMonths - plan.priceAmount);
+}
+
+/** Porcentaje de ahorro vs pagar el ancla mes a mes durante el plazo. */
+export function periodSavingsPctVsMonthly(
+  plan: { periodMonths: number; priceAmount: number },
+  monthlyAnchorPrice: number,
+): number {
+  if (plan.periodMonths <= 1 || monthlyAnchorPrice <= 0) return 0;
+  const full = monthlyAnchorPrice * plan.periodMonths;
+  if (full <= 0) return 0;
+  return Math.max(0, Math.round(((full - plan.priceAmount) / full) * 100));
 }

@@ -13,7 +13,8 @@ import {
   drawerPlataformaNav,
   drawerSitioNav,
   landingSections,
-  publicNav,
+  publicNavLanding,
+  publicNavPages,
   type NavItem,
 } from '@/lib/design';
 import {
@@ -229,8 +230,8 @@ export function PublicNav() {
   const [open, setOpen] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
 
-  const landingLinks = publicNav.slice(0, 3);
-  const pageLinks = publicNav.slice(3);
+  const landingLinks = publicNavLanding;
+  const pageLinks = publicNavPages;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -378,7 +379,7 @@ export function PublicNav() {
               {link.label}
             </Link>
           ))}
-          <p className="mobile-drawer__group-label">Plataforma</p>
+          <p className="mobile-drawer__group-label">Explora</p>
           {drawerPlataformaNav.map((link) => (
             <Link
               key={link.href}
@@ -389,7 +390,7 @@ export function PublicNav() {
               {link.label}
             </Link>
           ))}
-          <p className="mobile-drawer__group-label">Sitio</p>
+          <p className="mobile-drawer__group-label">Más</p>
           {drawerSitioNav.map((link) => (
             <Link
               key={link.href}

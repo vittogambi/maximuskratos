@@ -3,126 +3,29 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'motion/react';
-import { AppIcon } from '@/components/app-icon';
-import { HeroReveal, HeroRevealItem } from '@/components/motion/hero-reveal';
-import { ScrollReveal } from '@/components/motion/scroll-reveal';
-import { ScrollStaggerContainer, StaggerItem } from '@/components/motion/stagger';
-import { TextReveal } from '@/components/motion/text-reveal';
-import { AnimatedDivider } from '@/components/motion/animated-divider';
-import {
-  MOTION_DISTANCE,
-  MOTION_DURATION,
-  MOTION_EASE,
-  MOTION_STAGGER,
-} from '@/components/motion/tokens';
 import { AuthCta } from '@/components/auth-cta';
 import { PublicFooter } from '@/components/public-footer';
 import { PublicNav } from '@/components/public-nav';
-import { TrialBadge } from '@/components/trial-badge';
 import { FaqAccordionItem } from '@/components/pages/faq-accordion-item';
-import { MkPillarsDomainsMatrix } from '@/components/pages/mk-pillars-domains-matrix';
-import { HeroBeamMedia } from '@/components/landing/hero-beam-media';
+import { ScrollReveal } from '@/components/motion/scroll-reveal';
+import { ScrollStaggerContainer, StaggerItem } from '@/components/motion/stagger';
+import { MOTION_DISTANCE, MOTION_DURATION, MOTION_EASE, MOTION_STAGGER } from '@/components/motion/tokens';
+import { LandingHero } from '@/components/landing/landing-hero';
+import { LandingHowItWorks } from '@/components/landing/landing-how-it-works';
+import { LandingInsideMk } from '@/components/landing/landing-inside-mk';
+import { LandingDifferentiation } from '@/components/landing/landing-differentiation';
+import { LandingMethodBrief } from '@/components/landing/landing-method-brief';
+import { LandingGateways } from '@/components/landing/landing-gateways';
+import { LandingProductStatus } from '@/components/landing/landing-product-status';
+import { LandingPrecios } from '@/components/landing/landing-precios';
 import { applyLandingHashFromLocation } from '@/lib/landing-nav';
 import { LANDING_IMAGES } from '@/lib/assets';
 import { LANDING_FAQ_ITEMS } from '@/lib/landing-faq';
-import {
-  LANDING_BENEFITS,
-  LANDING_CLOSE,
-  LANDING_DIAGNOSTIC_CTA,
-  LANDING_DOMAINS_SECTION,
-  LANDING_HERO,
-  LANDING_HERO_STATUS,
-  LANDING_METHOD_STEPS,
-  LANDING_PROBLEM,
-  LANDING_PROFILES,
-  LANDING_PROFILES_CLOSE,
-  LANDING_REALMS,
-  LANDING_REALMS_CLOSE,
-  LANDING_WHAT_IS,
-} from '@/lib/landing-copy';
-
-const PHASE_IMAGES = {
-  phase01: LANDING_IMAGES.phase01,
-  phase02: LANDING_IMAGES.phase02,
-  phase03: LANDING_IMAGES.phase03,
-  phase04: LANDING_IMAGES.phase04,
-  phase05: LANDING_IMAGES.phase05,
-} as const;
-
-type GradientDir = 'to-b' | 'to-t';
-
-function StickyStatue({
-  src,
-  alt,
-  imgOpacity,
-  gradientDir,
-  gradientFrom,
-  gradientVia,
-  gradientTo,
-  hasBg,
-  variant = 'default',
-}: {
-  src: string;
-  alt: string;
-  imgOpacity: number;
-  gradientDir: GradientDir;
-  gradientFrom: string;
-  gradientVia?: string;
-  gradientTo: string;
-  hasBg?: boolean;
-  variant?: 'default' | 'crisis';
-}) {
-  const gradientStyle: React.CSSProperties = {
-    position: 'absolute',
-    inset: 0,
-    backgroundImage: gradientVia
-      ? `linear-gradient(${gradientDir === 'to-b' ? 'to bottom' : 'to top'}, ${gradientFrom}, ${gradientVia}, ${gradientTo})`
-      : `linear-gradient(${gradientDir === 'to-b' ? 'to bottom' : 'to top'}, ${gradientFrom}, ${gradientTo})`,
-  };
-
-  const isCrisis = variant === 'crisis';
-
-  const imgStyle: React.CSSProperties = {
-    position: 'absolute',
-    inset: 0,
-    width: '100%',
-    height: '100%',
-    maxWidth: 'none',
-    objectFit: 'cover',
-    ...(isCrisis ? {} : { objectPosition: 'center' }),
-    opacity: imgOpacity,
-  };
-
-  return (
-    <div
-      className={isCrisis ? 'ag-sticky-bg ag-crisis-bg' : 'ag-sticky-bg'}
-      style={hasBg ? { backgroundColor: '#0e0e0e' } : undefined}
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={src}
-        alt={alt}
-        className={isCrisis ? 'ag-crisis-bg__img' : undefined}
-        style={imgStyle}
-      />
-      <div style={gradientStyle} />
-    </div>
-  );
-}
+import { LANDING_CLOSE, LANDING_PRIMARY_CTA } from '@/lib/landing-copy';
 
 export function AethelgardLanding() {
   const reduced = useReducedMotion();
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
-  const [activeYield, setActiveYield] = useState<number | null>(null);
-  const [canSpotlightYield, setCanSpotlightYield] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
-    const update = () => setCanSpotlightYield(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, []);
 
   useEffect(() => {
     applyLandingHashFromLocation();
@@ -173,428 +76,32 @@ export function AethelgardLanding() {
 
       <main className="grow">
         <div className="relative w-full">
-          {/* ── 1. Promesa ─────────────────────────────────────────────── */}
-          <section className="ag-hero-section relative">
-            <HeroBeamMedia />
-            <HeroReveal className="ag-hero-overlay pointer-events-none relative z-10 flex flex-col justify-between">
-              {/* Single flex child preserves title-zone row centering (align-items: flex-end). */}
-              <div className="ag-hero-title-zone">
-                <div className="ag-hero-title-stack w-full">
-                  <HeroRevealItem group="eyebrow">
-                    <p className="hud-text ag-hero-title__eyebrow text-center text-action-red">
-                      MAXIMUS KRATOS
-                    </p>
-                    <AnimatedDivider
-                      className="ag-hero-title__rule"
-                      origin="center"
-                      startWhen="mount"
-                      delay={0.22}
-                    />
-                  </HeroRevealItem>
-                  <HeroRevealItem group="title" lcpSafe>
-                    <TextReveal
-                      as="h1"
-                      className="ag-hero-title cinematic-shadow"
-                      lineClassName="ag-hero-title__line"
-                      lines={[...LANDING_HERO.lines]}
-                      variant="epic"
-                      lcpSafe
-                      startWhen="mount"
-                      delay={0.62}
-                      duration={0.9}
-                      stagger={0.18}
-                    />
-                  </HeroRevealItem>
-                  <HeroRevealItem group="support">
-                    <p className="ag-hero-title__lead font-body-lg cinematic-shadow max-w-xl text-center text-white/85">
-                      {LANDING_HERO.lead}
-                    </p>
-                  </HeroRevealItem>
-                </div>
-              </div>
-              <div className="ag-hero-cta-zone pointer-events-auto flex w-full items-center justify-center">
-                <HeroRevealItem group="actions" distance={MOTION_DISTANCE.hero}>
-                  <div className="ag-panel ag-panel--hero">
-                    <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
-                    <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
-                    <p className="ag-panel__body font-body-lg">{LANDING_HERO.panel}</p>
-                    <p className="ag-hero-status-badge hud-text" aria-label="Estado de la plataforma">
-                      {LANDING_HERO_STATUS.badge}
-                    </p>
-                    <AuthCta href={LANDING_DIAGNOSTIC_CTA.href} className="btn-primary font-label-lg">
-                      {LANDING_DIAGNOSTIC_CTA.label}
-                    </AuthCta>
-                    <p className="ag-hero-cta-note font-body-sm">
-                      Acceso anticipado. Estatus de fundador permanente
-                    </p>
-                  </div>
-                </HeroRevealItem>
-              </div>
-            </HeroReveal>
-          </section>
+          {/* ── 1. Hero product-first ─────────────────────────────────── */}
+          <LandingHero />
 
-          {/* ── 2. Espejo del problema ─────────────────────────────────── */}
-          <section id="crisis" className="ag-crisis-section relative">
-            <StickyStatue
-              src={LANDING_IMAGES.statueBroken}
-              alt="Estatua rota"
-              imgOpacity={0.7}
-              gradientDir="to-b"
-              gradientFrom="#0e0e0e"
-              gradientVia="transparent"
-              gradientTo="#0e0e0e"
-              variant="crisis"
-            />
-            <div className="ag-crisis-content relative z-10">
-              <div className="ag-container mx-auto w-full max-w-6xl">
-                <ScrollReveal className="ag-crisis-intro text-center" density="spacious">
-                  <p className="hud-text text-action-red">{LANDING_PROBLEM.eyebrow}</p>
-                  <TextReveal
-                    as="h2"
-                    className="ag-crisis-title ag-type-section text-white"
-                    lines={[LANDING_PROBLEM.title, LANDING_PROBLEM.titleLine2]}
-                  />
-                  <p className="ag-crisis-lead font-body-lg cinematic-shadow text-white/80">
-                    {LANDING_PROBLEM.lead}
-                  </p>
-                  <AnimatedDivider className="ag-crisis-rule" origin="center" />
-                </ScrollReveal>
+          {/* ── 2. Funcionamiento en cuatro actos ─────────────────────── */}
+          <LandingHowItWorks />
 
-                <ScrollStaggerContainer
-                  className="ag-landing-problem-points"
-                  stagger={MOTION_STAGGER.base}
-                  itemCount={LANDING_PROBLEM.points.length + 1}
-                >
-                  <div className="ag-landing-problem-list" role="list">
-                    {LANDING_PROBLEM.points.map((point, i) => (
-                      <StaggerItem
-                        key={point}
-                        role="listitem"
-                        className="ag-landing-problem-list__item font-body-lg text-white/75"
-                        distance={MOTION_DISTANCE.sm}
-                        offsetX={i % 2 === 0 ? -12 : 12}
-                      >
-                        {point}
-                      </StaggerItem>
-                    ))}
-                  </div>
-                  <StaggerItem distance={MOTION_DISTANCE.sm}>
-                    <p className="ag-landing-problem-close font-body-lg text-white/85">
-                      {LANDING_PROBLEM.close}
-                    </p>
-                  </StaggerItem>
-                </ScrollStaggerContainer>
-              </div>
-            </div>
-          </section>
+          {/* ── 3. Dentro de Maximus Kratos ───────────────────────────── */}
+          <LandingInsideMk />
 
-          {/* ── 3. Perfiles ────────────────────────────────────────────── */}
-          <section id="perfiles" className="ag-section-inner ag-landing-profiles">
-            <div className="ag-container mx-auto w-full max-w-6xl">
-              <ScrollReveal className="ag-landing-profiles__head text-center" density="spacious">
-                <p className="hud-text text-action-red">¿TE RECONOCES?</p>
-                <h2 className="ag-type-section text-white">
-                  ¿Te reconoces en alguno de estos estados?
-                </h2>
-              </ScrollReveal>
+          {/* ── 4. Diferenciación sin copy defensivo ──────────────────── */}
+          <LandingDifferentiation />
 
-              <ScrollStaggerContainer
-                className="ag-profile-grid"
-                stagger={MOTION_STAGGER.base}
-                itemCount={LANDING_PROFILES.length}
-              >
-                {LANDING_PROFILES.map((card, index) => (
-                  <StaggerItem
-                    key={card.num}
-                    className="ag-profile-grid__item"
-                    distance={MOTION_DISTANCE.sm + 2}
-                    offsetX={index === 0 ? -10 : 10}
-                  >
-                    <article className="ag-panel ag-panel--marco ag-profile-card group h-full">
-                      <span className="ag-panel__corner ag-panel__corner--hover" aria-hidden />
-                      <p className="ag-profile-card__index hud-text text-action-red">{card.num}</p>
-                      <h3 className="ag-profile-card__title ag-panel__card-title">{card.title}</h3>
-                      <p className="ag-panel__card-body font-body-md">{card.body}</p>
-                    </article>
-                  </StaggerItem>
-                ))}
-              </ScrollStaggerContainer>
+          {/* ── 5. Método condensado ──────────────────────────────────── */}
+          <LandingMethodBrief />
 
-              <ScrollReveal className="ag-landing-profiles__close text-center" density="tight">
-                <p className="font-body-lg text-white/80">{LANDING_PROFILES_CLOSE}</p>
-              </ScrollReveal>
-            </div>
-          </section>
+          {/* ── 6. Puertas de entrada ─────────────────────────────────── */}
+          <LandingGateways />
 
-          {/* ── 4. Qué es MK + método ──────────────────────────────────── */}
-          <section id="funcionamiento" className="ag-section-inner ag-os-section">
-            <div className="ag-os-head relative overflow-hidden">
-              <div className="ag-os-head__bg-wrap pointer-events-none absolute inset-0" aria-hidden>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={LANDING_IMAGES.bgArquitecturaSentido}
-                  alt=""
-                  className="ag-os-head__bg-img"
-                />
-              </div>
-              <div className="ag-os-head__scrim pointer-events-none absolute inset-0" aria-hidden />
-              <div className="ag-container relative z-10 mx-auto">
-                <ScrollReveal className="ag-os-intro text-center" density="spacious">
-                  <p className="hud-text text-action-red">¿QUÉ ES MAXIMUS KRATOS?</p>
-                  <h2 className="ag-type-display text-white">
-                    {LANDING_WHAT_IS.titleLine1}
-                    <br />
-                    {LANDING_WHAT_IS.titleLine2}
-                  </h2>
-                  <p className="ag-os-lead font-body-lg text-xl text-white/70">
-                    {LANDING_WHAT_IS.lead}
-                  </p>
-                </ScrollReveal>
+          {/* ── 7. Estado del producto ────────────────────────────────── */}
+          <LandingProductStatus />
 
-                <div className="ag-mk-alignment">
-                  <ScrollStaggerContainer
-                    className="ag-mk-realms"
-                    stagger={MOTION_STAGGER.base}
-                    itemCount={LANDING_REALMS.length + 1}
-                  >
-                    <StaggerItem distance={MOTION_DISTANCE.sm} className="ag-mk-realms__rail" aria-hidden>
-                      <motion.span
-                        className="ag-mk-realms__rail-line"
-                        initial={reduced ? false : { scaleX: 0.4, opacity: 0.35 }}
-                        whileInView={{ scaleX: 1, opacity: 1 }}
-                        viewport={{ once: true, amount: 0.4 }}
-                        transition={{
-                          type: 'tween',
-                          duration: MOTION_DURATION.reveal,
-                          ease: MOTION_EASE.enter,
-                        }}
-                        style={{ transformOrigin: 'left center' }}
-                      />
-                      <span className="ag-mk-realms__rail-core">Alinea</span>
-                      <motion.span
-                        className="ag-mk-realms__rail-line"
-                        initial={reduced ? false : { scaleX: 0.4, opacity: 0.35 }}
-                        whileInView={{ scaleX: 1, opacity: 1 }}
-                        viewport={{ once: true, amount: 0.4 }}
-                        transition={{
-                          type: 'tween',
-                          duration: MOTION_DURATION.reveal,
-                          ease: MOTION_EASE.enter,
-                          delay: 0.08,
-                        }}
-                        style={{ transformOrigin: 'right center' }}
-                      />
-                    </StaggerItem>
-                    {LANDING_REALMS.map((realm, index) => (
-                      <StaggerItem key={realm.label} className="ag-mk-realm" distance={MOTION_DISTANCE.sm + 2}>
-                        <div className="ag-mk-realm__node" aria-hidden />
-                        <span className="ag-mk-realm__index hud-text" aria-hidden>
-                          {String(index + 1).padStart(2, '0')}
-                        </span>
-                        <div className="ag-mk-realm__icon" aria-hidden>
-                          <AppIcon name={realm.icon} size={22} />
-                        </div>
-                        <span className="ag-mk-realm__label font-headline-sm">{realm.label}</span>
-                        <span className="ag-mk-realm__symbol hud-text">{realm.symbol}</span>
-                        <p className="ag-mk-realm__question font-body-md">{realm.question}</p>
-                        <p className="ag-mk-realm__body font-body-md">{realm.body}</p>
-                      </StaggerItem>
-                    ))}
-                  </ScrollStaggerContainer>
-                  <ScrollReveal className="ag-landing-realms-close" density="tight">
-                    <p className="font-body-lg text-center text-white/75">{LANDING_REALMS_CLOSE}</p>
-                  </ScrollReveal>
-                </div>
-
-                {/* ── Los cuatro ámbitos (compacto) ──────────────────────── */}
-                <ScrollReveal className="ag-mk-domains-section" density="default">
-                  <div className="ag-mk-domains-section__head">
-                    <p className="hud-text text-action-red">{LANDING_DOMAINS_SECTION.eyebrow}</p>
-                    <h3 className="ag-type-item text-white">{LANDING_DOMAINS_SECTION.title}</h3>
-                    <MkPillarsDomainsMatrix />
-                    <p className="ag-mk-domains-section__lead font-body-md">
-                      {LANDING_DOMAINS_SECTION.leadClose}
-                    </p>
-                  </div>
-                  <div className="ag-mk-domains-section__link">
-                    <Link href={LANDING_DOMAINS_SECTION.linkHref} className="ag-marco-more__link font-label-lg">
-                      {LANDING_DOMAINS_SECTION.linkLabel}
-                      <AppIcon name="arrow-right" size={16} />
-                    </Link>
-                  </div>
-                </ScrollReveal>
-              </div>
-            </div>
-
-            <div className="ag-container relative z-10 mx-auto">
-              <ScrollReveal className="ag-landing-method-head text-center" density="default">
-                <p className="hud-text text-action-red">CÓMO FUNCIONA</p>
-                <h2 className="ag-type-section text-white">
-                  Cinco pasos. Un camino ordenado.
-                </h2>
-              </ScrollReveal>
-
-              <div className="ag-os-phases">
-                {LANDING_METHOD_STEPS.map((step, index) => {
-                  const reverse = index % 2 === 1;
-                  return (
-                    <ScrollReveal key={step.num} className="ag-phase-row" density="spacious">
-                      {/* Mobile: always image → text. Desktop: zigzag via lg:order. */}
-                      <div
-                        className={`ag-phase-media relative${reverse ? ' lg:order-2' : ''}`}
-                      >
-                        <div className="absolute -inset-4 hidden border border-white/10 lg:block" />
-                        <motion.div
-                          className="ag-phase-media__scale"
-                          initial={reduced ? false : { scale: 1.02 }}
-                          whileInView={{ scale: 1 }}
-                          viewport={{ once: true, amount: 0.35 }}
-                          transition={{
-                            type: 'tween',
-                            duration: MOTION_DURATION.reveal,
-                            ease: MOTION_EASE.enter,
-                          }}
-                        >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={PHASE_IMAGES[step.imageKey]}
-                            alt={step.title}
-                            className="h-auto w-full border border-white/5 object-cover opacity-85 mix-blend-lighten grayscale-[0.2]"
-                          />
-                        </motion.div>
-                      </div>
-                      <div
-                        className={`ag-panel ag-panel--phase${reverse ? ' lg:order-1' : ''}`}
-                      >
-                        <div className="hud-text mb-4 text-action-red">
-                          {step.num} · {step.eyebrow}
-                        </div>
-                        <h3 className="ag-panel__title font-headline-md">{step.title}</h3>
-                        <p className="ag-panel__body font-body-md">{step.body}</p>
-                        <p className="ag-phase-platform hud-text">{step.platform}</p>
-                        {step.link && (
-                          <Link href={step.link.href} className="ag-inline-link font-label-md">
-                            {step.link.label}
-                            <AppIcon name="arrow-right" size={14} />
-                          </Link>
-                        )}
-                      </div>
-                    </ScrollReveal>
-                  );
-                })}
-              </div>
-            </div>
-          </section>
-
-          {/* ── 5. Beneficios ──────────────────────────────────────────── */}
-          <section id="beneficios" className="ag-section-inner ag-landing-benefits">
-            <div className="ag-container mx-auto w-full max-w-6xl">
-              <ScrollReveal className="ag-yield-head" density="spacious">
-                <p className="hud-text text-action-red">QUÉ OBTIENES</p>
-                <h2 className="ag-yield-head__title ag-type-section text-white">
-                  Qué obtienes al entrar en MK
-                </h2>
-              </ScrollReveal>
-
-              <div onMouseLeave={canSpotlightYield ? () => setActiveYield(null) : undefined}>
-                <ScrollStaggerContainer
-                  className="ag-yield"
-                  stagger={MOTION_STAGGER.base}
-                  itemCount={LANDING_BENEFITS.length}
-                >
-                  {LANDING_BENEFITS.map((item, index) => (
-                    <StaggerItem key={item.title} distance={MOTION_DISTANCE.sm + 2}>
-                      <article
-                        className={`ag-yield__row${
-                          canSpotlightYield && activeYield === index ? ' ag-yield__row--active' : ''
-                        }${
-                          canSpotlightYield && activeYield !== null && activeYield !== index
-                            ? ' ag-yield__row--dim'
-                            : ''
-                        }`}
-                        onMouseEnter={canSpotlightYield ? () => setActiveYield(index) : undefined}
-                        onFocus={canSpotlightYield ? () => setActiveYield(index) : undefined}
-                        onBlur={canSpotlightYield ? () => setActiveYield(null) : undefined}
-                        tabIndex={canSpotlightYield ? 0 : undefined}
-                      >
-                        <span className="ag-yield__index hud-text" aria-hidden>
-                          {String(index + 1).padStart(2, '0')}
-                        </span>
-                        <h3 className="ag-yield__title ag-type-item">{item.title}</h3>
-                        <p className="ag-yield__body font-body-lg">{item.body}</p>
-                        <span className="ag-yield__bar" aria-hidden />
-                      </article>
-                    </StaggerItem>
-                  ))}
-                </ScrollStaggerContainer>
-              </div>
-
-              <ScrollReveal className="ag-marco-more" density="tight">
-                <Link href="/marco-central" className="ag-marco-more__link font-label-lg">
-                  Explorar el Marco Central completo
-                  <AppIcon name="arrow-right" size={16} />
-                </Link>
-              </ScrollReveal>
-            </div>
-          </section>
+          {/* ── 8. Precios ────────────────────────────────────────────── */}
+          <LandingPrecios />
         </div>
 
-        {/* ── 6. CTA Diagnóstico ───────────────────────────────────────── */}
-        <section className="ag-cta-section ag-section-inner relative flex items-center justify-center overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={LANDING_IMAGES.bgCtaGateway}
-            alt=""
-            style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              maxWidth: 'none',
-              objectFit: 'cover',
-              objectPosition: 'center 40%',
-              opacity: 0.75,
-              mixBlendMode: 'lighten',
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'linear-gradient(to top, #0e0e0e, rgba(14,14,14,0.55), transparent)',
-            }}
-          />
-          <ScrollReveal className="ag-panel ag-panel--wide relative z-10 ag-founder-close" density="spacious">
-            <p className="hud-text mb-6">
-              {LANDING_CLOSE.eyebrow}
-            </p>
-            <h2 className="ag-cta-title ag-type-section text-white">
-              {LANDING_CLOSE.title}
-              <br />
-              {LANDING_CLOSE.titleLine2}
-            </h2>
-            <p className="ag-landing-close-body font-body-lg text-white/75">{LANDING_CLOSE.body}</p>
-            <div className="ag-cta-step relative">
-              <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
-              <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
-              <span className="ag-cta-step__num" aria-hidden>01</span>
-              <div className="ag-landing-close-step">
-                <p className="hud-text text-action-red">{LANDING_CLOSE.stepEyebrow}</p>
-                <h3 className="ag-type-item text-white">{LANDING_CLOSE.stepTitle}</h3>
-                <p className="font-body-md text-white/65">{LANDING_CLOSE.stepBody}</p>
-              </div>
-              <div className="ag-founder-close__primary">
-                <AuthCta href={LANDING_DIAGNOSTIC_CTA.href} className="ag-btn-cta ag-founder-close__cta font-label-lg">
-                  {LANDING_DIAGNOSTIC_CTA.labelAlt}
-                </AuthCta>
-                <p className="ag-landing-close-platform font-body-sm">{LANDING_CLOSE.platformNote}</p>
-                <TrialBadge className="ag-trial-note" />
-              </div>
-            </div>
-          </ScrollReveal>
-        </section>
-
-        {/* ── 7. FAQ ───────────────────────────────────────────────────── */}
+        {/* ── 9a. FAQ ──────────────────────────────────────────────────── */}
         <section
           id="preguntas-frecuentes"
           className="ag-faq-section ag-section-inner"
@@ -649,6 +156,62 @@ export function AethelgardLanding() {
               </p>
             </ScrollReveal>
           </div>
+        </section>
+
+        {/* ── 9b. CTA final ────────────────────────────────────────────── */}
+        <section className="ag-cta-section ag-section-inner relative flex items-center justify-center overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={LANDING_IMAGES.bgCtaGateway}
+            alt=""
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              maxWidth: 'none',
+              objectFit: 'cover',
+              objectPosition: 'center 40%',
+              opacity: 0.75,
+              mixBlendMode: 'lighten',
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: 'linear-gradient(to top, #0e0e0e, rgba(14,14,14,0.55), transparent)',
+            }}
+          />
+          <ScrollReveal className="ag-panel ag-panel--wide relative z-10 ag-founder-close" density="spacious">
+            <p className="hud-text mb-6">{LANDING_CLOSE.eyebrow}</p>
+            <h2 className="ag-cta-title ag-type-section text-white">
+              {LANDING_CLOSE.title}
+              <br />
+              {LANDING_CLOSE.titleLine2}
+            </h2>
+            <p className="ag-landing-close-body font-body-lg text-white/75">{LANDING_CLOSE.body}</p>
+            <div className="ag-cta-step relative">
+              <span className="ag-panel__corner ag-panel__corner--tl" aria-hidden />
+              <span className="ag-panel__corner ag-panel__corner--br" aria-hidden />
+              <span className="ag-cta-step__num" aria-hidden>01</span>
+              <div className="ag-landing-close-step">
+                <p className="hud-text text-action-red">{LANDING_CLOSE.stepEyebrow}</p>
+                <h3 className="ag-type-item text-white">{LANDING_CLOSE.stepTitle}</h3>
+                {LANDING_CLOSE.stepBody ? (
+                  <p className="font-body-md text-white/65">{LANDING_CLOSE.stepBody}</p>
+                ) : null}
+              </div>
+              <div className="ag-founder-close__primary">
+                <AuthCta href={LANDING_PRIMARY_CTA.href} className="ag-btn-cta ag-founder-close__cta font-label-lg">
+                  {LANDING_PRIMARY_CTA.labelAlt}
+                </AuthCta>
+                {LANDING_CLOSE.platformNote ? (
+                  <p className="ag-landing-close-platform font-body-sm">{LANDING_CLOSE.platformNote}</p>
+                ) : null}
+              </div>
+            </div>
+          </ScrollReveal>
         </section>
       </main>
 

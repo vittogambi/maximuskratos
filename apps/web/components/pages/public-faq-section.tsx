@@ -18,7 +18,7 @@ type PublicFaqSectionProps = {
   headingId?: string;
 };
 
-/** Bloque FAQ compartido para subpáginas públicas (Manifiesto, Marco, Sistema). */
+/** Bloque FAQ compartido para subpáginas públicas (Manifiesto, Marco, Producto). */
 export function PublicFaqSection({
   eyebrow = 'PREGUNTAS FRECUENTES',
   title,

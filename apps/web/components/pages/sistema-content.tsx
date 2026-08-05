@@ -44,7 +44,12 @@ const EXPERIENCES: ReadonlyArray<{
     eyebrow: 'SÍNTESIS',
     title: 'Tu Perfil Maestro.',
     body: 'El diagnóstico se vuelve una lectura clara: índices de Alineación y Profundidad, resultado por pilar y por ámbito. Mide coherencia, no tu valor.',
-    specs: ['Índice de alineación', 'Índice de profundidad', 'Pilares y ámbitos', 'Arquetipo de referencia'],
+    specs: [
+      'Índice de Alineación MK',
+      'Espíritu, Mente y Cuerpo',
+      'Lectura por ámbito',
+      'Mide coherencia, no tu valor',
+    ],
     focus: 'perfil',
     reverse: true,
   },
@@ -61,7 +66,11 @@ const EXPERIENCES: ReadonlyArray<{
     eyebrow: 'CONTINUIDAD',
     title: 'Tu proceso no se reinicia.',
     body: 'El panel conserva diagnóstico, prioridades, acciones e historial. Ves cómo evoluciona tu sistema sin empezar de cero.',
-    specs: ['Índices y evolución', 'Prioridades vigentes', 'Historial del proceso'],
+    specs: [
+      'Evolución por ámbito en el tiempo',
+      'Índices que se actualizan contigo',
+      'Web y app bajo la misma cuenta',
+    ],
     focus: 'overview',
     reverse: true,
   },
@@ -192,7 +201,7 @@ export function SistemaContent() {
         />
         <div className="ag-container ag-sistema-hero__stack relative z-10">
           <ScrollReveal className="ag-sistema-hero__intro text-center" density="spacious">
-            <p className="hud-text text-action-red">MK · EL SISTEMA</p>
+            <p className="hud-text text-action-red">MK · PRODUCTO</p>
             <h1 className="ag-sistema-hero__title font-display-xl text-white">
               El tablero de control de tu transformación.
             </h1>
@@ -208,7 +217,7 @@ export function SistemaContent() {
           </ScrollReveal>
 
           <ScrollReveal className="ag-sistema-hero__preview" density="default" delay={0.06}>
-            <DeviceShowcase focus="overview" layout="hero" />
+            <DeviceShowcase focus="perfil" layout="hero" />
           </ScrollReveal>
         </div>
       </section>
@@ -254,7 +263,7 @@ export function SistemaContent() {
         <div className="ag-container">
           <SectionIntro
             eyebrow="MK · CÓMO OPERA"
-            title="El sistema no se detiene después de un diagnóstico."
+            title="El producto no se detiene después de un diagnóstico."
             lead="Define, ejecuta, registra, revisa y ajusta. El ciclo que mantiene tu Ruta MK viva mientras cambian tus prioridades."
             headingId="cycle-heading"
           />
@@ -266,7 +275,7 @@ export function SistemaContent() {
       <section className="ag-section-inner ag-sistema-status" aria-labelledby="status-heading">
         <div className="ag-container ag-container--narrow">
           <SectionIntro
-            eyebrow="MK · ESTADO DEL SISTEMA"
+            eyebrow="MK · ESTADO DEL PRODUCTO"
             title="Qué está abierto. Qué viene después."
             lead="Hoy reservas tu lugar. El diagnóstico y las apps se activan en el lanzamiento."
             headingId="status-heading"
@@ -306,7 +315,7 @@ export function SistemaContent() {
         <div className="ag-container">
           <SectionIntro
             eyebrow="MK · ECOSISTEMA"
-            title="Una cuenta. Un sistema."
+            title="Una cuenta. Una plataforma."
             lead="Tu acceso de fundador es el mismo hilo que seguirá en la webapp y en la app móvil."
             headingId="eco-heading"
           />

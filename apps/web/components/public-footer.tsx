@@ -62,10 +62,10 @@ export function PublicFooter() {
                 {siteConfig.tagline}
               </p>
               <p className="site-footer__desc">
-                Sistema de reconstrucción personal para hombres. Alineación real, no motivación vacía.
+                Diagnóstico, propósito y ejecución dentro de un mismo sistema.
               </p>
               <p className="site-footer__status">
-                Acceso anticipado abierto. Diagnóstico y apps próximamente.
+                Acceso anticipado abierto. Webapp y aplicaciones móviles en desarrollo.
               </p>
               <FooterSocialBar />
               <AuthCta href={publicNavAuth.register.href} className="site-footer__cta">
@@ -86,7 +86,7 @@ export function PublicFooter() {
                 useLandingHash
               />
               <FooterNavColumn
-                title="Sitio"
+                title="Más"
                 links={footerSiteNav}
                 ariaLabel="Enlaces del sitio"
               />
