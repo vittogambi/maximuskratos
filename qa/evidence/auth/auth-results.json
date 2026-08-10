@@ -1,0 +1,233 @@
+[
+  {
+    "id": "AUTH-REG-01",
+    "description": "Register new user succeeds",
+    "pass": true,
+    "detail": {
+      "status": 201,
+      "hasToken": true
+    }
+  },
+  {
+    "id": "AUTH-REG-02",
+    "description": "Register response has no passwordHash/password field",
+    "pass": true,
+    "detail": {
+      "keys": [
+        "id",
+        "email",
+        "role"
+      ]
+    }
+  },
+  {
+    "id": "AUTH-REG-03",
+    "description": "Duplicate email rejected with 409",
+    "pass": true,
+    "detail": {
+      "status": 409
+    }
+  },
+  {
+    "id": "AUTH-REG-04",
+    "description": "Invalid email format rejected with 400",
+    "pass": true,
+    "detail": {
+      "status": 400
+    }
+  },
+  {
+    "id": "AUTH-REG-05",
+    "description": "Short password rejected with 400",
+    "pass": true,
+    "detail": {
+      "status": 400
+    }
+  },
+  {
+    "id": "SEC-MASS-01",
+    "description": "Extra fields (role, onboardingStep) in register body rejected, not silently accepted",
+    "pass": true,
+    "detail": {
+      "status": 400,
+      "body": {
+        "message": [
+          "property role should not exist",
+          "property onboardingStep should not exist"
+        ],
+        "error": "Bad Request",
+        "statusCode": 400
+      }
+    }
+  },
+  {
+    "id": "AUTH-LOGIN-01",
+    "description": "Login with correct credentials succeeds",
+    "pass": true,
+    "detail": {
+      "status": 201
+    }
+  },
+  {
+    "id": "AUTH-LOGIN-02",
+    "description": "Login sets mk_refresh cookie",
+    "pass": true,
+    "detail": {}
+  },
+  {
+    "id": "AUTH-LOGIN-03",
+    "description": "Login with wrong password rejected with 401",
+    "pass": true,
+    "detail": {
+      "status": 401
+    }
+  },
+  {
+    "id": "SEC-ENUM-01",
+    "description": "Login error message identical for wrong-password vs nonexistent-user (no account enumeration)",
+    "pass": true,
+    "detail": {
+      "wrongPwMsg": "Email o contraseña inválidas.",
+      "noUserMsg": "Email o contraseña inválidas."
+    }
+  },
+  {
+    "id": "AUTH-ME-01",
+    "description": "No token rejected with 401",
+    "pass": true,
+    "detail": {
+      "status": 401
+    }
+  },
+  {
+    "id": "AUTH-ME-02",
+    "description": "Garbage token rejected with 401",
+    "pass": true,
+    "detail": {
+      "status": 401
+    }
+  },
+  {
+    "id": "AUTH-ME-03",
+    "description": "Valid token returns 200",
+    "pass": true,
+    "detail": {
+      "status": 200
+    }
+  },
+  {
+    "id": "SEC-LEAK-01",
+    "description": "/auth/me response contains no passwordHash",
+    "pass": true,
+    "detail": {
+      "keys": [
+        "id",
+        "email",
+        "role",
+        "onboardingStep",
+        "createdAt",
+        "subscription"
+      ]
+    }
+  },
+  {
+    "id": "AUTH-REFRESH-01",
+    "description": "Refresh with valid cookie returns new accessToken",
+    "pass": true,
+    "detail": {
+      "status": 201
+    }
+  },
+  {
+    "id": "AUTH-REFRESH-02",
+    "description": "Refresh rotates the cookie (new value differs)",
+    "pass": true,
+    "detail": {}
+  },
+  {
+    "id": "SEC-REPLAY-01",
+    "description": "Reusing the OLD (rotated-out) refresh cookie is rejected with 401",
+    "pass": true,
+    "detail": {
+      "status": 401
+    }
+  },
+  {
+    "id": "AUTHZ-01",
+    "description": "Regular user hitting /admin/users gets 403 (not 401, not 200)",
+    "pass": true,
+    "detail": {
+      "status": 403
+    }
+  },
+  {
+    "id": "AUTHZ-02",
+    "description": "Anonymous hitting /admin/users gets 401",
+    "pass": true,
+    "detail": {
+      "status": 401
+    }
+  },
+  {
+    "id": "AUTHZ-03",
+    "description": "Anonymous hitting /admin/plans gets 401",
+    "pass": true,
+    "detail": {
+      "status": 401
+    }
+  },
+  {
+    "id": "ADMIN-LOGIN-01",
+    "description": "Seeded admin can log in",
+    "pass": true,
+    "detail": {
+      "status": 201,
+      "role": "ADMIN"
+    }
+  },
+  {
+    "id": "ADMIN-USERS-01",
+    "description": "Admin can list users (200)",
+    "pass": true,
+    "detail": {
+      "status": 200,
+      "count": 42
+    }
+  },
+  {
+    "id": "SEC-LEAK-02",
+    "description": "Admin user list contains no passwordHash field",
+    "pass": true,
+    "detail": {}
+  },
+  {
+    "id": "ADMIN-PLANS-01",
+    "description": "Admin can list all plans incl. inactive (200)",
+    "pass": true,
+    "detail": {
+      "status": 200
+    }
+  },
+  {
+    "id": "AUTH-RESET-01",
+    "description": "forgot-password for existing user returns success:true",
+    "pass": true,
+    "detail": {
+      "status": 201,
+      "body": {
+        "success": true
+      }
+    }
+  },
+  {
+    "id": "SEC-ENUM-02",
+    "description": "forgot-password for nonexistent user ALSO returns success:true (no enumeration)",
+    "pass": true,
+    "detail": {
+      "status": 201,
+      "body": {
+        "success": true
+      }
+    }
+  }
+]

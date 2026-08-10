@@ -58,8 +58,9 @@ export const LANDING_HERO = {
 /** SEO/GEO: siteConfig, root meta, JSON-LD, llms.txt. Keep in sync with hero H1 + lead. */
 export const LANDING_SEO_DESCRIPTION = `${LANDING_HERO.lines.join(' ')}. ${LANDING_HERO.lead}`;
 
-/** Homepage meta description: promise + early-access status clause. */
-export const LANDING_HOME_META_DESCRIPTION = `${LANDING_SEO_DESCRIPTION} Sitio disponible hoy; webapp y apps para iOS y Android en desarrollo.`;
+/** Homepage meta description: keep under ~160 chars for SERP truncation. */
+export const LANDING_HOME_META_DESCRIPTION =
+  'Convierte tu propósito en una ruta ejecutable. Detecta la distancia entre lo que valoras y cómo vives. Sitio disponible hoy; webapp e apps en desarrollo.';
 
 /** Estado real de la plataforma, mostrado como líneas cortas junto al CTA del hero. */
 export const LANDING_HERO_STATUS_PILLS: ReadonlyArray<string> = isEarlyAccessMode()
@@ -202,21 +203,21 @@ export const LANDING_REALMS: ReadonlyArray<{
     label: 'Espíritu',
     icon: 'flame',
     symbol: 'Orienta',
-    body: 'Define quién eres, qué valoras y hacia dónde quieres dirigir tu vida.',
+    body: 'Descubre quién eres, define lo que valoras y qué estándares aplicarás, construye tu propósito central que dirija tu vida.',
   },
   {
     num: '02',
     label: 'Mente',
     icon: 'brain',
     symbol: 'Diseña',
-    body: 'Convierte esa dirección en decisiones, estrategias y sistemas que puedas sostener.',
+    body: 'Tu propósito alinea tus planes, tus planes definen tus tareas y tus tareas construyen los hábitos que transforman tu vida.',
   },
   {
     num: '03',
     label: 'Cuerpo',
     icon: 'muscles',
     symbol: 'Materializa',
-    body: 'Desarrolla la energía, la presencia y la capacidad necesarias para llevarlo a la acción.',
+    body: 'Donde las acciones de cada plan propuesto se hacen realidad en el mundo tangible. Aquí es donde se miden los avances.',
   },
 ];
 
@@ -227,10 +228,10 @@ export const LANDING_REALMS_CLOSE =
 export const LANDING_DOMAINS_SECTION = {
   eyebrow: 'ARQUITECTURA DEL SENTIDO',
   title: 'Tres pilares para orientar, diseñar y ejecutar tu vida.',
-  territoriesLabel: 'Se aplican a cuatro territorios',
+  territoriesLabel: 'Se observan en cuatro territorios',
   territories: ['Mentalidad', 'Relaciones', 'Finanzas', 'Salud física'] as const,
   leadClose:
-    'Los pilares describen las capacidades con las que actúas. Los ámbitos, las partes de tu vida donde esas capacidades se expresan.',
+    'Los pilares orientan y los ámbitos muestran dónde puede obstaculizarse esa dirección. La profundidad está en propósito y ejecución; en el resto, solo lo necesario para no frenar el avance.',
   linkLabel: 'Ver el Marco Central completo',
   linkHref: '/marco-central',
 } as const;

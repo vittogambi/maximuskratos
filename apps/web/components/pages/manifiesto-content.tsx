@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { AppIcon } from '@/components/app-icon';
 import { ScrollReveal } from '@/components/motion/scroll-reveal';
@@ -67,7 +68,7 @@ const MK_DEFINITION = {
       },
       {
         title: 'Rigor físico',
-        body: 'Construye no solo cuerpos fuertes, sino mentes dominantes y resilientes sobre sus sombras. El autodominio es la base del resto.',
+        body: 'Se mide en energía, presencia y constancia al servicio de tu dirección. El autodominio es la base del resto.',
       },
     ],
   },
@@ -201,10 +202,12 @@ export function ManifiestoContent() {
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section className="ag-about-hero ag-about-hero--origin relative overflow-hidden">
         <div className="ag-about-hero__bg-wrap" aria-hidden>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={LANDING_IMAGES.bgAboutSystems}
             alt=""
+            fill
+            sizes="100vw"
+            priority
             className="ag-about-hero__bg ag-about-hero__bg--systems"
           />
         </div>
@@ -398,10 +401,11 @@ export function ManifiestoContent() {
       {/* ── PROBLEMA + CREENCIAS ─────────────────────────────────────── */}
       <section className="ag-section-inner ag-about-block ag-about-contrast relative overflow-hidden">
         <div className="ag-about-block__bg pointer-events-none absolute inset-0" aria-hidden>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={LANDING_IMAGES.bgAboutSystems}
             alt=""
+            fill
+            sizes="100vw"
             className="ag-about-block__bg-img"
           />
         </div>

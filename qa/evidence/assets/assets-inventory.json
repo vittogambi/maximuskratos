@@ -1,0 +1,243 @@
+{
+  "generatedAt": "2026-08-10T02:27:27.421Z",
+  "base": "https://mkweb-staging.up.railway.app",
+  "remote": [
+    {
+      "path": "/images/landing/statue-beam-lit-hd.png?v=11",
+      "status": 200,
+      "contentType": "image/png",
+      "contentLength": 3096112,
+      "cacheControl": "public, max-age=0",
+      "contentEncoding": null,
+      "acceptRanges": "bytes"
+    },
+    {
+      "path": "/images/landing/statue-beam-lit.webp?v=11",
+      "status": 200,
+      "contentType": "image/webp",
+      "contentLength": 318862,
+      "cacheControl": "public, max-age=0",
+      "contentEncoding": null,
+      "acceptRanges": "bytes"
+    },
+    {
+      "path": "/images/landing/statue-beam-lit.jpg?v=11",
+      "status": 200,
+      "contentType": "image/jpeg",
+      "contentLength": 934043,
+      "cacheControl": "public, max-age=0",
+      "contentEncoding": null,
+      "acceptRanges": "bytes"
+    },
+    {
+      "path": "/images/landing/statue-beam-dark.webp?v=11",
+      "status": 200,
+      "contentType": "image/webp",
+      "contentLength": 71828,
+      "cacheControl": "public, max-age=0",
+      "contentEncoding": null,
+      "acceptRanges": "bytes"
+    },
+    {
+      "path": "/images/landing/statue-beam-dark-sm.webp?v=11",
+      "status": 200,
+      "contentType": "image/webp",
+      "contentLength": 63908,
+      "cacheControl": "public, max-age=0",
+      "contentEncoding": null,
+      "acceptRanges": "bytes"
+    },
+    {
+      "path": "/images/landing/statue-beam-lit-sm.webp?v=11",
+      "status": 200,
+      "contentType": "image/webp",
+      "contentLength": 78952,
+      "cacheControl": "public, max-age=0",
+      "contentEncoding": null,
+      "acceptRanges": "bytes"
+    },
+    {
+      "path": "/video/statue-beam.mp4?v=11",
+      "status": 200,
+      "contentType": "video/mp4",
+      "contentLength": 330081,
+      "cacheControl": "public, max-age=0",
+      "contentEncoding": null,
+      "acceptRanges": "bytes"
+    },
+    {
+      "path": "/images/backgrounds/arquitectura-sentido-columns.png",
+      "status": 200,
+      "contentType": "image/png",
+      "contentLength": 1295719,
+      "cacheControl": "public, max-age=0",
+      "contentEncoding": null,
+      "acceptRanges": "bytes"
+    },
+    {
+      "path": "/images/backgrounds/marco-central.png",
+      "status": 200,
+      "contentType": "image/png",
+      "contentLength": 2076669,
+      "cacheControl": "public, max-age=0",
+      "contentEncoding": null,
+      "acceptRanges": "bytes"
+    },
+    {
+      "path": "/images/backgrounds/about-systems.png",
+      "status": 200,
+      "contentType": "image/png",
+      "contentLength": 1838835,
+      "cacheControl": "public, max-age=0",
+      "contentEncoding": null,
+      "acceptRanges": "bytes"
+    },
+    {
+      "path": "/images/landing/dashboard-alineacion-desktop.png",
+      "status": 200,
+      "contentType": "image/png",
+      "contentLength": 751059,
+      "cacheControl": "public, max-age=0",
+      "contentEncoding": null,
+      "acceptRanges": "bytes"
+    },
+    {
+      "path": "/images/landing/dashboard-diagnostico-desktop.png",
+      "status": 200,
+      "contentType": "image/png",
+      "contentLength": 460264,
+      "cacheControl": "public, max-age=0",
+      "contentEncoding": null,
+      "acceptRanges": "bytes"
+    },
+    {
+      "path": "/images/ikigai/ikigai-hero.png",
+      "status": 200,
+      "contentType": "image/png",
+      "contentLength": 2104825,
+      "cacheControl": "public, max-age=0",
+      "contentEncoding": null,
+      "acceptRanges": "bytes"
+    },
+    {
+      "path": "/images/statues/hero-statue.png",
+      "status": 200,
+      "contentType": "image/png",
+      "contentLength": 7856417,
+      "cacheControl": "public, max-age=0",
+      "contentEncoding": null,
+      "acceptRanges": "bytes"
+    },
+    {
+      "path": "/fonts/bitte-bc.woff",
+      "status": 200,
+      "contentType": "font/woff",
+      "contentLength": 13052,
+      "cacheControl": "public, max-age=0",
+      "contentEncoding": null,
+      "acceptRanges": "bytes"
+    }
+  ],
+  "diskHeavy300kbPlus": [
+    {
+      "path": "/images/statues/hero-statue.png",
+      "bytes": 7856417
+    },
+    {
+      "path": "/images/landing/statue-beam-lit-hd.png",
+      "bytes": 3096112
+    },
+    {
+      "path": "/images/archetypes/constructor.png",
+      "bytes": 2575455
+    },
+    {
+      "path": "/images/archetypes/mentor.png",
+      "bytes": 2371051
+    },
+    {
+      "path": "/images/archetypes/visionario.png",
+      "bytes": 2324389
+    },
+    {
+      "path": "/images/backgrounds/gold-columns.png",
+      "bytes": 2185945
+    },
+    {
+      "path": "/images/ikigai/ikigai-hero.png",
+      "bytes": 2104825
+    },
+    {
+      "path": "/images/backgrounds/marco-central.png",
+      "bytes": 2076669
+    },
+    {
+      "path": "/images/backgrounds/cta-gateway.png",
+      "bytes": 1919616
+    },
+    {
+      "path": "/images/backgrounds/about-systems.png",
+      "bytes": 1838835
+    },
+    {
+      "path": "/images/archetypes/guerrero.png",
+      "bytes": 1589933
+    },
+    {
+      "path": "/images/archetypes/mago.png",
+      "bytes": 1561177
+    },
+    {
+      "path": "/images/archetypes/rey.png",
+      "bytes": 1401367
+    },
+    {
+      "path": "/images/archetypes/amante.png",
+      "bytes": 1390676
+    },
+    {
+      "path": "/images/backgrounds/arquitectura-sentido-columns.png",
+      "bytes": 1295719
+    },
+    {
+      "path": "/images/ikigai/ikigai-diagram.png",
+      "bytes": 984471
+    },
+    {
+      "path": "/images/landing/statue-beam-lit.jpg",
+      "bytes": 934043
+    },
+    {
+      "path": "/images/landing/dashboard-alineacion-desktop.png",
+      "bytes": 751059
+    },
+    {
+      "path": "/images/landing/dashboard-proposito-desktop.png",
+      "bytes": 685597
+    },
+    {
+      "path": "/images/landing/dashboard-ruta-desktop.png",
+      "bytes": 549534
+    },
+    {
+      "path": "/images/landing/dashboard-panel-desktop.png",
+      "bytes": 544330
+    },
+    {
+      "path": "/images/landing/dashboard-diagnostico-desktop.png",
+      "bytes": 460264
+    },
+    {
+      "path": "/video/statue-beam.mp4",
+      "bytes": 330081
+    },
+    {
+      "path": "/images/landing/statue-beam-lit.webp",
+      "bytes": 318862
+    }
+  ],
+  "notes": {
+    "heroStatueUsage": "HERO_STATUE only referenced in lib/assets.ts — likely dead asset",
+    "litWebpMissingFromPictureOnStaging": "statue-beam-lit.webp exists but staging <picture> omits desktop webp source"
+  }
+}

@@ -47,7 +47,13 @@ export function LandingHero() {
               stagger={0.06}
             />
           </HeroRevealItem>
-          <HeroRevealItem group="support">
+          {/*
+            lcpSafe: support copy must paint under the intro veil. Leaving it at
+            opacity 0 until delay 1.72s made this span the mobile LCP at ~6s on 4G
+            after the intro lifted. Intro still owns the entrance; cascade of
+            eyebrow/title/actions is unchanged.
+          */}
+          <HeroRevealItem group="support" lcpSafe>
             <p className="ag-hero-signature font-brand-tagline cinematic-shadow text-center text-action-red">
               {LANDING_HERO.signatureLines.map((line) => (
                 <span key={line} className="ag-hero-signature__line">

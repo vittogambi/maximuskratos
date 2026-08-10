@@ -51,7 +51,7 @@ export const LANDING_FAQ_ITEMS = [
     id: 'solo-entrenamiento',
     question: '¿MK es solo entrenamiento físico?',
     answer:
-      'No. La salud física forma parte del sistema, pero MK trabaja sobre tres pilares conectados: Espíritu, Mente y Cuerpo.\n\nEstos pilares se aplican a tu mentalidad, tus relaciones, tus finanzas y tu salud física.',
+      'No. MK profundiza en dirección, propósito, coherencia y ejecución. En relaciones, finanzas y salud física, diagnostica y prioriza para que no obstaculicen tu dirección. No es un especialista en dinero, cuerpo ni relaciones: cuando el caso lo requiere, orienta a buscar ayuda profesional.\n\nEl objetivo no es sacar 100 en cada ámbito. Es coherencia entre quién eres, qué diriges, qué sostienes y qué haces.',
   },
   {
     id: 'necesito-crisis',

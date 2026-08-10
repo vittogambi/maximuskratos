@@ -1,0 +1,45 @@
+[
+  {
+    "id": "AUTH-RESET-02",
+    "description": "Garbage reset token rejected with 400",
+    "pass": true,
+    "detail": {
+      "status": 400
+    }
+  },
+  {
+    "id": "AUTH-RESET-03",
+    "description": "Valid reset token accepted",
+    "pass": true,
+    "detail": {
+      "status": 201,
+      "body": {
+        "success": true
+      }
+    }
+  },
+  {
+    "id": "SEC-REPLAY-02",
+    "description": "Reset token cannot be reused a second time (single-use)",
+    "pass": true,
+    "detail": {
+      "status": 400
+    }
+  },
+  {
+    "id": "AUTH-RESET-04",
+    "description": "OLD password no longer works after reset",
+    "pass": true,
+    "detail": {
+      "status": 401
+    }
+  },
+  {
+    "id": "AUTH-RESET-05",
+    "description": "NEW password works after reset",
+    "pass": true,
+    "detail": {
+      "status": 201
+    }
+  }
+]

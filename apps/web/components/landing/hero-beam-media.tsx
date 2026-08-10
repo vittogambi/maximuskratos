@@ -62,6 +62,20 @@ export function HeroBeamMedia() {
   /** Always false on first paint so SSR HTML matches hydration. */
   const [videoOpacity, setVideoOpacity] = useState(0);
   const [showLitStill, setShowLitStill] = useState(false);
+  /**
+   * Data-saver / reduced-motion / repeat-visit are known synchronously.
+   * Computed once so the video's `src` can omit the clip entirely on these
+   * paths — otherwise the browser starts the fetch before effects run
+   * (and before useReducedMotion resolves on the client).
+   */
+  const [skipVideoFetch] = useState(() => {
+    if (prefersDataSaver() || beamPlayedThisDocument) return true;
+    try {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    } catch {
+      return false;
+    }
+  });
 
   const mx = useMotionValue(0);
   const sx = useSpring(mx, { stiffness: 90, damping: 24, mass: 0.55 });
@@ -237,6 +251,11 @@ export function HeroBeamMedia() {
             media="(max-width: 767px)"
             srcSet={LANDING_IMAGES.statueBeamLitSm}
           />
+          <source
+            type="image/webp"
+            media="(min-width: 768px)"
+            srcSet={LANDING_IMAGES.statueBeamLitWebp}
+          />
           <source media="(min-width: 768px)" srcSet={LANDING_IMAGES.statueBeamLitHd} />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -252,10 +271,10 @@ export function HeroBeamMedia() {
         <video
           ref={videoRef}
           className="ag-hero-bg__beam"
-          src={LANDING_VIDEO.statueBeam}
+          src={reduced || skipVideoFetch ? undefined : LANDING_VIDEO.statueBeam}
           muted
           playsInline
-          preload="auto"
+          preload="metadata"
           aria-hidden
           style={{
             opacity: videoOpacity,

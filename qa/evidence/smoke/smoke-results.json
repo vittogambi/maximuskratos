@@ -1,0 +1,399 @@
+{
+  "generatedAt": "2026-08-10T02:04:21.331Z",
+  "routes": {
+    "/": {
+      "route": "/",
+      "status": 200,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "failedRequests": [
+        {
+          "url": "https://mkweb-staging.up.railway.app/video/statue-beam.mp4?v=11",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "badStatuses": [
+        {
+          "url": "https://mkapi-staging.up.railway.app/api/v1/auth/refresh",
+          "status": 401
+        }
+      ],
+      "linkAudit": {
+        "internalCount": 45,
+        "externalCount": 0,
+        "emptyHrefCount": 0,
+        "h1Count": 1,
+        "internal": [
+          "/",
+          "/#funcionamiento",
+          "/#perfiles",
+          "/sistema",
+          "/marco-central",
+          "/#precios",
+          "/login",
+          "/register",
+          "/manifiesto",
+          "/ikigai",
+          "/eventos",
+          "/contacto",
+          "/precios",
+          "/privacidad",
+          "/terminos"
+        ]
+      }
+    },
+    "/manifiesto": {
+      "route": "/manifiesto",
+      "status": 200,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "badStatuses": [],
+      "linkAudit": {
+        "internalCount": 32,
+        "externalCount": 0,
+        "emptyHrefCount": 0,
+        "h1Count": 1,
+        "internal": [
+          "/",
+          "/#funcionamiento",
+          "/#perfiles",
+          "/sistema",
+          "/marco-central",
+          "/#precios",
+          "/manifiesto",
+          "/ikigai",
+          "/eventos",
+          "/contacto",
+          "/login",
+          "/precios",
+          "/privacidad",
+          "/terminos"
+        ]
+      }
+    },
+    "/sistema": {
+      "route": "/sistema",
+      "status": 200,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "badStatuses": [],
+      "linkAudit": {
+        "internalCount": 33,
+        "externalCount": 0,
+        "emptyHrefCount": 0,
+        "h1Count": 1,
+        "internal": [
+          "/",
+          "/#funcionamiento",
+          "/#perfiles",
+          "/sistema",
+          "/marco-central",
+          "/#precios",
+          "/manifiesto",
+          "/ikigai",
+          "/eventos",
+          "/contacto",
+          "/precios",
+          "/login",
+          "/privacidad",
+          "/terminos"
+        ]
+      }
+    },
+    "/marco-central": {
+      "route": "/marco-central",
+      "status": 200,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "failedRequests": [],
+      "badStatuses": [
+        {
+          "url": "https://mkapi-staging.up.railway.app/api/v1/auth/refresh",
+          "status": 401
+        }
+      ],
+      "linkAudit": {
+        "internalCount": 39,
+        "externalCount": 0,
+        "emptyHrefCount": 0,
+        "h1Count": 1,
+        "internal": [
+          "/",
+          "/#funcionamiento",
+          "/#perfiles",
+          "/sistema",
+          "/marco-central",
+          "/#precios",
+          "/login",
+          "/register",
+          "/manifiesto",
+          "/ikigai",
+          "/eventos",
+          "/contacto",
+          "/precios",
+          "/privacidad",
+          "/terminos"
+        ]
+      }
+    },
+    "/ikigai": {
+      "route": "/ikigai",
+      "status": 200,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "badStatuses": [],
+      "linkAudit": {
+        "internalCount": 30,
+        "externalCount": 0,
+        "emptyHrefCount": 0,
+        "h1Count": 1,
+        "internal": [
+          "/",
+          "/#funcionamiento",
+          "/#perfiles",
+          "/sistema",
+          "/marco-central",
+          "/#precios",
+          "/manifiesto",
+          "/ikigai",
+          "/eventos",
+          "/contacto",
+          "/login",
+          "/precios",
+          "/privacidad",
+          "/terminos"
+        ]
+      }
+    },
+    "/precios": {
+      "route": "/precios",
+      "status": 200,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "badStatuses": [],
+      "linkAudit": {
+        "internalCount": 29,
+        "externalCount": 0,
+        "emptyHrefCount": 0,
+        "h1Count": 0,
+        "internal": [
+          "/",
+          "/#funcionamiento",
+          "/#perfiles",
+          "/sistema",
+          "/marco-central",
+          "/#precios",
+          "/manifiesto",
+          "/ikigai",
+          "/eventos",
+          "/contacto",
+          "/login",
+          "/precios",
+          "/privacidad",
+          "/terminos"
+        ]
+      }
+    },
+    "/eventos": {
+      "route": "/eventos",
+      "status": 200,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "badStatuses": [],
+      "linkAudit": {
+        "internalCount": 30,
+        "externalCount": 0,
+        "emptyHrefCount": 0,
+        "h1Count": 1,
+        "internal": [
+          "/",
+          "/#funcionamiento",
+          "/#perfiles",
+          "/sistema",
+          "/marco-central",
+          "/#precios",
+          "/manifiesto",
+          "/ikigai",
+          "/eventos",
+          "/contacto",
+          "/login",
+          "/precios",
+          "/privacidad",
+          "/terminos"
+        ]
+      }
+    },
+    "/contacto": {
+      "route": "/contacto",
+      "status": 200,
+      "consoleErrors": [],
+      "failedRequests": [],
+      "badStatuses": [],
+      "linkAudit": {
+        "internalCount": 29,
+        "externalCount": 0,
+        "emptyHrefCount": 0,
+        "h1Count": 1,
+        "internal": [
+          "/",
+          "/#funcionamiento",
+          "/#perfiles",
+          "/sistema",
+          "/marco-central",
+          "/#precios",
+          "/manifiesto",
+          "/ikigai",
+          "/eventos",
+          "/contacto",
+          "/login",
+          "/precios",
+          "/privacidad",
+          "/terminos"
+        ]
+      }
+    },
+    "/privacidad": {
+      "route": "/privacidad",
+      "status": 200,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "failedRequests": [],
+      "badStatuses": [
+        {
+          "url": "https://mkapi-staging.up.railway.app/api/v1/auth/refresh",
+          "status": 401
+        }
+      ],
+      "linkAudit": {
+        "internalCount": 57,
+        "externalCount": 0,
+        "emptyHrefCount": 0,
+        "h1Count": 1,
+        "internal": [
+          "/",
+          "/#funcionamiento",
+          "/#perfiles",
+          "/sistema",
+          "/marco-central",
+          "/#precios",
+          "/login",
+          "/register",
+          "/manifiesto",
+          "/ikigai",
+          "/eventos",
+          "/contacto",
+          "#responsable",
+          "#datos",
+          "#finalidades",
+          "#base-legal",
+          "#cookies",
+          "#comparticion",
+          "#conservacion",
+          "#derechos",
+          "#seguridad",
+          "#menores",
+          "#cambios",
+          "/terminos",
+          "/precios",
+          "/privacidad"
+        ]
+      }
+    },
+    "/terminos": {
+      "route": "/terminos",
+      "status": 200,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "failedRequests": [],
+      "badStatuses": [
+        {
+          "url": "https://mkapi-staging.up.railway.app/api/v1/auth/refresh",
+          "status": 401
+        }
+      ],
+      "linkAudit": {
+        "internalCount": 61,
+        "externalCount": 0,
+        "emptyHrefCount": 0,
+        "h1Count": 1,
+        "internal": [
+          "/",
+          "/#funcionamiento",
+          "/#perfiles",
+          "/sistema",
+          "/marco-central",
+          "/#precios",
+          "/login",
+          "/register",
+          "/manifiesto",
+          "/ikigai",
+          "/eventos",
+          "/contacto",
+          "#aceptacion",
+          "#servicio",
+          "#cuenta",
+          "#uso-permitido",
+          "#contenido",
+          "#contenido-usuario",
+          "#pagos",
+          "#disclaimer",
+          "#limitacion",
+          "#suspension",
+          "#ley",
+          "#contacto",
+          "#cambios",
+          "/privacidad",
+          "/precios",
+          "/terminos"
+        ]
+      }
+    }
+  },
+  "redirects": [
+    {
+      "from": "/prestaciones",
+      "expectedTo": "/sistema",
+      "finalUrl": "https://mkweb-staging.up.railway.app/sistema",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "from": "/quienes-somos",
+      "expectedTo": "/manifiesto",
+      "finalUrl": "https://mkweb-staging.up.railway.app/manifiesto",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "from": "/porque-mk",
+      "expectedTo": "/manifiesto",
+      "finalUrl": "https://mkweb-staging.up.railway.app/manifiesto",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "from": "/base-conceptual",
+      "expectedTo": "/marco-central",
+      "finalUrl": "https://mkweb-staging.up.railway.app/marco-central",
+      "status": 200,
+      "ok": true
+    }
+  ],
+  "notFound": {
+    "status": 404,
+    "bodyText": "404\nThis page could not be found."
+  },
+  "contactValidation": {
+    "formFound": true,
+    "emptySubmitBlocked": true,
+    "validationVisible": true,
+    "validationDetail": {
+      "invalidCount": 2,
+      "ariaErrorCount": 0
+    }
+  }
+}

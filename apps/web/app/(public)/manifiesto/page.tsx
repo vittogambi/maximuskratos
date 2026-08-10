@@ -7,7 +7,7 @@ import { buildPageMetadata } from '@/lib/seo';
 export const metadata = buildPageMetadata({
   title: 'Manifiesto',
   description:
-    'El manifiesto de Maximus Kratos: el nombre, el fundamento clásico, las creencias y la decisión de construir un sistema integral de transformación masculina.',
+    'El manifiesto de Maximus Kratos: el nombre, el fundamento clásico, las creencias y la decisión de construir un sistema de coherencia entre identidad, propósito, estándares y conducta, bajo una misma dirección.',
   path: '/manifiesto',
 });
 

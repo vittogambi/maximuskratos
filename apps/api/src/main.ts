@@ -2,6 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -11,6 +12,11 @@ async function bootstrap() {
   const expressApp = app.getHttpAdapter().getInstance();
   expressApp.set('trust proxy', 1);
   app.use(cookieParser());
+  // CSP and COEP are off: this is a JSON API (no HTML/assets to protect with
+  // CSP), and COEP can break cross-origin fetches. HSTS, X-Content-Type-
+  // Options, X-Frame-Options, and Referrer-Policy are what staging was
+  // missing and are safe defaults for any backend.
+  app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
 
   const corsOrigins = (
     process.env.CORS_ORIGINS ??
@@ -37,16 +43,18 @@ async function bootstrap() {
     exclude: ['health'],
   });
 
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle('Maximus Kratos API')
-    .setDescription('Maximus Kratos REST API')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .addCookieAuth('mk_refresh')
-    .build();
+  if (process.env.NODE_ENV !== 'production') {
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle('Maximus Kratos API')
+      .setDescription('Maximus Kratos REST API')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .addCookieAuth('mk_refresh')
+      .build();
 
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api/v1/docs', app, document);
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup('api/v1/docs', app, document);
+  }
 
   const port = Number(process.env.PORT ?? 4000);
   await app.listen(port, '0.0.0.0');

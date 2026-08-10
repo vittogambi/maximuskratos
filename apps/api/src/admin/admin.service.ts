@@ -50,7 +50,12 @@ export class AdminService {
     const header = 'id,email,name,message,source,created_at';
     const rows = leads.map((l) => {
       const esc = (v: string | null | undefined) => {
-        const s = v ?? '';
+        let s = v ?? '';
+        // CSV/formula injection: a field starting with = + - @ is executed as
+        // a formula by Excel/Sheets on open. These fields come from public,
+        // unauthenticated form submissions. Prefixing with a single quote is
+        // the standard OWASP mitigation and is invisible once quoted in CSV.
+        if (/^[=+\-@]/.test(s)) s = `'${s}`;
         return `"${s.replace(/"/g, '""')}"`;
       };
       return [

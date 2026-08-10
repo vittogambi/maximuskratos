@@ -1,0 +1,7 @@
+# Keep harness scripts + small JSON; omit heavy binary evidence from git.
+evidence/**/*.png
+evidence/**/*.jpg
+evidence/**/*.jpeg
+evidence/**/*.webp
+evidence/**/*.har
+evidence/**/run.log

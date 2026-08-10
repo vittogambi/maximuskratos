@@ -1,0 +1,107 @@
+{
+  "generatedAt": "2026-08-10T02:27:30.215Z",
+  "checks": [
+    {
+      "id": "SEC-HDR-WEB-01",
+      "pass": false,
+      "detail": {
+        "missing": [
+          "strict-transport-security",
+          "x-content-type-options",
+          "x-frame-options",
+          "referrer-policy"
+        ],
+        "present": [],
+        "note": "Staging before deploy of next.config security headers"
+      }
+    },
+    {
+      "id": "SEC-HDR-API-01",
+      "pass": false,
+      "detail": {
+        "missing": [
+          "strict-transport-security",
+          "x-content-type-options",
+          "x-frame-options",
+          "referrer-policy"
+        ],
+        "xPoweredBy": "Express",
+        "note": "Staging API before helmet deploy"
+      }
+    },
+    {
+      "id": "SEC-SWAGGER-01",
+      "pass": false,
+      "detail": {
+        "status": 200,
+        "note": "Expect closed in production; staging currently exposes docs"
+      }
+    },
+    {
+      "id": "SEC-ADMIN-01",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "id": "SEC-ADMIN-02",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "id": "SEC-CORS-01",
+      "pass": true,
+      "detail": {
+        "acao": null
+      }
+    },
+    {
+      "id": "SEC-RATE-01",
+      "pass": true,
+      "detail": {
+        "limit": "100"
+      }
+    },
+    {
+      "id": "SEC-SOURCEMAP-01",
+      "pass": true,
+      "detail": {
+        "note": "No chunk found to probe"
+      }
+    },
+    {
+      "id": "SEC-HDR-API-LOCAL",
+      "pass": true,
+      "detail": {
+        "missing": [],
+        "headers": {
+          "xcto": "nosniff",
+          "xfo": "SAMEORIGIN",
+          "rp": "no-referrer"
+        }
+      }
+    },
+    {
+      "id": "SEC-SWAGGER-LOCAL",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "note": "Dev NODE_ENV should still expose swagger; production must not"
+      }
+    },
+    {
+      "id": "SEC-ADMIN-SHELL-01",
+      "pass": false,
+      "detail": {
+        "status": 200,
+        "bytes": 500,
+        "note": "200 means client-only guard; API still 401. Documented architectural risk."
+      }
+    }
+  ],
+  "passCount": 7,
+  "failCount": 4
+}

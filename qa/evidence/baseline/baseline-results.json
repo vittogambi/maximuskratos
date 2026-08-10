@@ -1,0 +1,1460 @@
+{
+  "generatedAt": "2026-08-10T01:30:17.498Z",
+  "routes": {
+    "/": {
+      "desktop-fast": {
+        "url": "https://mkweb-staging.up.railway.app/",
+        "finalUrl": "https://mkweb-staging.up.railway.app/",
+        "title": "Maximus Kratos: app y plataforma web de desarrollo personal para hombres",
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "category": "desktop"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "fast",
+        "cacheMode": "cold",
+        "throttled": false,
+        "navError": null,
+        "metrics": {
+          "ttfb": 198.39999997615814,
+          "domContentLoaded": 1195.0999999642372,
+          "load": 2483.699999988079,
+          "fcp": 1244,
+          "lcp": 1512,
+          "lcpElement": {
+            "tag": "img",
+            "selector": "img.ag-hero-bg__beam",
+            "src": "https://mkweb-staging.up.railway.app/images/landing/statue-beam-dark.webp?v=11",
+            "id": null
+          },
+          "lcpResourceUrl": "https://mkweb-staging.up.railway.app/images/landing/statue-beam-dark.webp?v=11",
+          "lcpAreaPx": 1295890,
+          "lcpTransferBytes": 72002,
+          "cls": 0.0015214667426215278,
+          "clsShiftCount": 2,
+          "tbtApprox": 0,
+          "longTaskCount": 0,
+          "inpProxyMs": 40
+        },
+        "bytes": {
+          "total": 7520046,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 17771
+            },
+            "font": {
+              "count": 10,
+              "bytes": 234859
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51949
+            },
+            "script": {
+              "count": 27,
+              "bytes": 265329
+            },
+            "image": {
+              "count": 12,
+              "bytes": 6586746
+            },
+            "fetch": {
+              "count": 11,
+              "bytes": 32839
+            },
+            "media": {
+              "count": 1,
+              "bytes": 330553
+            }
+          }
+        },
+        "requestCount": 64,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": [
+          {
+            "url": "https://mkweb-staging.up.railway.app/video/statue-beam.mp4?v=11",
+            "failure": "net::ERR_ABORTED"
+          }
+        ]
+      },
+      "mobile-4g": {
+        "url": "https://mkweb-staging.up.railway.app/",
+        "finalUrl": "https://mkweb-staging.up.railway.app/",
+        "title": "Maximus Kratos: app y plataforma web de desarrollo personal para hombres",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "category": "mobile"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "4g",
+        "cacheMode": "cold",
+        "throttled": true,
+        "navError": null,
+        "metrics": {
+          "ttfb": 200.4000000357628,
+          "domContentLoaded": 2235.5,
+          "load": 22166.600000023842,
+          "fcp": 2240,
+          "lcp": 14232,
+          "lcpElement": {
+            "tag": "span",
+            "selector": "span.ag-hero-signature__line",
+            "src": null,
+            "id": null
+          },
+          "lcpResourceUrl": null,
+          "lcpAreaPx": 25853,
+          "lcpTransferBytes": null,
+          "cls": 0.0005043347089446122,
+          "clsShiftCount": 1,
+          "tbtApprox": 9,
+          "longTaskCount": 1,
+          "inpProxyMs": null
+        },
+        "bytes": {
+          "total": 4492088,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 17771
+            },
+            "font": {
+              "count": 10,
+              "bytes": 234792
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51941
+            },
+            "image": {
+              "count": 12,
+              "bytes": 3558489
+            },
+            "script": {
+              "count": 27,
+              "bytes": 265498
+            },
+            "fetch": {
+              "count": 11,
+              "bytes": 33016
+            },
+            "media": {
+              "count": 1,
+              "bytes": 330581
+            }
+          }
+        },
+        "requestCount": 64,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      }
+    },
+    "/manifiesto": {
+      "desktop-fast": {
+        "url": "https://mkweb-staging.up.railway.app/manifiesto",
+        "finalUrl": "https://mkweb-staging.up.railway.app/manifiesto",
+        "title": "Manifiesto | Maximus Kratos",
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "category": "desktop"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "fast",
+        "cacheMode": "cold",
+        "throttled": false,
+        "navError": null,
+        "metrics": {
+          "ttfb": 213.10000002384186,
+          "domContentLoaded": 1108.1000000238419,
+          "load": 1770.9000000357628,
+          "fcp": 1156,
+          "lcp": 1364,
+          "lcpElement": {
+            "tag": "img",
+            "selector": "img.ag-about-hero__bg.ag-about-hero__bg--systems",
+            "src": "https://mkweb-staging.up.railway.app/images/backgrounds/about-systems.png",
+            "id": null
+          },
+          "lcpResourceUrl": "https://mkweb-staging.up.railway.app/images/backgrounds/about-systems.png",
+          "lcpAreaPx": 1101600,
+          "lcpTransferBytes": 1840837,
+          "cls": 0.0015214667426215278,
+          "clsShiftCount": 2,
+          "tbtApprox": 0,
+          "longTaskCount": 0,
+          "inpProxyMs": null
+        },
+        "bytes": {
+          "total": 2524989,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 16241
+            },
+            "script": {
+              "count": 27,
+              "bytes": 265429
+            },
+            "font": {
+              "count": 11,
+              "bytes": 300712
+            },
+            "image": {
+              "count": 4,
+              "bytes": 1858251
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51938
+            },
+            "fetch": {
+              "count": 9,
+              "bytes": 32418
+            }
+          }
+        },
+        "requestCount": 54,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      },
+      "mobile-4g": {
+        "url": "https://mkweb-staging.up.railway.app/manifiesto",
+        "finalUrl": "https://mkweb-staging.up.railway.app/manifiesto",
+        "title": "Manifiesto | Maximus Kratos",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "category": "mobile"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "4g",
+        "cacheMode": "cold",
+        "throttled": true,
+        "navError": null,
+        "metrics": {
+          "ttfb": 192.69999998807907,
+          "domContentLoaded": 3332.199999988079,
+          "load": 12769.199999988079,
+          "fcp": 3336,
+          "lcp": 12780,
+          "lcpElement": {
+            "tag": "img",
+            "selector": "img.ag-about-hero__bg.ag-about-hero__bg--systems",
+            "src": "https://mkweb-staging.up.railway.app/images/backgrounds/about-systems.png",
+            "id": null
+          },
+          "lcpResourceUrl": "https://mkweb-staging.up.railway.app/images/backgrounds/about-systems.png",
+          "lcpAreaPx": 163775,
+          "lcpTransferBytes": 1841505,
+          "cls": 0.0008576852723347495,
+          "clsShiftCount": 1,
+          "tbtApprox": 6,
+          "longTaskCount": 1,
+          "inpProxyMs": null
+        },
+        "bytes": {
+          "total": 2525616,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 16242
+            },
+            "font": {
+              "count": 11,
+              "bytes": 300774
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51938
+            },
+            "script": {
+              "count": 27,
+              "bytes": 265356
+            },
+            "image": {
+              "count": 4,
+              "bytes": 1858904
+            },
+            "fetch": {
+              "count": 9,
+              "bytes": 32402
+            }
+          }
+        },
+        "requestCount": 54,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [
+          "TypeError: Failed to execute 'getComputedStyle' on 'Window': parameter 1 is not of type 'Element'."
+        ],
+        "failedRequests": []
+      }
+    },
+    "/sistema": {
+      "desktop-fast": {
+        "url": "https://mkweb-staging.up.railway.app/sistema",
+        "finalUrl": "https://mkweb-staging.up.railway.app/sistema",
+        "title": "Producto | Maximus Kratos",
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "category": "desktop"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "fast",
+        "cacheMode": "cold",
+        "throttled": false,
+        "navError": null,
+        "metrics": {
+          "ttfb": 195.89999997615814,
+          "domContentLoaded": 1324.199999988079,
+          "load": 1590.199999988079,
+          "fcp": 1356,
+          "lcp": 1596,
+          "lcpElement": {
+            "tag": "img",
+            "selector": "img",
+            "src": "https://mkweb-staging.up.railway.app/images/landing/dashboard-alineacion-desktop.png",
+            "id": null
+          },
+          "lcpResourceUrl": "https://mkweb-staging.up.railway.app/images/landing/dashboard-alineacion-desktop.png",
+          "lcpAreaPx": 274440,
+          "lcpTransferBytes": 751881,
+          "cls": 0.0015214667426215278,
+          "clsShiftCount": 2,
+          "tbtApprox": 0,
+          "longTaskCount": 0,
+          "inpProxyMs": null
+        },
+        "bytes": {
+          "total": 2912044,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 14092
+            },
+            "script": {
+              "count": 27,
+              "bytes": 265309
+            },
+            "font": {
+              "count": 9,
+              "bytes": 222732
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51938
+            },
+            "image": {
+              "count": 7,
+              "bytes": 2325421
+            },
+            "fetch": {
+              "count": 9,
+              "bytes": 32552
+            }
+          }
+        },
+        "requestCount": 55,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      },
+      "mobile-4g": {
+        "url": "https://mkweb-staging.up.railway.app/sistema",
+        "finalUrl": "https://mkweb-staging.up.railway.app/sistema",
+        "title": "Producto | Maximus Kratos",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "category": "mobile"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "4g",
+        "cacheMode": "cold",
+        "throttled": true,
+        "navError": null,
+        "metrics": {
+          "ttfb": 225.30000001192093,
+          "domContentLoaded": 4024.400000035763,
+          "load": 14708,
+          "fcp": 4080,
+          "lcp": 14732,
+          "lcpElement": {
+            "tag": "img",
+            "selector": "img",
+            "src": "https://mkweb-staging.up.railway.app/images/landing/dashboard-alineacion-desktop.png",
+            "id": null
+          },
+          "lcpResourceUrl": "https://mkweb-staging.up.railway.app/images/landing/dashboard-alineacion-desktop.png",
+          "lcpAreaPx": 150677,
+          "lcpTransferBytes": 751874,
+          "cls": 0.0005043347089446122,
+          "clsShiftCount": 1,
+          "tbtApprox": 0,
+          "longTaskCount": 0,
+          "inpProxyMs": null
+        },
+        "bytes": {
+          "total": 2911890,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 14093
+            },
+            "script": {
+              "count": 27,
+              "bytes": 265309
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51951
+            },
+            "font": {
+              "count": 9,
+              "bytes": 222740
+            },
+            "image": {
+              "count": 7,
+              "bytes": 2325270
+            },
+            "fetch": {
+              "count": 9,
+              "bytes": 32527
+            }
+          }
+        },
+        "requestCount": 55,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      }
+    },
+    "/marco-central": {
+      "desktop-fast": {
+        "url": "https://mkweb-staging.up.railway.app/marco-central",
+        "finalUrl": "https://mkweb-staging.up.railway.app/marco-central",
+        "title": "Marco Central | Maximus Kratos",
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "category": "desktop"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "fast",
+        "cacheMode": "cold",
+        "throttled": false,
+        "navError": null,
+        "metrics": {
+          "ttfb": 196.9000000357628,
+          "domContentLoaded": 1008.5,
+          "load": 1338.9000000357628,
+          "fcp": 1044,
+          "lcp": 1304,
+          "lcpElement": {
+            "tag": "img",
+            "selector": "img.ag-marco-central-hero__bg-img",
+            "src": "https://mkweb-staging.up.railway.app/images/backgrounds/marco-central.png",
+            "id": null
+          },
+          "lcpResourceUrl": "https://mkweb-staging.up.railway.app/images/backgrounds/marco-central.png",
+          "lcpAreaPx": 737280,
+          "lcpTransferBytes": 2078680,
+          "cls": 0.0015214667426215278,
+          "clsShiftCount": 2,
+          "tbtApprox": 0,
+          "longTaskCount": 0,
+          "inpProxyMs": 40
+        },
+        "bytes": {
+          "total": 2674298,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 20784
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51951
+            },
+            "font": {
+              "count": 9,
+              "bytes": 222767
+            },
+            "script": {
+              "count": 27,
+              "bytes": 265291
+            },
+            "image": {
+              "count": 3,
+              "bytes": 2081151
+            },
+            "fetch": {
+              "count": 9,
+              "bytes": 32354
+            }
+          }
+        },
+        "requestCount": 51,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      },
+      "mobile-4g": {
+        "url": "https://mkweb-staging.up.railway.app/marco-central",
+        "finalUrl": "https://mkweb-staging.up.railway.app/marco-central",
+        "title": "Marco Central | Maximus Kratos",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "category": "mobile"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "4g",
+        "cacheMode": "cold",
+        "throttled": true,
+        "navError": null,
+        "metrics": {
+          "ttfb": 195.80000001192093,
+          "domContentLoaded": 3232.100000023842,
+          "load": 13449,
+          "fcp": 3236,
+          "lcp": 13456,
+          "lcpElement": {
+            "tag": "img",
+            "selector": "img.ag-marco-central-hero__bg-img",
+            "src": "https://mkweb-staging.up.railway.app/images/backgrounds/marco-central.png",
+            "id": null
+          },
+          "lcpResourceUrl": "https://mkweb-staging.up.railway.app/images/backgrounds/marco-central.png",
+          "lcpAreaPx": 197340,
+          "lcpTransferBytes": 2078977,
+          "cls": 0.0005043347089446122,
+          "clsShiftCount": 1,
+          "tbtApprox": 19,
+          "longTaskCount": 2,
+          "inpProxyMs": null
+        },
+        "bytes": {
+          "total": 2674602,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 20784
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51949
+            },
+            "script": {
+              "count": 27,
+              "bytes": 265275
+            },
+            "font": {
+              "count": 9,
+              "bytes": 222768
+            },
+            "image": {
+              "count": 3,
+              "bytes": 2081447
+            },
+            "fetch": {
+              "count": 9,
+              "bytes": 32379
+            }
+          }
+        },
+        "requestCount": 51,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      }
+    },
+    "/ikigai": {
+      "desktop-fast": {
+        "url": "https://mkweb-staging.up.railway.app/ikigai",
+        "finalUrl": "https://mkweb-staging.up.railway.app/ikigai",
+        "title": "IKIGAI | Maximus Kratos",
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "category": "desktop"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "fast",
+        "cacheMode": "cold",
+        "throttled": false,
+        "navError": null,
+        "metrics": {
+          "ttfb": 199.10000002384186,
+          "domContentLoaded": 1135.300000011921,
+          "load": 1430,
+          "fcp": 1192,
+          "lcp": 1460,
+          "lcpElement": {
+            "tag": "img",
+            "selector": "img.ag-about-hero__bg.ag-ikigai-hero__bg",
+            "src": "https://mkweb-staging.up.railway.app/images/ikigai/ikigai-hero.png",
+            "id": null
+          },
+          "lcpResourceUrl": "https://mkweb-staging.up.railway.app/images/ikigai/ikigai-hero.png",
+          "lcpAreaPx": 1101600,
+          "lcpTransferBytes": 2106907,
+          "cls": 0.0015214667426215278,
+          "clsShiftCount": 2,
+          "tbtApprox": 0,
+          "longTaskCount": 0,
+          "inpProxyMs": null
+        },
+        "bytes": {
+          "total": 3681949,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 13601
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51951
+            },
+            "font": {
+              "count": 9,
+              "bytes": 222734
+            },
+            "script": {
+              "count": 27,
+              "bytes": 265308
+            },
+            "image": {
+              "count": 4,
+              "bytes": 3095247
+            },
+            "fetch": {
+              "count": 9,
+              "bytes": 33108
+            }
+          }
+        },
+        "requestCount": 52,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      },
+      "mobile-4g": {
+        "url": "https://mkweb-staging.up.railway.app/ikigai",
+        "finalUrl": "https://mkweb-staging.up.railway.app/ikigai",
+        "title": "IKIGAI | Maximus Kratos",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "category": "mobile"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "4g",
+        "cacheMode": "cold",
+        "throttled": true,
+        "navError": null,
+        "metrics": {
+          "ttfb": 195.10000002384186,
+          "domContentLoaded": 3369.300000011921,
+          "load": 18290.899999976158,
+          "fcp": 3420,
+          "lcp": 18296,
+          "lcpElement": {
+            "tag": "img",
+            "selector": "img.ag-about-hero__bg.ag-ikigai-hero__bg",
+            "src": "https://mkweb-staging.up.railway.app/images/ikigai/ikigai-hero.png",
+            "id": null
+          },
+          "lcpResourceUrl": "https://mkweb-staging.up.railway.app/images/ikigai/ikigai-hero.png",
+          "lcpAreaPx": 279630,
+          "lcpTransferBytes": 2106655,
+          "cls": 0.0005043347089446122,
+          "clsShiftCount": 1,
+          "tbtApprox": 1,
+          "longTaskCount": 1,
+          "inpProxyMs": null
+        },
+        "bytes": {
+          "total": 3681614,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 13601
+            },
+            "font": {
+              "count": 9,
+              "bytes": 222752
+            },
+            "script": {
+              "count": 27,
+              "bytes": 265310
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51950
+            },
+            "image": {
+              "count": 4,
+              "bytes": 3094860
+            },
+            "fetch": {
+              "count": 9,
+              "bytes": 33141
+            }
+          }
+        },
+        "requestCount": 52,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      }
+    },
+    "/precios": {
+      "desktop-fast": {
+        "url": "https://mkweb-staging.up.railway.app/precios",
+        "finalUrl": "https://mkweb-staging.up.railway.app/precios",
+        "title": "Precios | Maximus Kratos",
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "category": "desktop"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "fast",
+        "cacheMode": "cold",
+        "throttled": false,
+        "navError": null,
+        "metrics": {
+          "ttfb": 196.30000001192093,
+          "domContentLoaded": 1072.9000000357628,
+          "load": 1329.9000000357628,
+          "fcp": 1116,
+          "lcp": 1856,
+          "lcpElement": {
+            "tag": "p",
+            "selector": "p.ag-intro__lead.font-body-lg.ag-intro__lead--center",
+            "src": null,
+            "id": null
+          },
+          "lcpResourceUrl": null,
+          "lcpAreaPx": 32542,
+          "lcpTransferBytes": null,
+          "cls": 0.01015918154618377,
+          "clsShiftCount": 2,
+          "tbtApprox": 0,
+          "longTaskCount": 0,
+          "inpProxyMs": null
+        },
+        "bytes": {
+          "total": 595100,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 9866
+            },
+            "font": {
+              "count": 9,
+              "bytes": 222794
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51950
+            },
+            "script": {
+              "count": 28,
+              "bytes": 269992
+            },
+            "image": {
+              "count": 2,
+              "bytes": 2476
+            },
+            "fetch": {
+              "count": 14,
+              "bytes": 38022
+            }
+          }
+        },
+        "requestCount": 56,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      },
+      "mobile-4g": {
+        "url": "https://mkweb-staging.up.railway.app/precios",
+        "finalUrl": "https://mkweb-staging.up.railway.app/precios",
+        "title": "Precios | Maximus Kratos",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "category": "mobile"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "4g",
+        "cacheMode": "cold",
+        "throttled": true,
+        "navError": null,
+        "metrics": {
+          "ttfb": 195.9000000357628,
+          "domContentLoaded": 2949.5,
+          "load": 3408.2999999523163,
+          "fcp": 2948,
+          "lcp": 3896,
+          "lcpElement": {
+            "tag": "p",
+            "selector": "p.ag-intro__lead.font-body-lg.ag-intro__lead--center",
+            "src": null,
+            "id": null
+          },
+          "lcpResourceUrl": null,
+          "lcpAreaPx": 26732,
+          "lcpTransferBytes": null,
+          "cls": 0.0005043347089446122,
+          "clsShiftCount": 1,
+          "tbtApprox": 4,
+          "longTaskCount": 1,
+          "inpProxyMs": null
+        },
+        "bytes": {
+          "total": 595122,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 9866
+            },
+            "script": {
+              "count": 28,
+              "bytes": 269988
+            },
+            "font": {
+              "count": 9,
+              "bytes": 222827
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51920
+            },
+            "image": {
+              "count": 2,
+              "bytes": 2469
+            },
+            "fetch": {
+              "count": 14,
+              "bytes": 38052
+            }
+          }
+        },
+        "requestCount": 56,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      }
+    },
+    "/eventos": {
+      "desktop-fast": {
+        "url": "https://mkweb-staging.up.railway.app/eventos",
+        "finalUrl": "https://mkweb-staging.up.railway.app/eventos",
+        "title": "Eventos | Maximus Kratos",
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "category": "desktop"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "fast",
+        "cacheMode": "cold",
+        "throttled": false,
+        "navError": null,
+        "metrics": {
+          "ttfb": 216.10000002384186,
+          "domContentLoaded": 1541,
+          "load": 1785.800000011921,
+          "fcp": 1576,
+          "lcp": 1576,
+          "lcpElement": {
+            "tag": "img",
+            "selector": "img.ag-about-hero__bg",
+            "src": "https://mkweb-staging.up.railway.app/images/eventos/hero-council.jpg",
+            "id": null
+          },
+          "lcpResourceUrl": "https://mkweb-staging.up.railway.app/images/eventos/hero-council.jpg",
+          "lcpAreaPx": 1065552,
+          "lcpTransferBytes": 166723,
+          "cls": 0.0015214667426215278,
+          "clsShiftCount": 2,
+          "tbtApprox": 0,
+          "longTaskCount": 0,
+          "inpProxyMs": null
+        },
+        "bytes": {
+          "total": 874205,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 9989
+            },
+            "script": {
+              "count": 27,
+              "bytes": 265322
+            },
+            "font": {
+              "count": 9,
+              "bytes": 222706
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51929
+            },
+            "image": {
+              "count": 4,
+              "bytes": 291136
+            },
+            "fetch": {
+              "count": 9,
+              "bytes": 33123
+            }
+          }
+        },
+        "requestCount": 52,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      },
+      "mobile-4g": {
+        "url": "https://mkweb-staging.up.railway.app/eventos",
+        "finalUrl": "https://mkweb-staging.up.railway.app/eventos",
+        "title": "Eventos | Maximus Kratos",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "category": "mobile"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "4g",
+        "cacheMode": "cold",
+        "throttled": true,
+        "navError": null,
+        "metrics": {
+          "ttfb": 195.80000001192093,
+          "domContentLoaded": 3760.199999988079,
+          "load": 5186.199999988079,
+          "fcp": 3764,
+          "lcp": 5196,
+          "lcpElement": {
+            "tag": "img",
+            "selector": "img.ag-about-hero__bg",
+            "src": "https://mkweb-staging.up.railway.app/images/eventos/hero-council.jpg",
+            "id": null
+          },
+          "lcpResourceUrl": "https://mkweb-staging.up.railway.app/images/eventos/hero-council.jpg",
+          "lcpAreaPx": 279630,
+          "lcpTransferBytes": 166740,
+          "cls": 0.0005043347089446122,
+          "clsShiftCount": 1,
+          "tbtApprox": 0,
+          "longTaskCount": 0,
+          "inpProxyMs": null
+        },
+        "bytes": {
+          "total": 874348,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 9989
+            },
+            "font": {
+              "count": 9,
+              "bytes": 222766
+            },
+            "script": {
+              "count": 27,
+              "bytes": 265304
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51941
+            },
+            "image": {
+              "count": 4,
+              "bytes": 291189
+            },
+            "fetch": {
+              "count": 9,
+              "bytes": 33159
+            }
+          }
+        },
+        "requestCount": 52,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      }
+    },
+    "/contacto": {
+      "desktop-fast": {
+        "url": "https://mkweb-staging.up.railway.app/contacto",
+        "finalUrl": "https://mkweb-staging.up.railway.app/contacto",
+        "title": "Contacto | Maximus Kratos",
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "category": "desktop"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "fast",
+        "cacheMode": "cold",
+        "throttled": false,
+        "navError": null,
+        "metrics": {
+          "ttfb": 194.30000001192093,
+          "domContentLoaded": 948.1000000238419,
+          "load": 1322.4000000357628,
+          "fcp": 1060,
+          "lcp": 1184,
+          "lcpElement": {
+            "tag": "img",
+            "selector": "img.ag-contact-section__bg",
+            "src": "https://mkweb-staging.up.railway.app/images/contacto/hero-listening.jpg",
+            "id": null
+          },
+          "lcpResourceUrl": "https://mkweb-staging.up.railway.app/images/contacto/hero-listening.jpg",
+          "lcpAreaPx": 864682,
+          "lcpTransferBytes": 94914,
+          "cls": 0.0015214667426215278,
+          "clsShiftCount": 2,
+          "tbtApprox": 0,
+          "longTaskCount": 0,
+          "inpProxyMs": 40
+        },
+        "bytes": {
+          "total": 679647,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 9142
+            },
+            "font": {
+              "count": 9,
+              "bytes": 222728
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51941
+            },
+            "script": {
+              "count": 27,
+              "bytes": 265310
+            },
+            "image": {
+              "count": 3,
+              "bytes": 97383
+            },
+            "fetch": {
+              "count": 9,
+              "bytes": 33143
+            }
+          }
+        },
+        "requestCount": 51,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      },
+      "mobile-4g": {
+        "url": "https://mkweb-staging.up.railway.app/contacto",
+        "finalUrl": "https://mkweb-staging.up.railway.app/contacto",
+        "title": "Contacto | Maximus Kratos",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "category": "mobile"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "4g",
+        "cacheMode": "cold",
+        "throttled": true,
+        "navError": null,
+        "metrics": {
+          "ttfb": 196.10000002384186,
+          "domContentLoaded": 3102.800000011921,
+          "load": 4107.099999964237,
+          "fcp": 3148,
+          "lcp": 3352,
+          "lcpElement": {
+            "tag": "img",
+            "selector": "img.ag-contact-section__bg",
+            "src": "https://mkweb-staging.up.railway.app/images/contacto/hero-listening.jpg",
+            "id": null
+          },
+          "lcpResourceUrl": "https://mkweb-staging.up.railway.app/images/contacto/hero-listening.jpg",
+          "lcpAreaPx": 326278,
+          "lcpTransferBytes": 94877,
+          "cls": 0.0005043347089446122,
+          "clsShiftCount": 1,
+          "tbtApprox": 0,
+          "longTaskCount": 1,
+          "inpProxyMs": null
+        },
+        "bytes": {
+          "total": 679664,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 9151
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51950
+            },
+            "script": {
+              "count": 27,
+              "bytes": 265323
+            },
+            "font": {
+              "count": 9,
+              "bytes": 222784
+            },
+            "image": {
+              "count": 3,
+              "bytes": 97344
+            },
+            "fetch": {
+              "count": 9,
+              "bytes": 33112
+            }
+          }
+        },
+        "requestCount": 51,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      }
+    },
+    "/privacidad": {
+      "desktop-fast": {
+        "url": "https://mkweb-staging.up.railway.app/privacidad",
+        "finalUrl": "https://mkweb-staging.up.railway.app/privacidad",
+        "title": "Política de Privacidad | Maximus Kratos",
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "category": "desktop"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "fast",
+        "cacheMode": "cold",
+        "throttled": false,
+        "navError": null,
+        "metrics": {
+          "ttfb": 194,
+          "domContentLoaded": 1063.8999999761581,
+          "load": 1320.8999999761581,
+          "fcp": 1092,
+          "lcp": 1152,
+          "lcpElement": {
+            "tag": "p",
+            "selector": "p.ag-legal-page__intro.font-body-lg",
+            "src": null,
+            "id": null
+          },
+          "lcpResourceUrl": null,
+          "lcpAreaPx": 55610,
+          "lcpTransferBytes": null,
+          "cls": 0.0015214667426215278,
+          "clsShiftCount": 2,
+          "tbtApprox": 0,
+          "longTaskCount": 0,
+          "inpProxyMs": null
+        },
+        "bytes": {
+          "total": 592990,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 10759
+            },
+            "font": {
+              "count": 9,
+              "bytes": 222769
+            },
+            "script": {
+              "count": 29,
+              "bytes": 268174
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51930
+            },
+            "image": {
+              "count": 2,
+              "bytes": 2469
+            },
+            "fetch": {
+              "count": 10,
+              "bytes": 36889
+            }
+          }
+        },
+        "requestCount": 53,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      },
+      "mobile-4g": {
+        "url": "https://mkweb-staging.up.railway.app/privacidad",
+        "finalUrl": "https://mkweb-staging.up.railway.app/privacidad",
+        "title": "Política de Privacidad | Maximus Kratos",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "category": "mobile"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "4g",
+        "cacheMode": "cold",
+        "throttled": true,
+        "navError": null,
+        "metrics": {
+          "ttfb": 193.89999997615814,
+          "domContentLoaded": 2902.899999976158,
+          "load": 3337,
+          "fcp": 2904,
+          "lcp": 3152,
+          "lcpElement": {
+            "tag": "p",
+            "selector": "p.ag-legal-page__intro.font-body-lg",
+            "src": null,
+            "id": null
+          },
+          "lcpResourceUrl": null,
+          "lcpAreaPx": 39780,
+          "lcpTransferBytes": null,
+          "cls": 0.0005043347089446122,
+          "clsShiftCount": 1,
+          "tbtApprox": 7,
+          "longTaskCount": 1,
+          "inpProxyMs": null
+        },
+        "bytes": {
+          "total": 592962,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 10758
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51951
+            },
+            "font": {
+              "count": 9,
+              "bytes": 222736
+            },
+            "script": {
+              "count": 29,
+              "bytes": 268154
+            },
+            "image": {
+              "count": 2,
+              "bytes": 2492
+            },
+            "fetch": {
+              "count": 10,
+              "bytes": 36871
+            }
+          }
+        },
+        "requestCount": 53,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      }
+    },
+    "/terminos": {
+      "desktop-fast": {
+        "url": "https://mkweb-staging.up.railway.app/terminos",
+        "finalUrl": "https://mkweb-staging.up.railway.app/terminos",
+        "title": "Términos de Servicio | Maximus Kratos",
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "category": "desktop"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "fast",
+        "cacheMode": "cold",
+        "throttled": false,
+        "navError": null,
+        "metrics": {
+          "ttfb": 194.5,
+          "domContentLoaded": 1087.699999988079,
+          "load": 1320.300000011921,
+          "fcp": 1112,
+          "lcp": 1156,
+          "lcpElement": {
+            "tag": "p",
+            "selector": "p.ag-legal-page__intro.font-body-lg",
+            "src": null,
+            "id": null
+          },
+          "lcpResourceUrl": null,
+          "lcpAreaPx": 55610,
+          "lcpTransferBytes": null,
+          "cls": 0.0015214667426215278,
+          "clsShiftCount": 2,
+          "tbtApprox": 0,
+          "longTaskCount": 0,
+          "inpProxyMs": null
+        },
+        "bytes": {
+          "total": 593364,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 11125
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51949
+            },
+            "font": {
+              "count": 9,
+              "bytes": 222816
+            },
+            "script": {
+              "count": 29,
+              "bytes": 268141
+            },
+            "image": {
+              "count": 2,
+              "bytes": 2469
+            },
+            "fetch": {
+              "count": 10,
+              "bytes": 36864
+            }
+          }
+        },
+        "requestCount": 53,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      },
+      "mobile-4g": {
+        "url": "https://mkweb-staging.up.railway.app/terminos",
+        "finalUrl": "https://mkweb-staging.up.railway.app/terminos",
+        "title": "Términos de Servicio | Maximus Kratos",
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "category": "mobile"
+        },
+        "browserTypeName": "chromium",
+        "networkProfileKey": "4g",
+        "cacheMode": "cold",
+        "throttled": true,
+        "navError": null,
+        "metrics": {
+          "ttfb": 194.4000000357628,
+          "domContentLoaded": 2910.300000011921,
+          "load": 3316.5,
+          "fcp": 2912,
+          "lcp": 3116,
+          "lcpElement": {
+            "tag": "p",
+            "selector": "p.ag-legal-page__intro.font-body-lg",
+            "src": null,
+            "id": null
+          },
+          "lcpResourceUrl": null,
+          "lcpAreaPx": 40014,
+          "lcpTransferBytes": null,
+          "cls": 0.0005043347089446122,
+          "clsShiftCount": 1,
+          "tbtApprox": 0,
+          "longTaskCount": 0,
+          "inpProxyMs": null
+        },
+        "bytes": {
+          "total": 593384,
+          "byType": {
+            "document": {
+              "count": 1,
+              "bytes": 11126
+            },
+            "font": {
+              "count": 9,
+              "bytes": 222787
+            },
+            "stylesheet": {
+              "count": 2,
+              "bytes": 51950
+            },
+            "script": {
+              "count": 29,
+              "bytes": 268170
+            },
+            "image": {
+              "count": 2,
+              "bytes": 2492
+            },
+            "fetch": {
+              "count": 10,
+              "bytes": 36859
+            }
+          }
+        },
+        "requestCount": 53,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 401 ()"
+        ],
+        "pageErrors": [],
+        "failedRequests": []
+      }
+    }
+  }
+}

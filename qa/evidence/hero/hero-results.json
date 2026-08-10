@@ -1,0 +1,226 @@
+{
+  "generatedAt": "2026-08-10T01:39:29.279Z",
+  "scenarios": {
+    "desktop-normal": {
+      "name": "desktop-normal",
+      "scenario": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "reducedMotion": false,
+        "dataSaver": false,
+        "softNavRepeat": false
+      },
+      "requestLog": [
+        {
+          "url": "/images/landing/statue-beam-dark.webp?v=11",
+          "status": 200,
+          "bytes": 72055
+        },
+        {
+          "url": "/images/landing/statue-beam-lit-hd.png?v=11",
+          "status": 200,
+          "bytes": 3098679
+        },
+        {
+          "url": "/video/statue-beam.mp4?v=11",
+          "status": 206,
+          "bytes": 330487
+        }
+      ],
+      "domState": {
+        "videoPreload": "auto",
+        "videoReadyState": 4,
+        "videoNetworkState": 1,
+        "videoCurrentTime": 2.022479,
+        "images": [
+          {
+            "src": "https://mkweb-staging.up.railway.app/images/landing/statue-beam-dark.webp?v=11",
+            "opacity": "1"
+          },
+          {
+            "src": "https://mkweb-staging.up.railway.app/images/landing/statue-beam-lit-hd.png?v=11",
+            "opacity": "0"
+          }
+        ]
+      },
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/hero/desktop-normal.png"
+    },
+    "desktop-reduced-motion": {
+      "name": "desktop-reduced-motion",
+      "scenario": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "reducedMotion": true,
+        "dataSaver": false,
+        "softNavRepeat": false
+      },
+      "requestLog": [
+        {
+          "url": "/images/landing/statue-beam-lit-hd.png?v=11",
+          "status": 200,
+          "bytes": 3099698
+        },
+        {
+          "url": "/images/landing/statue-beam-dark.webp?v=11",
+          "status": 200,
+          "bytes": 72035
+        },
+        {
+          "url": "/video/statue-beam.mp4?v=11",
+          "status": 206,
+          "bytes": 330615
+        }
+      ],
+      "domState": {
+        "videoPreload": "auto",
+        "videoReadyState": 4,
+        "videoNetworkState": 1,
+        "videoCurrentTime": 0,
+        "images": [
+          {
+            "src": "https://mkweb-staging.up.railway.app/images/landing/statue-beam-dark.webp?v=11",
+            "opacity": "0"
+          },
+          {
+            "src": "https://mkweb-staging.up.railway.app/images/landing/statue-beam-lit-hd.png?v=11",
+            "opacity": "1"
+          }
+        ]
+      },
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/hero/desktop-reduced-motion.png"
+    },
+    "desktop-data-saver": {
+      "name": "desktop-data-saver",
+      "scenario": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "reducedMotion": false,
+        "dataSaver": true,
+        "softNavRepeat": false
+      },
+      "requestLog": [
+        {
+          "url": "/images/landing/statue-beam-dark.webp?v=11",
+          "status": 200,
+          "bytes": 72020
+        },
+        {
+          "url": "/images/landing/statue-beam-lit-hd.png?v=11",
+          "status": 200,
+          "bytes": 3098978
+        },
+        {
+          "url": "/video/statue-beam.mp4?v=11",
+          "status": 206,
+          "bytes": 330781
+        }
+      ],
+      "domState": {
+        "videoPreload": "auto",
+        "videoReadyState": 4,
+        "videoNetworkState": 1,
+        "videoCurrentTime": 0,
+        "images": [
+          {
+            "src": "https://mkweb-staging.up.railway.app/images/landing/statue-beam-dark.webp?v=11",
+            "opacity": "0"
+          },
+          {
+            "src": "https://mkweb-staging.up.railway.app/images/landing/statue-beam-lit-hd.png?v=11",
+            "opacity": "1"
+          }
+        ]
+      },
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/hero/desktop-data-saver.png"
+    },
+    "desktop-soft-nav-repeat": {
+      "name": "desktop-soft-nav-repeat",
+      "scenario": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "reducedMotion": false,
+        "dataSaver": false,
+        "softNavRepeat": true
+      },
+      "requestLog": [
+        {
+          "url": "/images/landing/statue-beam-dark.webp?v=11",
+          "status": 200,
+          "bytes": 72021
+        },
+        {
+          "url": "/images/landing/statue-beam-lit-hd.png?v=11",
+          "status": 200,
+          "bytes": 3100444
+        },
+        {
+          "url": "/video/statue-beam.mp4?v=11",
+          "status": 206,
+          "bytes": 330628
+        }
+      ],
+      "domState": {
+        "videoPreload": null,
+        "videoReadyState": null,
+        "videoNetworkState": null,
+        "videoCurrentTime": null,
+        "images": []
+      },
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/hero/desktop-soft-nav-repeat.png"
+    },
+    "mobile-normal": {
+      "name": "mobile-normal",
+      "scenario": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "reducedMotion": false,
+        "dataSaver": false,
+        "softNavRepeat": false
+      },
+      "requestLog": [
+        {
+          "url": "/images/landing/statue-beam-lit-sm.webp?v=11",
+          "status": 200,
+          "bytes": 79208
+        },
+        {
+          "url": "/images/landing/statue-beam-dark-sm.webp?v=11",
+          "status": 200,
+          "bytes": 64080
+        },
+        {
+          "url": "/video/statue-beam.mp4?v=11",
+          "status": 206,
+          "bytes": 330724
+        }
+      ],
+      "domState": {
+        "videoPreload": "auto",
+        "videoReadyState": 4,
+        "videoNetworkState": 1,
+        "videoCurrentTime": 1.423032,
+        "images": [
+          {
+            "src": "https://mkweb-staging.up.railway.app/images/landing/statue-beam-dark-sm.webp?v=11",
+            "opacity": "1"
+          },
+          {
+            "src": "https://mkweb-staging.up.railway.app/images/landing/statue-beam-lit-sm.webp?v=11",
+            "opacity": "0"
+          }
+        ]
+      },
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/hero/mobile-normal.png"
+    }
+  }
+}

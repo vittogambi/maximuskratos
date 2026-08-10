@@ -1,0 +1,262 @@
+{
+  "generatedAt": "2026-08-10T02:02:32.558Z",
+  "results": [
+    {
+      "engine": "chromium-desktop",
+      "route": "/",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "pageErrors": [],
+      "heroState": {
+        "readyState": 4,
+        "networkState": 1,
+        "paused": true,
+        "currentTime": 2.049999
+      },
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/chromium-desktop-home.png"
+    },
+    {
+      "engine": "chromium-desktop",
+      "route": "/precios",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "pageErrors": [],
+      "heroState": null,
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/chromium-desktop-precios.png"
+    },
+    {
+      "engine": "chromium-desktop",
+      "route": "/login",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "pageErrors": [],
+      "heroState": null,
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/chromium-desktop-login.png"
+    },
+    {
+      "engine": "chromium-desktop",
+      "route": "/register",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "pageErrors": [],
+      "heroState": null,
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/chromium-desktop-register.png"
+    },
+    {
+      "engine": "webkit-desktop",
+      "route": "/",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "pageErrors": [],
+      "heroState": {
+        "readyState": 4,
+        "networkState": 1,
+        "paused": false,
+        "currentTime": 1.4964344583329148
+      },
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/webkit-desktop-home.png"
+    },
+    {
+      "engine": "webkit-desktop",
+      "route": "/precios",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "pageErrors": [],
+      "heroState": null,
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/webkit-desktop-precios.png"
+    },
+    {
+      "engine": "webkit-desktop",
+      "route": "/login",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "pageErrors": [],
+      "heroState": null,
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/webkit-desktop-login.png"
+    },
+    {
+      "engine": "webkit-desktop",
+      "route": "/register",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "pageErrors": [],
+      "heroState": null,
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/webkit-desktop-register.png"
+    },
+    {
+      "engine": "firefox-desktop",
+      "route": "/",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "heroState": {
+        "readyState": 4,
+        "networkState": 1,
+        "paused": false,
+        "currentTime": 0.791252
+      },
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/firefox-desktop-home.png"
+    },
+    {
+      "engine": "firefox-desktop",
+      "route": "/precios",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "heroState": null,
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/firefox-desktop-precios.png"
+    },
+    {
+      "engine": "firefox-desktop",
+      "route": "/login",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "heroState": null,
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/firefox-desktop-login.png"
+    },
+    {
+      "engine": "firefox-desktop",
+      "route": "/register",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "heroState": null,
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/firefox-desktop-register.png"
+    },
+    {
+      "engine": "chromium-mobile",
+      "route": "/",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "pageErrors": [],
+      "heroState": {
+        "readyState": 4,
+        "networkState": 1,
+        "paused": false,
+        "currentTime": 1.579784
+      },
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/chromium-mobile-home.png"
+    },
+    {
+      "engine": "chromium-mobile",
+      "route": "/precios",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "pageErrors": [],
+      "heroState": null,
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/chromium-mobile-precios.png"
+    },
+    {
+      "engine": "chromium-mobile",
+      "route": "/login",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "pageErrors": [],
+      "heroState": null,
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/chromium-mobile-login.png"
+    },
+    {
+      "engine": "chromium-mobile",
+      "route": "/register",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "pageErrors": [],
+      "heroState": null,
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/chromium-mobile-register.png"
+    },
+    {
+      "engine": "webkit-mobile",
+      "route": "/",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "pageErrors": [],
+      "heroState": {
+        "readyState": 4,
+        "networkState": 1,
+        "paused": false,
+        "currentTime": 0.932209374999661
+      },
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/webkit-mobile-home.png"
+    },
+    {
+      "engine": "webkit-mobile",
+      "route": "/precios",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "pageErrors": [],
+      "heroState": null,
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/webkit-mobile-precios.png"
+    },
+    {
+      "engine": "webkit-mobile",
+      "route": "/login",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "pageErrors": [],
+      "heroState": null,
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/webkit-mobile-login.png"
+    },
+    {
+      "engine": "webkit-mobile",
+      "route": "/register",
+      "status": 200,
+      "navError": null,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 ()"
+      ],
+      "pageErrors": [],
+      "heroState": null,
+      "screenshotPath": "/Users/vittoriogambi/maximuskratos/qa/evidence/browsers/webkit-mobile-register.png"
+    }
+  ]
+}

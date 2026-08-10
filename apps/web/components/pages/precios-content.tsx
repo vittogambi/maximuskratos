@@ -50,6 +50,7 @@ export function PreciosContent() {
       <section className="ag-section-inner ag-precios-open" aria-labelledby="planes-heading">
         <div className="ag-container ag-container--narrow">
           <SectionIntro
+            as="h1"
             eyebrow="PRECIOS"
             title="Acceso anticipado de fundador."
             lead="Reserva tu cuenta hoy sin cobro. Al lanzamiento eliges cada cuánto pagas; si adelantas, el precio por mes baja."

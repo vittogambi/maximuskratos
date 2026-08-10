@@ -20,6 +20,7 @@ ${LANDING_HERO.signature}
 ${siteConfig.description}
 
 Audience: men seeking self-mastery, direction, and an ordered life (Espíritu, Mente, Cuerpo).
+Scope: MK's core focus is direction, purpose, coherence, and execution. Other life domains (relationships, finances, physical health) are diagnosed and prioritized so they do not block that direction; when specialized knowledge is needed, MK refers users to professionals. MK is not a specialized coach for finance, body, or relationships.
 Language: Spanish (es).
 Contact: ${legalContact.email}
 Jurisdiction: ${legalContact.jurisdiction}

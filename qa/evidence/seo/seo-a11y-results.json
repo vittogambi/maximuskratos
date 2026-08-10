@@ -1,0 +1,410 @@
+{
+  "seoResults": {
+    "/": {
+      "route": "/",
+      "title": "Maximus Kratos: app y plataforma web de desarrollo personal para hombres",
+      "titleLength": 72,
+      "metaDesc": "Convierte tu propósito en una ruta que puedas ejecutar. Detecta la distancia entre lo que valoras y cómo estás viviendo. Define un propósito trascendental que ordene tus prioridades y conviértelo en una Ruta MK con decisiones, planes y acciones que puedas revisar y medir. Sitio disponible hoy; webapp y apps para iOS y Android en desarrollo.",
+      "metaDescLength": 342,
+      "canonical": "https://mkweb-staging.up.railway.app",
+      "ogTitle": "Maximus Kratos: app y plataforma web de desarrollo personal para hombres",
+      "ogImage": "https://mkweb-staging.up.railway.app/images/og/hero.jpg",
+      "twitterCard": "summary_large_image",
+      "h1Count": 1,
+      "h1s": [
+        "Convierte tu propósitoen una ruta que puedas ejecutar"
+      ],
+      "imgsMissingAlt": 0,
+      "robotsMeta": "index, follow",
+      "jsonLdCount": 2,
+      "favicon": true
+    },
+    "/manifiesto": {
+      "route": "/manifiesto",
+      "title": "Manifiesto | Maximus Kratos",
+      "titleLength": 27,
+      "metaDesc": "El manifiesto de Maximus Kratos: el nombre, el fundamento clásico, las creencias y la decisión de construir un sistema integral de transformación masculina.",
+      "metaDescLength": 156,
+      "canonical": "https://mkweb-staging.up.railway.app/manifiesto",
+      "ogTitle": "Manifiesto | Maximus Kratos",
+      "ogImage": "https://mkweb-staging.up.railway.app/images/og/hero.jpg",
+      "twitterCard": "summary_large_image",
+      "h1Count": 1,
+      "h1s": [
+        "Construimos sistemas,no discursos."
+      ],
+      "imgsMissingAlt": 0,
+      "robotsMeta": "index, follow",
+      "jsonLdCount": 2,
+      "favicon": true
+    },
+    "/sistema": {
+      "route": "/sistema",
+      "title": "Producto | Maximus Kratos",
+      "titleLength": 25,
+      "metaDesc": "Maximus Kratos: acceso anticipado abierto. Diagnóstico, Perfil Maestro, Ruta MK y apps se lanzan juntos próximamente.",
+      "metaDescLength": 117,
+      "canonical": "https://mkweb-staging.up.railway.app/sistema",
+      "ogTitle": "Producto | Maximus Kratos",
+      "ogImage": "https://mkweb-staging.up.railway.app/images/og/hero.jpg",
+      "twitterCard": "summary_large_image",
+      "h1Count": 1,
+      "h1s": [
+        "El tablero de control de tu transformación."
+      ],
+      "imgsMissingAlt": 0,
+      "robotsMeta": "index, follow",
+      "jsonLdCount": 2,
+      "favicon": true
+    },
+    "/marco-central": {
+      "route": "/marco-central",
+      "title": "Marco Central | Maximus Kratos",
+      "titleLength": 30,
+      "metaDesc": "Los nueve componentes del proceso de auditoría y autodescubrimiento de Maximus Kratos, y el marco filosófico que los sostiene: arquetipo, sombra y Hoja de Ruta de Propósito.",
+      "metaDescLength": 173,
+      "canonical": "https://mkweb-staging.up.railway.app/marco-central",
+      "ogTitle": "Marco Central | Maximus Kratos",
+      "ogImage": "https://mkweb-staging.up.railway.app/images/backgrounds/marco-central.png",
+      "twitterCard": "summary_large_image",
+      "h1Count": 1,
+      "h1s": [
+        "El mapa detrás del método."
+      ],
+      "imgsMissingAlt": 0,
+      "robotsMeta": "index, follow",
+      "jsonLdCount": 2,
+      "favicon": true
+    },
+    "/ikigai": {
+      "route": "/ikigai",
+      "title": "IKIGAI | Maximus Kratos",
+      "titleLength": 23,
+      "metaDesc": "El IKIGAI en Maximus Kratos: un eje de dirección entre significado, capacidad, contribución y sostenibilidad, integrado al Marco Central y al Perfil Maestro.",
+      "metaDescLength": 157,
+      "canonical": "https://mkweb-staging.up.railway.app/ikigai",
+      "ogTitle": "IKIGAI | Maximus Kratos",
+      "ogImage": "https://mkweb-staging.up.railway.app/images/ikigai/ikigai-hero.png",
+      "twitterCard": "summary_large_image",
+      "h1Count": 1,
+      "h1s": [
+        "IKIGAI: tu razón de ser."
+      ],
+      "imgsMissingAlt": 0,
+      "robotsMeta": "index, follow",
+      "jsonLdCount": 2,
+      "favicon": true
+    },
+    "/precios": {
+      "route": "/precios",
+      "title": "Precios | Maximus Kratos",
+      "titleLength": 24,
+      "metaDesc": "Un acceso a Maximus Kratos. Elige pagar mensual, trimestral, semestral o anual. Mismo contenido; más ahorro si pagas por adelantado.",
+      "metaDescLength": 132,
+      "canonical": "https://mkweb-staging.up.railway.app/precios",
+      "ogTitle": "Precios | Maximus Kratos",
+      "ogImage": "https://mkweb-staging.up.railway.app/images/og/hero.jpg",
+      "twitterCard": "summary_large_image",
+      "h1Count": 0,
+      "h1s": [],
+      "imgsMissingAlt": 0,
+      "robotsMeta": "index, follow",
+      "jsonLdCount": 2,
+      "favicon": true
+    },
+    "/eventos": {
+      "route": "/eventos",
+      "title": "Eventos | Maximus Kratos",
+      "titleLength": 24,
+      "metaDesc": "Eventos presenciales Maximus Kratos: jornadas intensivas de diagnóstico, estrategia y alineación de vida.",
+      "metaDescLength": 105,
+      "canonical": "https://mkweb-staging.up.railway.app/eventos",
+      "ogTitle": "Eventos | Maximus Kratos",
+      "ogImage": "https://mkweb-staging.up.railway.app/images/eventos/hero-council.jpg",
+      "twitterCard": "summary_large_image",
+      "h1Count": 1,
+      "h1s": [
+        "Próximamente."
+      ],
+      "imgsMissingAlt": 0,
+      "robotsMeta": "index, follow",
+      "jsonLdCount": 2,
+      "favicon": true
+    },
+    "/contacto": {
+      "route": "/contacto",
+      "title": "Contacto | Maximus Kratos",
+      "titleLength": 25,
+      "metaDesc": "Escríbenos con preguntas, feedback o consultas de empresas. Estamos construyendo Maximus Kratos y queremos escucharte.",
+      "metaDescLength": 118,
+      "canonical": "https://mkweb-staging.up.railway.app/contacto",
+      "ogTitle": "Contacto | Maximus Kratos",
+      "ogImage": "https://mkweb-staging.up.railway.app/images/contacto/hero-listening.jpg",
+      "twitterCard": "summary_large_image",
+      "h1Count": 1,
+      "h1s": [
+        "Hablemos."
+      ],
+      "imgsMissingAlt": 0,
+      "robotsMeta": "index, follow",
+      "jsonLdCount": 2,
+      "favicon": true
+    },
+    "/privacidad": {
+      "route": "/privacidad",
+      "title": "Política de Privacidad | Maximus Kratos",
+      "titleLength": 39,
+      "metaDesc": "Política de Privacidad de Maximus Kratos. Cómo tratamos tus datos personales en Santiago, Chile.",
+      "metaDescLength": 96,
+      "canonical": "https://mkweb-staging.up.railway.app/privacidad",
+      "ogTitle": "Política de Privacidad | Maximus Kratos",
+      "ogImage": "https://mkweb-staging.up.railway.app/images/og/hero.jpg",
+      "twitterCard": "summary_large_image",
+      "h1Count": 1,
+      "h1s": [
+        "Política de Privacidad"
+      ],
+      "imgsMissingAlt": 0,
+      "robotsMeta": "index, follow",
+      "jsonLdCount": 2,
+      "favicon": true
+    },
+    "/terminos": {
+      "route": "/terminos",
+      "title": "Términos de Servicio | Maximus Kratos",
+      "titleLength": 37,
+      "metaDesc": "Términos de Servicio de Maximus Kratos. Condiciones de uso del sitio y la Plataforma.",
+      "metaDescLength": 85,
+      "canonical": "https://mkweb-staging.up.railway.app/terminos",
+      "ogTitle": "Términos de Servicio | Maximus Kratos",
+      "ogImage": "https://mkweb-staging.up.railway.app/images/og/hero.jpg",
+      "twitterCard": "summary_large_image",
+      "h1Count": 1,
+      "h1s": [
+        "Términos de Servicio"
+      ],
+      "imgsMissingAlt": 0,
+      "robotsMeta": "index, follow",
+      "jsonLdCount": 2,
+      "favicon": true
+    }
+  },
+  "privateResults": {
+    "/admin": {
+      "robotsMeta": "noindex, nofollow"
+    },
+    "/panel": {
+      "robotsMeta": "noindex, nofollow"
+    },
+    "/perfil": {
+      "robotsMeta": "noindex, nofollow"
+    },
+    "/ruta": {
+      "robotsMeta": "noindex, nofollow"
+    },
+    "/cuenta": {
+      "robotsMeta": "noindex, nofollow"
+    },
+    "/diagnostico": {
+      "robotsMeta": "noindex, nofollow"
+    }
+  },
+  "a11yResults": {
+    "/": {
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodeCount": 14,
+          "targets": [
+            [
+              ".ag-sistema-status__group-label.text-action-red.hud-text"
+            ],
+            [
+              ".ag-sistema-status__row:nth-child(1) > .is-live.ag-sistema-status__mark.font-label-lg"
+            ],
+            [
+              ".ag-sistema-status__row:nth-child(2) > .is-live.ag-sistema-status__mark.font-label-lg"
+            ]
+          ]
+        }
+      ]
+    },
+    "/precios": {
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodeCount": 6,
+          "targets": [
+            [
+              ".ag-precios-open > .ag-container--narrow.ag-container > .ag-intro.text-center > div:nth-child(1) > .hud-text.text-action-red"
+            ],
+            [
+              ".site-footer__col:nth-child(1) > .site-footer__col-title"
+            ],
+            [
+              ".site-footer__col:nth-child(2) > .site-footer__col-title"
+            ]
+          ]
+        }
+      ]
+    },
+    "/contacto": {
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodeCount": 5,
+          "targets": [
+            [
+              ".site-footer__col:nth-child(1) > .site-footer__col-title"
+            ],
+            [
+              ".site-footer__col:nth-child(2) > .site-footer__col-title"
+            ],
+            [
+              "a[href$=\"privacidad\"]"
+            ]
+          ]
+        }
+      ]
+    },
+    "/login": {
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodeCount": 2,
+          "targets": [
+            [
+              "a[href$=\"forgot-password\"]"
+            ],
+            [
+              ".auth-button"
+            ]
+          ]
+        }
+      ]
+    },
+    "/register": {
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodeCount": 2,
+          "targets": [
+            [
+              ".is-active"
+            ],
+            [
+              ".auth-button"
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  "tabStops": [
+    {
+      "tag": "a",
+      "text": "MAXIMUS KRATOS",
+      "hasOutline": true,
+      "visible": true
+    },
+    {
+      "tag": "a",
+      "text": "Cómo funcionaFunciona",
+      "hasOutline": true,
+      "visible": true
+    },
+    {
+      "tag": "a",
+      "text": "Para quiénPara quién",
+      "hasOutline": true,
+      "visible": true
+    },
+    {
+      "tag": "a",
+      "text": "ProductoProducto",
+      "hasOutline": true,
+      "visible": true
+    },
+    {
+      "tag": "a",
+      "text": "MétodoMétodo",
+      "hasOutline": true,
+      "visible": true
+    },
+    {
+      "tag": "a",
+      "text": "PreciosPrecios",
+      "hasOutline": true,
+      "visible": true
+    },
+    {
+      "tag": "a",
+      "text": "Iniciar sesiónAcceder",
+      "hasOutline": true,
+      "visible": true
+    },
+    {
+      "tag": "a",
+      "text": "Acceso anticipado",
+      "hasOutline": true,
+      "visible": true
+    },
+    {
+      "tag": "a",
+      "text": "MAXIMUS KRATOS",
+      "hasOutline": true,
+      "visible": true
+    },
+    {
+      "tag": "button",
+      "text": "Cerrar menú",
+      "hasOutline": true,
+      "visible": true
+    },
+    {
+      "tag": "a",
+      "text": "Cómo funciona",
+      "hasOutline": true,
+      "visible": true
+    },
+    {
+      "tag": "a",
+      "text": "Para quién",
+      "hasOutline": true,
+      "visible": true
+    },
+    {
+      "tag": "a",
+      "text": "Precios",
+      "hasOutline": true,
+      "visible": true
+    },
+    {
+      "tag": "a",
+      "text": "Producto",
+      "hasOutline": true,
+      "visible": true
+    },
+    {
+      "tag": "a",
+      "text": "Método",
+      "hasOutline": true,
+      "visible": true
+    }
+  ]
+}

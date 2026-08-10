@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'motion/react';
 import { AppIcon } from '@/components/app-icon';
@@ -50,10 +51,12 @@ export function LandingHowItWorks() {
                       ease: MOTION_EASE.enter,
                     }}
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <Image
                       src={PHASE_IMAGES[step.imageKey]}
                       alt={step.title}
+                      width={1280}
+                      height={800}
+                      sizes="(max-width: 1023px) 100vw, 50vw"
                       className="h-auto w-full border border-white/5 object-cover opacity-85 mix-blend-lighten grayscale-[0.2]"
                     />
                   </motion.div>

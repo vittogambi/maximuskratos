@@ -54,6 +54,8 @@ export function StickyStatue({
         alt={alt}
         className={isCrisis ? 'ag-crisis-bg__img' : undefined}
         style={imgStyle}
+        loading="lazy"
+        decoding="async"
       />
       <div style={gradientStyle} />
     </div>

@@ -70,13 +70,13 @@ export const PILLARS: readonly Pillar[] = [
     verb: 'Materializa',
     question: '¿Tengo la energía, presencia y capacidad necesarias para convertirlo en acción?',
     brief:
-      'Presencia, ejecución, entrenamiento, descanso y nutrición. Entrega capacidad y acción.',
+      'Presencia, energía, descanso y capacidad de ejecutar. Entrega la base física para sostener tu dirección.',
     questions: [
       '¿Puedo ejecutar?',
       '¿Tengo energía y salud?',
       '¿Sostengo el autodominio?',
     ],
-    lives: 'Entrenamiento, nutrición, descanso, salud y autodominio físico.',
+    lives: 'Energía, descanso y autodominio para poder ejecutar.',
   },
 ] as const;
 
@@ -110,15 +110,15 @@ export const DOMAINS: readonly Domain[] = [
     key: 'financiero',
     label: 'Finanzas',
     icon: 'wallet',
-    question: '¿Cómo genero y administro recursos?',
-    distinction: 'Recursos: generación, administración y dirección del dinero.',
+    question: '¿El dinero sostiene o frena mi dirección?',
+    distinction: 'Orden y prioridades básicas sobre el dinero.',
   },
   {
     key: 'corporal',
     label: 'Salud física',
     icon: 'heart-pulse',
-    question: '¿Cómo cuido y desarrollo mi salud física?',
-    distinction: 'Entrenamiento, nutrición, descanso y salud en el cuerpo.',
+    question: '¿Mi salud física sostiene o frena mi dirección?',
+    distinction: 'Energía, descanso y cuidados básicos para no frenar la ejecución.',
   },
 ] as const;
 
@@ -130,7 +130,7 @@ export const MODEL_INTRO = {
   eyebrow: 'EL MODELO MK',
   title: 'Tres pilares. Cuatro ámbitos. Una vida alineada.',
   lead:
-    'Espíritu, Mente y Cuerpo observados en Mentalidad, Relaciones, Finanzas y Salud física. Una sola lectura de coherencia.',
+    'Espíritu, Mente y Cuerpo observados en Mentalidad, Relaciones, Finanzas y Salud física: una sola lectura de coherencia. La profundidad está en dirección y ejecución; en el resto, solo lo necesario para no frenar el avance.',
 } as const;
 
 export type IntegrationExample = {
@@ -152,7 +152,7 @@ export const INTEGRATION_EXAMPLES: readonly IntegrationExample[] = [
     domain: 'relaciones',
     contributions: {
       espiritu: 'Valores, amor y propósito compartido en tus vínculos.',
-      mente: 'Comunicación, límites y empatía en la relación.',
+      mente: 'Límites, presencia y acuerdos básicos en el vínculo.',
       cuerpo: 'Presencia, tiempo y acciones coherentes con esos valores.',
     },
   },
@@ -160,7 +160,7 @@ export const INTEGRATION_EXAMPLES: readonly IntegrationExample[] = [
     domain: 'financiero',
     contributions: {
       espiritu: 'Propósito y principios frente al dinero.',
-      mente: 'Estrategia, planificación y decisiones financieras.',
+      mente: 'Orden y decisiones suficientes sobre el dinero.',
       cuerpo: 'Trabajo, constancia y ejecución productiva.',
     },
   },
@@ -169,7 +169,7 @@ export const INTEGRATION_EXAMPLES: readonly IntegrationExample[] = [
     contributions: {
       espiritu: 'Un motivo claro para cuidarte.',
       mente: 'Conocimiento, disciplina y planificación del cuidado.',
-      cuerpo: 'Entrenamiento, nutrición y descanso.',
+      cuerpo: 'Hábitos simples de energía, descanso y movimiento.',
     },
   },
 ] as const;

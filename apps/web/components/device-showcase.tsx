@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion, useInView, useReducedMotion } from 'motion/react';
 import { useRef } from 'react';
 import { AppIcon } from '@/components/app-icon';
@@ -29,8 +30,14 @@ const PRODUCT_SHOTS: Record<DeviceShowcaseFocus, string> = {
 function ProductShot({ src }: { src: string }) {
   return (
     <div className="mk-app-ui__dashboard-shot">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt="" decoding="async" draggable={false} />
+      <Image
+        src={src}
+        alt=""
+        fill
+        sizes="(max-width: 767px) 352px, (max-width: 1023px) 448px, 512px"
+        loading="lazy"
+        draggable={false}
+      />
     </div>
   );
 }

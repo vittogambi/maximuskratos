@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { AppIcon } from '@/components/app-icon';
 import { ScrollReveal } from '@/components/motion/scroll-reveal';
@@ -20,8 +21,14 @@ export function LandingMethodBrief() {
       aria-labelledby="metodo-heading"
     >
       <div className="ag-os-head__bg-wrap pointer-events-none absolute inset-0" aria-hidden>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={LANDING_IMAGES.bgArquitecturaSentido} alt="" className="ag-os-head__bg-img" />
+        <Image
+          src={LANDING_IMAGES.bgArquitecturaSentido}
+          alt=""
+          fill
+          sizes="100vw"
+          loading="lazy"
+          className="ag-os-head__bg-img"
+        />
       </div>
       <div className="ag-os-head__scrim pointer-events-none absolute inset-0" aria-hidden />
       <div className="ag-container relative z-10 mx-auto">

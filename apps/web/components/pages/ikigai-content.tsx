@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { AppIcon } from '@/components/app-icon';
 import type { AppIconName } from '@/components/icons/registry';
@@ -181,8 +182,14 @@ export function IkigaiContent() {
       {/* 1. HERO */}
       <section className="ag-about-hero ag-ikigai-hero relative overflow-hidden">
         <div className="ag-about-hero__bg-wrap" aria-hidden>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={LANDING_IMAGES.ikigaiHero} alt="" className="ag-about-hero__bg ag-ikigai-hero__bg" />
+          <Image
+            src={LANDING_IMAGES.ikigaiHero}
+            alt=""
+            fill
+            sizes="100vw"
+            priority
+            className="ag-about-hero__bg ag-ikigai-hero__bg"
+          />
         </div>
         <div className="ag-about-hero__scrim" aria-hidden />
         <div className="ag-about-hero__content ag-container relative z-10">

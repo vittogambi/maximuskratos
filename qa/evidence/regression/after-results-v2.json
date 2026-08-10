@@ -1,0 +1,306 @@
+{
+  "generatedAt": "2026-08-10T02:37:23.467Z",
+  "mobile4g": [
+    {
+      "url": "http://localhost:3100/",
+      "finalUrl": "http://localhost:3100/",
+      "title": "Maximus Kratos: app y plataforma web de desarrollo personal para hombres",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "browserTypeName": "chromium",
+      "networkProfileKey": "4g",
+      "cacheMode": "cold",
+      "throttled": true,
+      "navError": null,
+      "metrics": {
+        "ttfb": 17.69999998807907,
+        "domContentLoaded": 1883.1000000238419,
+        "load": 4807,
+        "fcp": 1888,
+        "lcp": 1888,
+        "lcpElement": {
+          "tag": "span",
+          "selector": "span.ag-hero-signature__line",
+          "src": null,
+          "id": null
+        },
+        "lcpResourceUrl": null,
+        "lcpAreaPx": 29870,
+        "lcpTransferBytes": null,
+        "cls": 0.00272030136023392,
+        "clsShiftCount": 2,
+        "tbtApprox": 0,
+        "longTaskCount": 1,
+        "inpProxyMs": null
+      },
+      "bytes": {
+        "total": 1142320,
+        "byType": {
+          "document": {
+            "count": 1,
+            "bytes": 19019
+          },
+          "stylesheet": {
+            "count": 2,
+            "bytes": 52930
+          },
+          "font": {
+            "count": 10,
+            "bytes": 239260
+          },
+          "script": {
+            "count": 27,
+            "bytes": 281196
+          },
+          "image": {
+            "count": 6,
+            "bytes": 179843
+          },
+          "fetch": {
+            "count": 11,
+            "bytes": 39380
+          },
+          "media": {
+            "count": 1,
+            "bytes": 330692
+          }
+        }
+      },
+      "requestCount": 58,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    {
+      "url": "http://localhost:3100/",
+      "finalUrl": "http://localhost:3100/",
+      "title": "Maximus Kratos: app y plataforma web de desarrollo personal para hombres",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "browserTypeName": "chromium",
+      "networkProfileKey": "4g",
+      "cacheMode": "cold",
+      "throttled": true,
+      "navError": null,
+      "metrics": {
+        "ttfb": 2.599999964237213,
+        "domContentLoaded": 1672.199999988079,
+        "load": 4814.5,
+        "fcp": 1672,
+        "lcp": 1672,
+        "lcpElement": {
+          "tag": "span",
+          "selector": "span.ag-hero-signature__line",
+          "src": null,
+          "id": null
+        },
+        "lcpResourceUrl": null,
+        "lcpAreaPx": 29870,
+        "lcpTransferBytes": null,
+        "cls": 0.00272030136023392,
+        "clsShiftCount": 2,
+        "tbtApprox": 8,
+        "longTaskCount": 1,
+        "inpProxyMs": null
+      },
+      "bytes": {
+        "total": 1142320,
+        "byType": {
+          "document": {
+            "count": 1,
+            "bytes": 19019
+          },
+          "stylesheet": {
+            "count": 2,
+            "bytes": 52930
+          },
+          "font": {
+            "count": 10,
+            "bytes": 239260
+          },
+          "script": {
+            "count": 27,
+            "bytes": 281196
+          },
+          "image": {
+            "count": 6,
+            "bytes": 179843
+          },
+          "fetch": {
+            "count": 11,
+            "bytes": 39380
+          },
+          "media": {
+            "count": 1,
+            "bytes": 330692
+          }
+        }
+      },
+      "requestCount": 58,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    {
+      "url": "http://localhost:3100/",
+      "finalUrl": "http://localhost:3100/",
+      "title": "Maximus Kratos: app y plataforma web de desarrollo personal para hombres",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "browserTypeName": "chromium",
+      "networkProfileKey": "4g",
+      "cacheMode": "cold",
+      "throttled": true,
+      "navError": null,
+      "metrics": {
+        "ttfb": 3.100000023841858,
+        "domContentLoaded": 1877.800000011921,
+        "load": 4785.900000035763,
+        "fcp": 1880,
+        "lcp": 1880,
+        "lcpElement": {
+          "tag": "span",
+          "selector": "span.ag-hero-signature__line",
+          "src": null,
+          "id": null
+        },
+        "lcpResourceUrl": null,
+        "lcpAreaPx": 29870,
+        "lcpTransferBytes": null,
+        "cls": 0.00272030136023392,
+        "clsShiftCount": 2,
+        "tbtApprox": 0,
+        "longTaskCount": 1,
+        "inpProxyMs": null
+      },
+      "bytes": {
+        "total": 1142320,
+        "byType": {
+          "document": {
+            "count": 1,
+            "bytes": 19019
+          },
+          "stylesheet": {
+            "count": 2,
+            "bytes": 52930
+          },
+          "font": {
+            "count": 10,
+            "bytes": 239260
+          },
+          "script": {
+            "count": 27,
+            "bytes": 281196
+          },
+          "image": {
+            "count": 6,
+            "bytes": 179843
+          },
+          "fetch": {
+            "count": 11,
+            "bytes": 39380
+          },
+          "media": {
+            "count": 1,
+            "bytes": 330692
+          }
+        }
+      },
+      "requestCount": 58,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ],
+      "pageErrors": [],
+      "failedRequests": []
+    }
+  ],
+  "desktop": {
+    "url": "http://localhost:3100/",
+    "finalUrl": "http://localhost:3100/",
+    "title": "Maximus Kratos: app y plataforma web de desarrollo personal para hombres",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "browserTypeName": "chromium",
+    "networkProfileKey": "fast",
+    "cacheMode": "cold",
+    "throttled": false,
+    "navError": null,
+    "metrics": {
+      "ttfb": 2.199999988079071,
+      "domContentLoaded": 19.80000001192093,
+      "load": 58.5,
+      "fcp": 60,
+      "lcp": 160,
+      "lcpElement": {
+        "tag": "video",
+        "selector": "video.ag-hero-bg__beam",
+        "src": "http://localhost:3100/video/statue-beam.mp4?v=11",
+        "id": null
+      },
+      "lcpResourceUrl": "http://localhost:3100/video/statue-beam.mp4?v=11",
+      "lcpAreaPx": 505742,
+      "lcpTransferBytes": 0,
+      "cls": 0.00007507595486111111,
+      "clsShiftCount": 1,
+      "tbtApprox": 0,
+      "longTaskCount": 0,
+      "inpProxyMs": 48
+    },
+    "bytes": {
+      "total": 1168913,
+      "byType": {
+        "document": {
+          "count": 1,
+          "bytes": 19019
+        },
+        "stylesheet": {
+          "count": 2,
+          "bytes": 52930
+        },
+        "font": {
+          "count": 10,
+          "bytes": 239260
+        },
+        "script": {
+          "count": 27,
+          "bytes": 281196
+        },
+        "image": {
+          "count": 9,
+          "bytes": 537128
+        },
+        "fetch": {
+          "count": 11,
+          "bytes": 39380
+        },
+        "media": {
+          "count": 1,
+          "bytes": 0
+        }
+      }
+    },
+    "requestCount": 61,
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    ],
+    "pageErrors": [],
+    "failedRequests": [
+      {
+        "url": "http://localhost:3100/video/statue-beam.mp4?v=11",
+        "failure": "net::ERR_ABORTED"
+      }
+    ]
+  }
+}
