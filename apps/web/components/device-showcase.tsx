@@ -27,6 +27,10 @@ const PRODUCT_SHOTS: Record<DeviceShowcaseFocus, string> = {
   proposito: '/images/landing/dashboard-proposito-desktop.png',
 };
 
+const SHOT_ORDER = Object.keys(PRODUCT_SHOTS) as DeviceShowcaseFocus[];
+
+const SHOT_SIZES = '(max-width: 767px) 352px, (max-width: 1023px) 448px, 512px';
+
 function ProductShot({ src }: { src: string }) {
   return (
     <div className="mk-app-ui__dashboard-shot">
@@ -34,7 +38,7 @@ function ProductShot({ src }: { src: string }) {
         src={src}
         alt=""
         fill
-        sizes="(max-width: 767px) 352px, (max-width: 1023px) 448px, 512px"
+        sizes={SHOT_SIZES}
         loading="lazy"
         draggable={false}
       />
@@ -42,7 +46,47 @@ function ProductShot({ src }: { src: string }) {
   );
 }
 
-function DesktopAppScreen({ focus }: { focus: DeviceShowcaseFocus }) {
+/**
+ * Keep every stage shot mounted so rapid focus changes crossfade instead of
+ * waiting on a fresh lazy fetch (which felt "stuck" on the previous frame).
+ */
+function ProductShotStack({
+  focus,
+  readyToLoad,
+}: {
+  focus: DeviceShowcaseFocus;
+  readyToLoad: boolean;
+}) {
+  return (
+    <div className="mk-app-ui__dashboard-shot mk-app-ui__dashboard-shot--stack">
+      {SHOT_ORDER.map((key) => {
+        const active = key === focus;
+        return (
+          <Image
+            key={key}
+            src={PRODUCT_SHOTS[key]}
+            alt=""
+            fill
+            sizes={SHOT_SIZES}
+            loading={readyToLoad ? 'eager' : 'lazy'}
+            draggable={false}
+            style={{ opacity: active ? 1 : 0, zIndex: active ? 1 : 0 }}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+function DesktopAppScreen({
+  focus,
+  swapShots,
+  readyToLoad,
+}: {
+  focus: DeviceShowcaseFocus;
+  swapShots: boolean;
+  readyToLoad: boolean;
+}) {
   return (
     <div className="mk-app-ui mk-app-ui--desktop mk-app-ui--dashboard">
       <header className="mk-app-ui__titlebar">
@@ -57,7 +101,11 @@ function DesktopAppScreen({ focus }: { focus: DeviceShowcaseFocus }) {
         </div>
         <div className="mk-app-ui__titlebar-spacer" />
       </header>
-      <ProductShot src={PRODUCT_SHOTS[focus]} />
+      {swapShots ? (
+        <ProductShotStack focus={focus} readyToLoad={readyToLoad} />
+      ) : (
+        <ProductShot src={PRODUCT_SHOTS[focus]} />
+      )}
     </div>
   );
 }
@@ -65,11 +113,14 @@ function DesktopAppScreen({ focus }: { focus: DeviceShowcaseFocus }) {
 type DeviceShowcaseProps = {
   focus?: DeviceShowcaseFocus;
   layout?: 'hero' | 'experience';
+  /** Mount all product shots for instant stage swaps (landing “Dentro de MK”). */
+  swapShots?: boolean;
 };
 
 export function DeviceShowcase({
   focus = 'overview',
   layout = 'hero',
+  swapShots = false,
 }: DeviceShowcaseProps) {
   const isExperience = layout === 'experience';
   const reduced = useReducedMotion();
@@ -79,6 +130,7 @@ export function DeviceShowcase({
     amount: 0.25,
     margin: MOTION_VIEWPORT.margin,
   });
+  const readyToLoad = Boolean(inView || reduced);
 
   return (
     <div
@@ -122,7 +174,11 @@ export function DeviceShowcase({
                 }}
               >
                 <div className="device-frame__sheen" />
-                <DesktopAppScreen focus={focus} />
+                <DesktopAppScreen
+                  focus={focus}
+                  swapShots={swapShots}
+                  readyToLoad={readyToLoad}
+                />
               </motion.div>
             </div>
             {!isExperience ? <div className="device-frame__lip" /> : null}

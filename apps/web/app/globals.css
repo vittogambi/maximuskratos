@@ -8762,6 +8762,18 @@ html:has(.ag-landing) body {
   -webkit-user-drag: none;
 }
 
+/* Stacked product shots (inside-MK stage swap): crossfade, no blank frame. */
+.ag-landing .mk-app-ui__dashboard-shot--stack img {
+  transition: opacity 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ag-landing .mk-app-ui__dashboard-shot--stack img {
+    transition: none;
+  }
+}
+
 /* ── Real app shell chrome — top bar + bottom tabs, no sidebar ───────────── */
 .ag-landing .mk-app-ui__realtopbar {
   display: grid;

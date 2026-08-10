@@ -59,7 +59,7 @@ export function LandingInsideMk() {
           </ScrollReveal>
 
           <ScrollReveal className="ag-inside-mk__showcase" density="default">
-            <DeviceShowcase focus={focus} layout="experience" />
+            <DeviceShowcase focus={focus} layout="experience" swapShots />
           </ScrollReveal>
         </div>
       </div>
