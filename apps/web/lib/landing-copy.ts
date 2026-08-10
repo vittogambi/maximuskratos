@@ -60,7 +60,7 @@ export const LANDING_SEO_DESCRIPTION = `${LANDING_HERO.lines.join(' ')}. ${LANDI
 
 /** Homepage meta description: keep under ~160 chars for SERP truncation. */
 export const LANDING_HOME_META_DESCRIPTION =
-  'Convierte tu propósito en una ruta ejecutable. Detecta la distancia entre lo que valoras y cómo vives. Sitio disponible hoy; webapp e apps en desarrollo.';
+  'Convierte tu propósito en una ruta ejecutable. Detecta la distancia entre lo que valoras y cómo vives. Sitio disponible hoy; webapp y apps en desarrollo.';
 
 /** Estado real de la plataforma, mostrado como líneas cortas junto al CTA del hero. */
 export const LANDING_HERO_STATUS_PILLS: ReadonlyArray<string> = isEarlyAccessMode()
