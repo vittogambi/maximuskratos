@@ -5612,11 +5612,17 @@ html:has(.ag-landing) body {
   justify-content: flex-start;
   gap: clamp(2.25rem, 5vw, 3.25rem);
   padding-inline: var(--ag-gutter);
-  /* Pushed below the statue's face/beam reveal on purpose — the animation is
-     the first thing visitors should see uncovered. Text starts at the
-     shoulder line, never over the face. */
-  padding-top: clamp(21rem, 58vh, 34rem);
+  /* Below the statue face/beam. Tight enough that the lead and CTA
+     finish inside the first viewport instead of clipping mid-sentence. */
+  padding-top: clamp(18rem, 48vh, 28rem);
   padding-bottom: clamp(3rem, 7vh, 4.5rem);
+}
+
+@media (max-width: 767px) {
+  .ag-landing .ag-hero-content {
+    gap: 1.35rem;
+    padding-top: clamp(13.5rem, 40vh, 18.5rem);
+  }
 }
 
 .ag-landing .font-display-xl {
@@ -9532,6 +9538,10 @@ html:has(.ag-landing) body {
   text-align: center;
 }
 
+.ag-contact-page .contact-form__hint {
+  display: none;
+}
+
 /* ── Eventos ── */
 .ag-landing .ag-eventos-section {
   border-top: 1px solid rgba(255, 255, 255, 0.06);
@@ -9645,20 +9655,7 @@ html:has(.ag-landing) body {
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 999px;
-  background: #c00100;
-  box-shadow: 0 0 10px rgba(192, 1, 0, 0.7);
-  animation: ag-eventos-pip 2.4s ease-in-out infinite;
-}
-
-@keyframes ag-eventos-pip {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ag-landing .ag-eventos-status__pip {
-    animation: none;
-  }
+  background: rgba(255, 255, 255, 0.35);
 }
 
 /* Specs del primer evento */
