@@ -78,6 +78,8 @@ export type LandingFaqItem = (typeof LANDING_FAQ_ITEMS)[number];
 export const LANDING_FAQ_CLOSE = {
   title: 'Comienza con tu cuenta de fundador',
   lead: 'Crea tu cuenta sin tarjeta ni cobro. Te avisaremos con prioridad cuando se habiliten el diagnóstico y las primeras versiones de la plataforma.',
+  /** Mobile-only: title + button already carry the founder ask. */
+  leadMobile: 'Sin tarjeta. Te avisamos cuando se active la plataforma.',
   ctaLabel: 'Crear mi cuenta de fundador',
 } as const;
 

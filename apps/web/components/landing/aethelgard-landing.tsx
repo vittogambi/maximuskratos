@@ -145,7 +145,10 @@ export function AethelgardLanding() {
             <ScrollReveal className="ag-faq-footer text-center" density="tight">
               <div className="ag-faq-close">
                 <h3 className="ag-faq-close__title font-headline-sm">{LANDING_FAQ_CLOSE.title}</h3>
-                <p className="ag-faq-close__lead font-body-md">{LANDING_FAQ_CLOSE.lead}</p>
+                <p className="ag-faq-close__lead font-body-md">
+                  <span className="ag-faq-close__lead--full">{LANDING_FAQ_CLOSE.lead}</span>
+                  <span className="ag-faq-close__lead--short">{LANDING_FAQ_CLOSE.leadMobile}</span>
+                </p>
                 <AuthCta href={LANDING_PRIMARY_CTA.href} className="btn-primary font-label-lg">
                   {LANDING_FAQ_CLOSE.ctaLabel}
                 </AuthCta>

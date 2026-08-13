@@ -478,6 +478,7 @@ export function ManifiestoContent() {
                 </span>
               </>
             }
+            leadMobile="Cada territorio recibe atención. Ninguno ve el sistema completo."
             headingId="frag-heading"
           />
 
@@ -553,8 +554,13 @@ export function ManifiestoContent() {
               El método necesita algo que no olvide.
             </h2>
             <p className="ag-about-block__lead font-body-lg">
-              Un diagnóstico en papel se pierde. Una sesión termina. La tecnología existe para
-              conectar lo que descubres, conservarlo, medirlo y actualizarlo con el tiempo.
+              <span className="ag-about-block__lead--full">
+                Un diagnóstico en papel se pierde. Una sesión termina. La tecnología existe para
+                conectar lo que descubres, conservarlo, medirlo y actualizarlo con el tiempo.
+              </span>
+              <span className="ag-about-block__lead--short">
+                Un diagnóstico en papel se pierde. Una sesión termina.
+              </span>
             </p>
           </ScrollReveal>
 
@@ -588,9 +594,15 @@ export function ManifiestoContent() {
               No compite con lo que ya usas.
             </h2>
             <p className="ag-about-block__lead font-body-lg">
-              Un curso enseña. Un coach o mentor acompaña. Una app registra. Cada uno hace su
-              parte. Lo que falta es la capa que mantiene unido lo que aprendes, lo que decides y
-              lo que ejecutas después.
+              <span className="ag-about-block__lead--full">
+                Un curso enseña. Un coach o mentor acompaña. Una app registra. Cada uno hace su
+                parte. Lo que falta es la capa que mantiene unido lo que aprendes, lo que decides y
+                lo que ejecutas después.
+              </span>
+              <span className="ag-about-block__lead--short">
+                Cada uno hace su parte. Lo que falta es la capa que une lo que aprendes, decides y
+                ejecutas.
+              </span>
             </p>
           </ScrollReveal>
 
@@ -638,6 +650,7 @@ export function ManifiestoContent() {
             eyebrow="EL RECORRIDO"
             title="Así opera Maximus Kratos contigo."
             lead="Define, ejecuta, registra, revisa y ajusta. Del esfuerzo fragmentado a un proceso con diagnóstico, dirección, ejecución y seguimiento."
+            leadMobile="Define, ejecuta, registra, revisa y ajusta."
             headingId="journey-heading"
           />
 

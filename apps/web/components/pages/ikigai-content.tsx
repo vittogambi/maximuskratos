@@ -250,6 +250,7 @@ export function IkigaiContent() {
             eyebrow="LA INTERSECCIÓN"
             title="Cuatro campos. Un eje posible."
             lead="El IKIGAI se construye contrastando actividades reales desde cuatro perspectivas. No se trata de imaginar conceptos abstractos, sino de observar dónde tu experiencia comienza a mostrar coincidencias."
+            leadMobile="Se construye con actividades reales, no con conceptos abstractos."
             headingId="campos-heading"
           />
           <ScrollReveal className="ag-ikigai-diagram-wrap" density="default">
@@ -310,7 +311,12 @@ export function IkigaiContent() {
           />
           <ScrollReveal className="ag-ikigai-place" density="default">
             <p className="font-body-md ag-ikigai-place__intro">
-              No funciona solo. Se lee junto al resto de pilares del Espíritu: del linaje a la huella.
+              <span className="ag-ikigai-place__intro--full">
+                No funciona solo. Se lee junto al resto de pilares del Espíritu: del linaje a la huella.
+              </span>
+              <span className="ag-ikigai-place__intro--short">
+                No funciona solo. Se lee junto al resto de pilares del Espíritu.
+              </span>
             </p>
             <ol className="ag-ikigai-place__path" aria-label="Orden de los pilares del Marco Central">
               {MK_PILLAR_PATH.map((name) => (

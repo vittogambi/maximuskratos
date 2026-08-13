@@ -187,6 +187,7 @@ export function MarcoCentralContent() {
             eyebrow={MODEL_INTRO.eyebrow}
             title={MODEL_INTRO.title}
             lead={MODEL_INTRO.lead}
+            leadMobile={MODEL_INTRO.leadMobile}
             headingId="matrix-heading"
           />
 
@@ -234,6 +235,7 @@ export function MarcoCentralContent() {
             eyebrow="LENTES DE INTERPRETACIÓN"
             title="No basta con saber qué quieres. Debes entender cómo ejerces tu poder."
             lead="Los pilares muestran qué estás construyendo. Los arquetipos ayudan a comprender desde qué capacidades lo construyes. La sombra revela qué ocurre cuando esas capacidades pierden equilibrio."
+            leadMobile="Los arquetipos muestran desde qué capacidades construyes. La sombra, qué ocurre cuando pierden equilibrio."
             headingId="lenses-heading"
           />
 
@@ -339,9 +341,14 @@ export function MarcoCentralContent() {
 
           <ScrollReveal className="ag-marco-lens-close" density="tight">
             <p className="font-body-lg">
-              El objetivo no es pertenecer a un solo arquetipo. El objetivo es reconocer qué
-              capacidades están desarrolladas, cuáles permanecen ausentes y cuáles están siendo
-              gobernadas por su sombra.
+              <span className="ag-marco-lens-close--full">
+                El objetivo no es pertenecer a un solo arquetipo. El objetivo es reconocer qué
+                capacidades están desarrolladas, cuáles permanecen ausentes y cuáles están siendo
+                gobernadas por su sombra.
+              </span>
+              <span className="ag-marco-lens-close--short">
+                El objetivo no es pertenecer a un solo arquetipo.
+              </span>
             </p>
           </ScrollReveal>
         </div>
@@ -367,20 +374,6 @@ export function MarcoCentralContent() {
               </div>
               <div className="ag-marco-doc__body">
                 <p className="ag-marco-doc__title font-headline-sm">Hoja de Ruta de Propósito</p>
-                <div className="ag-marco-doc__route" aria-hidden>
-                  <motion.span
-                    className="ag-marco-doc__route-line"
-                    initial={reduced ? false : { scaleY: 0 }}
-                    whileInView={{ scaleY: 1 }}
-                    viewport={{ once: true, amount: 0.4 }}
-                    transition={{
-                      type: 'tween',
-                      duration: MOTION_DURATION.reveal,
-                      ease: MOTION_EASE.enter,
-                    }}
-                    style={{ transformOrigin: 'top center' }}
-                  />
-                </div>
                 <ScrollStaggerContainer
                   className="ag-marco-doc__blocks"
                   stagger={MOTION_STAGGER.tight}

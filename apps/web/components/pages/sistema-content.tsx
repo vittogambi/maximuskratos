@@ -205,9 +205,12 @@ export function SistemaContent() {
             <h1 className="ag-sistema-hero__title font-display-xl text-white">
               El tablero de control de tu transformación.
             </h1>
-            <p className="ag-sistema-hero__lead font-body-lg">
+            <p className="ag-sistema-hero__lead ag-sistema-hero__lead--full font-body-lg">
               No es un curso ni una biblioteca de contenido. Es la plataforma donde vivirá tu
               proceso. Hoy puedes reservar tu lugar como fundador.
+            </p>
+            <p className="ag-sistema-hero__lead ag-sistema-hero__lead--short font-body-lg">
+              No es un curso ni una biblioteca. Es la plataforma donde vivirá tu proceso.
             </p>
             <div className="ag-sistema-hero__pills" aria-label="Estado de la plataforma">
               <span className="ag-sistema-pill ag-sistema-pill--app">Acceso anticipado abierto</span>
@@ -379,6 +382,7 @@ export function SistemaContent() {
             eyebrow="MK · BASE METODOLÓGICA"
             title="El método detrás de la plataforma."
             lead="Diagnóstico, Perfil Maestro y Ruta MK no son piezas sueltas. Leen la misma arquitectura: tres pilares en cuatro ámbitos de tu vida. El mapa completo está en el Marco Central."
+            leadMobile="Diagnóstico, Perfil Maestro y Ruta MK leen la misma arquitectura: tres pilares en cuatro ámbitos."
             headingId="modelo-heading"
           />
 

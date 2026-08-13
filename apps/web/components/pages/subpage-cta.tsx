@@ -11,6 +11,7 @@ type SubpageCtaProps = {
   eyebrow?: string;
   title?: string;
   lead?: string;
+  leadMobile?: string;
   ctaLabel?: string;
   className?: string;
   /** Contenido extra bajo el CTA (p. ej. link de retorno). */
@@ -24,10 +25,17 @@ export function SubpageCta({
   eyebrow = 'MK · PRIMER PASO',
   title = SUBPAGE_PRIMARY_CTA.title,
   lead = SUBPAGE_PRIMARY_CTA.lead,
+  leadMobile,
   ctaLabel = LANDING_PRIMARY_CTA.labelAlt,
   className,
   children,
 }: SubpageCtaProps) {
+  const shortLead =
+    leadMobile ??
+    (lead === SUBPAGE_PRIMARY_CTA.lead && 'leadMobile' in SUBPAGE_PRIMARY_CTA
+      ? SUBPAGE_PRIMARY_CTA.leadMobile
+      : undefined);
+
   return (
     <section className={cn('ag-section-inner ag-sistema-cta', className)}>
       <div className="ag-container">
@@ -43,7 +51,16 @@ export function SubpageCta({
             <h2 className="ag-sistema-cta__title ag-type-section text-white">{title}</h2>
           </StaggerItem>
           <StaggerItem distance={MOTION_DISTANCE.md} className="ag-sistema-cta__actions">
-            <p className="ag-sistema-cta__lead font-body-md text-center">{lead}</p>
+            <p className="ag-sistema-cta__lead font-body-md text-center">
+              {shortLead ? (
+                <>
+                  <span className="ag-sistema-cta__lead--full">{lead}</span>
+                  <span className="ag-sistema-cta__lead--short">{shortLead}</span>
+                </>
+              ) : (
+                lead
+              )}
+            </p>
             <AuthCta href={LANDING_PRIMARY_CTA.href} className="ag-btn-cta font-label-lg">
               {ctaLabel}
             </AuthCta>

@@ -77,7 +77,10 @@ export function LandingMethodBrief() {
               </span>
             ))}
           </p>
-          <p className="ag-mk-domains-section__lead font-body-md">{LANDING_DOMAINS_SECTION.leadClose}</p>
+          <p className="ag-mk-domains-section__lead font-body-md">
+            <span className="ag-mk-domains-section__lead--full">{LANDING_DOMAINS_SECTION.leadClose}</span>
+            <span className="ag-mk-domains-section__lead--short">{LANDING_DOMAINS_SECTION.leadCloseMobile}</span>
+          </p>
           <div className="ag-mk-domains-section__link">
             <Link href={LANDING_DOMAINS_SECTION.linkHref} className="ag-marco-more__link font-label-lg">
               {LANDING_DOMAINS_SECTION.linkLabel}

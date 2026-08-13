@@ -32,6 +32,7 @@ export const SUBPAGE_PRIMARY_CTA = isEarlyAccessMode()
   ? ({
       title: 'Reserva tu acceso de fundador',
       lead: 'La plataforma completa llega pronto: diagnóstico, Perfil Maestro y Ruta. Hoy puedes crear tu cuenta y asegurar tu lugar.',
+      leadMobile: 'Hoy puedes crear tu cuenta y asegurar tu lugar.',
     } as const)
   : ({
       title: 'Haz tu diagnóstico inicial',
@@ -232,6 +233,8 @@ export const LANDING_DOMAINS_SECTION = {
   territories: ['Mentalidad', 'Relaciones', 'Finanzas', 'Salud física'] as const,
   leadClose:
     'Los pilares orientan y los ámbitos muestran dónde puede obstaculizarse esa dirección. La profundidad está en propósito y ejecución; en el resto, solo lo necesario para no frenar el avance.',
+  /** Mobile-only: drop the depth clause; the Marco Central link carries it. */
+  leadCloseMobile: 'Los pilares orientan. Los ámbitos muestran dónde se frena esa dirección.',
   linkLabel: 'Ver el Marco Central completo',
   linkHref: '/marco-central',
 } as const;
@@ -268,6 +271,10 @@ export const LANDING_GATEWAYS: ReadonlyArray<{ num: string; title: string; body:
 
 export const LANDING_GATEWAYS_CLOSE =
   'El diagnóstico identifica dónde está hoy tu principal brecha. Desde ahí, MK organiza propósito, prioridades y ejecución dentro de una Ruta MK personal.';
+
+/** Mobile-only: the second sentence restates the platform pitch. */
+export const LANDING_GATEWAYS_CLOSE_MOBILE =
+  'El diagnóstico identifica dónde está hoy tu principal brecha.';
 
 // ── 7. Estado del producto ──────────────────────────────────────────────
 export const LANDING_PRODUCT_STATUS_INTRO = {

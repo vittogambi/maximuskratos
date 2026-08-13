@@ -5,7 +5,12 @@ import { ScrollStaggerContainer, StaggerItem } from '@/components/motion/stagger
 import { MOTION_DISTANCE, MOTION_STAGGER } from '@/components/motion/tokens';
 import { StickyStatue } from '@/components/landing/sticky-statue';
 import { LANDING_IMAGES } from '@/lib/assets';
-import { LANDING_GATEWAYS, LANDING_GATEWAYS_CLOSE, LANDING_GATEWAYS_INTRO } from '@/lib/landing-copy';
+import {
+  LANDING_GATEWAYS,
+  LANDING_GATEWAYS_CLOSE,
+  LANDING_GATEWAYS_CLOSE_MOBILE,
+  LANDING_GATEWAYS_INTRO,
+} from '@/lib/landing-copy';
 
 /**
  * Bloque 5: puertas de entrada (antes "Perfiles"). La estatua rota vuelve a ser
@@ -57,7 +62,10 @@ export function LandingGateways() {
           </ScrollStaggerContainer>
 
           <ScrollReveal className="ag-landing-profiles__close text-center" density="tight">
-            <p className="font-body-lg text-white/80">{LANDING_GATEWAYS_CLOSE}</p>
+            <p className="font-body-lg text-white/80">
+              <span className="ag-landing-profiles__close--full">{LANDING_GATEWAYS_CLOSE}</span>
+              <span className="ag-landing-profiles__close--short">{LANDING_GATEWAYS_CLOSE_MOBILE}</span>
+            </p>
           </ScrollReveal>
         </div>
       </div>

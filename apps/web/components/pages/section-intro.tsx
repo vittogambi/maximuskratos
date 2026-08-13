@@ -9,6 +9,8 @@ type SectionIntroProps = {
   eyebrow: string;
   title: ReactNode;
   lead?: ReactNode;
+  /** Mobile-only lead. Desktop keeps `lead`. */
+  leadMobile?: ReactNode;
   as?: 'h1' | 'h2';
   size?: 'display' | 'section';
   align?: 'center' | 'start';
@@ -24,6 +26,7 @@ export function SectionIntro({
   eyebrow,
   title,
   lead,
+  leadMobile,
   as: Heading = 'h2',
   size = 'section',
   align = 'center',
@@ -60,7 +63,14 @@ export function SectionIntro({
               align === 'center' && 'ag-intro__lead--center',
             )}
           >
-            {lead}
+            {leadMobile ? (
+              <>
+                <span className="ag-intro__lead--full">{lead}</span>
+                <span className="ag-intro__lead--short">{leadMobile}</span>
+              </>
+            ) : (
+              lead
+            )}
           </p>
         </StaggerItem>
       ) : null}

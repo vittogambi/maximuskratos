@@ -1257,6 +1257,12 @@ img { display: block; max-width: 100%; }
   color: rgba(255, 255, 255, 0.92);
 }
 
+@media (max-width: 767px) {
+  .site-footer__tagline {
+    display: none;
+  }
+}
+
 .site-footer__desc {
   margin: 0;
   max-width: 22rem;
@@ -5255,6 +5261,10 @@ html:has(.ag-landing) body {
   line-height: 1.65;
 }
 
+.ag-landing .ag-mk-domains-section__lead--short {
+  display: none;
+}
+
 .ag-landing .ag-mk-domains {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -5469,12 +5479,18 @@ html:has(.ag-landing) body {
 .ag-landing .ag-hero-status__pill {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   padding: 0.35rem 0.7rem;
   font-size: 0.625rem;
   letter-spacing: 0.14em;
   color: rgba(255, 255, 255, 0.68);
+  text-align: center;
   border: 1px solid rgba(255, 255, 255, 0.16);
   background: rgba(255, 255, 255, 0.03);
+}
+
+.ag-landing .ag-hero-actions .btn-primary {
+  text-align: center;
 }
 
 .ag-landing .ag-hero-preview {
@@ -6012,6 +6028,10 @@ html:has(.ag-landing) body {
   text-align: center;
 }
 
+.ag-landing .ag-faq-close__lead--short {
+  display: none;
+}
+
 .ag-landing .ag-faq-footer__text {
   margin: 0;
   color: rgba(255, 255, 255, 0.5);
@@ -6062,6 +6082,33 @@ html:has(.ag-landing) body {
     margin-inline: auto;
     padding-inline: 0.25rem;
     box-sizing: border-box;
+  }
+
+  .ag-landing .ag-faq-close__lead--full,
+  .ag-landing .ag-mk-domains-section__lead--full,
+  .ag-landing .ag-landing-profiles__close--full,
+  .ag-landing .ag-intro__lead--full,
+  .ag-landing .ag-sistema-cta__lead--full,
+  .ag-landing .ag-marco-lens-close--full,
+  .ag-landing .ag-about-block__lead--full,
+  .ag-landing .ag-ikigai-place__intro--full {
+    display: none;
+  }
+
+  .ag-landing .ag-faq-close__lead--short,
+  .ag-landing .ag-mk-domains-section__lead--short,
+  .ag-landing .ag-landing-profiles__close--short,
+  .ag-landing .ag-intro__lead--short,
+  .ag-landing .ag-sistema-cta__lead--short,
+  .ag-landing .ag-marco-lens-close--short,
+  .ag-landing .ag-about-block__lead--short,
+  .ag-landing .ag-ikigai-place__intro--short {
+    display: block;
+  }
+
+  .ag-landing .ag-ikigai-diagram__caption,
+  .ag-landing .ag-ikigai-result__depth {
+    display: none;
   }
 
   .ag-landing .ag-sistema-cta__lead {
@@ -6299,6 +6346,10 @@ html:has(.ag-landing) body {
   margin: var(--ag-stack-sm) 0 0;
   color: rgba(255, 255, 255, 0.55);
   line-height: 1.6;
+}
+
+.ag-landing .ag-about-block__lead--short {
+  display: none;
 }
 
 .ag-landing .ag-about-block__lead--emphasis {
@@ -7138,6 +7189,15 @@ html:has(.ag-landing) body {
   display: flex;
   justify-content: center;
   margin-top: var(--ag-stack-lg);
+}
+
+@media (max-width: 767px) {
+  .ag-landing .ag-about-cost__link .ag-marco-more__link {
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+    flex-wrap: wrap;
+  }
 }
 
 .ag-landing .ag-about-crosslink {
@@ -10513,6 +10573,10 @@ html:has(.ag-landing) body {
   color: rgba(255, 255, 255, 0.72);
 }
 
+.ag-landing .ag-landing-profiles__close--short {
+  display: none;
+}
+
 .ag-landing .ag-landing-realms-close {
   margin: clamp(1.75rem, 4vw, 2.5rem) auto 0;
   max-width: 36rem;
@@ -11509,6 +11573,7 @@ html:has(.ag-landing) body {
 .ag-landing .ag-mk-matrix {
   width: 100%;
   max-width: var(--ag-max-band);
+  min-width: 0;
   margin: 0 auto;
 }
 
@@ -11523,7 +11588,9 @@ html:has(.ag-landing) body {
 /* Glass stage */
 .ag-landing .ag-mk-matrix__stage {
   position: relative;
+  min-width: 0;
   padding: clamp(1rem, 2.5vw, 1.5rem);
+  overflow-x: clip;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background:
     linear-gradient(155deg, rgba(22, 22, 22, 0.94) 0%, rgba(10, 10, 10, 0.98) 55%, rgba(14, 10, 10, 0.96) 100%);
@@ -11561,6 +11628,8 @@ html:has(.ag-landing) body {
 }
 
 .ag-landing .ag-mk-matrix__acc {
+  min-width: 0;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background:
     linear-gradient(165deg, rgba(18, 18, 18, 0.96) 0%, rgba(10, 10, 10, 0.98) 100%);
@@ -11583,12 +11652,14 @@ html:has(.ag-landing) body {
   align-items: center;
   justify-content: space-between;
   gap: 0.85rem;
+  min-width: 0;
   padding: 1.15rem 1.15rem;
   text-align: left;
   color: inherit;
   background: transparent;
   border: 0;
   cursor: pointer;
+  white-space: normal;
 }
 
 .ag-landing .ag-mk-matrix__acc-trigger.is-open {
@@ -11602,7 +11673,8 @@ html:has(.ag-landing) body {
 }
 
 .ag-landing .ag-mk-matrix__acc-title {
-  display: inline-flex;
+  display: flex;
+  flex: 1;
   align-items: center;
   gap: 0.75rem;
   min-width: 0;
@@ -11625,6 +11697,7 @@ html:has(.ag-landing) body {
   font-weight: 400;
   color: rgba(255, 255, 255, 0.5);
   line-height: 1.45;
+  overflow-wrap: break-word;
 }
 
 .ag-landing .ag-mk-matrix__acc-chevron {
@@ -12143,21 +12216,44 @@ html:has(.ag-landing) body {
   color: rgba(255, 255, 255, 0.48);
 }
 
-.ag-landing .ag-sistema-cycle .ag-about-cycle__step {
-  opacity: 0.55;
-  transition:
-    opacity var(--duration-base) var(--ease-entrance),
-    border-color var(--duration-base) var(--ease-entrance),
-    box-shadow var(--duration-base) var(--ease-entrance);
+/* Lighting is for the desktop gear. The stacked list must stay fully lit. */
+@media (max-width: 899px) {
+  .ag-landing .ag-sistema-cycle .ag-about-cycle__step {
+    opacity: 1;
+    margin-bottom: 0.65rem;
+    padding: 1.05rem 1rem 1.1rem 1.35rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 2px solid rgba(192, 1, 0, 0.45);
+    background:
+      linear-gradient(165deg, rgba(22, 22, 22, 0.96) 0%, rgba(10, 10, 10, 0.98) 100%);
+    box-shadow:
+      0 18px 36px -28px rgba(0, 0, 0, 0.9),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .ag-landing .ag-sistema-cycle .ag-about-cycle__step:last-child {
+    margin-bottom: 0;
+    border-left-color: rgba(192, 1, 0, 0.75);
+  }
 }
 
-.ag-landing .ag-sistema-cycle .ag-about-cycle__step.is-lit {
-  opacity: 1;
-}
+@media (min-width: 900px) {
+  .ag-landing .ag-sistema-cycle .ag-about-cycle__list:has(.is-lit) .ag-about-cycle__step {
+    opacity: 0.55;
+    transition:
+      opacity var(--duration-base) var(--ease-entrance),
+      border-color var(--duration-base) var(--ease-entrance),
+      box-shadow var(--duration-base) var(--ease-entrance);
+  }
 
-.ag-landing .ag-sistema-cycle .ag-about-cycle__step.is-focus {
-  border-color: rgba(192, 1, 0, 0.45);
-  box-shadow: 0 0 0 1px rgba(192, 1, 0, 0.2);
+  .ag-landing .ag-sistema-cycle .ag-about-cycle__step.is-lit {
+    opacity: 1;
+  }
+
+  .ag-landing .ag-sistema-cycle .ag-about-cycle__step.is-focus {
+    border-color: rgba(192, 1, 0, 0.45);
+    box-shadow: 0 0 0 1px rgba(192, 1, 0, 0.2);
+  }
 }
 
 .ag-landing .ag-sistema-status {
@@ -12870,6 +12966,10 @@ html:has(.ag-landing) body {
   color: rgba(255, 255, 255, 0.55);
   line-height: 1.6;
   text-align: center;
+}
+
+.ag-landing .ag-sistema-cta__lead--short {
+  display: none;
 }
 
 /* Device showcase — experience layout */
@@ -15490,6 +15590,7 @@ html:has(.ag-landing) body {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.75rem;
+  min-width: 0;
 }
 
 @media (min-width: 900px) {
@@ -15504,13 +15605,16 @@ html:has(.ag-landing) body {
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  min-width: 0;
   min-height: 100%;
   padding: 0;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(14, 14, 14, 0.92);
   color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
   text-align: left;
+  white-space: normal;
   transition: border-color 0.25s ease, background 0.25s ease, color 0.25s ease;
 }
 
@@ -15566,6 +15670,7 @@ html:has(.ag-landing) body {
   flex: 1;
   flex-direction: column;
   gap: 0.35rem;
+  min-width: 0;
   padding: 0.85rem 0.9rem 1rem;
   text-align: center;
 }
@@ -15573,12 +15678,14 @@ html:has(.ag-landing) body {
 .ag-landing .ag-marco-lens__card-label {
   display: block;
   letter-spacing: 0.08em;
+  overflow-wrap: break-word;
 }
 
 .ag-landing .ag-marco-lens__card-tagline {
   display: block;
   color: rgba(255, 255, 255, 0.48);
   line-height: 1.35;
+  overflow-wrap: break-word;
 }
 
 .ag-landing .ag-marco-lens__card--active .ag-marco-lens__card-label {
@@ -15712,6 +15819,10 @@ html:has(.ag-landing) body {
   line-height: 1.65;
 }
 
+.ag-landing .ag-marco-lens-close--short {
+  display: none;
+}
+
 /* HdRP — un solo documento, sin lista duplicada */
 .ag-landing .ag-marco-hdrp-body {
   margin-top: clamp(2rem, 4vw, 3rem);
@@ -15750,26 +15861,6 @@ html:has(.ag-landing) body {
 .ag-landing .ag-marco-doc__title {
   margin: 0 0 1.15rem;
   color: #fff;
-}
-
-.ag-landing .ag-marco-doc__route {
-  position: relative;
-  height: 0;
-}
-
-.ag-landing .ag-marco-doc__route-line {
-  position: absolute;
-  left: 1.35rem;
-  top: 0.25rem;
-  bottom: -0.25rem;
-  width: 1px;
-  height: calc(100% + 4rem);
-  background: linear-gradient(
-    to bottom,
-    rgba(247, 198, 123, 0.45),
-    rgba(247, 198, 123, 0.08)
-  );
-  pointer-events: none;
 }
 
 .ag-landing .ag-marco-doc__blocks {
@@ -15853,6 +15944,15 @@ html:has(.ag-landing) body {
   margin-top: var(--ag-stack-lg);
 }
 
+@media (max-width: 767px) {
+  .ag-landing .ag-marco-bridge__link .ag-marco-more__link {
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+    flex-wrap: wrap;
+  }
+}
+
 /* ─── IKIGAI (/ikigai) ──────────────────────────────────────────────────────── */
 .ag-landing .ag-ikigai-hero__bg {
   object-position: center 38%;
@@ -15934,6 +16034,10 @@ html:has(.ag-landing) body {
   margin: 0 0 1.5rem;
   color: rgba(255, 255, 255, 0.6);
   line-height: 1.6;
+}
+
+.ag-landing .ag-ikigai-place__intro--short {
+  display: none;
 }
 
 .ag-landing .ag-ikigai-place__path {
@@ -16873,6 +16977,10 @@ html:has(.ag-landing) body {
 
 .ag-landing .ag-intro__lead--center {
   margin-inline: auto;
+}
+
+.ag-landing .ag-intro__lead--short {
+  display: none;
 }
 
 .ag-landing .ag-sistema-cta__title {

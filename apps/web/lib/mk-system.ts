@@ -131,6 +131,8 @@ export const MODEL_INTRO = {
   title: 'Tres pilares. Cuatro ámbitos. Una vida alineada.',
   lead:
     'Espíritu, Mente y Cuerpo observados en Mentalidad, Relaciones, Finanzas y Salud física: una sola lectura de coherencia. La profundidad está en dirección y ejecución; en el resto, solo lo necesario para no frenar el avance.',
+  /** Mobile-only: title already names the 3×4; drop the inventory. */
+  leadMobile: 'Una sola lectura de coherencia. La profundidad está en dirección y ejecución.',
 } as const;
 
 export type IntegrationExample = {
