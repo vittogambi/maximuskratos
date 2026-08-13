@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react';
+import { redirect } from 'next/navigation';
+import { isEarlyAccessMode } from '@/lib/product-phase';
 import { buildPageMetadata } from '@/lib/seo';
 
 export const metadata = buildPageMetadata({
@@ -10,6 +12,10 @@ export const metadata = buildPageMetadata({
 
 /** Full-screen cinematic shell — no public nav, no footer. */
 export default function DiagnosticoLayout({ children }: { children: ReactNode }) {
+  if (isEarlyAccessMode()) {
+    redirect('/panel');
+  }
+
   return (
     <div
       className="dk-shell"

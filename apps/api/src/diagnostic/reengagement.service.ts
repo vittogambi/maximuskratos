@@ -3,6 +3,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
 import { MailService } from '../mail/mail.service';
+import { isEarlyAccessMode } from '../product-phase';
 
 const TRIGGERS = ['24h', '48h', '7d'] as const;
 type Trigger = (typeof TRIGGERS)[number];
@@ -26,6 +27,8 @@ export class ReengagementService {
   /** Runs every 4 hours to check for sessions that need a nudge. */
   @Cron(CronExpression.EVERY_4_HOURS)
   async sendReengagementNudges(): Promise<void> {
+    if (isEarlyAccessMode()) return;
+
     const appUrl = this.config.get<string>('APP_URL') ?? 'https://maximus-kratos.com';
     const resumeUrl = `${appUrl}/diagnostico`;
     const now = Date.now();

@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import { PerfilContent } from '@/components/pages/PerfilContent';
+import { isEarlyAccessMode } from '@/lib/product-phase';
 
 export const metadata: Metadata = {
   title: 'Tu resultado',
@@ -7,5 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function DiagnosticResultPage() {
+  if (isEarlyAccessMode()) {
+    redirect('/perfil');
+  }
+
   return <PerfilContent />;
 }

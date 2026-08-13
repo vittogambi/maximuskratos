@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useAuthSession } from '@/components/auth-session-provider';
 import { apiDiagnosticStart, type DiagnosticState } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth-storage';
+import { isEarlyAccessMode } from '@/lib/product-phase';
 
 function routeFromState(state: DiagnosticState, router: ReturnType<typeof useRouter>) {
   if (state.sessionState.showWelcomeScreen) {
@@ -38,6 +39,11 @@ export function DiagnosticEntry() {
   const { status } = useAuthSession();
 
   useEffect(() => {
+    if (isEarlyAccessMode()) {
+      router.replace('/panel');
+      return;
+    }
+
     if (status === 'guest') {
       router.replace('/login');
       return;

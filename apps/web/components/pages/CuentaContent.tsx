@@ -99,10 +99,12 @@ export function CuentaContent() {
             Ver planes y precios
             <span aria-hidden>›</span>
           </Link>
-          <Link href="/diagnostico/resultado" className="mk-cuenta-link">
-            Ver resultado completo
-            <span aria-hidden>›</span>
-          </Link>
+          {!earlyAccess ? (
+            <Link href="/diagnostico/resultado" className="mk-cuenta-link">
+              Ver resultado completo
+              <span aria-hidden>›</span>
+            </Link>
+          ) : null}
           <Link href="/" className="mk-cuenta-link">
             Sitio público
             <span aria-hidden>›</span>
