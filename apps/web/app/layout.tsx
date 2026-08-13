@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
-import { Barlow_Condensed, Geist, Hanken_Grotesk, Noto_Serif } from 'next/font/google';
+import localFont from 'next/font/local';
 import './globals.css';
 import { AuthSessionProvider } from '@/components/auth-session-provider';
 import {
@@ -11,29 +11,42 @@ import {
 import { buildRootMetadata } from '@/lib/seo';
 import { cn } from '@/lib/utils';
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
+const geist = localFont({
+  src: './fonts/geist-latin.woff2',
+  variable: '--font-sans',
+  weight: '100 900',
+  display: 'swap',
+});
 
 /** Barlow Condensed — secondary fallback if self-hosted Bitte BC fails to load */
-const bitteFallback = Barlow_Condensed({
-  subsets: ['latin'],
-  weight: ['600', '700', '800'],
+const bitteFallback = localFont({
+  src: [
+    { path: './fonts/barlow-condensed-600.woff2', weight: '600', style: 'normal' },
+    { path: './fonts/barlow-condensed-700.woff2', weight: '700', style: 'normal' },
+    { path: './fonts/barlow-condensed-800.woff2', weight: '800', style: 'normal' },
+  ],
   variable: '--font-bitte-fallback',
   display: 'swap',
 });
 
 /** Body, UI, labels — pairs with condensed industrial display */
-const hanken = Hanken_Grotesk({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  style: ['normal', 'italic'],
+const hanken = localFont({
+  src: [
+    { path: './fonts/hanken-grotesk-latin.woff2', weight: '100 900', style: 'normal' },
+    { path: './fonts/hanken-grotesk-latin-italic.woff2', weight: '100 900', style: 'italic' },
+  ],
   variable: '--font-hanken',
   display: 'swap',
 });
 
 /** Classical Greek — concept cards (Bitte BC has no Greek glyphs) */
-const notoSerif = Noto_Serif({
-  subsets: ['latin', 'greek'],
-  weight: ['400', '600'],
+const notoSerif = localFont({
+  src: [
+    { path: './fonts/noto-serif-latin-400.woff2', weight: '400', style: 'normal' },
+    { path: './fonts/noto-serif-latin-600.woff2', weight: '600', style: 'normal' },
+    { path: './fonts/noto-serif-greek-400.woff2', weight: '400', style: 'normal' },
+    { path: './fonts/noto-serif-greek-600.woff2', weight: '600', style: 'normal' },
+  ],
   variable: '--font-noto-serif',
   display: 'swap',
 });

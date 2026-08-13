@@ -1,0 +1,12 @@
+Self-hosted OFL webfonts for next/font/local (build does not fetch Google Fonts).
+
+  Hanken Grotesk  Copyright 2021 The Hanken Grotesk Project Authors
+                  https://github.com/marcologous/hanken-grotesk
+  Geist           Copyright 2024 The Geist Project Authors
+                  https://github.com/vercel/geist-font
+  Barlow Condensed  Copyright 2017 The Barlow Project Authors
+                    https://github.com/jpt/barlow
+  Noto Serif      Copyright 2022 The Noto Project Authors
+                  https://github.com/notofonts/latin-greek-cyrillic
+
+Licensed under the SIL Open Font License, Version 1.1. See OFL.txt.
