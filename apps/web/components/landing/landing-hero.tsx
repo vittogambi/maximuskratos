@@ -4,6 +4,7 @@ import { LandingHashLink } from '@/components/landing-hash-link';
 import { HeroBeamMedia } from '@/components/landing/hero-beam-media';
 import { AnimatedDivider } from '@/components/motion/animated-divider';
 import { HeroReveal, HeroRevealItem } from '@/components/motion/hero-reveal';
+import { HERO_GROUP_DELAY } from '@/components/motion/tokens';
 import { TextReveal } from '@/components/motion/text-reveal';
 import {
   LANDING_FOUNDER_CTA_NOTE,
@@ -47,26 +48,33 @@ export function LandingHero() {
               stagger={0.06}
             />
           </HeroRevealItem>
-          {/*
-            lcpSafe: support copy must paint under the intro veil. Leaving it at
-            opacity 0 until delay 1.72s made this span the mobile LCP at ~6s on 4G
-            after the intro lifted. Intro still owns the entrance; cascade of
-            eyebrow/title/actions is unchanged.
-          */}
           <HeroRevealItem group="support" lcpSafe>
-            <p className="ag-hero-signature font-brand-tagline cinematic-shadow text-center text-action-red">
-              {LANDING_HERO.signatureLines.map((line) => (
-                <span key={line} className="ag-hero-signature__line">
-                  {line}
-                </span>
-              ))}
-            </p>
-            <p className="ag-hero-title__lead ag-hero-title__lead--full font-body-lg cinematic-shadow mx-auto max-w-xl text-center text-white/85">
-              {LANDING_HERO.lead}
-            </p>
-            <p className="ag-hero-title__lead ag-hero-title__lead--short font-body-md cinematic-shadow mx-auto text-center text-white/85">
-              {LANDING_HERO.leadMobile}
-            </p>
+            <TextReveal
+              as="p"
+              className="ag-hero-signature font-brand-tagline cinematic-shadow text-center text-action-red"
+              lineClassName="ag-hero-signature__line"
+              lines={[...LANDING_HERO.signatureLines]}
+              startWhen="mount"
+              delay={HERO_GROUP_DELAY.support}
+              duration={0.7}
+              stagger={0.07}
+            />
+            <TextReveal
+              as="p"
+              className="ag-hero-title__lead ag-hero-title__lead--full font-body-lg cinematic-shadow mx-auto max-w-xl text-center text-white/85"
+              lines={[LANDING_HERO.lead]}
+              startWhen="mount"
+              delay={HERO_GROUP_DELAY.support + 0.14}
+              duration={0.65}
+            />
+            <TextReveal
+              as="p"
+              className="ag-hero-title__lead ag-hero-title__lead--short font-body-md cinematic-shadow mx-auto text-center text-white/85"
+              lines={[LANDING_HERO.leadMobile]}
+              startWhen="mount"
+              delay={HERO_GROUP_DELAY.support + 0.14}
+              duration={0.65}
+            />
           </HeroRevealItem>
         </div>
 

@@ -11,9 +11,9 @@ import { LANDING_IMAGES, LANDING_VIDEO } from '@/lib/assets';
 
 /** Cut at peak beam, before the clip fades back to darkness. */
 const BEAM_CUTOFF_S = 2.05;
-/** Hold the paused peak frame, then soft-crossfade to the crisp still. */
-const HANDOFF_HOLD_MS = 280;
-const HANDOFF_FADE_MS = 700;
+/** Hold the paused peak under the video, then settle to the HD still. */
+const HANDOFF_HOLD_MS = 520;
+const HANDOFF_FADE_MS = 1200;
 
 /**
  * Skip replaying when the user soft-navigates back to `/` in the same SPA lifetime.
@@ -62,6 +62,8 @@ export function HeroBeamMedia() {
   /** Always false on first paint so SSR HTML matches hydration. */
   const [videoOpacity, setVideoOpacity] = useState(0);
   const [showLitStill, setShowLitStill] = useState(false);
+  /** Fade only on the peak → still settle. Appear is a snap onto frame 0. */
+  const [videoFadingOut, setVideoFadingOut] = useState(false);
   /**
    * Data-saver / reduced-motion / repeat-visit are known synchronously.
    * Computed once so the video's `src` can omit the clip entirely on these
@@ -84,6 +86,7 @@ export function HeroBeamMedia() {
     // Soft-nav return or a11y: land on the illuminated still, no replay.
     if (reduced || prefersDataSaver() || beamPlayedThisDocument) {
       setVideoOpacity(0);
+      setVideoFadingOut(false);
       setShowLitStill(true);
       return;
     }
@@ -104,12 +107,16 @@ export function HeroBeamMedia() {
       } catch {
         /* ignore */
       }
-      // Reveal lit under the video, then fade the soft clip away. Lit stays.
+      // Lit is already the peak frame. Hold, then settle off the 720p clip.
       setShowLitStill(true);
       beamPlayedThisDocument = true;
       handoffTimer = window.setTimeout(() => {
         if (runId.current !== id) return;
-        setVideoOpacity(0);
+        setVideoFadingOut(true);
+        requestAnimationFrame(() => {
+          if (runId.current !== id) return;
+          setVideoOpacity(0);
+        });
       }, HANDOFF_HOLD_MS);
     };
 
@@ -148,19 +155,24 @@ export function HeroBeamMedia() {
         if (runId.current !== id) return;
 
         v.currentTime = 0;
+        if (v.seeking) {
+          await new Promise<void>((resolve) => {
+            v.addEventListener('seeked', () => resolve(), { once: true });
+            window.setTimeout(resolve, 200);
+          });
+        }
+        if (runId.current !== id) return;
+        setVideoFadingOut(false);
+        setVideoOpacity(1);
         await v.play();
       } catch {
+        setVideoOpacity(0);
         setShowLitStill(true);
         beamPlayedThisDocument = true;
         return;
       }
 
       if (runId.current !== id) return;
-
-      requestAnimationFrame(() => {
-        if (runId.current !== id) return;
-        setVideoOpacity(1);
-      });
 
       v.addEventListener('timeupdate', onTimeUpdate);
       cutTimer = window.setTimeout(() => {
@@ -278,7 +290,7 @@ export function HeroBeamMedia() {
           aria-hidden
           style={{
             opacity: videoOpacity,
-            transition: fade,
+            transition: videoFadingOut ? fade : 'none',
           }}
         />
       </motion.div>
