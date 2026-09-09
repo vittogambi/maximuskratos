@@ -6,6 +6,8 @@ function firstExisting(candidates: string[]): string | null {
   return candidates.find((path) => existsSync(path)) ?? null;
 }
 
+// Railway starts the API with cwd apps/api, so repo-root paths need ../../packages.
+
 export function frozenDefinitionPath(): string {
   const found = firstExisting([
     join(process.cwd(), 'packages/matrix-engine/definitions/matrix-v2.0.json'),
