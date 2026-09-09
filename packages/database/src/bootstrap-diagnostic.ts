@@ -193,7 +193,6 @@ async function ensureDiagnosticCatalogOnce(prisma: PrismaClient): Promise<void> 
       return;
     }
 
-    await prisma.rule.deleteMany({ where: { versionId: existing.id } });
     await prisma.diagnosticVersion.delete({ where: { id: existing.id } });
   }
 
