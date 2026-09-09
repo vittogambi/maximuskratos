@@ -1,0 +1,241 @@
+{
+  "definitionId": "ikigai-v0.1",
+  "revision": 1,
+  "ref": "ikigai-v0.1@1",
+  "status": "DRAFT",
+  "engineMin": "0.1.0",
+  "matrixRef": "matrix-v2.0@1",
+  "publicName": "IKIGAI · Tu mapa de dirección",
+  "examplesDisclaimer": "Los ejemplos solo muestran el tipo de respuesta. No necesitas elegir ninguno.",
+  "hypothesis": {
+    "label": "¿Qué dirección aparece al unir estas piezas?",
+    "help": "Mi propósito es poner mi [lo que te mueve] y mi [lo que puedes aportar] al servicio de [lo que vale la pena atender], generando valor a través de [lo que puede sostenerte].",
+    "examples": [
+      "Ayudar a equipos pequeños a ordenar su forma de trabajar.",
+      "Enseñar herramientas prácticas a personas que están empezando en algo que ya conozco bien.",
+      "Crear soluciones que hagan más simple un problema que hoy consume demasiado tiempo."
+    ],
+    "noHypothesisLabel": "Todavía no veo una dirección clara"
+  },
+  "likertAnchors": [
+    { "value": 1, "label": "Nada de acuerdo" },
+    { "value": 2, "label": "Poco de acuerdo" },
+    { "value": 3, "label": "Neutral" },
+    { "value": 4, "label": "De acuerdo" },
+    { "value": 5, "label": "Muy de acuerdo" }
+  ],
+  "skipCriterionLabel": "Prefiero no responder",
+  "fields": [
+    {
+      "key": "PASION",
+      "title": "Lo que te mueve",
+      "prompt": "¿Qué actividades te hacen sentir interesado, energizado o con ganas de seguir mejorando?",
+      "help": "Piensa en cosas que haces por iniciativa propia, que despiertan tu curiosidad o en las que disfrutas progresar.",
+      "examples": ["Enseñar", "entrenar", "investigar", "construir", "diseñar", "cuidar", "liderar", "escribir", "resolver problemas"],
+      "placeholder": "Por ejemplo: explicar cosas difíciles a otras personas",
+      "matrixIds": ["P-PRO-051", "P-PRO-052", "P-PRO-053", "P-PRO-054", "P-PRO-055"],
+      "evidencePrompt": "¿Qué experiencia tienes con esto?",
+      "evidenceOptions": [
+        { "key": "SOSTENIDO", "label": "Lo hago de forma sostenida" },
+        { "key": "OCASIONAL", "label": "Lo hago a veces" },
+        { "key": "ATRACCION", "label": "Me atrae, pero casi no lo he hecho" }
+      ]
+    },
+    {
+      "key": "CAPACIDAD",
+      "title": "Lo que puedes aportar",
+      "prompt": "¿Qué capacidades tienes hoy o has demostrado que puedes desarrollar bien?",
+      "help": "Piensa en resultados que ya has conseguido, experiencia que has acumulado o cosas que aprendes con especial facilidad.",
+      "examples": ["Explicar", "organizar", "construir", "analizar", "diseñar", "negociar", "liderar", "cuidar"],
+      "placeholder": "Por ejemplo: organizar un proyecto de principio a fin",
+      "matrixIds": ["P-PRO-056", "P-PRO-057", "P-PRO-058", "P-PRO-059", "P-PRO-060"],
+      "evidencePrompt": "¿En qué te basas?",
+      "evidenceOptions": [
+        { "key": "RESULTADOS", "label": "Lo he demostrado con resultados" },
+        { "key": "EXPERIENCIA", "label": "Tengo experiencia haciéndolo" },
+        { "key": "SENALES", "label": "Tengo señales de que puedo desarrollarlo" },
+        { "key": "INTUICION", "label": "Por ahora es una intuición" }
+      ]
+    },
+    {
+      "key": "NECESIDAD",
+      "title": "Lo que vale la pena atender",
+      "prompt": "¿Qué problemas, necesidades o personas sientes que vale la pena ayudar?",
+      "help": "Piensa en situaciones que te importaría mejorar, aunque todavía no tengas claro cómo hacerlo.",
+      "examples": ["Aprender", "soledad", "salud", "cuidado", "comunidad", "desigualdad", "orden"],
+      "placeholder": "Por ejemplo: equipos que no saben por dónde empezar",
+      "matrixIds": ["P-PRO-061", "P-PRO-062", "P-PRO-063", "P-PRO-064", "P-PRO-065"],
+      "evidencePrompt": "¿Qué tan cerca has estado de esto?",
+      "evidenceOptions": [
+        { "key": "VIVIDA", "label": "Lo he vivido" },
+        { "key": "OBSERVADA", "label": "Lo he visto de cerca" },
+        { "key": "INDIRECTA", "label": "Lo conozco indirectamente" },
+        { "key": "INTUICION", "label": "Por ahora es una intuición" }
+      ]
+    },
+    {
+      "key": "VALOR",
+      "title": "Lo que puede sostenerte",
+      "prompt": "¿Qué resultados podrías generar que alguien valoraría lo suficiente como para sostenerlos?",
+      "help": "Puede ser mediante dinero, intercambio, un producto, un servicio, un oficio o una responsabilidad que otros necesiten.",
+      "examples": ["Consultoría", "formación", "un producto", "un oficio", "un servicio", "cuidado remunerado"],
+      "placeholder": "Por ejemplo: formación para un equipo que necesita orden",
+      "matrixIds": ["P-PRO-066", "P-PRO-067", "P-PRO-068", "P-PRO-069", "P-PRO-070"],
+      "evidencePrompt": "¿Qué has visto hasta ahora?",
+      "evidenceOptions": [
+        { "key": "SOSTUVO_A_MI", "label": "Ya me ha permitido sostenerme" },
+        { "key": "SOSTIENE_A_OTROS", "label": "He visto que puede sostener a otros" },
+        { "key": "NO_PROBADO", "label": "Creo que podría sostenerse, pero no lo he probado" },
+        { "key": "DESCONOCIDO", "label": "Todavía no lo sé" }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "key": "DISFRUTE_SOSTENIBLE",
+      "label": "Disfrute sostenible",
+      "text": "Esta hipótesis utiliza actividades que podría sostener durante años.",
+      "matrixId": "P-PRO-071"
+    },
+    {
+      "key": "CAPACIDAD_DEMOSTRABLE",
+      "label": "Capacidad demostrable",
+      "text": "Existe evidencia de que puede desarrollar o ejecutar las capacidades requeridas.",
+      "matrixId": "P-PRO-072"
+    },
+    {
+      "key": "UTILIDAD_REAL",
+      "label": "Utilidad real",
+      "text": "Resuelve una necesidad concreta de personas o comunidades.",
+      "matrixId": "P-PRO-073"
+    },
+    {
+      "key": "VALOR_ECONOMICO",
+      "label": "Sustento o intercambio",
+      "text": "Puede generar una forma ética y realista de sustento o intercambio.",
+      "matrixId": "P-PRO-074"
+    },
+    {
+      "key": "COHERENCIA_MORAL",
+      "label": "Coherencia moral",
+      "text": "Es coherente con sus valores, responsabilidades y límites.",
+      "matrixId": "P-PRO-075"
+    },
+    {
+      "key": "FACTIBILIDAD",
+      "label": "Factibilidad",
+      "text": "Puede probarse con los recursos disponibles en los próximos noventa días.",
+      "matrixId": "P-PRO-076"
+    }
+  ],
+  "gapQuestionByField": {
+    "PASION": "¿Qué te mueve en la hipótesis {n}?",
+    "CAPACIDAD": "¿Qué sabes hacer en la hipótesis {n}?",
+    "NECESIDAD": "¿A qué necesidad responde la hipótesis {n}?",
+    "VALOR": "¿Cómo se sostiene la hipótesis {n}?"
+  },
+  "rules": [
+    {
+      "id": "T_FIELD_EMPTY",
+      "enabled": true,
+      "copy": "No anotaste nada en {campo}."
+    },
+    {
+      "id": "T_FIELD_THIN",
+      "enabled": true,
+      "copy": "{campo} tiene poco material."
+    },
+    {
+      "id": "T_HYP_GAP",
+      "enabled": true,
+      "copy": "La hipótesis {n} no toca {campo}."
+    },
+    {
+      "id": "T_NO_HYPOTHESIS",
+      "enabled": true,
+      "copy": "Todavía no aparece una hipótesis suficientemente clara. Eso es un resultado válido."
+    },
+    {
+      "id": "T_ALL_UNLINKED",
+      "enabled": true,
+      "copy": "Tus hipótesis no unen campos distintos. Todavía son listas, no direcciones."
+    },
+    {
+      "id": "T_SAME_TEXT_ALL_FIELDS",
+      "enabled": true,
+      "copy": "Anotaste \"{texto}\" en varios campos."
+    },
+    {
+      "id": "T_HYP_CRITERION_LOW",
+      "enabled": true,
+      "copy": "En la hipótesis {n} respondiste en desacuerdo a: {criterio}."
+    },
+    {
+      "id": "T_FIELD_INTUITION_ONLY",
+      "enabled": true,
+      "copy": "En {campo}, todo lo que anotaste está todavía por poner a prueba."
+    },
+    {
+      "id": "T_HYP_WEAK_EVIDENCE",
+      "enabled": true,
+      "copy": "Esta hipótesis se apoya principalmente en cosas que todavía no has puesto a prueba."
+    },
+    {
+      "id": "T_HYP_MORAL_CONFLICT",
+      "enabled": true,
+      "copy": "Marcaste que esta hipótesis no parece coherente con tus valores, responsabilidades o límites. Antes de avanzar, vale la pena entender dónde está el conflicto."
+    },
+    {
+      "id": "T_ENJOY_NOT_SUSTAINED",
+      "enabled": false,
+      "copy": "Te atrae, pero todavía no has comprobado que puedas sostenerlo."
+    },
+    {
+      "id": "T_SKILL_NO_ENJOY",
+      "enabled": false,
+      "copy": "Sabes hacerlo, pero no parece que quieras sostenerlo durante años."
+    },
+    {
+      "id": "NX_CRITERION_LOWEST",
+      "enabled": false,
+      "copy": ""
+    },
+    {
+      "id": "NX_INTUITION_FIRST",
+      "enabled": false,
+      "copy": ""
+    },
+    {
+      "id": "NX_FIELD_WEAKEST",
+      "enabled": false,
+      "copy": ""
+    }
+  ],
+  "nextExperiment": {
+    "focusLabel": "¿Qué necesitarías descubrir para saber si esta dirección merece seguir creciendo?",
+    "horizonLabel": "Durante:",
+    "horizons": [30, 60, 90],
+    "actionLabel": "Voy a:",
+    "signalLabel": "Sabré algo nuevo si:"
+  },
+  "lexicon": {
+    "IKIGAI": "Herramienta para explorar una dirección vital conectando lo que te mueve, tus capacidades, necesidades que consideras valiosas y formas de sostener esa dirección.",
+    "hipotesis": "Una posible dirección suficientemente coherente como para merecer ser puesta a prueba.",
+    "tension": "Un hueco, contradicción o incertidumbre que aparece al mirar el material en conjunto. No significa que algo esté mal.",
+    "comprobado": "Algo sobre lo que tienes experiencia directa suficiente para no basarte solamente en una suposición.",
+    "intuicion": "Algo que parece posible, atractivo o importante, pero que todavía necesita experiencia real.",
+    "direccion": "Tu mejor orientación actual. Puede cambiar con nueva evidencia.",
+    "proposito": "Un horizonte de sentido más amplio. MK no lo calcula ni asegura descubrir uno único."
+  },
+  "feedback": {
+    "clarity": "¿Esto te ayudó a ver una dirección con más claridad?",
+    "clarityOptions": ["Mucho", "Algo", "Poco", "Nada"],
+    "wantsTest": "¿Terminas con algo concreto que quieras poner a prueba?",
+    "wantsTestOptions": ["Sí", "Más o menos", "No"],
+    "friction": "¿Hubo algo que no entendieras o que se sintiera forzado?"
+  },
+  "source": {
+    "legacy_form": "E-PER-008",
+    "matrix": "matrix-v2.0@1"
+  }
+}

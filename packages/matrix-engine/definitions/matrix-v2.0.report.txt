@@ -1,0 +1,35 @@
+MATRIX IMPORT REPORT
+definition_ref     matrix-v2.0@1
+definition_sha256  f5bb1435556db11d6a5513cee9b52140b7a0a5c2ecfd0e8fb57d5ba4078eec11
+source             MATRIZ_MAESTRA_MK_v2_FOCO.xlsx
+source_sha256      006ec491afbf95f8a9cfbb821a3703bd791e216063f63bb495b10f794a249180
+engine             @mk/matrix-engine 0.1.0
+
+COUNTS
+questions          187   (ids unicos, 187 activas)
+scoreable          113   ESTADO con ponderacion > 0
+normalizable       112   (1 sin regla de escala)
+risks              8
+inverse            5
+domains            5   MENTALIDAD 24  RELACIONES 24  FINANZAS 24  CUERPO 34  PROPÓSITO 81
+dimensions         46   (41 canonicas despues de alias)
+scales             10
+rules              26
+plans              16
+objectives         48
+activities         96
+metrics            40
+
+ERRORS   0
+
+
+WARNINGS 6
+  W1  ítems no ESTADO con ponderación 1: D-REL-15, D-FIN-09, D-CUE-25
+  W2  12 métricas referenciadas inexistentes, 59 preguntas afectadas: MEN-DIR, MEN-AUT, MEN-FOC, MEN-APR, REL-LÍM, REL-REC, FIN-FLU, FIN-DEU, FIN-AHO, CUE-SUE, CUE-ALI, CUE-AUT
+  W3  ítem ESTADO sin regla de normalización: D-CUE-07
+  W4  dimensiones con un solo ítem puntuable: CUE.seguridad_y_restricciones, PRO.hipotesis_disfrute_sostenible, PRO.hipotesis_capacidad_demostrable, PRO.hipotesis_utilidad_real, PRO.hipotesis_valor_economico, PRO.hipotesis_coherencia_moral, PRO.hipotesis_factibilidad
+  W5  ámbito sin planes en catálogo: PROPÓSITO
+  W6  condiciones de alerta con cláusula cualitativa: D-REL-15, D-FIN-09, D-CUE-25
+
+INTERPRETATIONS ACTIVE  20
+PUBLISHABLE  yes

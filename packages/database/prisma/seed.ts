@@ -1,6 +1,7 @@
 import { PrismaClient, Role, SubscriptionStatus } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { ensureDiagnosticCatalog } from '../src/bootstrap-diagnostic';
+import { ensureIkigaiDefinition } from './seed-ikigai';
 
 const prisma = new PrismaClient();
 
@@ -220,6 +221,7 @@ async function main() {
   }
 
   await ensureDiagnosticCatalog(prisma);
+  await ensureIkigaiDefinition(prisma);
 
   console.log(`Seeded admin: ${adminEmail}`);
   console.log(`Seeded ${DEMO_LEADS.length} demo leads (if missing)`);

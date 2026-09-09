@@ -1,0 +1,4741 @@
+{
+  "definition_ref": "matrix-v2.0@1",
+  "definition_sha256": "f5bb1435556db11d6a5513cee9b52140b7a0a5c2ecfd0e8fb57d5ba4078eec11",
+  "source_sha256": "006ec491afbf95f8a9cfbb821a3703bd791e216063f63bb495b10f794a249180",
+  "engine_semver": "0.1.0",
+  "policy_id": "FULL-v1",
+  "responses_hash": "sha256:5eeca53375576e77420d1a7b8d65e864dd602b68253ea2f6f708ac526230c7c8",
+  "safety": {
+    "alerts": [],
+    "not_evaluated": [],
+    "risk_coverage": 1,
+    "safety_incomplete": false
+  },
+  "dimensions": [
+    {
+      "key": "MEN.direccion_e_identidad",
+      "domain": "MENTALIDAD",
+      "score": 50,
+      "score_display": 50,
+      "items_scored": 6,
+      "items_scoreable": 6,
+      "coverage": 1,
+      "inverse": false
+    },
+    {
+      "key": "MEN.autorregulacion_y_resiliencia",
+      "domain": "MENTALIDAD",
+      "score": 50,
+      "score_display": 50,
+      "items_scored": 6,
+      "items_scoreable": 6,
+      "coverage": 1,
+      "inverse": false
+    },
+    {
+      "key": "MEN.foco_y_ejecucion",
+      "domain": "MENTALIDAD",
+      "score": 50,
+      "score_display": 50,
+      "items_scored": 6,
+      "items_scoreable": 6,
+      "coverage": 1,
+      "inverse": false
+    },
+    {
+      "key": "MEN.aprendizaje_y_decisiones",
+      "domain": "MENTALIDAD",
+      "score": 50,
+      "score_display": 50,
+      "items_scored": 6,
+      "items_scoreable": 6,
+      "coverage": 1,
+      "inverse": false
+    },
+    {
+      "key": "REL.conexion_y_apoyo",
+      "domain": "RELACIONES",
+      "score": 50,
+      "score_display": 50,
+      "items_scored": 6,
+      "items_scoreable": 6,
+      "coverage": 1,
+      "inverse": false
+    },
+    {
+      "key": "REL.comunicacion",
+      "domain": "RELACIONES",
+      "score": 50,
+      "score_display": 50,
+      "items_scored": 6,
+      "items_scoreable": 6,
+      "coverage": 1,
+      "inverse": false
+    },
+    {
+      "key": "REL.limites_y_conflicto",
+      "domain": "RELACIONES",
+      "score": 50,
+      "score_display": 50,
+      "items_scored": 5,
+      "items_scoreable": 5,
+      "coverage": 1,
+      "inverse": false
+    },
+    {
+      "key": "REL.reciprocidad_comunidad_y_liderazgo",
+      "domain": "RELACIONES",
+      "score": 50,
+      "score_display": 50,
+      "items_scored": 6,
+      "items_scoreable": 6,
+      "coverage": 1,
+      "inverse": false
+    },
+    {
+      "key": "FIN.flujo_y_suficiencia",
+      "domain": "FINANZAS",
+      "score": 50,
+      "score_display": 50,
+      "items_scored": 6,
+      "items_scoreable": 6,
+      "coverage": 1,
+      "inverse": false
+    },
+    {
+      "key": "FIN.deuda_y_obligaciones",
+      "domain": "FINANZAS",
+      "score": 50,
+      "score_display": 50,
+      "items_scored": 5,
+      "items_scoreable": 5,
+      "coverage": 1,
+      "inverse": false
+    },
+    {
+      "key": "FIN.ahorro_y_respaldo",
+      "domain": "FINANZAS",
+      "score": 50,
+      "score_display": 50,
+      "items_scored": 6,
+      "items_scoreable": 6,
+      "coverage": 1,
+      "inverse": false
+    },
+    {
+      "key": "FIN.inversion_y_generacion_de_valor",
+      "domain": "FINANZAS",
+      "score": 50,
+      "score_display": 50,
+      "items_scored": 6,
+      "items_scoreable": 6,
+      "coverage": 1,
+      "inverse": false
+    },
+    {
+      "key": "CUE.seguridad_y_restricciones",
+      "domain": "CUERPO",
+      "score": 50,
+      "score_display": 50,
+      "items_scored": 1,
+      "items_scoreable": 1,
+      "coverage": 1,
+      "inverse": false
+    },
+    {
+      "key": "CUE.sueno_y_recuperacion",
+      "domain": "CUERPO",
+      "score": 50,
+      "score_display": 50,
+      "items_scored": 5,
+      "items_scoreable": 5,
+      "coverage": 1,
+      "inverse": false
+    },
+    {
+      "key": "CUE.alimentacion_e_hidratacion",
+      "domain": "CUERPO",
+      "score": 50,
+      "score_display": 50,
+      "items_scored": 6,
+      "items_scoreable": 6,
+      "coverage": 1,
+      "inverse": false
+    },
+    {
+      "key": "CUE.movimiento_y_entrenamiento",
+      "domain": "CUERPO",
+      "score": 50,
+      "score_display": 50,
+      "items_scored": 6,
+      "items_scoreable": 6,
+      "coverage": 1,
+      "inverse": false
+    },
+    {
+      "key": "CUE.autoimagen_y_relacion_corporal",
+      "domain": "CUERPO",
+      "score": 50,
+      "score_display": 50,
+      "items_scored": 3,
+      "items_scoreable": 3,
+      "coverage": 1,
+      "inverse": false
+    },
+    {
+      "key": "CUE.objetivo_y_condiciones",
+      "domain": "CUERPO",
+      "score": null,
+      "score_display": null,
+      "items_scored": 0,
+      "items_scoreable": 0,
+      "coverage": 0,
+      "inverse": false
+    }
+  ],
+  "domains": [
+    {
+      "key": "MENTALIDAD",
+      "coverage_definition": 1,
+      "coverage_served": 1,
+      "classification": "INTERPRETABLE",
+      "score": 50,
+      "score_display": 50,
+      "state_from_band": "ESTABILIZACIÓN",
+      "state_final": "ESTABILIZACIÓN",
+      "state_source": "BAND",
+      "state_rule_id": "R-STATE-02",
+      "distance_to_band_edge": 10,
+      "dimensions_used": 4
+    },
+    {
+      "key": "RELACIONES",
+      "coverage_definition": 1,
+      "coverage_served": 1,
+      "classification": "INTERPRETABLE",
+      "score": 50,
+      "score_display": 50,
+      "state_from_band": "ESTABILIZACIÓN",
+      "state_final": "ESTABILIZACIÓN",
+      "state_source": "BAND",
+      "state_rule_id": "R-STATE-02",
+      "distance_to_band_edge": 10,
+      "dimensions_used": 4
+    },
+    {
+      "key": "FINANZAS",
+      "coverage_definition": 1,
+      "coverage_served": 1,
+      "classification": "INTERPRETABLE",
+      "score": 50,
+      "score_display": 50,
+      "state_from_band": "ESTABILIZACIÓN",
+      "state_final": "ESTABILIZACIÓN",
+      "state_source": "BAND",
+      "state_rule_id": "R-STATE-02",
+      "distance_to_band_edge": 10,
+      "dimensions_used": 4
+    },
+    {
+      "key": "CUERPO",
+      "coverage_definition": 1,
+      "coverage_served": 1,
+      "classification": "INTERPRETABLE",
+      "score": 50,
+      "score_display": 50,
+      "state_from_band": "ESTABILIZACIÓN",
+      "state_final": "ESTABILIZACIÓN",
+      "state_source": "BAND",
+      "state_rule_id": "R-STATE-02",
+      "distance_to_band_edge": 10,
+      "dimensions_used": 5
+    }
+  ],
+  "priority": {
+    "domain": "MENTALIDAD",
+    "tier": "STATE",
+    "rule_id": "LAB-PRIORITY-01",
+    "reason": null,
+    "candidates": [
+      {
+        "domain": "MENTALIDAD",
+        "tier": "STATE",
+        "state": "ESTABILIZACIÓN",
+        "score_display": 50,
+        "classified": true
+      },
+      {
+        "domain": "CUERPO",
+        "tier": "STATE",
+        "state": "ESTABILIZACIÓN",
+        "score_display": 50,
+        "classified": true
+      },
+      {
+        "domain": "FINANZAS",
+        "tier": "STATE",
+        "state": "ESTABILIZACIÓN",
+        "score_display": 50,
+        "classified": true
+      },
+      {
+        "domain": "RELACIONES",
+        "tier": "STATE",
+        "state": "ESTABILIZACIÓN",
+        "score_display": 50,
+        "classified": true
+      }
+    ],
+    "criteria_not_evaluated": [
+      {
+        "criterion": "deterioro",
+        "reason": "requiere dos mediciones"
+      },
+      {
+        "criterion": "palanca",
+        "reason": "sin modelo de datos"
+      },
+      {
+        "criterion": "proposito",
+        "reason": "R-PUR no ejecutable"
+      }
+    ],
+    "purpose_excluded": true,
+    "purpose_note": "PROPÓSITO no participa en la prioridad de v0 porque la matriz todavía no define cómo hacerlo (R-PUR no ejecutable, sin planes de propósito). Esto no significa que MK concluya que este ámbito importe más que el propósito."
+  },
+  "maintenance": {
+    "domain": "CUERPO",
+    "rule_id": "LAB-PRIORITY-02"
+  },
+  "recommendations": {
+    "primary": {
+      "domain": "MENTALIDAD",
+      "plan_id": "MEN-EST",
+      "label": "MATRIX RECOMMENDATION",
+      "objectives": [
+        "MEN-EST-O1",
+        "MEN-EST-O2",
+        "MEN-EST-O3"
+      ],
+      "activities": [
+        "MEN-EST-O1-A1",
+        "MEN-EST-O1-A2",
+        "MEN-EST-O2-A1",
+        "MEN-EST-O2-A2",
+        "MEN-EST-O3-A1",
+        "MEN-EST-O3-A2"
+      ],
+      "catalog_lookup": true,
+      "executable_recommendation": "ALLOWED",
+      "blocked_reason": null,
+      "derivation_required": false,
+      "activities_unfiltered_warning": false
+    },
+    "maintenance": {
+      "domain": "CUERPO",
+      "plan_id": "CUE-EST",
+      "label": "MATRIX RECOMMENDATION",
+      "objectives": [
+        "CUE-EST-O1",
+        "CUE-EST-O2",
+        "CUE-EST-O3"
+      ],
+      "activities": [
+        "CUE-EST-O1-A1",
+        "CUE-EST-O1-A2",
+        "CUE-EST-O2-A1",
+        "CUE-EST-O2-A2",
+        "CUE-EST-O3-A1",
+        "CUE-EST-O3-A2"
+      ],
+      "catalog_lookup": true,
+      "executable_recommendation": "ALLOWED",
+      "blocked_reason": null,
+      "derivation_required": false,
+      "activities_unfiltered_warning": false
+    },
+    "catalog_lookup": [
+      {
+        "domain": "RELACIONES",
+        "plan_id": "REL-EST",
+        "label": "MATRIX RECOMMENDATION",
+        "objectives": [
+          "REL-EST-O1",
+          "REL-EST-O2",
+          "REL-EST-O3"
+        ],
+        "activities": [
+          "REL-EST-O1-A1",
+          "REL-EST-O1-A2",
+          "REL-EST-O2-A1",
+          "REL-EST-O2-A2",
+          "REL-EST-O3-A1",
+          "REL-EST-O3-A2"
+        ],
+        "catalog_lookup": true,
+        "executable_recommendation": "ALLOWED",
+        "blocked_reason": null,
+        "derivation_required": false,
+        "activities_unfiltered_warning": false
+      },
+      {
+        "domain": "FINANZAS",
+        "plan_id": "FIN-EST",
+        "label": "MATRIX RECOMMENDATION",
+        "objectives": [
+          "FIN-EST-O1",
+          "FIN-EST-O2",
+          "FIN-EST-O3"
+        ],
+        "activities": [
+          "FIN-EST-O1-A1",
+          "FIN-EST-O1-A2",
+          "FIN-EST-O2-A1",
+          "FIN-EST-O2-A2",
+          "FIN-EST-O3-A1",
+          "FIN-EST-O3-A2"
+        ],
+        "catalog_lookup": true,
+        "executable_recommendation": "ALLOWED",
+        "blocked_reason": null,
+        "derivation_required": false,
+        "activities_unfiltered_warning": false
+      }
+    ]
+  },
+  "purpose": {
+    "domain_score": null,
+    "not_applicable_reason": "LAB-PURPOSE-01",
+    "stage": null,
+    "stage_reason": "R-PUR-01..04 NOT_APPLICABLE",
+    "dimension_scores": [
+      {
+        "key": "PRO.historia_y_linaje",
+        "score": null,
+        "score_display": null,
+        "coverage": 0
+      },
+      {
+        "key": "PRO.vision",
+        "score": null,
+        "score_display": null,
+        "coverage": 0
+      },
+      {
+        "key": "PRO.valores",
+        "score": null,
+        "score_display": null,
+        "coverage": 0
+      },
+      {
+        "key": "PRO.estandares",
+        "score": null,
+        "score_display": null,
+        "coverage": 0
+      },
+      {
+        "key": "PRO.identidad",
+        "score": 50,
+        "score_display": 50,
+        "coverage": 1
+      },
+      {
+        "key": "PRO.interferencia",
+        "score": 50,
+        "score_display": 50,
+        "coverage": 1
+      },
+      {
+        "key": "PRO.integracion",
+        "score": 50,
+        "score_display": 50,
+        "coverage": 1
+      },
+      {
+        "key": "PRO.tendencia_apertura",
+        "score": null,
+        "score_display": null,
+        "coverage": 0
+      },
+      {
+        "key": "PRO.tendencia_organizacion",
+        "score": null,
+        "score_display": null,
+        "coverage": 0
+      },
+      {
+        "key": "PRO.tendencia_energia_social",
+        "score": null,
+        "score_display": null,
+        "coverage": 0
+      },
+      {
+        "key": "PRO.tendencia_cooperacion",
+        "score": null,
+        "score_display": null,
+        "coverage": 0
+      },
+      {
+        "key": "PRO.tendencia_sensibilidad_al_estres",
+        "score": null,
+        "score_display": null,
+        "coverage": 0
+      },
+      {
+        "key": "PRO.ikigai_pasion",
+        "score": null,
+        "score_display": null,
+        "coverage": 0
+      },
+      {
+        "key": "PRO.ikigai_capacidad",
+        "score": null,
+        "score_display": null,
+        "coverage": 0
+      },
+      {
+        "key": "PRO.ikigai_necesidad",
+        "score": null,
+        "score_display": null,
+        "coverage": 0
+      },
+      {
+        "key": "PRO.ikigai_valor_economico",
+        "score": null,
+        "score_display": null,
+        "coverage": 0
+      },
+      {
+        "key": "PRO.hipotesis_disfrute_sostenible",
+        "score": 50,
+        "score_display": 50,
+        "coverage": 1
+      },
+      {
+        "key": "PRO.hipotesis_capacidad_demostrable",
+        "score": 50,
+        "score_display": 50,
+        "coverage": 1
+      },
+      {
+        "key": "PRO.hipotesis_utilidad_real",
+        "score": 50,
+        "score_display": 50,
+        "coverage": 1
+      },
+      {
+        "key": "PRO.hipotesis_valor_economico",
+        "score": 50,
+        "score_display": 50,
+        "coverage": 1
+      },
+      {
+        "key": "PRO.hipotesis_coherencia_moral",
+        "score": 50,
+        "score_display": 50,
+        "coverage": 1
+      },
+      {
+        "key": "PRO.hipotesis_factibilidad",
+        "score": 50,
+        "score_display": 50,
+        "coverage": 1
+      },
+      {
+        "key": "PRO.huella",
+        "score": null,
+        "score_display": null,
+        "coverage": 0
+      }
+    ]
+  },
+  "global": {
+    "average": 50,
+    "narrative_only": true,
+    "label": null,
+    "label_reason": "R-GLOB-02 NOT_APPLICABLE"
+  },
+  "data_gaps": {
+    "unscoreable_items": [
+      {
+        "question_id": "D-CUE-07",
+        "reason": "SCALE_HAS_NO_SCORE_MAP"
+      }
+    ],
+    "invalid_responses": [],
+    "unresolved_metric_keys": 59
+  },
+  "narrative_completion": [
+    {
+      "module": "HISTORIA Y LINAJE",
+      "answered": 0,
+      "total": 5
+    },
+    {
+      "module": "VISIÓN",
+      "answered": 0,
+      "total": 5
+    },
+    {
+      "module": "VALORES",
+      "answered": 0,
+      "total": 5
+    },
+    {
+      "module": "ESTÁNDARES",
+      "answered": 0,
+      "total": 5
+    },
+    {
+      "module": "IKIGAI_PASIÓN",
+      "answered": 0,
+      "total": 5
+    },
+    {
+      "module": "IKIGAI_CAPACIDAD",
+      "answered": 0,
+      "total": 5
+    },
+    {
+      "module": "IKIGAI_NECESIDAD",
+      "answered": 0,
+      "total": 5
+    },
+    {
+      "module": "IKIGAI_VALOR ECONÓMICO",
+      "answered": 0,
+      "total": 5
+    },
+    {
+      "module": "HUELLA",
+      "answered": 0,
+      "total": 5
+    }
+  ],
+  "interpretations_used": [
+    "LAB-ALIAS-01",
+    "LAB-COV-01",
+    "LAB-COV-02",
+    "LAB-COV-03",
+    "LAB-GLOBAL-01",
+    "LAB-NORM-01",
+    "LAB-PRIORITY-01",
+    "LAB-PRIORITY-02",
+    "LAB-PURPOSE-01",
+    "LAB-RECO-01",
+    "LAB-SAFETY-03",
+    "LAB-SCORE-01",
+    "LAB-STATE-01"
+  ],
+  "rules_not_executed": [
+    "R-GLOB-02",
+    "R-PUR-01",
+    "R-PUR-02",
+    "R-PUR-03",
+    "R-PUR-04",
+    "R-COMB-01",
+    "R-TASK-01",
+    "R-REV-01",
+    "R-LOAD-04"
+  ],
+  "trace": {
+    "step": "ROOT",
+    "node_id": "root",
+    "inputs": [],
+    "output": {
+      "definition_ref": "matrix-v2.0@1",
+      "policy_id": "FULL-v1"
+    },
+    "rule_id": "R-LOAD-01",
+    "source": "MATRIX",
+    "reason": "Pipeline de evaluacion v0.",
+    "children": [
+      {
+        "step": "RESPONSE_VALIDATION",
+        "node_id": "responses",
+        "inputs": [],
+        "output": {
+          "served": 187,
+          "answered": 120,
+          "skipped": 67,
+          "invalid": []
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "Respuestas clasificadas. Valor invalido no se corrige ni se aproxima."
+      },
+      {
+        "step": "SAFETY_EVAL",
+        "node_id": "safety",
+        "inputs": [],
+        "output": {
+          "alerts": [],
+          "not_evaluated": [],
+          "risk_coverage": 1,
+          "safety_incomplete": false
+        },
+        "rule_id": "LAB-SAFETY-03",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de riesgo 1. Incompleto: false.",
+        "children": [
+          {
+            "step": "SAFETY_EVAL",
+            "node_id": "safety:D-REL-15",
+            "inputs": [
+              {
+                "kind": "question",
+                "id": "D-REL-15"
+              }
+            ],
+            "output": {
+              "question_id": "D-REL-15",
+              "domain": "RELACIONES",
+              "severity": "CRITICA",
+              "status": "NOT_FIRED",
+              "fired": false,
+              "override_applies": false,
+              "condition_confirmed": null,
+              "condition_text": "Respuesta 1 y presencia declarada de violencia/coerción",
+              "numeric_met": false,
+              "qualitative_confirmed": false,
+              "immediate_action": "Mostrar ruta de seguridad; no indicar confrontación automática.",
+              "referral": "Profesional o servicio especializado en violencia, según contexto local.",
+              "override_applied": null
+            },
+            "rule_id": "D-REL-15",
+            "source": "MATRIX",
+            "reason": "D-REL-15 evaluado. Clausula numerica no cumplida."
+          },
+          {
+            "step": "SAFETY_EVAL",
+            "node_id": "safety:D-FIN-09",
+            "inputs": [
+              {
+                "kind": "question",
+                "id": "D-FIN-09"
+              }
+            ],
+            "output": {
+              "question_id": "D-FIN-09",
+              "domain": "FINANZAS",
+              "severity": "ALTA",
+              "status": "NOT_FIRED",
+              "fired": false,
+              "override_applies": false,
+              "condition_confirmed": null,
+              "condition_text": "Respuesta 1 o 2 y mora/riesgo de pérdida de vivienda o servicios",
+              "numeric_met": false,
+              "qualitative_confirmed": false,
+              "immediate_action": "Priorizar gastos esenciales y derivar antes de recomendar inversión.",
+              "referral": "Asesor financiero/deuda o servicio de orientación al consumidor.",
+              "override_applied": null
+            },
+            "rule_id": "D-FIN-09",
+            "source": "MATRIX",
+            "reason": "D-FIN-09 evaluado. Clausula numerica no cumplida."
+          },
+          {
+            "step": "SAFETY_EVAL",
+            "node_id": "safety:D-CUE-01",
+            "inputs": [
+              {
+                "kind": "question",
+                "id": "D-CUE-01"
+              }
+            ],
+            "output": {
+              "question_id": "D-CUE-01",
+              "domain": "CUERPO",
+              "severity": "ALTA",
+              "status": "NOT_FIRED",
+              "fired": false,
+              "override_applies": false,
+              "condition_confirmed": null,
+              "condition_text": "Respuesta Sí",
+              "numeric_met": false,
+              "qualitative_confirmed": null,
+              "immediate_action": "Solicitar detalle y requerir autorización/criterio profesional cuando corresponda.",
+              "referral": "Médico tratante.",
+              "override_applied": null
+            },
+            "rule_id": "D-CUE-01",
+            "source": "MATRIX",
+            "reason": "D-CUE-01 evaluado. Clausula numerica no cumplida."
+          },
+          {
+            "step": "SAFETY_EVAL",
+            "node_id": "safety:D-CUE-02",
+            "inputs": [
+              {
+                "kind": "question",
+                "id": "D-CUE-02"
+              }
+            ],
+            "output": {
+              "question_id": "D-CUE-02",
+              "domain": "CUERPO",
+              "severity": "ALTA",
+              "status": "NOT_FIRED",
+              "fired": false,
+              "override_applies": false,
+              "condition_confirmed": null,
+              "condition_text": "Respuesta Sí",
+              "numeric_met": false,
+              "qualitative_confirmed": null,
+              "immediate_action": "No generar ejercicios contraindicados; solicitar localización, intensidad y restricciones.",
+              "referral": "Médico o kinesiólogo.",
+              "override_applied": null
+            },
+            "rule_id": "D-CUE-02",
+            "source": "MATRIX",
+            "reason": "D-CUE-02 evaluado. Clausula numerica no cumplida."
+          },
+          {
+            "step": "SAFETY_EVAL",
+            "node_id": "safety:D-CUE-03",
+            "inputs": [
+              {
+                "kind": "question",
+                "id": "D-CUE-03"
+              }
+            ],
+            "output": {
+              "question_id": "D-CUE-03",
+              "domain": "CUERPO",
+              "severity": "MEDIA",
+              "status": "NOT_FIRED",
+              "fired": false,
+              "override_applies": false,
+              "condition_confirmed": null,
+              "condition_text": "Respuesta Sí",
+              "numeric_met": false,
+              "qualitative_confirmed": null,
+              "immediate_action": "Registrar medicación para personalización y advertencias; no modificarla.",
+              "referral": "Médico tratante.",
+              "override_applied": null
+            },
+            "rule_id": "D-CUE-03",
+            "source": "MATRIX",
+            "reason": "D-CUE-03 evaluado. Clausula numerica no cumplida."
+          },
+          {
+            "step": "SAFETY_EVAL",
+            "node_id": "safety:D-CUE-04",
+            "inputs": [
+              {
+                "kind": "question",
+                "id": "D-CUE-04"
+              }
+            ],
+            "output": {
+              "question_id": "D-CUE-04",
+              "domain": "CUERPO",
+              "severity": "ALTA",
+              "status": "NOT_FIRED",
+              "fired": false,
+              "override_applies": false,
+              "condition_confirmed": null,
+              "condition_text": "Respuesta Sí",
+              "numeric_met": false,
+              "qualitative_confirmed": null,
+              "immediate_action": "Bloquear recomendaciones incompatibles con la indicación.",
+              "referral": "Médico o kinesiólogo.",
+              "override_applied": null
+            },
+            "rule_id": "D-CUE-04",
+            "source": "MATRIX",
+            "reason": "D-CUE-04 evaluado. Clausula numerica no cumplida."
+          },
+          {
+            "step": "SAFETY_EVAL",
+            "node_id": "safety:D-CUE-05",
+            "inputs": [
+              {
+                "kind": "question",
+                "id": "D-CUE-05"
+              }
+            ],
+            "output": {
+              "question_id": "D-CUE-05",
+              "domain": "CUERPO",
+              "severity": "CRITICA",
+              "status": "NOT_FIRED",
+              "fired": false,
+              "override_applies": false,
+              "condition_confirmed": null,
+              "condition_text": "Respuesta Sí",
+              "numeric_met": false,
+              "qualitative_confirmed": null,
+              "immediate_action": "Suspender recomendaciones de ejercicio y mostrar evaluación médica prioritaria.",
+              "referral": "Atención médica.",
+              "override_applied": null
+            },
+            "rule_id": "D-CUE-05",
+            "source": "MATRIX",
+            "reason": "D-CUE-05 evaluado. Clausula numerica no cumplida."
+          },
+          {
+            "step": "SAFETY_EVAL",
+            "node_id": "safety:D-CUE-25",
+            "inputs": [
+              {
+                "kind": "question",
+                "id": "D-CUE-25"
+              }
+            ],
+            "output": {
+              "question_id": "D-CUE-25",
+              "domain": "CUERPO",
+              "severity": "ALTA",
+              "status": "NOT_FIRED",
+              "fired": false,
+              "override_applies": false,
+              "condition_confirmed": null,
+              "condition_text": "Respuesta 1 o 2 y conducta riesgosa declarada",
+              "numeric_met": false,
+              "qualitative_confirmed": false,
+              "immediate_action": "Detener plan automatizado y solicitar evaluación profesional.",
+              "referral": "Profesional de salud o salud mental según conducta.",
+              "override_applied": null
+            },
+            "rule_id": "D-CUE-25",
+            "source": "MATRIX",
+            "reason": "D-CUE-25 evaluado. Clausula numerica no cumplida."
+          }
+        ]
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:AUD-MEN-01",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-MEN-01"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:AUD-MEN-02",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-MEN-02"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:AUD-MEN-03",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-MEN-03"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:AUD-MEN-04",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-MEN-04"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:AUD-REL-01",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-REL-01"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:AUD-REL-02",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-REL-02"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:AUD-REL-03",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-REL-03"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:AUD-REL-04",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-REL-04"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:AUD-FIN-01",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-FIN-01"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:AUD-FIN-02",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-FIN-02"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:AUD-FIN-03",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-FIN-03"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:AUD-FIN-04",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-FIN-04"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:AUD-CUE-01",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-CUE-01"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:AUD-CUE-02",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-CUE-02"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:AUD-CUE-03",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-CUE-03"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:AUD-CUE-04",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-CUE-04"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-01",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-01"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-02",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-02"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-03",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-03"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-04",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-04"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-05",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-05"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-06",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-06"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-07",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-07"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-08",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-08"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-09",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-09"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-10",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-10"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-11",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-11"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-12",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-12"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-13",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-13"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-14",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-14"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-15",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-15"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-16",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-16"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-17",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-17"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-18",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-18"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-19",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-19"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-MEN-20",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-MEN-20"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-01",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-01"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-02",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-02"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-03",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-03"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-04",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-04"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-05",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-05"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-06",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-06"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-07",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-07"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-08",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-08"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-09",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-09"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-10",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-10"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-11",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-11"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-12",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-12"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-13",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-13"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-14",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-14"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-16",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-16"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-17",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-17"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-18",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-18"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-19",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-19"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-REL-20",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-REL-20"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-01",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-01"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-02",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-02"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-03",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-03"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-04",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-04"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-05",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-05"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-06",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-06"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-07",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-07"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-08",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-08"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-10",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-10"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-11",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-11"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-12",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-12"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-13",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-13"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-14",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-14"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-15",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-15"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-16",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-16"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-17",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-17"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-18",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-18"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-19",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-19"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-FIN-20",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-FIN-20"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-07",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-07"
+          }
+        ],
+        "output": {
+          "rawValue": null,
+          "score": null,
+          "reason": "SKIPPED_BY_USER"
+        },
+        "rule_id": "LAB-NORM-01",
+        "source": "DATA_GAP",
+        "reason": "D-CUE-07 no tiene mapa de escala. Fuera de numerador y denominador."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-08",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-08"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-09",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-09"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-10",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-10"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-11",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-11"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-12",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-12"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-13",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-13"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-14",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-14"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-15",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-15"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-16",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-16"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-17",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-17"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-18",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-18"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-19",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-19"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-20",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-20"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-21",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-21"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-22",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-22"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-23",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-23"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:D-CUE-24",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-24"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-021",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-021"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-022",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-022"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-023",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-023"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-024",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-024"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-025",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-025"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-026",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-026"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-02",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-027",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-027"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-02",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-028",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-028"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-02",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-029",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-029"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-02",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-030",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-030"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-02",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-031",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-031"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-032",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-032"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-033",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-033"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-034",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-034"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-035",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-035"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-071",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-071"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-072",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-072"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-073",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-073"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-074",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-074"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-075",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-075"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "NORMALIZE_ITEM",
+        "node_id": "normalize:P-PRO-076",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "P-PRO-076"
+          }
+        ],
+        "output": {
+          "rawValue": 3,
+          "score": 50,
+          "reason": null
+        },
+        "rule_id": "R-SCORE-01",
+        "source": "MATRIX",
+        "reason": "Valor 3 se normaliza a 50."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:MEN.direccion_e_identidad",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-MEN-01"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-01"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-02"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-03"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-04"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-05"
+          }
+        ],
+        "output": {
+          "key": "MEN.direccion_e_identidad",
+          "domain": "MENTALIDAD",
+          "score": 50,
+          "score_display": 50,
+          "items_scored": 6,
+          "items_scoreable": 6,
+          "coverage": 1,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "MEN.direccion_e_identidad media ponderada de 6 items."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:MEN.autorregulacion_y_resiliencia",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-MEN-02"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-06"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-07"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-08"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-09"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-10"
+          }
+        ],
+        "output": {
+          "key": "MEN.autorregulacion_y_resiliencia",
+          "domain": "MENTALIDAD",
+          "score": 50,
+          "score_display": 50,
+          "items_scored": 6,
+          "items_scoreable": 6,
+          "coverage": 1,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "MEN.autorregulacion_y_resiliencia media ponderada de 6 items."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:MEN.foco_y_ejecucion",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-MEN-03"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-11"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-12"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-13"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-14"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-15"
+          }
+        ],
+        "output": {
+          "key": "MEN.foco_y_ejecucion",
+          "domain": "MENTALIDAD",
+          "score": 50,
+          "score_display": 50,
+          "items_scored": 6,
+          "items_scoreable": 6,
+          "coverage": 1,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "MEN.foco_y_ejecucion media ponderada de 6 items."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:MEN.aprendizaje_y_decisiones",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-MEN-04"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-16"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-17"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-18"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-19"
+          },
+          {
+            "kind": "question",
+            "id": "D-MEN-20"
+          }
+        ],
+        "output": {
+          "key": "MEN.aprendizaje_y_decisiones",
+          "domain": "MENTALIDAD",
+          "score": 50,
+          "score_display": 50,
+          "items_scored": 6,
+          "items_scoreable": 6,
+          "coverage": 1,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "MEN.aprendizaje_y_decisiones media ponderada de 6 items."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:REL.conexion_y_apoyo",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-REL-01"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-01"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-02"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-03"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-04"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-05"
+          }
+        ],
+        "output": {
+          "key": "REL.conexion_y_apoyo",
+          "domain": "RELACIONES",
+          "score": 50,
+          "score_display": 50,
+          "items_scored": 6,
+          "items_scoreable": 6,
+          "coverage": 1,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "REL.conexion_y_apoyo media ponderada de 6 items."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:REL.comunicacion",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-REL-02"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-06"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-07"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-08"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-09"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-10"
+          }
+        ],
+        "output": {
+          "key": "REL.comunicacion",
+          "domain": "RELACIONES",
+          "score": 50,
+          "score_display": 50,
+          "items_scored": 6,
+          "items_scoreable": 6,
+          "coverage": 1,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "REL.comunicacion media ponderada de 6 items."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:REL.limites_y_conflicto",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-REL-03"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-11"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-12"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-13"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-14"
+          }
+        ],
+        "output": {
+          "key": "REL.limites_y_conflicto",
+          "domain": "RELACIONES",
+          "score": 50,
+          "score_display": 50,
+          "items_scored": 5,
+          "items_scoreable": 5,
+          "coverage": 1,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "REL.limites_y_conflicto media ponderada de 5 items."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:REL.reciprocidad_comunidad_y_liderazgo",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-REL-04"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-16"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-17"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-18"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-19"
+          },
+          {
+            "kind": "question",
+            "id": "D-REL-20"
+          }
+        ],
+        "output": {
+          "key": "REL.reciprocidad_comunidad_y_liderazgo",
+          "domain": "RELACIONES",
+          "score": 50,
+          "score_display": 50,
+          "items_scored": 6,
+          "items_scoreable": 6,
+          "coverage": 1,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "REL.reciprocidad_comunidad_y_liderazgo media ponderada de 6 items."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:FIN.flujo_y_suficiencia",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-FIN-01"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-01"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-02"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-03"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-04"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-05"
+          }
+        ],
+        "output": {
+          "key": "FIN.flujo_y_suficiencia",
+          "domain": "FINANZAS",
+          "score": 50,
+          "score_display": 50,
+          "items_scored": 6,
+          "items_scoreable": 6,
+          "coverage": 1,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "FIN.flujo_y_suficiencia media ponderada de 6 items."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:FIN.deuda_y_obligaciones",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-FIN-02"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-06"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-07"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-08"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-10"
+          }
+        ],
+        "output": {
+          "key": "FIN.deuda_y_obligaciones",
+          "domain": "FINANZAS",
+          "score": 50,
+          "score_display": 50,
+          "items_scored": 5,
+          "items_scoreable": 5,
+          "coverage": 1,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "FIN.deuda_y_obligaciones media ponderada de 5 items."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:FIN.ahorro_y_respaldo",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-FIN-03"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-11"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-12"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-13"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-14"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-15"
+          }
+        ],
+        "output": {
+          "key": "FIN.ahorro_y_respaldo",
+          "domain": "FINANZAS",
+          "score": 50,
+          "score_display": 50,
+          "items_scored": 6,
+          "items_scoreable": 6,
+          "coverage": 1,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "FIN.ahorro_y_respaldo media ponderada de 6 items."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:FIN.inversion_y_generacion_de_valor",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-FIN-04"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-16"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-17"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-18"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-19"
+          },
+          {
+            "kind": "question",
+            "id": "D-FIN-20"
+          }
+        ],
+        "output": {
+          "key": "FIN.inversion_y_generacion_de_valor",
+          "domain": "FINANZAS",
+          "score": 50,
+          "score_display": 50,
+          "items_scored": 6,
+          "items_scoreable": 6,
+          "coverage": 1,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "FIN.inversion_y_generacion_de_valor media ponderada de 6 items."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:CUE.seguridad_y_restricciones",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-CUE-01"
+          }
+        ],
+        "output": {
+          "key": "CUE.seguridad_y_restricciones",
+          "domain": "CUERPO",
+          "score": 50,
+          "score_display": 50,
+          "items_scored": 1,
+          "items_scoreable": 1,
+          "coverage": 1,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "CUE.seguridad_y_restricciones media ponderada de 1 items."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:CUE.sueno_y_recuperacion",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-CUE-02"
+          },
+          {
+            "kind": "question",
+            "id": "D-CUE-08"
+          },
+          {
+            "kind": "question",
+            "id": "D-CUE-09"
+          },
+          {
+            "kind": "question",
+            "id": "D-CUE-10"
+          },
+          {
+            "kind": "question",
+            "id": "D-CUE-11"
+          }
+        ],
+        "output": {
+          "key": "CUE.sueno_y_recuperacion",
+          "domain": "CUERPO",
+          "score": 50,
+          "score_display": 50,
+          "items_scored": 5,
+          "items_scoreable": 5,
+          "coverage": 1,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "CUE.sueno_y_recuperacion media ponderada de 5 items."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:CUE.alimentacion_e_hidratacion",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-CUE-03"
+          },
+          {
+            "kind": "question",
+            "id": "D-CUE-12"
+          },
+          {
+            "kind": "question",
+            "id": "D-CUE-13"
+          },
+          {
+            "kind": "question",
+            "id": "D-CUE-14"
+          },
+          {
+            "kind": "question",
+            "id": "D-CUE-15"
+          },
+          {
+            "kind": "question",
+            "id": "D-CUE-16"
+          }
+        ],
+        "output": {
+          "key": "CUE.alimentacion_e_hidratacion",
+          "domain": "CUERPO",
+          "score": 50,
+          "score_display": 50,
+          "items_scored": 6,
+          "items_scoreable": 6,
+          "coverage": 1,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "CUE.alimentacion_e_hidratacion media ponderada de 6 items."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:CUE.movimiento_y_entrenamiento",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "AUD-CUE-04"
+          },
+          {
+            "kind": "question",
+            "id": "D-CUE-17"
+          },
+          {
+            "kind": "question",
+            "id": "D-CUE-18"
+          },
+          {
+            "kind": "question",
+            "id": "D-CUE-19"
+          },
+          {
+            "kind": "question",
+            "id": "D-CUE-20"
+          },
+          {
+            "kind": "question",
+            "id": "D-CUE-21"
+          }
+        ],
+        "output": {
+          "key": "CUE.movimiento_y_entrenamiento",
+          "domain": "CUERPO",
+          "score": 50,
+          "score_display": 50,
+          "items_scored": 6,
+          "items_scoreable": 6,
+          "coverage": 1,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "CUE.movimiento_y_entrenamiento media ponderada de 6 items."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:CUE.autoimagen_y_relacion_corporal",
+        "inputs": [
+          {
+            "kind": "question",
+            "id": "D-CUE-22"
+          },
+          {
+            "kind": "question",
+            "id": "D-CUE-23"
+          },
+          {
+            "kind": "question",
+            "id": "D-CUE-24"
+          }
+        ],
+        "output": {
+          "key": "CUE.autoimagen_y_relacion_corporal",
+          "domain": "CUERPO",
+          "score": 50,
+          "score_display": 50,
+          "items_scored": 3,
+          "items_scoreable": 3,
+          "coverage": 1,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "CUE.autoimagen_y_relacion_corporal media ponderada de 3 items."
+      },
+      {
+        "step": "DIMENSION_SCORE",
+        "node_id": "dimension:CUE.objetivo_y_condiciones",
+        "inputs": [],
+        "output": {
+          "key": "CUE.objetivo_y_condiciones",
+          "domain": "CUERPO",
+          "score": null,
+          "score_display": null,
+          "items_scored": 0,
+          "items_scoreable": 0,
+          "coverage": 0,
+          "inverse": false
+        },
+        "rule_id": "R-SCORE-03",
+        "source": "MATRIX",
+        "reason": "CUE.objetivo_y_condiciones sin items puntuados. El score no es cero."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:MEN.direccion_e_identidad",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "MEN.direccion_e_identidad"
+          }
+        ],
+        "output": {
+          "coverage": 1
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension MEN.direccion_e_identidad expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:MEN.autorregulacion_y_resiliencia",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "MEN.autorregulacion_y_resiliencia"
+          }
+        ],
+        "output": {
+          "coverage": 1
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension MEN.autorregulacion_y_resiliencia expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:MEN.foco_y_ejecucion",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "MEN.foco_y_ejecucion"
+          }
+        ],
+        "output": {
+          "coverage": 1
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension MEN.foco_y_ejecucion expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:MEN.aprendizaje_y_decisiones",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "MEN.aprendizaje_y_decisiones"
+          }
+        ],
+        "output": {
+          "coverage": 1
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension MEN.aprendizaje_y_decisiones expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:REL.conexion_y_apoyo",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "REL.conexion_y_apoyo"
+          }
+        ],
+        "output": {
+          "coverage": 1
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension REL.conexion_y_apoyo expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:REL.comunicacion",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "REL.comunicacion"
+          }
+        ],
+        "output": {
+          "coverage": 1
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension REL.comunicacion expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:REL.limites_y_conflicto",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "REL.limites_y_conflicto"
+          }
+        ],
+        "output": {
+          "coverage": 1
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension REL.limites_y_conflicto expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:REL.reciprocidad_comunidad_y_liderazgo",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "REL.reciprocidad_comunidad_y_liderazgo"
+          }
+        ],
+        "output": {
+          "coverage": 1
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension REL.reciprocidad_comunidad_y_liderazgo expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:FIN.flujo_y_suficiencia",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "FIN.flujo_y_suficiencia"
+          }
+        ],
+        "output": {
+          "coverage": 1
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension FIN.flujo_y_suficiencia expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:FIN.deuda_y_obligaciones",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "FIN.deuda_y_obligaciones"
+          }
+        ],
+        "output": {
+          "coverage": 1
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension FIN.deuda_y_obligaciones expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:FIN.ahorro_y_respaldo",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "FIN.ahorro_y_respaldo"
+          }
+        ],
+        "output": {
+          "coverage": 1
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension FIN.ahorro_y_respaldo expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:FIN.inversion_y_generacion_de_valor",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "FIN.inversion_y_generacion_de_valor"
+          }
+        ],
+        "output": {
+          "coverage": 1
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension FIN.inversion_y_generacion_de_valor expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:CUE.seguridad_y_restricciones",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "CUE.seguridad_y_restricciones"
+          }
+        ],
+        "output": {
+          "coverage": 1
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension CUE.seguridad_y_restricciones expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:CUE.sueno_y_recuperacion",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "CUE.sueno_y_recuperacion"
+          }
+        ],
+        "output": {
+          "coverage": 1
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension CUE.sueno_y_recuperacion expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:CUE.alimentacion_e_hidratacion",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "CUE.alimentacion_e_hidratacion"
+          }
+        ],
+        "output": {
+          "coverage": 1
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension CUE.alimentacion_e_hidratacion expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:CUE.movimiento_y_entrenamiento",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "CUE.movimiento_y_entrenamiento"
+          }
+        ],
+        "output": {
+          "coverage": 1
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension CUE.movimiento_y_entrenamiento expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:CUE.autoimagen_y_relacion_corporal",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "CUE.autoimagen_y_relacion_corporal"
+          }
+        ],
+        "output": {
+          "coverage": 1
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension CUE.autoimagen_y_relacion_corporal expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "dimension_coverage:CUE.objetivo_y_condiciones",
+        "inputs": [
+          {
+            "kind": "dimension",
+            "id": "CUE.objetivo_y_condiciones"
+          }
+        ],
+        "output": {
+          "coverage": 0
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Cobertura de dimension CUE.objetivo_y_condiciones expuesta. No bloquea clasificacion."
+      },
+      {
+        "step": "DIMENSION_COVERAGE",
+        "node_id": "critical_dimensions",
+        "inputs": [],
+        "output": {
+          "critical_dimensions": "NOT_APPLICABLE"
+        },
+        "rule_id": "LAB-COV-02",
+        "source": "NOT_APPLICABLE",
+        "reason": "No hay marcador de dimension critica en la matriz. La cobertura por dimension no bloquea."
+      },
+      {
+        "step": "DOMAIN_COVERAGE",
+        "node_id": "coverage:MENTALIDAD",
+        "inputs": [
+          {
+            "kind": "domain",
+            "id": "MENTALIDAD"
+          }
+        ],
+        "output": {
+          "coverage_definition": 1,
+          "coverage_served": 1,
+          "classification": "INTERPRETABLE"
+        },
+        "rule_id": "R-MISS-01",
+        "source": "MATRIX",
+        "reason": "MENTALIDAD cobertura de definicion 1 (INTERPRETABLE). Denominador independiente de la politica."
+      },
+      {
+        "step": "DOMAIN_SCORE",
+        "node_id": "domain_score:MENTALIDAD",
+        "inputs": [
+          {
+            "kind": "node",
+            "id": "dimension:MEN.direccion_e_identidad"
+          },
+          {
+            "kind": "node",
+            "id": "dimension:MEN.autorregulacion_y_resiliencia"
+          },
+          {
+            "kind": "node",
+            "id": "dimension:MEN.foco_y_ejecucion"
+          },
+          {
+            "kind": "node",
+            "id": "dimension:MEN.aprendizaje_y_decisiones"
+          }
+        ],
+        "output": {
+          "score": 50,
+          "aggregation": "DIMENSION_EQUAL",
+          "counterfactual_item_weighted": 50
+        },
+        "rule_id": "LAB-SCORE-01",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "MENTALIDAD media igual por dimension. Contrafactual por item: 50."
+      },
+      {
+        "step": "STATE_BAND",
+        "node_id": "state:MENTALIDAD",
+        "inputs": [
+          {
+            "kind": "node",
+            "id": "domain_score:MENTALIDAD"
+          }
+        ],
+        "output": {
+          "state_from_band": "ESTABILIZACIÓN",
+          "score_display": 50,
+          "distance_to_band_edge": 10
+        },
+        "rule_id": "R-STATE-02",
+        "source": "MATRIX",
+        "reason": "MENTALIDAD banda sobre score_display 50: ESTABILIZACIÓN."
+      },
+      {
+        "step": "OVERRIDE",
+        "node_id": "override:MENTALIDAD",
+        "inputs": [
+          {
+            "kind": "node",
+            "id": "state:MENTALIDAD"
+          },
+          {
+            "kind": "node",
+            "id": "safety"
+          }
+        ],
+        "output": {
+          "state_final": "ESTABILIZACIÓN",
+          "state_source": "BAND",
+          "state_rule_id": "R-STATE-02"
+        },
+        "rule_id": "R-OVR-01",
+        "source": "MATRIX",
+        "reason": "MENTALIDAD sin override de safety."
+      },
+      {
+        "step": "DOMAIN_COVERAGE",
+        "node_id": "coverage:RELACIONES",
+        "inputs": [
+          {
+            "kind": "domain",
+            "id": "RELACIONES"
+          }
+        ],
+        "output": {
+          "coverage_definition": 1,
+          "coverage_served": 1,
+          "classification": "INTERPRETABLE"
+        },
+        "rule_id": "R-MISS-01",
+        "source": "MATRIX",
+        "reason": "RELACIONES cobertura de definicion 1 (INTERPRETABLE). Denominador independiente de la politica."
+      },
+      {
+        "step": "DOMAIN_SCORE",
+        "node_id": "domain_score:RELACIONES",
+        "inputs": [
+          {
+            "kind": "node",
+            "id": "dimension:REL.conexion_y_apoyo"
+          },
+          {
+            "kind": "node",
+            "id": "dimension:REL.comunicacion"
+          },
+          {
+            "kind": "node",
+            "id": "dimension:REL.limites_y_conflicto"
+          },
+          {
+            "kind": "node",
+            "id": "dimension:REL.reciprocidad_comunidad_y_liderazgo"
+          }
+        ],
+        "output": {
+          "score": 50,
+          "aggregation": "DIMENSION_EQUAL",
+          "counterfactual_item_weighted": 50
+        },
+        "rule_id": "LAB-SCORE-01",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "RELACIONES media igual por dimension. Contrafactual por item: 50."
+      },
+      {
+        "step": "STATE_BAND",
+        "node_id": "state:RELACIONES",
+        "inputs": [
+          {
+            "kind": "node",
+            "id": "domain_score:RELACIONES"
+          }
+        ],
+        "output": {
+          "state_from_band": "ESTABILIZACIÓN",
+          "score_display": 50,
+          "distance_to_band_edge": 10
+        },
+        "rule_id": "R-STATE-02",
+        "source": "MATRIX",
+        "reason": "RELACIONES banda sobre score_display 50: ESTABILIZACIÓN."
+      },
+      {
+        "step": "OVERRIDE",
+        "node_id": "override:RELACIONES",
+        "inputs": [
+          {
+            "kind": "node",
+            "id": "state:RELACIONES"
+          },
+          {
+            "kind": "node",
+            "id": "safety"
+          }
+        ],
+        "output": {
+          "state_final": "ESTABILIZACIÓN",
+          "state_source": "BAND",
+          "state_rule_id": "R-STATE-02"
+        },
+        "rule_id": "R-OVR-01",
+        "source": "MATRIX",
+        "reason": "RELACIONES sin override de safety."
+      },
+      {
+        "step": "DOMAIN_COVERAGE",
+        "node_id": "coverage:FINANZAS",
+        "inputs": [
+          {
+            "kind": "domain",
+            "id": "FINANZAS"
+          }
+        ],
+        "output": {
+          "coverage_definition": 1,
+          "coverage_served": 1,
+          "classification": "INTERPRETABLE"
+        },
+        "rule_id": "R-MISS-01",
+        "source": "MATRIX",
+        "reason": "FINANZAS cobertura de definicion 1 (INTERPRETABLE). Denominador independiente de la politica."
+      },
+      {
+        "step": "DOMAIN_SCORE",
+        "node_id": "domain_score:FINANZAS",
+        "inputs": [
+          {
+            "kind": "node",
+            "id": "dimension:FIN.flujo_y_suficiencia"
+          },
+          {
+            "kind": "node",
+            "id": "dimension:FIN.deuda_y_obligaciones"
+          },
+          {
+            "kind": "node",
+            "id": "dimension:FIN.ahorro_y_respaldo"
+          },
+          {
+            "kind": "node",
+            "id": "dimension:FIN.inversion_y_generacion_de_valor"
+          }
+        ],
+        "output": {
+          "score": 50,
+          "aggregation": "DIMENSION_EQUAL",
+          "counterfactual_item_weighted": 50
+        },
+        "rule_id": "LAB-SCORE-01",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "FINANZAS media igual por dimension. Contrafactual por item: 50."
+      },
+      {
+        "step": "STATE_BAND",
+        "node_id": "state:FINANZAS",
+        "inputs": [
+          {
+            "kind": "node",
+            "id": "domain_score:FINANZAS"
+          }
+        ],
+        "output": {
+          "state_from_band": "ESTABILIZACIÓN",
+          "score_display": 50,
+          "distance_to_band_edge": 10
+        },
+        "rule_id": "R-STATE-02",
+        "source": "MATRIX",
+        "reason": "FINANZAS banda sobre score_display 50: ESTABILIZACIÓN."
+      },
+      {
+        "step": "OVERRIDE",
+        "node_id": "override:FINANZAS",
+        "inputs": [
+          {
+            "kind": "node",
+            "id": "state:FINANZAS"
+          },
+          {
+            "kind": "node",
+            "id": "safety"
+          }
+        ],
+        "output": {
+          "state_final": "ESTABILIZACIÓN",
+          "state_source": "BAND",
+          "state_rule_id": "R-STATE-02"
+        },
+        "rule_id": "R-OVR-01",
+        "source": "MATRIX",
+        "reason": "FINANZAS sin override de safety."
+      },
+      {
+        "step": "DOMAIN_COVERAGE",
+        "node_id": "coverage:CUERPO",
+        "inputs": [
+          {
+            "kind": "domain",
+            "id": "CUERPO"
+          }
+        ],
+        "output": {
+          "coverage_definition": 1,
+          "coverage_served": 1,
+          "classification": "INTERPRETABLE"
+        },
+        "rule_id": "R-MISS-01",
+        "source": "MATRIX",
+        "reason": "CUERPO cobertura de definicion 1 (INTERPRETABLE). Denominador independiente de la politica."
+      },
+      {
+        "step": "DOMAIN_SCORE",
+        "node_id": "domain_score:CUERPO",
+        "inputs": [
+          {
+            "kind": "node",
+            "id": "dimension:CUE.seguridad_y_restricciones"
+          },
+          {
+            "kind": "node",
+            "id": "dimension:CUE.sueno_y_recuperacion"
+          },
+          {
+            "kind": "node",
+            "id": "dimension:CUE.alimentacion_e_hidratacion"
+          },
+          {
+            "kind": "node",
+            "id": "dimension:CUE.movimiento_y_entrenamiento"
+          },
+          {
+            "kind": "node",
+            "id": "dimension:CUE.autoimagen_y_relacion_corporal"
+          },
+          {
+            "kind": "node",
+            "id": "dimension:CUE.objetivo_y_condiciones"
+          }
+        ],
+        "output": {
+          "score": 50,
+          "aggregation": "DIMENSION_EQUAL",
+          "counterfactual_item_weighted": 50
+        },
+        "rule_id": "LAB-SCORE-01",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "CUERPO media igual por dimension. Contrafactual por item: 50."
+      },
+      {
+        "step": "STATE_BAND",
+        "node_id": "state:CUERPO",
+        "inputs": [
+          {
+            "kind": "node",
+            "id": "domain_score:CUERPO"
+          }
+        ],
+        "output": {
+          "state_from_band": "ESTABILIZACIÓN",
+          "score_display": 50,
+          "distance_to_band_edge": 10
+        },
+        "rule_id": "R-STATE-02",
+        "source": "MATRIX",
+        "reason": "CUERPO banda sobre score_display 50: ESTABILIZACIÓN."
+      },
+      {
+        "step": "OVERRIDE",
+        "node_id": "override:CUERPO",
+        "inputs": [
+          {
+            "kind": "node",
+            "id": "state:CUERPO"
+          },
+          {
+            "kind": "node",
+            "id": "safety"
+          }
+        ],
+        "output": {
+          "state_final": "ESTABILIZACIÓN",
+          "state_source": "BAND",
+          "state_rule_id": "R-STATE-02"
+        },
+        "rule_id": "R-OVR-01",
+        "source": "MATRIX",
+        "reason": "CUERPO sin override de safety."
+      },
+      {
+        "step": "DOMAIN_SCORE",
+        "node_id": "purpose",
+        "inputs": [],
+        "output": {
+          "domain_score": null,
+          "not_applicable_reason": "LAB-PURPOSE-01",
+          "stage": null,
+          "stage_reason": "R-PUR-01..04 NOT_APPLICABLE",
+          "dimension_scores": [
+            {
+              "key": "PRO.historia_y_linaje",
+              "score": null,
+              "score_display": null,
+              "coverage": 0
+            },
+            {
+              "key": "PRO.vision",
+              "score": null,
+              "score_display": null,
+              "coverage": 0
+            },
+            {
+              "key": "PRO.valores",
+              "score": null,
+              "score_display": null,
+              "coverage": 0
+            },
+            {
+              "key": "PRO.estandares",
+              "score": null,
+              "score_display": null,
+              "coverage": 0
+            },
+            {
+              "key": "PRO.identidad",
+              "score": 50,
+              "score_display": 50,
+              "coverage": 1
+            },
+            {
+              "key": "PRO.interferencia",
+              "score": 50,
+              "score_display": 50,
+              "coverage": 1
+            },
+            {
+              "key": "PRO.integracion",
+              "score": 50,
+              "score_display": 50,
+              "coverage": 1
+            },
+            {
+              "key": "PRO.tendencia_apertura",
+              "score": null,
+              "score_display": null,
+              "coverage": 0
+            },
+            {
+              "key": "PRO.tendencia_organizacion",
+              "score": null,
+              "score_display": null,
+              "coverage": 0
+            },
+            {
+              "key": "PRO.tendencia_energia_social",
+              "score": null,
+              "score_display": null,
+              "coverage": 0
+            },
+            {
+              "key": "PRO.tendencia_cooperacion",
+              "score": null,
+              "score_display": null,
+              "coverage": 0
+            },
+            {
+              "key": "PRO.tendencia_sensibilidad_al_estres",
+              "score": null,
+              "score_display": null,
+              "coverage": 0
+            },
+            {
+              "key": "PRO.ikigai_pasion",
+              "score": null,
+              "score_display": null,
+              "coverage": 0
+            },
+            {
+              "key": "PRO.ikigai_capacidad",
+              "score": null,
+              "score_display": null,
+              "coverage": 0
+            },
+            {
+              "key": "PRO.ikigai_necesidad",
+              "score": null,
+              "score_display": null,
+              "coverage": 0
+            },
+            {
+              "key": "PRO.ikigai_valor_economico",
+              "score": null,
+              "score_display": null,
+              "coverage": 0
+            },
+            {
+              "key": "PRO.hipotesis_disfrute_sostenible",
+              "score": 50,
+              "score_display": 50,
+              "coverage": 1
+            },
+            {
+              "key": "PRO.hipotesis_capacidad_demostrable",
+              "score": 50,
+              "score_display": 50,
+              "coverage": 1
+            },
+            {
+              "key": "PRO.hipotesis_utilidad_real",
+              "score": 50,
+              "score_display": 50,
+              "coverage": 1
+            },
+            {
+              "key": "PRO.hipotesis_valor_economico",
+              "score": 50,
+              "score_display": 50,
+              "coverage": 1
+            },
+            {
+              "key": "PRO.hipotesis_coherencia_moral",
+              "score": 50,
+              "score_display": 50,
+              "coverage": 1
+            },
+            {
+              "key": "PRO.hipotesis_factibilidad",
+              "score": 50,
+              "score_display": 50,
+              "coverage": 1
+            },
+            {
+              "key": "PRO.huella",
+              "score": null,
+              "score_display": null,
+              "coverage": 0
+            }
+          ]
+        },
+        "rule_id": "LAB-PURPOSE-01",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "PROPÓSITO no tiene score de ambito, estado ni plan. Se reportan dimensiones. No entra a prioridad.",
+        "children": [
+          {
+            "step": "DOMAIN_SCORE",
+            "node_id": "purpose:not_applicable",
+            "inputs": [],
+            "output": {
+              "rules": [
+                "R-PUR-01",
+                "R-PUR-02",
+                "R-PUR-03",
+                "R-PUR-04"
+              ]
+            },
+            "rule_id": "R-PUR-01",
+            "source": "NOT_APPLICABLE",
+            "reason": "R-PUR no es ejecutable. Sin umbrales ni inputs operativos."
+          }
+        ]
+      },
+      {
+        "step": "PRIORITY",
+        "node_id": "priority",
+        "inputs": [],
+        "output": {
+          "priority": {
+            "domain": "MENTALIDAD",
+            "tier": "STATE",
+            "rule_id": "LAB-PRIORITY-01",
+            "reason": null,
+            "candidates": [
+              {
+                "domain": "MENTALIDAD",
+                "tier": "STATE",
+                "state": "ESTABILIZACIÓN",
+                "score_display": 50,
+                "classified": true
+              },
+              {
+                "domain": "CUERPO",
+                "tier": "STATE",
+                "state": "ESTABILIZACIÓN",
+                "score_display": 50,
+                "classified": true
+              },
+              {
+                "domain": "FINANZAS",
+                "tier": "STATE",
+                "state": "ESTABILIZACIÓN",
+                "score_display": 50,
+                "classified": true
+              },
+              {
+                "domain": "RELACIONES",
+                "tier": "STATE",
+                "state": "ESTABILIZACIÓN",
+                "score_display": 50,
+                "classified": true
+              }
+            ],
+            "criteria_not_evaluated": [
+              {
+                "criterion": "deterioro",
+                "reason": "requiere dos mediciones"
+              },
+              {
+                "criterion": "palanca",
+                "reason": "sin modelo de datos"
+              },
+              {
+                "criterion": "proposito",
+                "reason": "R-PUR no ejecutable"
+              }
+            ],
+            "purpose_excluded": true,
+            "purpose_note": "PROPÓSITO no participa en la prioridad de v0 porque la matriz todavía no define cómo hacerlo (R-PUR no ejecutable, sin planes de propósito). Esto no significa que MK concluya que este ámbito importe más que el propósito."
+          },
+          "maintenance": {
+            "domain": "CUERPO",
+            "rule_id": "LAB-PRIORITY-02"
+          }
+        },
+        "rule_id": "LAB-PRIORITY-01",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Prioridad MENTALIDAD por STATE bajo LAB-PRIORITY-01. PROPÓSITO no participa en la prioridad de v0 porque la matriz todavía no define cómo hacerlo (R-PUR no ejecutable, sin planes de propósito). Esto no significa que MK concluya que este ámbito importe más que el propósito."
+      },
+      {
+        "step": "RECOMMENDATION",
+        "node_id": "recommendation",
+        "inputs": [],
+        "output": {
+          "primary": {
+            "domain": "MENTALIDAD",
+            "plan_id": "MEN-EST",
+            "label": "MATRIX RECOMMENDATION",
+            "objectives": [
+              "MEN-EST-O1",
+              "MEN-EST-O2",
+              "MEN-EST-O3"
+            ],
+            "activities": [
+              "MEN-EST-O1-A1",
+              "MEN-EST-O1-A2",
+              "MEN-EST-O2-A1",
+              "MEN-EST-O2-A2",
+              "MEN-EST-O3-A1",
+              "MEN-EST-O3-A2"
+            ],
+            "catalog_lookup": true,
+            "executable_recommendation": "ALLOWED",
+            "blocked_reason": null,
+            "derivation_required": false,
+            "activities_unfiltered_warning": false
+          },
+          "maintenance": {
+            "domain": "CUERPO",
+            "plan_id": "CUE-EST",
+            "label": "MATRIX RECOMMENDATION",
+            "objectives": [
+              "CUE-EST-O1",
+              "CUE-EST-O2",
+              "CUE-EST-O3"
+            ],
+            "activities": [
+              "CUE-EST-O1-A1",
+              "CUE-EST-O1-A2",
+              "CUE-EST-O2-A1",
+              "CUE-EST-O2-A2",
+              "CUE-EST-O3-A1",
+              "CUE-EST-O3-A2"
+            ],
+            "catalog_lookup": true,
+            "executable_recommendation": "ALLOWED",
+            "blocked_reason": null,
+            "derivation_required": false,
+            "activities_unfiltered_warning": false
+          },
+          "catalog_lookup": [
+            {
+              "domain": "RELACIONES",
+              "plan_id": "REL-EST",
+              "label": "MATRIX RECOMMENDATION",
+              "objectives": [
+                "REL-EST-O1",
+                "REL-EST-O2",
+                "REL-EST-O3"
+              ],
+              "activities": [
+                "REL-EST-O1-A1",
+                "REL-EST-O1-A2",
+                "REL-EST-O2-A1",
+                "REL-EST-O2-A2",
+                "REL-EST-O3-A1",
+                "REL-EST-O3-A2"
+              ],
+              "catalog_lookup": true,
+              "executable_recommendation": "ALLOWED",
+              "blocked_reason": null,
+              "derivation_required": false,
+              "activities_unfiltered_warning": false
+            },
+            {
+              "domain": "FINANZAS",
+              "plan_id": "FIN-EST",
+              "label": "MATRIX RECOMMENDATION",
+              "objectives": [
+                "FIN-EST-O1",
+                "FIN-EST-O2",
+                "FIN-EST-O3"
+              ],
+              "activities": [
+                "FIN-EST-O1-A1",
+                "FIN-EST-O1-A2",
+                "FIN-EST-O2-A1",
+                "FIN-EST-O2-A2",
+                "FIN-EST-O3-A1",
+                "FIN-EST-O3-A2"
+              ],
+              "catalog_lookup": true,
+              "executable_recommendation": "ALLOWED",
+              "blocked_reason": null,
+              "derivation_required": false,
+              "activities_unfiltered_warning": false
+            }
+          ]
+        },
+        "rule_id": "LAB-RECO-01",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Plan MEN-EST por lookup de catalogo. Etiqueta MATRIX RECOMMENDATION.",
+        "children": [
+          {
+            "step": "RECOMMENDATION",
+            "node_id": "recommendation:primary",
+            "inputs": [],
+            "output": {
+              "domain": "MENTALIDAD",
+              "plan_id": "MEN-EST",
+              "label": "MATRIX RECOMMENDATION",
+              "objectives": [
+                "MEN-EST-O1",
+                "MEN-EST-O2",
+                "MEN-EST-O3"
+              ],
+              "activities": [
+                "MEN-EST-O1-A1",
+                "MEN-EST-O1-A2",
+                "MEN-EST-O2-A1",
+                "MEN-EST-O2-A2",
+                "MEN-EST-O3-A1",
+                "MEN-EST-O3-A2"
+              ],
+              "catalog_lookup": true,
+              "executable_recommendation": "ALLOWED",
+              "blocked_reason": null,
+              "derivation_required": false,
+              "activities_unfiltered_warning": false
+            },
+            "rule_id": "LAB-RECO-01",
+            "source": "LAB_INTERPRETATION_v0",
+            "reason": "Recomendacion principal MEN-EST."
+          },
+          {
+            "step": "RECOMMENDATION",
+            "node_id": "recommendation:maintenance",
+            "inputs": [],
+            "output": {
+              "domain": "CUERPO",
+              "plan_id": "CUE-EST",
+              "label": "MATRIX RECOMMENDATION",
+              "objectives": [
+                "CUE-EST-O1",
+                "CUE-EST-O2",
+                "CUE-EST-O3"
+              ],
+              "activities": [
+                "CUE-EST-O1-A1",
+                "CUE-EST-O1-A2",
+                "CUE-EST-O2-A1",
+                "CUE-EST-O2-A2",
+                "CUE-EST-O3-A1",
+                "CUE-EST-O3-A2"
+              ],
+              "catalog_lookup": true,
+              "executable_recommendation": "ALLOWED",
+              "blocked_reason": null,
+              "derivation_required": false,
+              "activities_unfiltered_warning": false
+            },
+            "rule_id": "LAB-PRIORITY-02",
+            "source": "LAB_INTERPRETATION_v0",
+            "reason": "Mantenimiento CUERPO."
+          }
+        ]
+      },
+      {
+        "step": "GLOBAL",
+        "node_id": "global",
+        "inputs": [],
+        "output": {
+          "average": 50,
+          "narrative_only": true,
+          "label": null
+        },
+        "rule_id": "LAB-GLOBAL-01",
+        "source": "LAB_INTERPRETATION_v0",
+        "reason": "Promedio de ambitos clasificados. Solo narrativo. Sin etiqueta global.",
+        "children": [
+          {
+            "step": "GLOBAL",
+            "node_id": "global:label",
+            "inputs": [],
+            "output": {
+              "label": null,
+              "rule": "R-GLOB-02"
+            },
+            "rule_id": "R-GLOB-02",
+            "source": "NOT_APPLICABLE",
+            "reason": "R-GLOB-02 nombra etiquetas sin formula. No se implementa."
+          }
+        ]
+      }
+    ]
+  },
+  "engine_warnings": []
+}

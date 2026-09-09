@@ -1,0 +1,26 @@
+{
+  "name": "@mk/matrix-engine",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "matrix:import": "tsx src/cli/import.ts",
+    "matrix:case": "tsx src/cli/case.ts",
+    "matrix:goldens": "tsx scripts/write-goldens.ts",
+    "matrix:rafa-casebook": "tsx scripts/build-rafa-casebook.ts"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.21",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

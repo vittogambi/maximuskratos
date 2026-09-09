@@ -32,7 +32,6 @@ model User {
   passwordResetTokens PasswordResetToken[]
   diagnosticSession   DiagnosticSession?
   masterProfile       MasterProfile?
-  userAchievements    UserAchievement[]
 
   @@map("users")
 }
@@ -146,25 +145,6 @@ enum ModuleStatus {
   COMPLETE
 }
 
-enum AlertSeverity {
-  LOW
-  MEDIUM
-  HIGH
-  CRITICAL
-}
-
-enum AlertType {
-  ALTO_AUTOENGANO
-  INCONGRUENCIA_NARRATIVA
-  RIESGO_FINANCIERO
-  RIESGO_ABANDONO
-  FALTA_PROPOSITO
-  ENTORNO_TOXICO
-  BAJA_EJECUCION
-  SOBRECONFIANZA
-  RESPUESTAS_INCONSISTENTES
-}
-
 model DiagnosticVersion {
   id          String             @id @default(uuid())
   version     String             @unique
@@ -172,7 +152,6 @@ model DiagnosticVersion {
   publishedAt DateTime?          @map("published_at")
   createdAt   DateTime           @default(now()) @map("created_at")
   modules     DiagnosticModule[]
-  rules       Rule[]
   sessions    DiagnosticSession[]
 
   @@map("diagnostic_versions")
@@ -251,10 +230,7 @@ model DiagnosticSession {
   responses       Response[]
   moduleProgress  UserModuleProgress[]
   snapshots       ScoreSnapshot[]
-  alerts          AdminAlert[]
   events          DiagnosticEvent[]
-  discoveries     Discovery[]
-  seeds           RecommendationSeed[]
   profile         MasterProfile?
 
   @@map("diagnostic_sessions")
@@ -312,45 +288,6 @@ model ScoreSnapshot {
   @@map("score_snapshots")
 }
 
-model Rule {
-  id          String            @id @default(uuid())
-  versionId   String            @map("version_id")
-  version     DiagnosticVersion @relation(fields: [versionId], references: [id])
-  slug        String
-  phase       DiagnosticPhase?
-  trigger     String
-  conditions  Json
-  actions     Json
-  priority    Int               @default(100)
-  isActive    Boolean           @default(true) @map("is_active")
-  description String?
-
-  @@unique([versionId, slug])
-  @@index([phase])
-  @@map("rules")
-}
-
-model AdminAlert {
-  id             String            @id @default(uuid())
-  sessionId      String            @map("session_id")
-  session        DiagnosticSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  type           AlertType
-  severity       AlertSeverity
-  motivo         String
-  evidencia      Json
-  accionSugerida String            @map("accion_sugerida")
-  isRead         Boolean           @default(false) @map("is_read")
-  isActioned     Boolean           @default(false) @map("is_actioned")
-  actionNote     String?           @map("action_note")
-  createdAt      DateTime          @default(now()) @map("created_at")
-  resolvedAt     DateTime?         @map("resolved_at")
-
-  @@index([sessionId])
-  @@index([severity])
-  @@index([isRead])
-  @@map("admin_alerts")
-}
-
 model DiagnosticEvent {
   id        String            @id @default(uuid())
   sessionId String            @map("session_id")
@@ -363,45 +300,6 @@ model DiagnosticEvent {
   @@index([type])
   @@index([createdAt])
   @@map("diagnostic_events")
-}
-
-model Discovery {
-  id           String            @id @default(uuid())
-  sessionId    String            @map("session_id")
-  session      DiagnosticSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  moduleId     String            @map("module_id")
-  dimensionKey String            @map("dimension_key")
-  textEs       String            @map("text_es")
-  templateSlug String            @map("template_slug")
-  seenAt       DateTime?         @map("seen_at")
-  createdAt    DateTime          @default(now()) @map("created_at")
-
-  @@index([sessionId])
-  @@map("discoveries")
-}
-
-model Achievement {
-  id              String            @id @default(uuid())
-  slug            String            @unique
-  titleEs         String            @map("title_es")
-  descriptionEs   String            @map("description_es")
-  iconKey         String?           @map("icon_key")
-  unlockCondition Json              @map("unlock_condition")
-  userAchievements UserAchievement[]
-
-  @@map("achievements")
-}
-
-model UserAchievement {
-  id            String      @id @default(uuid())
-  userId        String      @map("user_id")
-  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  achievementId String      @map("achievement_id")
-  achievement   Achievement @relation(fields: [achievementId], references: [id])
-  unlockedAt    DateTime    @default(now()) @map("unlocked_at")
-
-  @@unique([userId, achievementId])
-  @@map("user_achievements")
 }
 
 model MasterProfile {
@@ -429,17 +327,553 @@ model MasterProfile {
   @@map("master_profiles")
 }
 
-model RecommendationSeed {
-  id           String            @id @default(uuid())
-  sessionId    String            @map("session_id")
-  session      DiagnosticSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  category     String
-  dimensionKey String            @map("dimension_key")
-  priority     Int
-  payload      Json
-  consumed     Boolean           @default(false)
-  createdAt    DateTime          @default(now()) @map("created_at")
+enum LabDefinitionStatus {
+  CANDIDATE
+  ACCEPTED_CANDIDATE
+  REJECTED
+  PUBLISHED
+}
 
-  @@index([sessionId])
-  @@map("recommendation_seeds")
+enum LabCaseKind {
+  REAL
+  SYNTHETIC
+  SELF
+  IMPORTED
+  SIMULATION
+}
+
+enum LabRunKind {
+  ORIGINAL
+  POLICY
+  REPLAY
+  WHAT_IF
+}
+
+enum LabRunStatus {
+  COLLECTING
+  AWAITING_EXPECTATION
+  REVEALED
+  FAILED
+}
+
+enum LabChangeSetStatus {
+  OPEN
+  MATERIALIZED
+  REPLAYED
+  ACCEPTED
+  REJECTED
+}
+
+enum ExperienceDefinitionStatus {
+  CANDIDATE
+  ACCEPTED_CANDIDATE
+  REJECTED
+  PUBLISHED
+}
+
+model LabDefinition {
+  id                 String              @id @default(uuid())
+  definitionId       String              @map("definition_id")
+  revision           Int
+  definitionRef      String              @unique @map("definition_ref")
+  definitionSha256   String              @map("definition_sha256")
+  sourceSha256       String              @map("source_sha256")
+  status             LabDefinitionStatus
+  payload            Json
+  baseDefinitionRef  String?             @map("base_definition_ref")
+  changesetId        String?             @map("changeset_id")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  runs               LabRun[]
+  workspaces         LabDefinitionWorkspace[] @relation("WorkspaceBase")
+  changeSetsAsBase   LabChangeSet[]      @relation("ChangeSetBase")
+  changeSetsAsTarget LabChangeSet[]      @relation("ChangeSetTarget")
+
+  @@unique([definitionId, revision])
+  @@index([definitionSha256])
+  @@map("lab_definitions")
+}
+
+model LabDefinitionWorkspace {
+  id                String         @id @default(uuid())
+  baseDefinitionRef String         @map("base_definition_ref")
+  base              LabDefinition  @relation("WorkspaceBase", fields: [baseDefinitionRef], references: [definitionRef])
+  pendingOperations Json           @default("[]") @map("pending_operations")
+  createdBy         String         @map("created_by")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+  changeSets        LabChangeSet[]
+
+  @@map("lab_definition_workspaces")
+}
+
+model LabChangeSet {
+  id                    String             @id @default(uuid())
+  number                Int
+  workspaceId           String             @map("workspace_id")
+  workspace             LabDefinitionWorkspace @relation(fields: [workspaceId], references: [id])
+  baseDefinitionRef     String             @map("base_definition_ref")
+  base                  LabDefinition      @relation("ChangeSetBase", fields: [baseDefinitionRef], references: [definitionRef])
+  baseDefinitionSha256  String             @map("base_definition_sha256")
+  targetDefinitionRef   String?            @unique @map("target_definition_ref")
+  target                LabDefinition?     @relation("ChangeSetTarget", fields: [targetDefinitionRef], references: [definitionRef])
+  targetDefinitionSha256 String?           @map("target_definition_sha256")
+  operations            Json
+  reason                String
+  relatedCaseIds        String[]           @map("related_case_ids")
+  relatedRunIds         String[]           @map("related_run_ids")
+  relatedReviewIds      String[]           @map("related_review_ids")
+  findingId             String?            @map("finding_id")
+  finding               LabFinding?        @relation(fields: [findingId], references: [id])
+  unmotivated           Boolean            @default(false)
+  status                LabChangeSetStatus @default(OPEN)
+  createdBy             String             @map("created_by")
+  createdAt             DateTime           @default(now()) @map("created_at")
+  replays               LabReplayRun[]
+
+  @@map("lab_changesets")
+}
+
+model LabCase {
+  id                String      @id @default(uuid())
+  label             String
+  kind              LabCaseKind
+  blind             Boolean     @default(true)
+  expertContext     String?     @map("expert_context")
+  fixtureKey        String?     @map("fixture_key")
+  casebookKey       String?     @map("casebook_key")
+  derivedFromCaseId String?     @map("derived_from_case_id")
+  derivedFrom       LabCase?    @relation("CaseDerivation", fields: [derivedFromCaseId], references: [id])
+  derivedCases      LabCase[]   @relation("CaseDerivation")
+  createdBy         String      @map("created_by")
+  createdAt         DateTime    @default(now()) @map("created_at")
+  archivedAt        DateTime?   @map("archived_at")
+  runs              LabRun[]
+  directions        DirectionVersion[]
+  productReviews    ProductReview[]
+  findings          LabFindingCase[]
+  observations      LabQuestionObservation[]
+
+  @@index([kind])
+  @@index([derivedFromCaseId])
+  @@map("lab_cases")
+}
+
+model LabRun {
+  id                String       @id @default(uuid())
+  caseId            String       @map("case_id")
+  case              LabCase      @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  kind              LabRunKind   @default(ORIGINAL)
+  sourceRunId       String?      @map("source_run_id")
+  definitionRef     String       @map("definition_ref")
+  definition        LabDefinition @relation(fields: [definitionRef], references: [definitionRef])
+  definitionSha256  String       @map("definition_sha256")
+  sourceSha256      String       @map("source_sha256")
+  engineSemver      String       @map("engine_semver")
+  policyId          String       @map("policy_id")
+  status            LabRunStatus @default(COLLECTING)
+  responsesHash     String?      @map("responses_hash")
+  snapshot          Json?
+  frozenAt          DateTime?    @map("frozen_at")
+  revealedAt        DateTime?    @map("revealed_at")
+  skippedExpectation Boolean     @default(false) @map("skipped_expectation")
+  startedAt         DateTime     @default(now()) @map("started_at")
+  directionReading  Json?        @map("direction_reading")
+  directionMethodologyVersion String? @map("direction_methodology_version")
+  responses         LabResponse[]
+  expectations      LabExpectation[]
+  reviews           LabReview[]
+  safetyAssessments LabSafetyAssessment[]
+  purposeAssessments LabExpertPurposeAssessment[]
+  projections       ExperienceProjectionRecord[]
+  replayResults     LabReplayResult[]
+  observations      LabQuestionObservation[]
+
+  @@index([caseId])
+  @@index([definitionRef])
+  @@map("lab_runs")
+}
+
+model LabResponse {
+  id                    String   @id @default(uuid())
+  runId                 String   @map("run_id")
+  run                   LabRun   @relation(fields: [runId], references: [id], onDelete: Cascade)
+  questionId            String   @map("question_id")
+  status                String
+  rawValue              String?  @map("raw_value")
+  valueKind             String   @map("value_kind")
+  qualitativeConfirmed  Boolean? @map("qualitative_confirmed")
+  source                String
+  answeredAt            DateTime @default(now()) @map("answered_at")
+  latencyMs             Int?     @map("latency_ms")
+
+  @@unique([runId, questionId])
+  @@map("lab_responses")
+}
+
+model LabExpectation {
+  id                     String   @id @default(uuid())
+  runId                  String   @map("run_id")
+  run                    LabRun   @relation(fields: [runId], references: [id], onDelete: Cascade)
+  revision               Int
+  expectedStates         Json     @map("expected_states")
+  expectedPriorityDomain String   @map("expected_priority_domain")
+  expectedPlanId         String?  @map("expected_plan_id")
+  expectedPlanFreeText   String?  @map("expected_plan_free_text")
+  expectedAlerts         String[] @map("expected_alerts")
+  expectedPurposeStage   String   @map("expected_purpose_stage")
+  confidence             String
+  notes                  String?
+  // LAB-ONLY open reading captured before the MK categories. Never reaches the engine,
+  // never enters the definition, never changes a snapshot.
+  openWhatIsHappening    String?  @map("open_what_is_happening")
+  openMainConcern        String?  @map("open_main_concern")
+  openFirstFocus         String?  @map("open_first_focus")
+  openFirstAction        String?  @map("open_first_action")
+  // Structured personal decision. LAB ONLY. Not the Matrix prediction.
+  personalFirstDomain    String?  @map("personal_first_domain")
+  submittedAt            DateTime @default(now()) @map("submitted_at")
+  submittedBy            String   @map("submitted_by")
+
+  @@unique([runId, revision])
+  @@map("lab_expectations")
+}
+
+model LabReview {
+  id                      String   @id @default(uuid())
+  runId                   String   @map("run_id")
+  run                     LabRun   @relation(fields: [runId], references: [id], onDelete: Cascade)
+  revision                Int
+  verdicts                Json
+  firstWrongLayer         String?  @map("first_wrong_layer")
+  rootCauseCodes          String[] @map("root_cause_codes")
+  // LAB-ONLY: responses Rafa considered decisive. Not read by the engine.
+  evidenceRefs            String[] @default([]) @map("evidence_refs")
+  notes                   String?
+  recommendedPlanId       String?  @map("recommended_plan_id")
+  postRevealStates        Json?    @map("post_reveal_states")
+  postRevealPriorityDomain String? @map("post_reveal_priority_domain")
+  noMethodologicalProblem Boolean  @default(false) @map("no_methodological_problem")
+  caseVerdict             String?  @map("case_verdict")
+  familyVerdicts          Json     @default("{}") @map("family_verdicts")
+  hypothesis              String?
+  disposition             String?
+  linkedFindingId         String?  @map("linked_finding_id")
+  doubtedRules            String[] @default([]) @map("doubted_rules")
+  submittedAt             DateTime @default(now()) @map("submitted_at")
+  submittedBy             String   @map("submitted_by")
+
+  @@unique([runId, revision])
+  @@map("lab_reviews")
+}
+
+model LabSafetyAssessment {
+  id          String   @id @default(uuid())
+  runId       String   @map("run_id")
+  run         LabRun   @relation(fields: [runId], references: [id], onDelete: Cascade)
+  questionId  String   @map("question_id")
+  verdict     String
+  notes       String?
+  submittedAt DateTime @default(now()) @map("submitted_at")
+  submittedBy String   @map("submitted_by")
+
+  @@index([runId, questionId])
+  @@map("lab_safety_assessments")
+}
+
+model LabExpertPurposeAssessment {
+  id          String   @id @default(uuid())
+  runId       String   @map("run_id")
+  run         LabRun   @relation(fields: [runId], references: [id], onDelete: Cascade)
+  revision    Int
+  stage       String
+  evidenceRefs String[] @map("evidence_refs")
+  confidence  String
+  notes       String?
+  submittedAt DateTime @default(now()) @map("submitted_at")
+  submittedBy String   @map("submitted_by")
+
+  @@unique([runId, revision])
+  @@map("lab_expert_purpose_assessments")
+}
+
+model LabReplayRun {
+  id                   String        @id @default(uuid())
+  changesetId          String        @map("changeset_id")
+  changeset            LabChangeSet  @relation(fields: [changesetId], references: [id])
+  baseDefinitionRef    String        @map("base_definition_ref")
+  candidateDefinitionRef String      @map("candidate_definition_ref")
+  status               String        @default("COMPLETE")
+  createdBy            String        @map("created_by")
+  createdAt            DateTime      @default(now()) @map("created_at")
+  results              LabReplayResult[]
+
+  @@map("lab_replay_runs")
+}
+
+model LabReplayResult {
+  id                String       @id @default(uuid())
+  replayRunId       String       @map("replay_run_id")
+  replay            LabReplayRun @relation(fields: [replayRunId], references: [id], onDelete: Cascade)
+  sourceRunId       String       @map("source_run_id")
+  sourceRun         LabRun       @relation(fields: [sourceRunId], references: [id])
+  baseSnapshot      Json         @map("base_snapshot")
+  candidateSnapshot Json         @map("candidate_snapshot")
+  flags             Json
+  attribution       String
+  verdict           String?
+  verdictBy         String?      @map("verdict_by")
+  verdictAt         DateTime?    @map("verdict_at")
+
+  @@unique([replayRunId, sourceRunId])
+  @@map("lab_replay_results")
+}
+
+model ExperienceDefinition {
+  id             String                     @id @default(uuid())
+  experienceId   String                     @map("experience_id")
+  revision       Int
+  experienceRef  String                     @unique @map("experience_ref")
+  sha256         String
+  status         ExperienceDefinitionStatus
+  payload        Json
+  createdAt      DateTime                   @default(now()) @map("created_at")
+  projections    ExperienceProjectionRecord[]
+
+  @@unique([experienceId, revision])
+  @@map("experience_definitions")
+}
+
+model DirectionVersion {
+  id            String   @id @default(uuid())
+  caseId        String   @map("case_id")
+  case          LabCase  @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  revision      Int
+  statement     String
+  status        String
+  evidenceRefs  String[] @map("evidence_refs")
+  confidence    String?
+  source        String
+  supersedesId  String?  @map("supersedes_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@unique([caseId, revision])
+  @@map("direction_versions")
+}
+
+model ExperienceProjectionRecord {
+  id                    String               @id @default(uuid())
+  runId                 String               @map("run_id")
+  run                   LabRun               @relation(fields: [runId], references: [id], onDelete: Cascade)
+  experienceRef         String               @map("experience_ref")
+  experience            ExperienceDefinition @relation(fields: [experienceRef], references: [experienceRef])
+  experienceSha256      String               @map("experience_sha256")
+  projection            Json
+  createdAt             DateTime             @default(now()) @map("created_at")
+
+  @@index([runId])
+  @@map("experience_projection_records")
+}
+
+model ProductReview {
+  id                    String   @id @default(uuid())
+  caseId                String   @map("case_id")
+  case                  LabCase  @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  runId                 String   @map("run_id")
+  revision              Int
+  verdicts              Json
+  purposeFeels          String   @map("purpose_feels")
+  stillMk               String   @map("still_mk")
+  firstProductDivergence String  @map("first_product_divergence")
+  whatWouldChange       String?  @map("what_would_change")
+  whatWasMissing        String?  @map("what_was_missing")
+  submittedAt           DateTime @default(now()) @map("submitted_at")
+  submittedBy           String   @map("submitted_by")
+
+  @@unique([runId, revision])
+  @@map("product_reviews")
+}
+
+model LabFinding {
+  id                   String   @id @default(uuid())
+  number               Int      @unique
+  title                String
+  summary              String
+  layer                String
+  severity             String
+  status               String
+  hypothesis           String?
+  currentBehavior      String   @map("current_behavior")
+  rafaExpectedBehavior String   @map("rafa_expected_behavior")
+  relatedRules         String[] @map("related_rules")
+  evidenceIds          String[] @map("evidence_ids")
+  decision             String?
+  decisionReason       String?  @map("decision_reason")
+  createdBy            String   @map("created_by")
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+  contentChangeRequired Boolean  @default(false) @map("content_change_required")
+  cases                 LabFindingCase[]
+  changeSets            LabChangeSet[]
+  consistencies         LabFindingConsistency[]
+  observations          LabQuestionObservation[]
+
+  @@map("lab_findings")
+}
+
+model LabQuestionObservation {
+  id         String      @id @default(uuid())
+  questionId String      @map("question_id")
+  caseId     String?     @map("case_id")
+  case       LabCase?    @relation(fields: [caseId], references: [id], onDelete: SetNull)
+  runId      String?     @map("run_id")
+  run        LabRun?     @relation(fields: [runId], references: [id], onDelete: SetNull)
+  reviewer   String
+  issueTypes String[]    @map("issue_types")
+  note       String
+  proposal   String?
+  aspects    Json?
+  proposedWording String? @map("proposed_wording")
+  kind       String      @default("CONTENT")
+  suggestedOperation Json? @map("suggested_operation")
+  fidelity   Json?
+  status     String      @default("PENDING")
+  findingId  String?     @map("finding_id")
+  finding    LabFinding? @relation(fields: [findingId], references: [id], onDelete: SetNull)
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @updatedAt @map("updated_at")
+
+  @@index([questionId])
+  @@index([caseId])
+  @@index([findingId])
+  @@map("lab_question_observations")
+}
+
+model LabFindingCase {
+  findingId       String     @map("finding_id")
+  caseId          String     @map("case_id")
+  finding         LabFinding @relation(fields: [findingId], references: [id], onDelete: Cascade)
+  case            LabCase    @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  supportsFinding String?    @map("supports_finding")
+  rafaCriterion   String?    @map("rafa_criterion")
+  matrixResult    String?    @map("matrix_result")
+  difference      String?
+
+  @@id([findingId, caseId])
+  @@map("lab_finding_cases")
+}
+
+model LabFindingConsistency {
+  id               String     @id @default(uuid())
+  findingId        String     @map("finding_id")
+  finding          LabFinding @relation(fields: [findingId], references: [id], onDelete: Cascade)
+  acceptedCaseKey  String     @map("accepted_case_key")
+  rejectedCaseKey  String     @map("rejected_case_key")
+  answer           String?
+  notes            String?
+  createdAt        DateTime   @default(now()) @map("created_at")
+
+  @@map("lab_finding_consistencies")
+}
+
+model LabWorkSession {
+  id                             String    @id @default(uuid())
+  title                          String    @default("Sesión con Rafa")
+  casebookKeys                   String[]  @map("casebook_keys")
+  closeObservationBeforeChanges  Boolean   @default(true) @map("close_observation_before_changes")
+  createdBy                      String    @map("created_by")
+  createdAt                      DateTime  @default(now()) @map("created_at")
+  closedAt                       DateTime? @map("closed_at")
+  summary                        Json?
+
+  @@index([createdBy, closedAt])
+  @@map("lab_work_sessions")
+}
+
+model LabMigrationDecision {
+  id          String   @id
+  rafaVerdict String?  @map("rafa_verdict")
+  rafaNote    String?  @map("rafa_note")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("lab_migration_decisions")
+}
+
+model LabReadinessDecision {
+  id            String   @id @default(uuid())
+  candidateRef  String   @map("candidate_ref")
+  decision      String
+  note          String?
+  decidedBy     String   @map("decided_by")
+  decidedAt     DateTime @default(now()) @map("decided_at")
+
+  @@map("lab_readiness_decisions")
+}
+
+enum IkigaiDefinitionStatus {
+  DRAFT
+  PUBLISHED
+  RETIRED
+}
+
+enum IkigaiSessionStatus {
+  NEW
+  IN_PROGRESS
+  COMPLETED
+  FOLLOW_UP
+  ARCHIVED
+}
+
+model IkigaiDefinition {
+  id           String                 @id @default(uuid())
+  definitionId String                 @map("definition_id")
+  revision     Int
+  ref          String                 @unique
+  status       IkigaiDefinitionStatus @default(DRAFT)
+  sha256       String
+  engineMin    String                 @map("engine_min")
+  payload      Json
+  publishedAt  DateTime?              @map("published_at")
+  createdAt    DateTime               @default(now()) @map("created_at")
+  sessions     IkigaiSession[]
+
+  @@unique([definitionId, revision])
+  @@index([status])
+  @@map("ikigai_definitions")
+}
+
+model IkigaiSession {
+  id             String              @id @default(uuid())
+  definitionId   String              @map("definition_id")
+  definition     IkigaiDefinition    @relation(fields: [definitionId], references: [id])
+  tokenHash      String?             @unique @map("token_hash")
+  status         IkigaiSessionStatus @default(NEW)
+  currentStep    String              @default("PASION") @map("current_step")
+  draftVersion   Int                 @default(0) @map("draft_version")
+  draft          Json
+  source         Json?
+  startedAt      DateTime            @default(now()) @map("started_at")
+  lastActivityAt DateTime            @default(now()) @map("last_activity_at")
+  completedAt    DateTime?           @map("completed_at")
+  createdAt      DateTime            @default(now()) @map("created_at")
+  updatedAt      DateTime            @updatedAt @map("updated_at")
+  snapshots      IkigaiResultSnapshot[]
+
+  @@index([status, lastActivityAt])
+  @@index([definitionId])
+  @@map("ikigai_sessions")
+}
+
+model IkigaiResultSnapshot {
+  id            String        @id @default(uuid())
+  sessionId     String        @map("session_id")
+  session       IkigaiSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  revision      Int
+  definitionRef String        @map("definition_ref")
+  engineVersion String        @map("engine_version")
+  sha256        String
+  payload       Json
+  createdAt     DateTime      @default(now()) @map("created_at")
+
+  @@unique([sessionId, revision])
+  @@map("ikigai_result_snapshots")
 }

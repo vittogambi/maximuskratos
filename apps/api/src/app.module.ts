@@ -18,6 +18,8 @@ import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
 import { BillingModule } from './billing/billing.module';
 import { DiagnosticModule } from './diagnostic/diagnostic.module';
+import { LabModule } from './lab/lab.module';
+import { IkigaiModule } from './ikigai/ikigai.module';
 import { HealthController } from './health/health.controller';
 import { LeadsModule } from './leads/leads.module';
 import { MailModule } from './mail/mail.module';
@@ -49,6 +51,8 @@ import { PrismaModule } from './prisma/prisma.module';
     AdminModule,
     BillingModule,
     DiagnosticModule,
+    LabModule,
+    IkigaiModule,
   ],
   controllers: [HealthController],
   providers: [

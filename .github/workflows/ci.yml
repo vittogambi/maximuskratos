@@ -48,11 +48,30 @@ jobs:
       - name: Run migrations
         run: npm run db:migrate:deploy
 
-      - name: Build database package
-        run: npm run build -w @mk/database
+      - name: Seed database
+        run: npm run db:seed
+
+      - name: Build internal packages
+        run: |
+          npm run build -w @mk/database
+          npm run build -w @mk/matrix-engine
+          npm run build -w @mk/experience-engine
+          npm run build -w @mk/ikigai-engine
+
+      - name: Test engines
+        run: |
+          npm run test -w @mk/matrix-engine
+          npm run test -w @mk/experience-engine
+          npm run test -w @mk/ikigai-engine
+
+      - name: Test API
+        run: npm run test -w @mk/api
 
       - name: Build API
         run: npm run build -w @mk/api
+
+      - name: Test web
+        run: npm run test -w @mk/web
 
       - name: Build web
         run: npm run build -w @mk/web

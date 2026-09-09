@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build -w @mk/database && npm run build -w @mk/api && npm run build -w @mk/web",
+    "build": "npm run build -w @mk/database && npm run build -w @mk/matrix-engine && npm run build -w @mk/experience-engine && npm run build -w @mk/ikigai-engine && npm run build -w @mk/api && npm run build -w @mk/web",
     "start": "sh scripts/start-api.sh",
     "start:api": "sh scripts/start-api.sh",
     "start:web": "npm run start -w @mk/web",
@@ -23,8 +23,12 @@
     "db:generate": "npm run generate -w @mk/database",
     "db:migrate": "npm run migrate:dev -w @mk/database",
     "db:migrate:deploy": "npm run migrate:deploy -w @mk/database",
-    "check:build": "npm run build -w @mk/database && npm run build -w @mk/api && npm run build -w @mk/web",
-    "prepare": "husky"
+    "check:build": "npm run build -w @mk/database && npm run build -w @mk/matrix-engine && npm run build -w @mk/experience-engine && npm run build -w @mk/ikigai-engine && npm run build -w @mk/api && npm run build -w @mk/web",
+    "test": "npm run test -w @mk/matrix-engine && npm run test -w @mk/experience-engine && npm run test -w @mk/ikigai-engine && npm run test -w @mk/api && npm run test -w @mk/web",
+    "matrix:import": "npm run matrix:import -w @mk/matrix-engine --",
+    "matrix:case": "npm run matrix:case -w @mk/matrix-engine --",
+    "prepare": "husky",
+    "lab:reset": "npm run lab:reset -w @mk/database"
   },
   "engines": {
     "node": ">=20"

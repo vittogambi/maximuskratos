@@ -11,9 +11,18 @@ dist
 *.log
 .DS_Store
 coverage
+!apps/web/app/admin/lab/coverage/
+!apps/web/app/admin/lab/coverage/**
 .turbo
 .cursor
 apps/api/dist
 apps/web/.next
 docs/
+_archive/
 presentation/
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+graft/
+
+# Browser QA output (screenshots + console report) from scripts/lab-ux-qa.mjs
+.qa/

@@ -6,6 +6,9 @@
         "npm install",
         "npm run db:generate",
         "npm run build -w @mk/database",
+        "npm run build -w @mk/matrix-engine",
+        "npm run build -w @mk/experience-engine",
+        "npm run build -w @mk/ikigai-engine",
         "npm run build -w @mk/api"
       ]
     }

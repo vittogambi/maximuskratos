@@ -6,17 +6,29 @@ import { useEffect, useLayoutEffect, useState, type ReactNode } from 'react';
 import { Logo } from '@/components/logo';
 import { AppIcon } from '@/components/app-icon';
 import { useAuthSession } from '@/components/auth-session-provider';
+import { UnsavedChangesProvider, useUnsavedChanges } from '@/components/admin/unsaved-changes';
+import { LabFlash } from '@/components/admin/lab/primitives';
 
 const NAV = [
   { href: '/admin', label: 'Resumen', icon: 'layout-dashboard', exact: true },
   { href: '/admin/users', label: 'Usuarios', icon: 'users' },
   { href: '/admin/leads', label: 'Leads', icon: 'mail' },
   { href: '/admin/planes', label: 'Planes', icon: 'layout-grid' },
+  { href: '/admin/lab', label: 'Laboratorio', icon: 'target' },
 ] as const;
 
 export function AdminShell({ children }: { children: ReactNode }) {
+  return (
+    <UnsavedChangesProvider>
+      <AdminShellInner>{children}</AdminShellInner>
+    </UnsavedChangesProvider>
+  );
+}
+
+function AdminShellInner({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
+  const { tryNavigate, tryLeave } = useUnsavedChanges();
   const { status, user, logout: sessionLogout } = useAuthSession();
   const [loggingOut, setLoggingOut] = useState(false);
 
@@ -39,12 +51,29 @@ export function AdminShell({ children }: { children: ReactNode }) {
 
   async function handleLogout() {
     if (loggingOut) return;
+    if (
+      !tryLeave(() => {
+        void runLogout();
+      })
+    ) {
+      return;
+    }
+    await runLogout();
+  }
+
+  async function runLogout() {
+    if (loggingOut) return;
     setLoggingOut(true);
     try {
       await sessionLogout();
     } finally {
       setLoggingOut(false);
     }
+  }
+
+  function guardClick(href: string, event: { preventDefault: () => void }) {
+    if (pathname === href) return;
+    if (!tryNavigate(href)) event.preventDefault();
   }
 
   if (status === 'guest') {
@@ -74,6 +103,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
             hideTagline
             mark="brand"
             className="admin-sidebar__logo"
+            onClick={(event) => guardClick('/admin', event)}
           />
         </div>
 
@@ -89,6 +119,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
                 href={item.href}
                 className={`admin-sidebar__link${active ? ' is-active' : ''}`}
                 aria-current={active ? 'page' : undefined}
+                onClick={(event) => guardClick(item.href, event)}
               >
                 <AppIcon name={item.icon} size={18} />
                 <span>{item.label}</span>
@@ -102,7 +133,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
             {email}
           </p>
           <div className="admin-sidebar__footer-actions">
-            <Link href="/" className="admin-sidebar__ghost">
+            <Link href="/" className="admin-sidebar__ghost" onClick={(event) => guardClick('/', event)}>
               <AppIcon name="globe" size={14} />
               Sitio
             </Link>
@@ -127,6 +158,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
             hideTagline
             mark="brand"
             className="admin-sidebar__logo"
+            onClick={(event) => guardClick('/admin', event)}
           />
           <nav className="admin-mobile-bar__tabs" aria-label="Admin móvil">
             {NAV.map((item) => {
@@ -139,6 +171,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
                   key={item.href}
                   href={item.href}
                   className={active ? 'is-active' : undefined}
+                  onClick={(event) => guardClick(item.href, event)}
                 >
                   {item.label}
                 </Link>
@@ -147,6 +180,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
           </nav>
         </header>
         <main className="admin-main">{children}</main>
+        <LabFlash />
       </div>
     </div>
   );

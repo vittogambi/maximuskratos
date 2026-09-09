@@ -10,7 +10,9 @@ import { LucideCalendar } from '@/components/icons/lucide/calendar';
 import { LucideCalendarCheck } from '@/components/icons/lucide/calendar-check';
 import { LucideCheck } from '@/components/icons/lucide/check';
 import { LucideChevronDown } from '@/components/icons/lucide/chevron-down';
+import { LucideCircle } from '@/components/icons/lucide/circle';
 import { LucideCircleCheck } from '@/components/icons/lucide/circle-check';
+import { LucideCircleDot } from '@/components/icons/lucide/circle-dot';
 import { LucideCircleX } from '@/components/icons/lucide/circle-x';
 import { LucideColumns } from '@/components/icons/lucide/columns';
 import { LucideCompass } from '@/components/icons/lucide/compass';
@@ -19,6 +21,7 @@ import { LucideCrown } from '@/components/icons/lucide/crown';
 import { LucideBrain } from '@/components/icons/lucide/brain';
 import { LucideDumbbell } from '@/components/icons/lucide/dumbbell';
 import { LucideDownload } from '@/components/icons/lucide/download';
+import { LucideFlag } from '@/components/icons/lucide/flag';
 import { LucideFlame } from '@/components/icons/lucide/flame';
 import { LucideExternalLink } from '@/components/icons/lucide/external-link';
 import { LucideEye } from '@/components/icons/lucide/eye';
@@ -32,6 +35,7 @@ import { LucideIkigai } from '@/components/icons/lucide/ikigai';
 import { LucideLaurelWreath } from '@/components/icons/lucide/laurel-wreath';
 import { LucideLayoutDashboard } from '@/components/icons/lucide/layout-dashboard';
 import { LucideLayoutGrid } from '@/components/icons/lucide/layout-grid';
+import { LucideLock } from '@/components/icons/lucide/lock';
 import { LucideLogOut } from '@/components/icons/lucide/log-out';
 import { LucideMail } from '@/components/icons/lucide/mail';
 import { LucideMailPlus } from '@/components/icons/lucide/mail-plus';
@@ -43,6 +47,7 @@ import { LucideScanEye } from '@/components/icons/lucide/scan-eye';
 import { LucideScanLine } from '@/components/icons/lucide/scan-line';
 import { LucideShadow } from '@/components/icons/lucide/shadow';
 import { LucideShield } from '@/components/icons/lucide/shield';
+import { LucideShieldAlert } from '@/components/icons/lucide/shield-alert';
 import { LucideSparkles } from '@/components/icons/lucide/sparkles';
 import { LucideStethoscope } from '@/components/icons/lucide/stethoscope';
 import { LucideSword } from '@/components/icons/lucide/sword';
@@ -73,7 +78,9 @@ export const ICON_REGISTRY = {
   'calendar-check': LucideCalendarCheck,
   check: LucideCheck,
   'chevron-down': LucideChevronDown,
+  circle: LucideCircle,
   'circle-check': LucideCircleCheck,
+  'circle-dot': LucideCircleDot,
   'circle-x': LucideCircleX,
   columns: LucideColumns,
   compass: LucideCompass,
@@ -82,6 +89,7 @@ export const ICON_REGISTRY = {
   brain: LucideBrain,
   dumbbell: LucideDumbbell,
   download: LucideDownload,
+  flag: LucideFlag,
   flame: LucideFlame,
   'external-link': LucideExternalLink,
   eye: LucideEye,
@@ -97,6 +105,7 @@ export const ICON_REGISTRY = {
   'layout-dashboard': LucideLayoutDashboard,
   'layout-grid': LucideLayoutGrid,
   linkedin: SocialLinkedin,
+  lock: LucideLock,
   'log-out': LucideLogOut,
   mail: LucideMail,
   'mail-plus': LucideMailPlus,
@@ -108,6 +117,7 @@ export const ICON_REGISTRY = {
   'scan-line': LucideScanLine,
   shadow: LucideShadow,
   shield: LucideShield,
+  'shield-alert': LucideShieldAlert,
   sparkles: LucideSparkles,
   stethoscope: LucideStethoscope,
   sword: LucideSword,

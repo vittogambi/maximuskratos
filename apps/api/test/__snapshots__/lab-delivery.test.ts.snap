@@ -1,0 +1,83 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LAB-041 deliveryReport sections > snapshots markdown with the 19 sections in order 1`] = `
+"## Versión candidata
+
+- matrix-v2.0@4
+
+## Casos revisados
+
+Nada registrado.
+
+## Casos propios
+
+Nada registrado.
+
+## Preguntas que están bien
+
+Nada registrado.
+
+## Preguntas a modificar
+
+Nada registrado.
+
+## Preguntas a eliminar
+
+Nada registrado.
+
+## Preguntas a agregar
+
+Nada registrado.
+
+## Puntajes y mapeo
+
+Nada registrado.
+
+## Pesos
+
+Nada registrado.
+
+## Dimensiones
+
+Nada registrado.
+
+## Cobertura
+
+Nada registrado.
+
+## Estados
+
+Nada registrado.
+
+## Alertas
+
+Nada registrado.
+
+## Ámbito prioritario
+
+Nada registrado.
+
+## Planes
+
+Nada registrado.
+
+## Limitaciones
+
+Nada registrado.
+
+## Hallazgos abiertos
+
+Nada registrado.
+
+## Regresiones
+
+Nada registrado.
+
+## Decisión de cierre
+
+Nada registrado.
+
+## Migraciones que no conservan la intención
+
+Nada registrado."
+`;

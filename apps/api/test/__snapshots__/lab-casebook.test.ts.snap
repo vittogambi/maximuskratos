@@ -1,0 +1,110 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PHASE 1 casebook blindness > snapshots the stories and test intents 1`] = `
+{
+  "R01": {
+    "story": "Ignacio respondió las preguntas cerradas y dejó casi vacías las preguntas abiertas. Revisa sus respuestas antes de registrar tu lectura.",
+    "testIntent": "Perfil completo con poca señal cualitativa",
+  },
+  "R02": {
+    "story": "El cuestionario de Felipe está completo en preguntas cerradas. Las abiertas tienen poco texto.",
+    "testIntent": "Resultado basado principalmente en respuestas cerradas",
+  },
+  "R03": {
+    "story": "El cuestionario de Rodrigo está completo. En sueño hay un número, sin texto abierto.",
+    "testIntent": "Respuestas abiertas poco interpretables",
+  },
+  "R04": {
+    "story": "Martín tiene el cuestionario completo. Incluye respuestas de Cuerpo sobre controles y energía al despertar.",
+    "testIntent": "Señal corporal moderada sin alarma clínica",
+  },
+  "R05": {
+    "story": "El cuestionario de Javier cubre Mentalidad, Relaciones, Finanzas y Cuerpo.",
+    "testIntent": "Caso controlado",
+  },
+  "R06": {
+    "story": "Nicolás tiene respuestas en todos los ámbitos.",
+    "testIntent": "Empate intermedio en un perfil estable",
+  },
+  "R07A": {
+    "story": "Este caso de Esteban comparte todas las respuestas con el otro, salvo una pregunta de Mentalidad.",
+    "testIntent": "Sensibilidad cerca de una frontera",
+  },
+  "R07B": {
+    "story": "Comparte las respuestas con el otro caso de Esteban, salvo esa misma pregunta de Mentalidad.",
+    "testIntent": "Sensibilidad cerca de una frontera",
+  },
+  "R08A": {
+    "story": "Diego y el otro caso de Diego comparten las respuestas, salvo una pregunta de Mentalidad.",
+    "testIntent": "Cambio de ámbito prioritario por una respuesta",
+  },
+  "R08B": {
+    "story": "Esta versión de Diego cambia solo esa pregunta de Mentalidad. El resto coincide con el otro caso.",
+    "testIntent": "Cambio de ámbito prioritario por una respuesta",
+  },
+  "R09A": {
+    "story": "Entre los dos casos de Cristóbal cambia una pregunta de Mentalidad. El resto coincide.",
+    "testIntent": "Estabilidad ante una variación menor",
+  },
+  "R09B": {
+    "story": "Esta versión de Cristóbal cambia esa misma pregunta de Mentalidad. El resto coincide con el otro caso.",
+    "testIntent": "Estabilidad ante una variación menor",
+  },
+  "R10": {
+    "story": "El cuestionario de Álvaro está incompleto. Hay respuestas en algunas secciones y otras quedaron vacías.",
+    "testIntent": "Cuestionario parcialmente completado",
+  },
+  "R11": {
+    "story": "El cuestionario de Pablo incluye una respuesta de dolor en el pecho, desmayo o falta de aire durante el esfuerzo.",
+    "testIntent": "Alerta que debe imponerse al cálculo",
+  },
+  "R11B": {
+    "story": "En Cuerpo, Ramiro dejó preguntas sin responder. Marcó dolor en el pecho, desmayo o falta de aire durante el esfuerzo.",
+    "testIntent": "Señal corporal grave con poco resto de Cuerpo",
+  },
+  "R12": {
+    "story": "Finanzas quedó incompleta. Hay una respuesta que indica que la deuda del mes no cubre gastos esenciales.",
+    "testIntent": "Ámbito incompleto con señal financiera crítica",
+  },
+  "R12B": {
+    "story": "Vicente respondió Finanzas por completo. Hay una respuesta que indica que la deuda del mes no cubre gastos esenciales.",
+    "testIntent": "Finanzas altas con techo por alerta",
+  },
+  "R13A": {
+    "story": "Camilo respondió el cuestionario completo. Hay un caso paralelo con las mismas categorías y otra combinación de respuestas.",
+    "testIntent": "Significado interno con un resumen similar",
+  },
+  "R13B": {
+    "story": "Este caso de Camilo usa las mismas categorías que el otro. Cambia la combinación de algunas respuestas.",
+    "testIntent": "Significado interno con un resumen similar",
+  },
+  "R14": {
+    "story": "El cuestionario de Sebastián incluye las preguntas cortas y las de detalle.",
+    "testIntent": "Lectura corta frente a evaluación completa",
+  },
+  "R15A": {
+    "story": "En esta versión, Benjamín habla de construir algo propio, estar más presente en casa y mejorar su situación financiera.",
+    "testIntent": "Dirección distinta, mismo diagnóstico",
+  },
+  "R15B": {
+    "story": "En esta versión, Benjamín pone más énfasis en su familia, la estabilidad y tener mayor disponibilidad en su día a día.",
+    "testIntent": "Dirección distinta, mismo diagnóstico",
+  },
+  "R16": {
+    "story": "El cuestionario de Tomás está completo. Incluye las preguntas de Relaciones.",
+    "testIntent": "Relaciones claramente más comprometidas",
+  },
+  "R17": {
+    "story": "Lucas tiene el cuestionario completo. Incluye las preguntas de Finanzas.",
+    "testIntent": "Finanzas claramente más comprometidas",
+  },
+  "R18": {
+    "story": "El cuestionario de Emilio está completo. Incluye las preguntas de Cuerpo y Finanzas.",
+    "testIntent": "Empate entre ámbitos de soporte",
+  },
+  "R19": {
+    "story": "Agustín tiene preguntas cortas y de detalle en el mismo cuestionario.",
+    "testIntent": "Lectura corta frente a evaluación completa",
+  },
+}
+`;
