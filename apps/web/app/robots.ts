@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: [
+        disallow: [
         '/admin',
         '/app',
         '/api',
@@ -20,6 +20,8 @@ export default function robots(): MetadataRoute.Robots {
         '/bienvenido',
         '/forgot-password',
         '/reset-password',
+        '/ikigai/empezar',
+        '/ikigai/s',
       ],
     },
     sitemap: `${baseUrl}/sitemap.xml`,

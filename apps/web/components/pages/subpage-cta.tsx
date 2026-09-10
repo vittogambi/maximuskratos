@@ -1,6 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import Link from 'next/link';
 import { AuthCta } from '@/components/auth-cta';
 import { ScrollStaggerContainer, StaggerItem } from '@/components/motion/stagger';
 import { MOTION_DISTANCE, MOTION_STAGGER } from '@/components/motion/tokens';
@@ -13,6 +14,7 @@ type SubpageCtaProps = {
   lead?: string;
   leadMobile?: string;
   ctaLabel?: string;
+  ctaHref?: string;
   className?: string;
   /** Contenido extra bajo el CTA (p. ej. link de retorno). */
   children?: ReactNode;
@@ -27,6 +29,7 @@ export function SubpageCta({
   lead = SUBPAGE_PRIMARY_CTA.lead,
   leadMobile,
   ctaLabel = LANDING_PRIMARY_CTA.labelAlt,
+  ctaHref,
   className,
   children,
 }: SubpageCtaProps) {
@@ -61,9 +64,15 @@ export function SubpageCta({
                 lead
               )}
             </p>
-            <AuthCta href={LANDING_PRIMARY_CTA.href} className="ag-btn-cta font-label-lg">
-              {ctaLabel}
-            </AuthCta>
+            {ctaHref ? (
+              <Link href={ctaHref} className="ag-btn-cta font-label-lg">
+                {ctaLabel}
+              </Link>
+            ) : (
+              <AuthCta href={LANDING_PRIMARY_CTA.href} className="ag-btn-cta font-label-lg">
+                {ctaLabel}
+              </AuthCta>
+            )}
           </StaggerItem>
           {children ? (
             <StaggerItem distance={MOTION_DISTANCE.sm}>{children}</StaggerItem>

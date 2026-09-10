@@ -9,7 +9,7 @@
   "examplesDisclaimer": "Los ejemplos solo muestran el tipo de respuesta. No necesitas elegir ninguno.",
   "hypothesis": {
     "label": "¿Qué dirección aparece al unir estas piezas?",
-    "help": "Mi propósito es poner mi [lo que te mueve] y mi [lo que puedes aportar] al servicio de [lo que vale la pena atender], generando valor a través de [lo que puede sostenerte].",
+    "help": "Escríbela con tus palabras. Es una hipótesis de dirección, no un propósito cerrado.",
     "examples": [
       "Ayudar a equipos pequeños a ordenar su forma de trabajar.",
       "Enseñar herramientas prácticas a personas que están empezando en algo que ya conozco bien.",
@@ -172,12 +172,12 @@
     },
     {
       "id": "T_FIELD_INTUITION_ONLY",
-      "enabled": true,
+      "enabled": false,
       "copy": "En {campo}, todo lo que anotaste está todavía por poner a prueba."
     },
     {
       "id": "T_HYP_WEAK_EVIDENCE",
-      "enabled": true,
+      "enabled": false,
       "copy": "Esta hipótesis se apoya principalmente en cosas que todavía no has puesto a prueba."
     },
     {

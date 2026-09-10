@@ -47,6 +47,7 @@ describe('ikigai-v0.1 definition', () => {
     expect(validateDefinition(definition)).toEqual([]);
     expect(definition.status).toBe('DRAFT');
     expect(JSON.stringify(definition)).not.toMatch(/TODO_RAFA|FIXME|purpose_score/);
+    expect(JSON.stringify(definition)).not.toMatch(/Mi propósito es/);
   });
 
   it('pins Matrix texts for the six criteria', () => {
@@ -72,6 +73,35 @@ describe('classifyEvidence', () => {
     expect(classifyEvidence('NO_PROBADO')).toBe('intuition');
     expect(classifyEvidence('DESCONOCIDO')).toBe('intuition');
     expect(classifyEvidence(null)).toBe('unmarked');
+  });
+});
+
+describe('result evidence buckets', () => {
+  it('does not treat unmarked items as intuition', () => {
+    const draft = baseDraft();
+    draft.items.PASION[0].evidence = null;
+    draft.hypotheses = [
+      {
+        id: 'h1',
+        text: 'Una dirección que quiero explorar es enseñar con sistemas.',
+        itemIds: ['p1', 'c1'],
+        criteria: {
+          DISFRUTE_SOSTENIBLE: 4,
+          CAPACIDAD_DEMOSTRABLE: 4,
+          UTILIDAD_REAL: 4,
+          VALOR_ECONOMICO: 4,
+          COHERENCIA_MORAL: 4,
+          FACTIBILIDAD: 4,
+        },
+        order: 0,
+      },
+    ];
+    const built = buildResult(definition, draft, '2026-01-01T00:00:00.000Z');
+    const pasion = built.material.fields.find((field) => field.key === 'PASION')?.items.find((row) => row.id === 'p1');
+    expect(pasion?.classification).toBe('unmarked');
+    const bucket = built.evidence.byHypothesis[0];
+    expect(bucket.backed.some((row) => row.id === 'p1')).toBe(false);
+    expect(bucket.intuition.some((row) => row.id === 'p1')).toBe(false);
   });
 });
 
@@ -272,9 +302,9 @@ describe('rules', () => {
     expect(ids).toContain('T_ALL_UNLINKED');
     expect(ids).toContain('T_SAME_TEXT_ALL_FIELDS');
     expect(ids).toContain('T_HYP_CRITERION_LOW');
-    expect(ids).toContain('T_FIELD_INTUITION_ONLY');
-    expect(ids).toContain('T_HYP_WEAK_EVIDENCE');
     expect(ids).toContain('T_HYP_MORAL_CONFLICT');
+    expect(ids).not.toContain('T_FIELD_INTUITION_ONLY');
+    expect(ids).not.toContain('T_HYP_WEAK_EVIDENCE');
     expect(ids).not.toContain('T_ENJOY_NOT_SUSTAINED');
     expect(ids).not.toContain('T_SKILL_NO_ENJOY');
     expect(ids.some((id) => id.startsWith('NX_'))).toBe(false);
@@ -292,6 +322,33 @@ describe('rules', () => {
     const ids = deriveTensions(definition, draft).map((t) => t.ruleId);
     expect(ids).toContain('T_FIELD_EMPTY');
     expect(ids).toContain('T_NO_HYPOTHESIS');
+  });
+
+  it('does not fire evidence tensions without collected qualifiers', () => {
+    const draft = emptyDraft();
+    draft.items.PASION = [item('p1', 'mismo', 'ATRACCION', 0), item('p2', 'x', 'ATRACCION', 1)];
+    draft.items.CAPACIDAD = [item('c1', 'mismo', 'INTUICION', 0), item('c2', 'y', 'INTUICION', 1)];
+    draft.items.NECESIDAD = [item('n1', 'mismo', 'INDIRECTA', 0), item('n2', 'z', 'INTUICION', 1)];
+    draft.items.VALOR = [item('v1', 'pago', 'NO_PROBADO', 0), item('v2', 'otro', null, 1)];
+    draft.hypotheses = [
+      {
+        id: 'h1',
+        text: 'Una dirección débil sin unir campos distintos aquí.',
+        itemIds: ['p1'],
+        criteria: {
+          DISFRUTE_SOSTENIBLE: 4,
+          CAPACIDAD_DEMOSTRABLE: 4,
+          UTILIDAD_REAL: 4,
+          VALOR_ECONOMICO: 4,
+          COHERENCIA_MORAL: 4,
+          FACTIBILIDAD: 4,
+        },
+        order: 0,
+      },
+    ];
+    const ids = deriveTensions(definition, draft).map((t) => t.ruleId);
+    expect(ids).not.toContain('T_FIELD_INTUITION_ONLY');
+    expect(ids).not.toContain('T_HYP_WEAK_EVIDENCE');
   });
 
   it('does not fire disabled rules even when conditions match', () => {
@@ -374,6 +431,7 @@ describe('buildResult', () => {
     expect(hashResult(a)).toBe(hashResult(JSON.parse(JSON.stringify(a))));
     const dumped = JSON.stringify(a);
     expect(dumped).not.toMatch(/purpose_score/);
+    expect(dumped).not.toMatch(/Mi propósito es/);
     expect(dumped).not.toMatch(/%/);
     expect(a).not.toHaveProperty('score');
     expect(a).not.toHaveProperty('total');

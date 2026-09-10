@@ -92,7 +92,7 @@ export function buildResult(definition: IkigaiDefinition, draft: IkigaiDraft, no
     byHypothesis: hypotheses.map((hyp) => ({
       hypothesisId: hyp.id,
       backed: hyp.linkedItems.filter((item) => item.classification === 'backed'),
-      intuition: hyp.linkedItems.filter((item) => item.classification !== 'backed'),
+      intuition: hyp.linkedItems.filter((item) => item.classification === 'intuition'),
     })),
   };
 

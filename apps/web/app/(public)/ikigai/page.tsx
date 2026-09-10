@@ -6,7 +6,7 @@ import { buildPageMetadata } from '@/lib/seo';
 export const metadata = buildPageMetadata({
   title: 'IKIGAI',
   description:
-    'El IKIGAI en Maximus Kratos: un eje de dirección entre significado, capacidad, contribución y sostenibilidad, integrado al Marco Central y al Perfil Maestro.',
+    'Ordena material personal, conecta lo que te importa, formula una dirección y contrástala. Versión en revisión.',
   path: '/ikigai',
   image: LANDING_IMAGES.ikigaiHero,
 });

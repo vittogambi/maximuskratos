@@ -40,31 +40,31 @@ const IKIGAI_FIELDS: ReadonlyArray<{
 }> = [
   {
     num: '01',
-    label: 'Lo que amas',
+    label: 'Lo que te mueve',
     icon: 'flame',
-    question: '¿Qué actividades te conectan profundamente con lo que haces?',
-    body: 'No se limita a aquello que resulta fácil o entretenido. Incluye acciones que siguen teniendo significado incluso cuando demandan esfuerzo, paciencia o aprendizaje.',
+    question: '¿Qué actividades te hacen sentir interesado, energizado o con ganas de seguir mejorando?',
+    body: 'Piensa en cosas que haces por iniciativa propia, que despiertan tu curiosidad o en las que disfrutas progresar.',
   },
   {
     num: '02',
-    label: 'En lo que eres bueno',
+    label: 'Lo que puedes aportar',
     icon: 'target',
-    question: '¿Qué capacidades posees o podrías desarrollar hasta alcanzar excelencia?',
-    body: 'Incluye competencias actuales, patrones de aprendizaje, fortalezas reconocidas y habilidades que muestran potencial real. El talento no se presenta aquí como algo exclusivamente innato.',
+    question: '¿Qué capacidades tienes hoy o has demostrado que puedes desarrollar bien?',
+    body: 'Piensa en resultados que ya has conseguido, experiencia que has acumulado o cosas que aprendes con especial facilidad.',
   },
   {
     num: '03',
-    label: 'Lo que otros necesitan',
+    label: 'Lo que vale la pena atender',
     icon: 'globe',
-    question: '¿Dónde pueden tus capacidades producir valor más allá de ti mismo?',
-    body: 'El propósito adquiere profundidad cuando lo que desarrollas puede resolver, construir, proteger, enseñar o mejorar algo para otras personas. Esa contribución puede comenzar en una familia, un equipo, una comunidad, una organización o un problema concreto.',
+    question: '¿Qué problemas, necesidades o personas sientes que vale la pena ayudar?',
+    body: 'Piensa en situaciones que te importaría mejorar, aunque todavía no tengas claro cómo hacerlo.',
   },
   {
     num: '04',
     label: 'Lo que puede sostenerte',
     icon: 'briefcase',
-    question: '¿De qué manera esa contribución puede formar parte de una vida sostenible?',
-    body: 'El propósito no debe ignorar la realidad material. Esta dimensión analiza si una capacidad puede transformarse en trabajo, intercambio, estabilidad o recursos. No se reduce únicamente a “¿por qué te pagarían?”.',
+    question: '¿Qué resultados podrías generar que alguien valoraría lo suficiente como para sostenerlos?',
+    body: 'Puede ser mediante dinero, intercambio, un producto, un servicio, un oficio o una responsabilidad que otros necesiten.',
   },
 ];
 
@@ -82,8 +82,8 @@ const TENSIONS: ReadonlyArray<{ title: string; body: string }> = [
     body: 'Puedes generar valor para otros mientras agotas tus recursos, tu tiempo o tu estabilidad.',
   },
   {
-    title: 'Sostenibilidad sin propósito',
-    body: 'Puedes construir una vida económicamente funcional que, sin embargo, se siente desconectada de tus valores y tu dirección.',
+    title: 'Sostenibilidad sin dirección',
+    body: 'Puedes construir una vida económicamente funcional que, sin embargo, se siente desconectada de tus valores y de hacia dónde quieres ir.',
   },
 ];
 
@@ -113,56 +113,51 @@ const IKIGAI_NOT: ReadonlyArray<{ title: string; body: string }> = [
 const IKIGAI_PROCESS: ReadonlyArray<{ num: string; title: string; body: string }> = [
   {
     num: '01',
-    title: 'Registras',
-    body: 'Identificas actividades y experiencias concretas relacionadas con cada campo. No se aceptan únicamente conceptos abstractos como “ayudar” o “crecer”. Deben convertirse en acciones observables: enseñar, construir, diseñar, dirigir, cuidar, investigar o entrenar.',
+    title: 'Exploras',
+    body: 'Recorres los cuatro lentes y anotas material propio. Puedes usar un banco de ideas, pero cada sugerencia se personaliza antes de entrar a tu mapa.',
   },
   {
     num: '02',
-    title: 'Evalúas',
-    body: 'Analizas cada actividad según su nivel de significado, capacidad, contribución y sostenibilidad. Las escalas ayudan a comparar y ordenar información, pero no reemplazan tu reflexión.',
+    title: 'Relacionas',
+    body: 'Miras los cuatro grupos juntos y decides qué piezas parecen pertenecer a una misma dirección. No hay cruce automático ni fórmula 4/4.',
   },
   {
     num: '03',
-    title: 'Relacionas',
-    body: 'Contrastas actividades entre campos. El sistema te ayuda a ver coincidencias, campos débiles, contradicciones y patrones que se repiten. Aparecen desalineación, tensión, áreas poco desarrolladas e hipótesis todavía no comprobadas.',
+    title: 'Formulas',
+    body: 'Escribes una hipótesis de dirección con tus palabras. Puedes construir hasta tres. Una es suficiente para continuar.',
   },
   {
     num: '04',
-    title: 'Formulas',
-    body: 'Construyes uno o varios ejes posibles de propósito. El resultado puede ser una dirección, un patrón o una combinación de actividades, no necesariamente una profesión única.',
+    title: 'Contrastas',
+    body: 'Pones a prueba una dirección con seis criterios: disfrute, capacidad, utilidad, sustento, coherencia y factibilidad. Sin score.',
   },
   {
     num: '05',
-    title: 'Contrastas',
-    body: 'La dirección se confronta con decisiones, proyectos y experiencia real. El propósito se fortalece cuando puede sostenerse fuera del ejercicio y modificar la forma en que actúas.',
-  },
-  {
-    num: '06',
-    title: 'Integras',
-    body: 'El resultado se integra al Perfil Maestro junto al resto de pilares del Espíritu, del linaje a la huella.',
+    title: 'Pruebas',
+    body: 'Diseñas un experimento de 30, 60 o 90 días para obtener evidencia real y recalibrar la dirección.',
   },
 ];
 
 const RESULT_ITEMS: ReadonlyArray<{ title: string; body: string }> = [
   {
-    title: 'Actividades con mayor convergencia',
-    body: 'Acciones que muestran una relación fuerte entre significado, capacidad, contribución y sostenibilidad.',
+    title: 'Tu hipótesis de dirección',
+    body: 'Una frase que tú escribes. No es una definición de quién eres ni un propósito calculado.',
   },
   {
-    title: 'Campos más desarrollados',
-    body: 'Dimensiones que ya poseen evidencia y pueden funcionar como punto de apoyo.',
+    title: 'Cómo se construye',
+    body: 'Las piezas de los cuatro lentes que tú relacionaste para esa dirección.',
   },
   {
-    title: 'Tensiones principales',
-    body: 'Relaciones que todavía no están resueltas o que requieren exploración.',
+    title: 'Cómo se ve hoy',
+    body: 'Tus respuestas a los seis criterios. Sin promedio y sin porcentaje.',
   },
   {
-    title: 'Hipótesis de propósito',
-    body: 'Direcciones posibles que deben contrastarse mediante decisiones y experiencia.',
+    title: 'Qué falta descubrir',
+    body: 'Lentes abiertos o criterios que todavía no respondiste.',
   },
   {
-    title: 'Próximos movimientos',
-    body: 'Acciones concretas para desarrollar una capacidad, validar una contribución o comprobar su sostenibilidad.',
+    title: 'Un experimento',
+    body: 'Qué vas a hacer en 30, 60 o 90 días y qué contarás como evidencia nueva.',
   },
 ];
 
@@ -173,7 +168,6 @@ const DECISION_AREAS = [
   'Uso del tiempo',
   'Decisiones económicas',
   'Contribución',
-  'Prioridades de la Ruta MK',
 ] as const;
 
 export function IkigaiContent() {
@@ -195,12 +189,20 @@ export function IkigaiContent() {
         <div className="ag-about-hero__content ag-container relative z-10">
           <ScrollReveal className="ag-about-hero__intro text-center" density="spacious">
             <p className="hud-text text-action-red">ESPÍRITU</p>
-            <h1 className="ag-about-hero__title ag-type-display text-white">IKIGAI: tu razón de ser.</h1>
+            <h1 className="ag-about-hero__title ag-type-display text-white">IKIGAI · Tu mapa de dirección</h1>
             <p className="ag-about-hero__origin font-body-lg">
-              No es una vocación de revista ni una frase para redes. Es la intersección entre lo que
-              amas, lo que sabes hacer, lo que el mundo necesita de ti y aquello que puede sostener
-              tu vida.
+              Explora lo que te mueve, lo que puedes aportar, lo que vale la pena atender y lo que
+              puede sostenerte. Conecta esas piezas, formula una dirección y contrástala.
             </p>
+            <div className="ag-ikigai-hero__cta">
+              <Link href="/ikigai/empezar" className="ag-btn-cta font-label-lg">
+                Construir mi mapa
+              </Link>
+              <p className="font-body-md ag-ikigai-hero__note">
+                Versión en revisión. No calculamos tu propósito. Sales con una hipótesis de dirección
+                que puedes contrastar y con algo concreto que explorar.
+              </p>
+            </div>
           </ScrollReveal>
         </div>
       </section>
@@ -247,10 +249,10 @@ export function IkigaiContent() {
       <section className="ag-section-inner ag-about-block" aria-labelledby="campos-heading">
         <div className="ag-container">
           <SectionIntro
-            eyebrow="LA INTERSECCIÓN"
-            title="Cuatro campos. Un eje posible."
-            lead="El IKIGAI se construye contrastando actividades reales desde cuatro perspectivas. No se trata de imaginar conceptos abstractos, sino de observar dónde tu experiencia comienza a mostrar coincidencias."
-            leadMobile="Se construye con actividades reales, no con conceptos abstractos."
+            eyebrow="CUATRO LENTES"
+            title="Cuatro formas de mirar. Una dirección que tú formulas."
+            lead="El producto ordena la reflexión. No exige completar perfectamente cuatro círculos. No calcula tu propósito."
+            leadMobile="Cuatro lentes para ordenar. Tú formulas la dirección."
             headingId="campos-heading"
           />
           <ScrollReveal className="ag-ikigai-diagram-wrap" density="default">
@@ -258,13 +260,13 @@ export function IkigaiContent() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={LANDING_IMAGES.ikigaiDiagram}
-                alt="Diagrama IKIGAI: la intersección entre lo que amas, en lo que eres bueno, lo que otros necesitan y lo que puede sostenerte. En el centro: IKIGAI."
+                alt="Diagrama clásico de IKIGAI con cuatro círculos. En MK sirve como referencia histórica, no como mecánica del producto."
                 className="ag-ikigai-diagram__img"
                 width={1024}
                 height={1024}
               />
               <figcaption className="ag-ikigai-diagram__caption hud-text">
-                Cuatro campos. Un eje posible.
+                El diagrama clásico organiza ideas. No es un test que debas completar.
               </figcaption>
             </figure>
           </ScrollReveal>
@@ -293,8 +295,8 @@ export function IkigaiContent() {
           </ScrollStaggerContainer>
           <ScrollReveal className="ag-ikigai-section-close" density="tight">
             <p className="font-body-lg">
-              El centro no siempre aparece como una respuesta perfecta. A veces aparece como una
-              dirección suficientemente sólida para comenzar a probar.
+              No necesitas completar perfectamente cuatro círculos. El resultado es una hipótesis de
+              dirección que puedes contrastar.
             </p>
           </ScrollReveal>
         </div>
@@ -312,10 +314,12 @@ export function IkigaiContent() {
           <ScrollReveal className="ag-ikigai-place" density="default">
             <p className="font-body-md ag-ikigai-place__intro">
               <span className="ag-ikigai-place__intro--full">
-                No funciona solo. Se lee junto al resto de pilares del Espíritu: del linaje a la huella.
+                En el Marco Central pertenece al pilar Espíritu, junto al linaje, la visión, los
+                valores y la huella. Este ejercicio todavía no escribe en el resto del sistema.
               </span>
               <span className="ag-ikigai-place__intro--short">
-                No funciona solo. Se lee junto al resto de pilares del Espíritu.
+                En el Marco Central pertenece al pilar Espíritu. Este ejercicio todavía no escribe en
+                el resto del sistema.
               </span>
             </p>
             <ol className="ag-ikigai-place__path" aria-label="Orden de los pilares del Marco Central">
@@ -343,8 +347,8 @@ export function IkigaiContent() {
         <div className="ag-container">
           <SectionIntro
             eyebrow="DESALINEACIÓN"
-            title="Cuando falta un campo, aparece una fractura."
-            lead="Las cuatro dimensiones deben observarse juntas. Una sola no basta para sostener una dirección."
+            title="Cuatro lentes desequilibrados dejan una dirección incompleta."
+            lead="Estos son ejemplos de desequilibrio. El ejercicio no diagnostica fracturas automáticas."
             headingId="tension-heading"
           />
           <ScrollReveal className="ag-ikigai-tensions" density="default">
@@ -362,8 +366,7 @@ export function IkigaiContent() {
               ))}
             </ol>
             <p className="font-body-lg ag-ikigai-tensions__close">
-              MK no busca una coincidencia perfecta. Busca mostrar qué relación está fuerte, cuál
-              está ausente y qué debe ponerse a prueba.
+              Sirven para pensar. El mapa no convierte estos ejemplos en un diagnóstico automático.
             </p>
           </ScrollReveal>
         </div>
@@ -396,7 +399,7 @@ export function IkigaiContent() {
           <SectionIntro
             eyebrow="CÓMO SE TRABAJA"
             title="Del concepto a una hipótesis que puede ponerse a prueba."
-            lead="El sistema ayuda a construir, ordenar, contrastar e integrar una dirección. No entrega una revelación instantánea."
+            lead="El ejercicio ayuda a ordenar, conectar, formular y contrastar una dirección. No entrega una revelación instantánea."
             headingId="proceso-heading"
           />
           <ScrollStaggerContainer
@@ -446,12 +449,8 @@ export function IkigaiContent() {
           </ScrollStaggerContainer>
           <ScrollReveal className="ag-ikigai-result__integration" density="tight">
             <p className="font-body-lg">
-              Tu mapa de IKIGAI se integra al Perfil Maestro y deja de ser un ejercicio aislado.
-              Se convierte en referencia para prioridades y decisiones.
-            </p>
-            <p className="font-body-md ag-ikigai-result__depth">
-              Con el tiempo, ese trabajo también alimenta el Índice de profundidad de tu Perfil
-              Maestro: evidencia del trabajo interior acumulado, no una calificación de tu propósito.
+              Sales con un mapa para pensar y con un experimento escrito por ti. El resto del sistema
+              MK no se actualiza con este ejercicio.
             </p>
           </ScrollReveal>
         </div>
@@ -463,7 +462,7 @@ export function IkigaiContent() {
           <SectionIntro
             eyebrow="DESPUÉS DEL EJERCICIO"
             title="Una dirección debe modificar decisiones."
-            lead="El sistema usa tu IKIGAI para ayudarte a evaluar:"
+            lead="Puedes usar este mapa para pensar en:"
             headingId="decisions-heading"
           />
           <ScrollReveal className="ag-ikigai-decisions" density="default">
@@ -475,19 +474,24 @@ export function IkigaiContent() {
               ))}
             </ul>
             <p className="font-body-lg ag-ikigai-decisions__close">
-              Cuando aparece una oportunidad, el sistema no pregunta únicamente si es atractiva o
-              rentable. Permite observar si desarrolla tus capacidades, contribuye a algo necesario,
-              puede sostenerse y se aproxima a la vida que declaraste construir.
+              Cuando aparece una oportunidad, puedes mirar si desarrolla tus capacidades, contribuye
+              a algo necesario, puede sostenerse y se aproxima a la vida que quieres construir.
             </p>
             <p className="font-body-md ag-ikigai-decisions__note">
-              No toma decisiones por ti. Te da un criterio más sólido para tomarlas.
+              No toma decisiones por ti. Te deja un criterio más claro para tomarlas.
             </p>
           </ScrollReveal>
         </div>
       </section>
 
       {/* 10. PRIMER PASO */}
-      <SubpageCta />
+      <SubpageCta
+        eyebrow="MK · MAPA"
+        title="Construye tu mapa de dirección."
+        lead="Explora lo que te mueve, lo que puedes aportar, lo que vale la pena atender y lo que puede sostenerte. Conecta las piezas y contrasta una dirección. Versión en revisión."
+        ctaLabel="Construir mi mapa"
+        ctaHref="/ikigai/empezar"
+      />
     </div>
   );
 }
