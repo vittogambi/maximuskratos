@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ResultView } from '@/components/ikigai/result-view';
-import { IkigaiShell } from '@/components/ikigai/shell';
+import { IkigaiShell, trackStops } from '@/components/ikigai/shell';
 import {
   IkigaiApiError,
   ikigaiApi,
@@ -77,14 +77,14 @@ export function ResultPage({ sessionId }: { sessionId: string }) {
 
   if (!result || !definition) {
     return (
-      <IkigaiShell onExit={() => router.push('/ikigai/empezar')}>
+      <IkigaiShell moment="Mapa" stops={trackStops(6)} onExit={() => router.push('/ikigai/empezar')}>
         <p className="ik-hint">Cargando tu mapa…</p>
       </IkigaiShell>
     );
   }
 
   return (
-    <IkigaiShell onExit={() => router.push('/ikigai/empezar')}>
+    <IkigaiShell moment="Mapa" stops={trackStops(6)} onExit={() => router.push('/ikigai/empezar')}>
       <ResultView
         result={result}
         revision={revision}

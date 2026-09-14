@@ -111,12 +111,16 @@ describe('ikigai player copy', () => {
   it('renders start screen', () => {
     const html = renderToStaticMarkup(<StartView />);
     const body = text(html);
-    expect(body).toContain('Construye una hipótesis de dirección.');
+    expect(body).toContain('Empieza por ordenar las piezas.');
+    expect(body).toContain('Tu avance queda guardado y tus respuestas no se publican.');
+    expect(body).not.toContain('este dispositivo');
     expect(body).toContain('Empezar');
     expect(body).toContain('Salir');
     expect(body).toContain('MK');
     expect(body).toContain('Versión en revisión');
+    expect(html).toContain('/images/ikigai/ikigai-hero.png');
     expect(body).not.toContain('Antes de empezar');
+    expect(body).not.toMatch(/hipótesis/i);
     expect(body).not.toMatch(/purpose_score|este es tu propósito|Mi propósito es/i);
     expect(html).not.toMatch(/[—–]/);
   });
@@ -135,9 +139,10 @@ describe('ikigai player copy', () => {
     const body = text(html);
     expect(body).toContain('¿Qué actividades te hacen sentir interesado, energizado o con ganas de seguir mejorando?');
     expect(body).toContain('Ayuda de campo');
-    expect(body).toContain('Explorar ideas');
-    expect(body).toContain('Añadir');
-    expect(body).toContain('Todavía no tengo claro qué poner aquí');
+    expect(body).toContain('Escribir una pieza');
+    expect(body).toContain('Ver ideas');
+    expect(body).toContain('Todavía no lo tengo claro');
+    expect(body).toContain('Empieza con algo tuyo o mira ideas para inspirarte.');
     expect(body).not.toContain('Elemento 1');
     expect(body).not.toContain('Añade al menos 2');
     expect(html).not.toContain('textarea');
@@ -214,7 +219,7 @@ describe('ikigai player copy', () => {
       />,
     );
     const body = text(html);
-    expect(body).toContain('Todavía no aparece una dirección suficientemente clara.');
+    expect(body).toContain('Esto es lo que recogiste.');
     expect(body).toContain('Volver a explorar');
     expect(body).not.toMatch(/purpose_score|%\b|nivel|badge|confetti/i);
     expect(body).not.toContain('poco material');

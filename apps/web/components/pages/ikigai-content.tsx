@@ -190,17 +190,17 @@ export function IkigaiContent() {
           <ScrollReveal className="ag-about-hero__intro text-center" density="spacious">
             <p className="hud-text text-action-red">ESPÍRITU</p>
             <h1 className="ag-about-hero__title ag-type-display text-white">IKIGAI · Tu mapa de dirección</h1>
-            <p className="ag-about-hero__origin font-body-lg">
-              Explora lo que te mueve, lo que puedes aportar, lo que vale la pena atender y lo que
-              puede sostenerte. Conecta esas piezas, formula una dirección y contrástala.
+            <p className="ag-about-hero__origin font-body-lg">Empieza por ordenar las piezas.</p>
+            <p className="font-body-md ag-ikigai-hero__lead">
+              Explora lo que te mueve, lo que puedes aportar, lo que te importa y lo que puede
+              sostenerte. Después conéctalo y dale forma a una dirección para explorar.
             </p>
             <div className="ag-ikigai-hero__cta">
               <Link href="/ikigai/empezar" className="ag-btn-cta font-label-lg">
-                Construir mi mapa
+                Empezar mi mapa
               </Link>
               <p className="font-body-md ag-ikigai-hero__note">
-                Versión en revisión. No calculamos tu propósito. Sales con una hipótesis de dirección
-                que puedes contrastar y con algo concreto que explorar.
+                Versión en revisión. No buscamos definir tu propósito por ti.
               </p>
             </div>
           </ScrollReveal>
@@ -488,8 +488,8 @@ export function IkigaiContent() {
       <SubpageCta
         eyebrow="MK · MAPA"
         title="Construye tu mapa de dirección."
-        lead="Explora lo que te mueve, lo que puedes aportar, lo que vale la pena atender y lo que puede sostenerte. Conecta las piezas y contrasta una dirección. Versión en revisión."
-        ctaLabel="Construir mi mapa"
+        lead="Empieza por ordenar las piezas. Explora lo que te mueve, lo que puedes aportar, lo que te importa y lo que puede sostenerte."
+        ctaLabel="Empezar mi mapa"
         ctaHref="/ikigai/empezar"
       />
     </div>

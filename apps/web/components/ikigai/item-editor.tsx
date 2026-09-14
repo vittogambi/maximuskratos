@@ -20,7 +20,7 @@ export function IkigaiItemEditor({
   label?: string;
   submitLabel?: string;
   onSubmit: (text: string) => void;
-  onCancel: () => void;
+  onCancel?: () => void;
   onRemove?: () => void;
 }) {
   const [text, setText] = useState(initial);
@@ -49,16 +49,20 @@ export function IkigaiItemEditor({
         {text.length} / {maxLength}
       </p>
       <div className="ik-editor__actions">
-        <div className="ik-editor__aux">
-          {onRemove ? (
-            <button type="button" className="ik-text" onClick={onRemove}>
-              Quitar
-            </button>
-          ) : null}
-          <button type="button" className="ik-text" onClick={onCancel}>
-            Cancelar
-          </button>
-        </div>
+        {onRemove || onCancel ? (
+          <div className="ik-editor__aux">
+            {onRemove ? (
+              <button type="button" className="ik-text" onClick={onRemove}>
+                Quitar
+              </button>
+            ) : null}
+            {onCancel ? (
+              <button type="button" className="ik-text" onClick={onCancel}>
+                Cancelar
+              </button>
+            ) : null}
+          </div>
+        ) : null}
         <button
           type="button"
           className="ag-btn-primary font-label-lg"

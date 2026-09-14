@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { IkigaiShell } from '@/components/ikigai/shell';
 import { IkigaiApiError, ikigaiApi } from '@/lib/ikigai-api';
+import { LANDING_IMAGES } from '@/lib/assets';
 import {
   clearStoredSession,
   readStoredSession,
@@ -58,6 +59,7 @@ export function StartView() {
 
   return (
     <IkigaiShell
+      moment="IKIGAI"
       onExit={() => router.push('/ikigai')}
       stackActions
       actions={
@@ -73,7 +75,7 @@ export function StartView() {
             </button>
             <button
               type="button"
-              className="ik-btn-quiet font-label-lg"
+              className="ik-btn-quiet"
               disabled={busy}
               onClick={() => void startNew()}
             >
@@ -92,23 +94,36 @@ export function StartView() {
         )
       }
     >
-      <p className="ik-kicker">IKIGAI</p>
-      <h1 className="ik-question font-body">Construye una hipótesis de dirección.</h1>
-      <p className="font-body-md ik-support">
-        Recorre lo que te mueve, lo que puedes aportar, lo que vale la pena atender y lo que puede
-        sostenerte. Conecta las piezas que para ti van juntas y pon una dirección a prueba.
-      </p>
-      {resume ? (
-        <p className="ik-note">
-          {resume.incomplete ? 'Tienes un mapa empezado' : 'Ya tienes un mapa'}
-        </p>
-      ) : null}
-      {error ? (
-        <p className="ik-warn" role="alert">
-          {error}
-        </p>
-      ) : null}
-      <p className="ik-note">Tus respuestas quedan en este dispositivo y no se publican.</p>
+      <div className="ik-start">
+        <div className="ik-start__figure" aria-hidden>
+          <img
+            src={LANDING_IMAGES.ikigaiHero}
+            alt=""
+            width={1536}
+            height={1024}
+            fetchPriority="high"
+          />
+        </div>
+        <div className="ik-start__copy">
+          <h1 className="ik-question font-body">Empieza por ordenar las piezas.</h1>
+          <p className="font-body-md ik-support">
+            Explora lo que te mueve, lo que puedes aportar, lo que te importa y lo que puede
+            sostenerte. Conecta lo que tenga sentido para ti y dale forma a una dirección que puedas
+            seguir explorando.
+          </p>
+          {resume ? (
+            <p className="ik-note">
+              {resume.incomplete ? 'Ya tienes un mapa empezado' : 'Ya tienes un mapa'}
+            </p>
+          ) : null}
+          {error ? (
+            <p className="ik-warn" role="alert">
+              {error}
+            </p>
+          ) : null}
+          <p className="ik-note">Tu avance queda guardado y tus respuestas no se publican.</p>
+        </div>
+      </div>
     </IkigaiShell>
   );
 }

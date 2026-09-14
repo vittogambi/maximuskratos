@@ -1,8 +1,8 @@
 'use client';
 
 import type { IkigaiDefinition, IkigaiDraft } from '@/lib/ikigai-api';
-import { CONTRAST_ONE_NOTE } from '@/lib/ikigai-ui/copy';
-import { contrastScreens } from '@/lib/ikigai-ui/format';
+import { CONTRAST_SUBJECT } from '@/lib/ikigai-ui/copy';
+import { contrastScreens, speakOfDirection } from '@/lib/ikigai-ui/format';
 
 export function IkigaiContrastStep({
   definition,
@@ -23,6 +23,7 @@ export function IkigaiContrastStep({
   if (!criterion || !hyp) return null;
   const answered = Object.prototype.hasOwnProperty.call(hyp.criteria, screen.criterionKey);
   const value = hyp.criteria[screen.criterionKey];
+  const prompt = speakOfDirection(criterion.text);
 
   function setValue(next: 1 | 2 | 3 | 4 | 5 | null) {
     onChange({
@@ -37,24 +38,29 @@ export function IkigaiContrastStep({
 
   return (
     <>
-      <p className="ik-kicker">
-        {screen.criterionIndex + 1} de 6 · {criterion.label}
-      </p>
-      <h1 className="ik-question font-body">{criterion.text}</h1>
-      <p className="font-body-md ik-support">{hyp.text}</p>
-      <p className="ik-hint">{CONTRAST_ONE_NOTE}</p>
-      <div className="ik-likert" role="radiogroup" aria-label={criterion.text}>
-        {definition.likertAnchors.map((anchor) => (
-          <button
-            key={anchor.value}
-            type="button"
-            className={value === anchor.value ? 'is-on' : ''}
-            aria-pressed={value === anchor.value}
-            onClick={() => setValue(anchor.value)}
-          >
-            {anchor.label}
-          </button>
-        ))}
+      <div className="ik-direction ik-direction--subject">
+        <p className="ik-direction__label">{CONTRAST_SUBJECT}</p>
+        <p>{hyp.text}</p>
+      </div>
+      <p className="ik-kicker">{criterion.label}</p>
+      <h1 className="ik-question font-body">{prompt}</h1>
+      <div className="ik-likert" role="radiogroup" aria-label={prompt}>
+        {definition.likertAnchors.map((anchor) => {
+          const on = value === anchor.value;
+          return (
+            <button
+              key={anchor.value}
+              type="button"
+              role="radio"
+              className={on ? 'is-on' : ''}
+              aria-checked={on}
+              onClick={() => setValue(anchor.value)}
+            >
+              <span>{anchor.label}</span>
+              <span className={`ik-likert__choice${on ? ' is-on' : ''}`} aria-hidden />
+            </button>
+          );
+        })}
       </div>
       <button type="button" className="ik-text" onClick={() => setValue(null)}>
         {definition.skipCriterionLabel}

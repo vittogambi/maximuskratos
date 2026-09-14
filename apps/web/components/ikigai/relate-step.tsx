@@ -1,13 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { IkigaiLensMark } from '@/components/ikigai/lens-mark';
 import type { IkigaiDefinition, IkigaiDraft, IkigaiHypothesis } from '@/lib/ikigai-api';
 import {
   CONTRAST_ONE_NOTE,
   HYPOTHESIS_GUIDE_ITEMS,
   HYPOTHESIS_GUIDE_NOTE,
   HYPOTHESIS_PLACEHOLDER,
+  RELATE_EMPTY,
   RELATE_LEAD,
+  RELATE_NO_PIECES_PREFIX,
+  SAVE_DIRECTION,
+  TRAY_EMPTY,
+  TRAY_LABEL,
+  WRITE_PIECES_LABEL,
 } from '@/lib/ikigai-ui/copy';
 import {
   coverageOf,
@@ -31,12 +38,14 @@ export function IkigaiRelateStep({
   onChange,
   onContrast,
   onNoHypothesis,
+  onBackToLenses,
 }: {
   definition: IkigaiDefinition;
   draft: IkigaiDraft;
   onChange: (patch: Partial<IkigaiDraft>) => void;
   onContrast: (selectedHypothesisId: string) => void;
   onNoHypothesis: () => void;
+  onBackToLenses?: () => void;
 }) {
   const saved = draft.hypotheses.filter(
     (h) => h.text.trim().length >= 12 && h.itemIds.length >= 1,
@@ -53,6 +62,10 @@ export function IkigaiRelateStep({
   const canWrite = itemIds.length >= 1;
   const canSave = text.trim().length >= 12 && text.length <= HYPOTHESIS_MAX && itemIds.length >= 1;
   const canAddAnother = saved.length < 3;
+
+  useEffect(() => {
+    document.querySelector('.ik-main')?.scrollTo(0, 0);
+  }, [phase]);
 
   function toggle(id: string) {
     setItemIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
@@ -78,29 +91,36 @@ export function IkigaiRelateStep({
     setPhase('saved');
   }
 
+  const chosen = FIELD_STEPS.flatMap((key) =>
+    byField[key].filter((row) => itemIds.includes(row.id)).map((row) => ({ ...row, field: key })),
+  );
+
   if (phase === 'write') {
     return (
       <>
         <h1 className="ik-question font-body">{definition.hypothesis.label}</h1>
         <p className="font-body-md ik-support">{definition.hypothesis.help}</p>
-        <div className="ik-compose" aria-label="Piezas de esta dirección">
-          {FIELD_STEPS.map((key) => {
-            const item = byField[key].find((row) => itemIds.includes(row.id));
-            return (
-              <div key={key} className="ik-compose__row">
-                <span>{fieldTitle(definition, key)}</span>
-                <span>{item?.text ?? 'Sin definir'}</span>
-              </div>
-            );
-          })}
+        <div className="ik-chosen">
+          <p className="ik-chosen__label">{WRITE_PIECES_LABEL}</p>
+          <div className="ik-chosen__chips">
+            {chosen.map((row) => (
+                <span className="ik-token" key={row.id}>
+                <span className="ik-token__lens">
+                  <IkigaiLensMark field={row.field} size={12} />
+                  {fieldTitle(definition, row.field)}
+                </span>
+                {row.text}
+              </span>
+            ))}
+          </div>
         </div>
         <label className="sr-only" htmlFor="hyp-text">
           Dirección
         </label>
         <textarea
           id="hyp-text"
-          className="ik-area"
-          rows={6}
+          className="ik-area ik-area--write"
+          rows={5}
           maxLength={HYPOTHESIS_MAX}
           placeholder={HYPOTHESIS_PLACEHOLDER}
           value={text}
@@ -109,9 +129,30 @@ export function IkigaiRelateStep({
         <p className={`ik-count${text.length >= HYPOTHESIS_MAX ? ' is-over' : ''}`}>
           {text.length} / {HYPOTHESIS_MAX}
         </p>
-        <button type="button" className="ik-text" onClick={() => setGuide((v) => !v)}>
-          Necesito una guía
-        </button>
+        <div className="ik-aux-row">
+          <button
+            type="button"
+            className="ik-text"
+            aria-pressed={guide}
+            onClick={() => {
+              setGuide((open) => !open);
+              setExamples(false);
+            }}
+          >
+            Necesito una guía
+          </button>
+          <button
+            type="button"
+            className="ik-text"
+            aria-pressed={examples}
+            onClick={() => {
+              setExamples((open) => !open);
+              setGuide(false);
+            }}
+          >
+            Ver ejemplos
+          </button>
+        </div>
         {guide ? (
           <div className="ik-guide">
             <p className="ik-note">Puedes pensar en:</p>
@@ -123,9 +164,6 @@ export function IkigaiRelateStep({
             <p className="ik-hint">{HYPOTHESIS_GUIDE_NOTE}</p>
           </div>
         ) : null}
-        <button type="button" className="ik-text" onClick={() => setExamples((v) => !v)}>
-          Ver ejemplos
-        </button>
         {examples ? (
           <ul className="ik-help-list">
             {definition.hypothesis.examples.map((row) => (
@@ -133,9 +171,9 @@ export function IkigaiRelateStep({
             ))}
           </ul>
         ) : null}
-        <div className="ik-inline-actions">
-          <button type="button" className="ik-btn-quiet font-label-lg" onClick={() => setPhase('map')}>
-            Atrás
+        <div className="ik-write-foot">
+          <button type="button" className="ik-text" onClick={() => setPhase('map')}>
+            ← Volver
           </button>
           <button
             type="button"
@@ -143,7 +181,7 @@ export function IkigaiRelateStep({
             disabled={!canSave}
             onClick={saveCurrent}
           >
-            Guardar
+            {SAVE_DIRECTION}
           </button>
         </div>
       </>
@@ -172,10 +210,37 @@ export function IkigaiRelateStep({
 
   if (phase === 'saved') {
     const last = saved[saved.length - 1];
+    const lastPieces = last
+      ? FIELD_STEPS.flatMap((key) =>
+          byField[key]
+            .filter((row) => last.itemIds.includes(row.id))
+            .map((row) => ({ ...row, field: key })),
+        )
+      : [];
     return (
       <>
         <h1 className="ik-question font-body">Una dirección que apareció</h1>
-        {last ? <div className="ik-direction"><p>{last.text}</p></div> : null}
+        {last ? (
+          <div className="ik-direction ik-direction--saved">
+            <p>{last.text}</p>
+          </div>
+        ) : null}
+        {lastPieces.length > 0 ? (
+          <div className="ik-chosen">
+            <p className="ik-chosen__label">{WRITE_PIECES_LABEL}</p>
+            <div className="ik-chosen__chips">
+              {lastPieces.map((row) => (
+                <span className="ik-token" key={row.id}>
+                <span className="ik-token__lens">
+                  <IkigaiLensMark field={row.field} size={12} />
+                  {fieldTitle(definition, row.field)}
+                </span>
+                {row.text}
+              </span>
+              ))}
+            </div>
+          </div>
+        ) : null}
         {saved.length > 1
           ? saved.slice(0, -1).map((hyp) => (
               <div className="ik-direction" key={hyp.id}>
@@ -184,22 +249,8 @@ export function IkigaiRelateStep({
               </div>
             ))
           : null}
-        <p className="ik-hint">Una es suficiente para continuar.</p>
         <p className="ik-hint">{CONTRAST_ONE_NOTE}</p>
         <div className="ik-inline-actions">
-          {canAddAnother ? (
-            <button
-              type="button"
-              className="ik-btn-quiet font-label-lg"
-              onClick={() => {
-                setItemIds([]);
-                setText('');
-                setPhase('map');
-              }}
-            >
-              Explorar otra dirección
-            </button>
-          ) : null}
           <button
             type="button"
             className="ag-btn-primary font-label-lg"
@@ -210,6 +261,47 @@ export function IkigaiRelateStep({
           >
             {saved.length === 1 ? 'Contrastar esta dirección' : 'Elegir cuál contrastar'}
           </button>
+          {canAddAnother ? (
+            <button
+              type="button"
+              className="ik-btn-quiet"
+              onClick={() => {
+                setItemIds([]);
+                setText('');
+                setPhase('map');
+              }}
+            >
+              Explorar otra dirección
+            </button>
+          ) : null}
+        </div>
+        <button type="button" className="ik-text" onClick={() => setConfirmNone(true)}>
+          {definition.hypothesis.noHypothesisLabel}
+        </button>
+        {confirmNone ? <NoneModal onCancel={() => setConfirmNone(false)} onConfirm={onNoHypothesis} /> : null}
+      </>
+    );
+  }
+
+  const withPieces = FIELD_STEPS.filter((key) => byField[key].length > 0);
+  const withoutPieces = FIELD_STEPS.filter((key) => byField[key].length === 0);
+
+  if (withPieces.length === 0) {
+    return (
+      <>
+        <h1 className="ik-question font-body">¿Qué piezas parecen pertenecer a una misma dirección?</h1>
+        <div className="ik-slot">
+          <p className="ik-slot__text">{RELATE_EMPTY}</p>
+          {onBackToLenses ? (
+            <div className="ik-add-row">
+              <button type="button" className="ik-add" onClick={onBackToLenses}>
+                <span className="ik-add__mark" aria-hidden>
+                  +
+                </span>
+                Volver a explorar
+              </button>
+            </div>
+          ) : null}
         </div>
         <button type="button" className="ik-text" onClick={() => setConfirmNone(true)}>
           {definition.hypothesis.noHypothesisLabel}
@@ -223,26 +315,49 @@ export function IkigaiRelateStep({
     <>
       <h1 className="ik-question font-body">¿Qué piezas parecen pertenecer a una misma dirección?</h1>
       <p className="font-body-md ik-support">{RELATE_LEAD}</p>
-      {FIELD_STEPS.map((key) => (
+      {withPieces.map((key) => (
         <LensGroup
           key={key}
           title={fieldTitle(definition, key)}
           items={byField[key]}
-          unclear={draft.fieldClarity?.[key] === 'UNCLEAR' && byField[key].length === 0}
           selected={itemIds}
           onToggle={toggle}
         />
       ))}
-      <div className="ik-compose" aria-label="Composición">
-        {FIELD_STEPS.map((key) => (
-          <div key={key} className="ik-compose__row">
-            <span>{fieldTitle(definition, key)}</span>
-            <span>{covered[key] ? '✓' : 'Sin definir'}</span>
-          </div>
-        ))}
+      {withoutPieces.length > 0 ? (
+        <p className="ik-hint ik-hint--gap">
+          {RELATE_NO_PIECES_PREFIX}{' '}
+          {withoutPieces.map((key) => fieldTitle(definition, key).toLowerCase()).join(', ')}.
+        </p>
+      ) : null}
+      <div className="ik-aux-row">
+        {onBackToLenses ? (
+          <button type="button" className="ik-text" onClick={onBackToLenses}>
+            Volver a explorar
+          </button>
+        ) : null}
+        <button type="button" className="ik-text" onClick={() => setConfirmNone(true)}>
+          {definition.hypothesis.noHypothesisLabel}
+        </button>
       </div>
-      {missing ? <p className="ik-hint">{missing}</p> : null}
-      <div className="ik-inline-actions">
+      <div className="ik-tray">
+        <div className="ik-tray__head">
+          <p className="ik-tray__label">{TRAY_LABEL}</p>
+          {chosen.length > 0 ? <span className="ik-tray__count">{chosen.length}</span> : null}
+        </div>
+        {chosen.length > 0 ? (
+          <div className="ik-tray__chips">
+            {chosen.map((row) => (
+              <span className="ik-token ik-token--chip" key={row.id}>
+                <IkigaiLensMark field={row.field} size={12} />
+                {row.text}
+              </span>
+            ))}
+          </div>
+        ) : (
+          <p className="ik-tray__empty">{TRAY_EMPTY}</p>
+        )}
+        {missing ? <p className="ik-tray__note">{missing}</p> : null}
         <button
           type="button"
           className="ag-btn-primary font-label-lg"
@@ -255,9 +370,6 @@ export function IkigaiRelateStep({
           Ponerlo en palabras
         </button>
       </div>
-      <button type="button" className="ik-text" onClick={() => setConfirmNone(true)}>
-        {definition.hypothesis.noHypothesisLabel}
-      </button>
       {confirmNone ? <NoneModal onCancel={() => setConfirmNone(false)} onConfirm={onNoHypothesis} /> : null}
     </>
   );
@@ -266,20 +378,17 @@ export function IkigaiRelateStep({
 function LensGroup({
   title,
   items,
-  unclear,
   selected,
   onToggle,
 }: {
   title: string;
   items: { id: string; text: string }[];
-  unclear: boolean;
   selected: string[];
   onToggle: (id: string) => void;
 }) {
   return (
     <section className="ik-section">
       <h2>{title}</h2>
-      {unclear || items.length === 0 ? <p className="ik-hint">Todavía no está claro</p> : null}
       <div className="ik-stack ik-stack--tight">
         {items.map((item) => {
           const on = selected.includes(item.id);
@@ -318,7 +427,7 @@ function NoneModal({ onCancel, onConfirm }: { onCancel: () => void; onConfirm: (
           <button type="button" className="ag-btn-primary font-label-lg" onClick={onConfirm}>
             Ver mi mapa
           </button>
-          <button type="button" className="ik-btn-quiet font-label-lg" onClick={onCancel}>
+          <button type="button" className="ik-btn-quiet" onClick={onCancel}>
             Seguir explorando
           </button>
         </div>

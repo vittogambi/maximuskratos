@@ -6050,6 +6050,8 @@ html:has(.ag-landing) body {
   .ag-landing .ag-intro__lead,
   .ag-landing .ag-about-block__lead,
   .ag-landing .ag-about-hero__origin,
+  .ag-landing .ag-ikigai-hero__lead,
+  .ag-landing .ag-ikigai-hero__note,
   .ag-landing .ag-sistema-cta__lead,
   .ag-landing .ag-sistema-hero__lead,
   .ag-landing .ag-os-lead,
@@ -15938,6 +15940,31 @@ html:has(.ag-landing) body {
 .ag-landing .ag-ikigai-hero__bg {
   object-position: center 38%;
   opacity: 0.62;
+}
+
+.ag-landing .ag-ikigai-hero .ag-about-hero__origin {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ag-landing .ag-ikigai-hero__lead {
+  margin: 0.7rem auto 0;
+  max-width: 32rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.ag-landing .ag-ikigai-hero__cta {
+  margin-top: var(--ag-stack-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.ag-landing .ag-ikigai-hero__note {
+  margin: 0;
+  max-width: 26rem;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* Por qué importa */

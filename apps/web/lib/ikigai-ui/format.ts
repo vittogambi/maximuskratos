@@ -9,6 +9,7 @@ import type {
   IkigaiItem,
   IkigaiResult,
 } from '@/lib/ikigai-api';
+import { EMPTY_AREAS_LEAD, THIN_AREAS_LEAD } from '@/lib/ikigai-ui/copy';
 
 export function newItemId(): string {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
@@ -20,6 +21,14 @@ export const COVERAGE_LABELS = {
   CAPACIDAD: 'Lo que puedes aportar',
   NECESIDAD: 'Lo que vale la pena atender',
   VALOR: 'Lo que puede sostenerte',
+} as const;
+
+/** Chrome only. Same four marks as the public /ikigai page. */
+export const LENS_ICONS = {
+  PASION: 'flame',
+  CAPACIDAD: 'target',
+  NECESIDAD: 'globe',
+  VALOR: 'briefcase',
 } as const;
 
 export function fieldTitle(definition: IkigaiDefinition | null | undefined, key: IkigaiFieldKey): string {
@@ -247,6 +256,20 @@ export const BAND_LABELS: Record<CriterionBand, string> = {
   unknown: 'No lo sabemos todavía',
 };
 
+/** Display-only. Canonical copy stays in the definition. */
+export function speakOfDirection(text: string): string {
+  return text
+    .replace(/en la hipótesis \d+/gi, (chunk) =>
+      chunk.startsWith('E') ? 'En esta dirección' : 'en esta dirección',
+    )
+    .replace(/la hipótesis \d+/gi, (chunk) =>
+      chunk.startsWith('L') ? 'Esta dirección' : 'esta dirección',
+    )
+    .replace(/Esta hipótesis/g, 'Esta dirección')
+    .replace(/esta hipótesis/g, 'esta dirección')
+    .replace(/ninguna hipótesis/g, 'ninguna dirección');
+}
+
 export function discoveryNotes(result: IkigaiResult): string[] {
   const selected =
     result.hypotheses.find((hyp) => hyp.id === result.selectedHypothesisId) ?? result.hypotheses[0];
@@ -262,4 +285,55 @@ export function discoveryNotes(result: IkigaiResult): string[] {
     }
   }
   return notes;
+}
+
+export type SignalBlock =
+  | { kind: 'areas'; lead: string; titles: string[] }
+  | { kind: 'note'; key: string; text: string };
+
+/** Presentation only. Groups repeated engine gaps; leaves distinct signals intact. */
+export function clusterSignals(
+  tensions: IkigaiResult['tensions'],
+  definition: IkigaiDefinition,
+): SignalBlock[] {
+  const empty: IkigaiResult['tensions'] = [];
+  const thin: typeof empty = [];
+  const rest: typeof empty = [];
+  for (const tension of tensions) {
+    if (tension.ruleId === 'T_FIELD_EMPTY') empty.push(tension);
+    else if (tension.ruleId === 'T_FIELD_THIN') thin.push(tension);
+    else rest.push(tension);
+  }
+
+  const blocks: SignalBlock[] = [];
+
+  function pushGroup(rows: IkigaiResult['tensions'], lead: string) {
+    if (rows.length === 0) return;
+    if (rows.length > 1 && rows.every((row) => row.fieldKey)) {
+      blocks.push({
+        kind: 'areas',
+        lead,
+        titles: rows.map((row) => fieldTitle(definition, row.fieldKey!)),
+      });
+      return;
+    }
+    for (const row of rows) {
+      blocks.push({
+        kind: 'note',
+        key: `${row.ruleId}-${row.fieldKey ?? ''}-${row.hypothesisId ?? ''}`,
+        text: speakOfDirection(row.text),
+      });
+    }
+  }
+
+  pushGroup(empty, EMPTY_AREAS_LEAD);
+  pushGroup(thin, THIN_AREAS_LEAD);
+  for (const row of rest) {
+    blocks.push({
+      kind: 'note',
+      key: `${row.ruleId}-${row.fieldKey ?? ''}-${row.hypothesisId ?? ''}`,
+      text: speakOfDirection(row.text),
+    });
+  }
+  return blocks;
 }

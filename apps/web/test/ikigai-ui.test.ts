@@ -8,6 +8,7 @@ import {
   emptyUiDraft,
   filledCount,
   hypothesesReady,
+  LENS_ICONS,
 } from '@/lib/ikigai-ui/format';
 import { FIELD_UI, HYPOTHESIS_PLACEHOLDER, REVIEW_LABEL } from '@/lib/ikigai-ui/copy';
 import {
@@ -32,6 +33,67 @@ const empty: IkigaiDraft = {
 };
 
 describe('ikigai ui helpers', () => {
+  it('speaks of the current direction instead of numbered hypotheses', async () => {
+    const { speakOfDirection } = await import('@/lib/ikigai-ui/format');
+    expect(speakOfDirection('¿Qué te mueve en la hipótesis 1?')).toBe('¿Qué te mueve en esta dirección?');
+    expect(speakOfDirection('La hipótesis 2 no toca lo que te mueve.')).toBe(
+      'Esta dirección no toca lo que te mueve.',
+    );
+    expect(speakOfDirection('Esta hipótesis utiliza actividades que podría sostener durante años.')).toBe(
+      'Esta dirección utiliza actividades que podría sostener durante años.',
+    );
+    expect(speakOfDirection('Todavía no aparece una hipótesis suficientemente clara.')).toBe(
+      'Todavía no aparece una hipótesis suficientemente clara.',
+    );
+  });
+
+  it('groups repeated field gaps and keeps distinct signals', async () => {
+    const { clusterSignals } = await import('@/lib/ikigai-ui/format');
+    const definition = {
+      fields: [
+        { key: 'PASION', title: 'Lo que te mueve' },
+        { key: 'CAPACIDAD', title: 'Lo que puedes aportar' },
+        { key: 'NECESIDAD', title: 'Lo que vale la pena atender' },
+        { key: 'VALOR', title: 'Lo que puede sostenerte' },
+      ],
+    } as never;
+    const blocks = clusterSignals(
+      [
+        { ruleId: 'T_FIELD_EMPTY', fieldKey: 'PASION', text: 'No anotaste nada en Lo que te mueve.' },
+        { ruleId: 'T_FIELD_EMPTY', fieldKey: 'CAPACIDAD', text: 'No anotaste nada en Lo que puedes aportar.' },
+        { ruleId: 'T_FIELD_EMPTY', fieldKey: 'NECESIDAD', text: 'No anotaste nada en Lo que vale la pena atender.' },
+        { ruleId: 'T_FIELD_THIN', fieldKey: 'VALOR', text: 'Lo que puede sostenerte tiene poco material.' },
+        {
+          ruleId: 'T_ALL_UNLINKED',
+          text: 'Tus hipótesis no unen campos distintos. Todavía son listas, no direcciones.',
+        },
+        {
+          ruleId: 'T_HYP_CRITERION_LOW',
+          text: 'En esta dirección respondiste en desacuerdo a: Sustento o intercambio.',
+        },
+      ],
+      definition,
+    );
+    expect(blocks).toEqual([
+      {
+        kind: 'areas',
+        lead: 'Todavía no hay piezas en:',
+        titles: ['Lo que te mueve', 'Lo que puedes aportar', 'Lo que vale la pena atender'],
+      },
+      { kind: 'note', key: 'T_FIELD_THIN-VALOR-', text: 'Lo que puede sostenerte tiene poco material.' },
+      {
+        kind: 'note',
+        key: 'T_ALL_UNLINKED--',
+        text: 'Tus hipótesis no unen campos distintos. Todavía son listas, no direcciones.',
+      },
+      {
+        kind: 'note',
+        key: 'T_HYP_CRITERION_LOW--',
+        text: 'En esta dirección respondiste en desacuerdo a: Sustento o intercambio.',
+      },
+    ]);
+  });
+
   it('counts filled items and hypothesis readiness', () => {
     expect(filledCount(empty.items.PASION)).toBe(2);
     expect(hypothesesReady(empty)).toBe(false);
@@ -118,6 +180,7 @@ describe('public copy sources', () => {
       expect(chrome).not.toContain(field.prompt);
       expect(chrome).not.toContain(field.help);
       expect(COVERAGE_LABELS[field.key]).toBe(field.title);
+      expect(LENS_ICONS[field.key]).toBeTruthy();
     }
   });
 
@@ -168,6 +231,9 @@ describe('public copy sources', () => {
     expect(landing).not.toMatch(/[Íí]ndice de profundidad/);
     expect(seo).not.toMatch(/Perfil Maestro/);
     expect(landing).toContain('Versión en revisión');
+    expect(landing).toContain('Empezar mi mapa');
+    expect(landing).not.toContain('Construir mi mapa');
+    expect(landing).not.toMatch(/No calculamos tu propósito/);
     expect(REVIEW_LABEL).toBe('Versión en revisión');
     for (const field of definition.fields) {
       expect(landing).toContain(field.title);

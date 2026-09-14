@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { IkigaiContrastStep } from '@/components/ikigai/contrast-step';
 import { IkigaiFieldStep } from '@/components/ikigai/field-step';
 import { IkigaiRelateStep } from '@/components/ikigai/relate-step';
-import { IkigaiShell } from '@/components/ikigai/shell';
+import { IkigaiShell, trackStops } from '@/components/ikigai/shell';
 import {
   IkigaiApiError,
   ikigaiApi,
@@ -17,6 +17,7 @@ import {
 } from '@/lib/ikigai-api';
 import { trackIkigai } from '@/lib/ikigai-ui/analytics';
 import { useIkigaiAutosave } from '@/lib/ikigai-ui/autosave';
+import { FIELD_CTA_HINT } from '@/lib/ikigai-ui/copy';
 import {
   compactDraft,
   contrastReady,
@@ -57,18 +58,15 @@ function pruneDraft(draft: IkigaiDraft): IkigaiDraft {
   };
 }
 
-function momentFor(step: Step, contrastIndex: number) {
+function momentFor(step: Step) {
   if ((FIELD_STEPS as readonly string[]).includes(step)) {
-    return {
-      label: 'IKIGAI · EXPLORAR',
-      value: FIELD_STEPS.indexOf(step as (typeof FIELD_STEPS)[number]) + 1,
-      max: 4,
-    };
+    const index = FIELD_STEPS.indexOf(step as (typeof FIELD_STEPS)[number]);
+    return { label: 'Explorar', position: index };
   }
   if (step === 'HIPOTESIS' || step === 'REVISION') {
-    return { label: 'IKIGAI · CONECTAR', value: 1, max: 1 };
+    return { label: 'Conectar', position: 4 };
   }
-  return { label: 'IKIGAI · CONTRASTAR', value: contrastIndex + 1, max: 6 };
+  return { label: 'Contrastar', position: 5 };
 }
 
 export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
@@ -135,7 +133,11 @@ export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
   });
 
   const screens = draft ? contrastScreens(draft) : [];
-  const moment = momentFor(step, contrastIndex);
+  const moment = momentFor(step);
+
+  useEffect(() => {
+    document.querySelector('.ik-main')?.scrollTo(0, 0);
+  }, [step, contrastIndex]);
 
   function go(next: Step) {
     setFieldEditing(false);
@@ -291,6 +293,7 @@ export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
         onNoHypothesis={() => {
           void completeWith(pruneDraft({ ...draft, noHypothesisYet: true, hypotheses: [] }));
         }}
+        onBackToLenses={() => go('VALOR')}
       />
     );
   } else {
@@ -307,32 +310,29 @@ export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
   const hideShellCta = step === 'HIPOTESIS' || step === 'REVISION' || fieldEditing;
   const nextLabel =
     step === 'CONTRASTE' && contrastIndex >= screens.length - 1 ? 'Ver mi mapa' : 'Continuar';
+  const ctaHint =
+    canNext || completing || step === 'CONTRASTE' ? null : FIELD_CTA_HINT;
 
   return (
     <IkigaiShell
-      stepLabel={moment.label}
-      progress={moment.value}
-      progressMax={moment.max}
+      moment={moment.label}
+      stops={trackStops(moment.position)}
+      ctaHint={hideShellCta ? null : ctaHint}
       banner={banner}
       onRetry={autosave.state === 'error' ? () => void autosave.retry() : undefined}
       onExit={() => void onExit()}
+      confirmExit
+      onBack={step !== 'PASION' || contrastIndex > 0 ? onBack : undefined}
       actions={
         hideShellCta ? null : (
-          <>
-            {step !== 'PASION' || contrastIndex > 0 ? (
-              <button type="button" className="ik-btn-quiet font-label-lg" onClick={onBack}>
-                Atrás
-              </button>
-            ) : null}
-            <button
-              type="button"
-              className="ag-btn-primary font-label-lg"
-              disabled={!canNext || completing}
-              onClick={() => void onNext()}
-            >
-              {nextLabel}
-            </button>
-          </>
+          <button
+            type="button"
+            className="ag-btn-primary font-label-lg"
+            disabled={!canNext || completing}
+            onClick={() => void onNext()}
+          >
+            {nextLabel}
+          </button>
         )
       }
     >

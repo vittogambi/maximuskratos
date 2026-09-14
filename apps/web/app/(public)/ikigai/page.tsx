@@ -6,7 +6,7 @@ import { buildPageMetadata } from '@/lib/seo';
 export const metadata = buildPageMetadata({
   title: 'IKIGAI',
   description:
-    'Ordena material personal, conecta lo que te importa, formula una dirección y contrástala. Versión en revisión.',
+    'Empieza por ordenar las piezas. Explora lo que te mueve, lo que puedes aportar, lo que te importa y lo que puede sostenerte. Versión en revisión.',
   path: '/ikigai',
   image: LANDING_IMAGES.ikigaiHero,
 });
