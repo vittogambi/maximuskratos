@@ -33,7 +33,7 @@ function isActiveLink(href: string, pathname: string, activeHash: string): boole
   if (linkHash) {
     return pathname === '/' && activeHash === linkHash;
   }
-  return pathname === href;
+  return pathname === href || (href !== '/' && pathname.startsWith(`${href}/`));
 }
 
 function isPageReload(): boolean {

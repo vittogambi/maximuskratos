@@ -51,12 +51,8 @@ export function validHypotheses(draft: IkigaiDraft): IkigaiHypothesis[] {
 }
 
 export function resolveSelectedHypothesisId(draft: IkigaiDraft): string | null {
-  if (draft.noHypothesisYet) return null;
-  const hyps = validHypotheses(draft);
-  if (draft.selectedHypothesisId && hyps.some((hyp) => hyp.id === draft.selectedHypothesisId)) {
-    return draft.selectedHypothesisId;
-  }
-  return hyps.length === 1 ? hyps[0].id : null;
+  const id = draft.selectedHypothesisId;
+  return id && draft.hypotheses.some((hypothesis) => hypothesis.id === id) ? id : null;
 }
 
 export function normalizeDraft(value: unknown): IkigaiDraft {

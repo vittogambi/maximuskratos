@@ -14,6 +14,7 @@ import { LucideCircle } from '@/components/icons/lucide/circle';
 import { LucideCircleCheck } from '@/components/icons/lucide/circle-check';
 import { LucideCircleDot } from '@/components/icons/lucide/circle-dot';
 import { LucideCircleX } from '@/components/icons/lucide/circle-x';
+import { LucideCoins } from '@/components/icons/lucide/coins';
 import { LucideColumns } from '@/components/icons/lucide/columns';
 import { LucideCompass } from '@/components/icons/lucide/compass';
 import { LucideCrosshair } from '@/components/icons/lucide/crosshair';
@@ -29,6 +30,7 @@ import { LucideEyeOff } from '@/components/icons/lucide/eye-off';
 import { LucideFingerprint } from '@/components/icons/lucide/fingerprint';
 import { LucideGlobe } from '@/components/icons/lucide/globe';
 import { LucideHandshake } from '@/components/icons/lucide/handshake';
+import { LucideHeart } from '@/components/icons/lucide/heart';
 import { LucideHeartPulse } from '@/components/icons/lucide/heart-pulse';
 import { LucideHelm } from '@/components/icons/lucide/helm';
 import { LucideIkigai } from '@/components/icons/lucide/ikigai';
@@ -38,6 +40,7 @@ import { LucideLayoutGrid } from '@/components/icons/lucide/layout-grid';
 import { LucideLock } from '@/components/icons/lucide/lock';
 import { LucideLogOut } from '@/components/icons/lucide/log-out';
 import { LucideMail } from '@/components/icons/lucide/mail';
+import { LucideMedal } from '@/components/icons/lucide/medal';
 import { LucideMailPlus } from '@/components/icons/lucide/mail-plus';
 import { LucideMap } from '@/components/icons/lucide/map';
 import { LucideMenu } from '@/components/icons/lucide/menu';
@@ -49,6 +52,7 @@ import { LucideShadow } from '@/components/icons/lucide/shadow';
 import { LucideShield } from '@/components/icons/lucide/shield';
 import { LucideShieldAlert } from '@/components/icons/lucide/shield-alert';
 import { LucideSparkles } from '@/components/icons/lucide/sparkles';
+import { LucideStar } from '@/components/icons/lucide/star';
 import { LucideStethoscope } from '@/components/icons/lucide/stethoscope';
 import { LucideSword } from '@/components/icons/lucide/sword';
 import { LucideTarget } from '@/components/icons/lucide/target';
@@ -57,6 +61,7 @@ import { LucideUserPlus } from '@/components/icons/lucide/user-plus';
 import { LucideUserX } from '@/components/icons/lucide/user-x';
 import { LucideUsers } from '@/components/icons/lucide/users';
 import { LucideWallet } from '@/components/icons/lucide/wallet';
+import { LucideWorld } from '@/components/icons/lucide/world';
 import { LucideX } from '@/components/icons/lucide/x';
 import { LucideZapOff } from '@/components/icons/lucide/zap-off';
 import { SocialInstagram } from '@/components/icons/social/instagram';
@@ -79,6 +84,7 @@ export const ICON_REGISTRY = {
   check: LucideCheck,
   'chevron-down': LucideChevronDown,
   circle: LucideCircle,
+  coins: LucideCoins,
   'circle-check': LucideCircleCheck,
   'circle-dot': LucideCircleDot,
   'circle-x': LucideCircleX,
@@ -97,6 +103,7 @@ export const ICON_REGISTRY = {
   fingerprint: LucideFingerprint,
   globe: LucideGlobe,
   handshake: LucideHandshake,
+  heart: LucideHeart,
   'heart-pulse': LucideHeartPulse,
   helm: LucideHelm,
   ikigai: LucideIkigai,
@@ -110,6 +117,7 @@ export const ICON_REGISTRY = {
   mail: LucideMail,
   'mail-plus': LucideMailPlus,
   map: LucideMap,
+  medal: LucideMedal,
   menu: LucideMenu,
   moon: LucideMoon,
   muscles: LucideMuscles,
@@ -119,6 +127,7 @@ export const ICON_REGISTRY = {
   shield: LucideShield,
   'shield-alert': LucideShieldAlert,
   sparkles: LucideSparkles,
+  star: LucideStar,
   stethoscope: LucideStethoscope,
   sword: LucideSword,
   target: LucideTarget,
@@ -127,6 +136,7 @@ export const ICON_REGISTRY = {
   'user-x': LucideUserX,
   users: LucideUsers,
   wallet: LucideWallet,
+  world: LucideWorld,
   x: LucideX,
   youtube: SocialYoutube,
   'zap-off': LucideZapOff,

@@ -115,6 +115,16 @@ spacing:
   stack-lg: 32px
 ---
 
+## Implementado en el piloto Ikigai
+
+Candidato visual, pendiente de aceptación. No es todavía el estándar de snapshots.
+
+- Conectar (`apps/web/components/ikigai/relate-step.tsx`) muestra el diagrama. Los círculos se llaman Lo que amas, En lo que eres bueno, Lo que el mundo necesita y Por lo que te pueden pagar. Los cruces se llaman Pasión, Misión, Profesión, Vocación e Ikigai. Guardar una posibilidad no la elige.
+- El botón de acción del player es `#c00100` con texto blanco, radio 0, en `.ik-app .ag-btn-primary`. El `#ff0000` de esta prosa no es el fondo de ese botón: blanco sobre `#ff0000` queda en 4,00:1.
+- Un botón deshabilitado muestra el motivo en texto.
+- La barra del player usa el escudo (`Logo`, `markOnly`), no las letras MK.
+- El YAML de arriba sigue siendo el export antiguo. `primary: #ffb4a8` no es el botón. Si esta prosa y `apps/web/app/globals.css` divergen, manda el CSS de la superficie.
+
 ## Brand & Style
 
 The visual identity is rooted in the intersection of **Ancient Stoicism and Modern Precision**. It targets high-achieving men seeking discipline, self-mastery, and elite performance. The aesthetic direction merges the gravitas of classical antiquity with the clinical, high-tech efficiency of a premium developer tool.

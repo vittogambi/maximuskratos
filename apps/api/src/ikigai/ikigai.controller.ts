@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, Patch, Post, Put, Req, UseGuards } fro
 import { ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { IkigaiAccessGuard } from './ikigai-access.guard';
-import { CreateIkigaiSessionDto, NextExperimentDto, PatchIkigaiDraftDto } from './ikigai.dto';
+import { CreateIkigaiSessionDto, NextExperimentDto, PatchIkigaiDraftDto, SessionWriteDto } from './ikigai.dto';
 import { IkigaiService } from './ikigai.service';
 
 type AuthedIkigaiRequest = {
@@ -40,8 +40,8 @@ export class IkigaiController {
   @Post('sessions/:id/complete')
   @HttpCode(200)
   @UseGuards(IkigaiAccessGuard)
-  complete(@Req() req: AuthedIkigaiRequest) {
-    return this.ikigai.complete(req.ikigai.session);
+  complete(@Req() req: AuthedIkigaiRequest, @Body() dto: SessionWriteDto) {
+    return this.ikigai.complete(req.ikigai.session, dto);
   }
 
   @Get('sessions/:id/result')
@@ -53,8 +53,8 @@ export class IkigaiController {
   @Post('sessions/:id/reopen')
   @HttpCode(200)
   @UseGuards(IkigaiAccessGuard)
-  reopen(@Req() req: AuthedIkigaiRequest) {
-    return this.ikigai.reopen(req.ikigai.session);
+  reopen(@Req() req: AuthedIkigaiRequest, @Body() dto: SessionWriteDto) {
+    return this.ikigai.reopen(req.ikigai.session, dto);
   }
 
   @Put('sessions/:id/next-experiment')

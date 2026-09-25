@@ -48,6 +48,9 @@ export class PatchIkigaiDraftDto {
   @Type(() => Number)
   draftVersion!: number;
 
+  @IsString()
+  definitionSha256!: string;
+
   @IsOptional()
   @IsString()
   step?: string;
@@ -56,7 +59,23 @@ export class PatchIkigaiDraftDto {
   patch!: Record<string, unknown>;
 }
 
+export class SessionWriteDto {
+  @IsInt()
+  @Type(() => Number)
+  draftVersion!: number;
+
+  @IsString()
+  definitionSha256!: string;
+}
+
 export class NextExperimentDto {
+  @IsInt()
+  @Type(() => Number)
+  draftVersion!: number;
+
+  @IsString()
+  definitionSha256!: string;
+
   @IsOptional()
   @IsString()
   hypothesisId!: string | null;

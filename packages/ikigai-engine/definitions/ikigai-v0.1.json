@@ -28,7 +28,7 @@
   "fields": [
     {
       "key": "PASION",
-      "title": "Lo que te mueve",
+      "title": "Lo que amas",
       "prompt": "¿Qué actividades te hacen sentir interesado, energizado o con ganas de seguir mejorando?",
       "help": "Piensa en cosas que haces por iniciativa propia, que despiertan tu curiosidad o en las que disfrutas progresar.",
       "examples": ["Enseñar", "entrenar", "investigar", "construir", "diseñar", "cuidar", "liderar", "escribir", "resolver problemas"],
@@ -43,7 +43,7 @@
     },
     {
       "key": "CAPACIDAD",
-      "title": "Lo que puedes aportar",
+      "title": "En lo que eres bueno",
       "prompt": "¿Qué capacidades tienes hoy o has demostrado que puedes desarrollar bien?",
       "help": "Piensa en resultados que ya has conseguido, experiencia que has acumulado o cosas que aprendes con especial facilidad.",
       "examples": ["Explicar", "organizar", "construir", "analizar", "diseñar", "negociar", "liderar", "cuidar"],
@@ -59,7 +59,7 @@
     },
     {
       "key": "NECESIDAD",
-      "title": "Lo que vale la pena atender",
+      "title": "Lo que el mundo necesita",
       "prompt": "¿Qué problemas, necesidades o personas sientes que vale la pena ayudar?",
       "help": "Piensa en situaciones que te importaría mejorar, aunque todavía no tengas claro cómo hacerlo.",
       "examples": ["Aprender", "soledad", "salud", "cuidado", "comunidad", "desigualdad", "orden"],
@@ -75,7 +75,7 @@
     },
     {
       "key": "VALOR",
-      "title": "Lo que puede sostenerte",
+      "title": "Por lo que te pueden pagar",
       "prompt": "¿Qué resultados podrías generar que alguien valoraría lo suficiente como para sostenerlos?",
       "help": "Puede ser mediante dinero, intercambio, un producto, un servicio, un oficio o una responsabilidad que otros necesiten.",
       "examples": ["Consultoría", "formación", "un producto", "un oficio", "un servicio", "cuidado remunerado"],
@@ -124,15 +124,15 @@
     {
       "key": "FACTIBILIDAD",
       "label": "Factibilidad",
-      "text": "Puede probarse con los recursos disponibles en los próximos noventa días.",
+      "text": "Podrías probar esta dirección en los próximos 90 días con el tiempo, la plata y las herramientas que ya tienes.",
       "matrixId": "P-PRO-076"
     }
   ],
   "gapQuestionByField": {
-    "PASION": "¿Qué te mueve en la hipótesis {n}?",
-    "CAPACIDAD": "¿Qué sabes hacer en la hipótesis {n}?",
-    "NECESIDAD": "¿A qué necesidad responde la hipótesis {n}?",
-    "VALOR": "¿Cómo se sostiene la hipótesis {n}?"
+    "PASION": "¿Qué de lo que amas entra en la hipótesis {n}?",
+    "CAPACIDAD": "¿En qué eres bueno dentro de la hipótesis {n}?",
+    "NECESIDAD": "¿Qué de lo que el mundo necesita toca la hipótesis {n}?",
+    "VALOR": "¿Por qué te pagarían en la hipótesis {n}?"
   },
   "rules": [
     {
@@ -212,14 +212,14 @@
     }
   ],
   "nextExperiment": {
-    "focusLabel": "¿Qué necesitarías descubrir para saber si esta dirección merece seguir creciendo?",
-    "horizonLabel": "Durante:",
+    "focusLabel": "Qué quieres comprobar",
+    "horizonLabel": "Durante",
     "horizons": [30, 60, 90],
-    "actionLabel": "Voy a:",
-    "signalLabel": "Sabré algo nuevo si:"
+    "actionLabel": "Qué vas a hacer",
+    "signalLabel": "Cómo te vas a dar cuenta"
   },
   "lexicon": {
-    "IKIGAI": "Herramienta para explorar una dirección vital conectando lo que te mueve, tus capacidades, necesidades que consideras valiosas y formas de sostener esa dirección.",
+    "IKIGAI": "Herramienta para explorar una dirección conectando lo que amas, en lo que eres bueno, lo que el mundo necesita y por lo que te pueden pagar.",
     "hipotesis": "Una posible dirección suficientemente coherente como para merecer ser puesta a prueba.",
     "tension": "Un hueco, contradicción o incertidumbre que aparece al mirar el material en conjunto. No significa que algo esté mal.",
     "comprobado": "Algo sobre lo que tienes experiencia directa suficiente para no basarte solamente en una suposición.",

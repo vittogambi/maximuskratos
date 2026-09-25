@@ -17,10 +17,4 @@ export class LeadsService {
     });
     return { success: true, id: lead.id };
   }
-
-  async findAll() {
-    return this.prisma.lead.findMany({
-      orderBy: { createdAt: 'desc' },
-    });
-  }
 }

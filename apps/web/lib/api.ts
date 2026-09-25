@@ -323,7 +323,8 @@ export function getApiDocsUrl(): string {
 }
 
 export function getApiBaseUrl(): string {
-  return apiBaseUrl() || API_ORIGIN;
+  if (typeof window !== 'undefined') return apiBaseUrl();
+  return API_ORIGIN;
 }
 
 // ─── Diagnostic ───────────────────────────────────────────────────────────────

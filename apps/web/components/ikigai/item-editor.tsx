@@ -48,6 +48,7 @@ export function IkigaiItemEditor({
       <p className={`ik-count${text.length >= maxLength ? ' is-over' : ''}`}>
         {text.length} / {maxLength}
       </p>
+      {text.length > 0 && text.trim().length < 3 ? <p className="ik-hint">Escribe al menos 3 caracteres.</p> : null}
       <div className="ik-editor__actions">
         {onRemove || onCancel ? (
           <div className="ik-editor__aux">

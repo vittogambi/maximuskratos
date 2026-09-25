@@ -85,7 +85,7 @@ type SystemReportProps = {
  * Lectura del perfil como sistema: índices de Alineación/Profundidad, resultado por
  * pilar y por ámbito, mapa de relación, y qué áreas están más o menos desarrolladas.
  * El arquetipo queda al final como referencia interpretativa secundaria.
- * Compartido entre PerfilContent (panel) y DiagnosticResult (página de resultado).
+ * Compartido entre PerfilContent y la página de resultado del diagnóstico.
  */
 export function SystemReport({ scores, indices, archetype, secondaryArchetype }: SystemReportProps) {
   const alineacion = Math.round(indices[PRESENTATION_INDICES.alineacion.sourceKey] ?? 0);

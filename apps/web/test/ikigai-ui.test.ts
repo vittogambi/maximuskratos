@@ -35,9 +35,11 @@ const empty: IkigaiDraft = {
 describe('ikigai ui helpers', () => {
   it('speaks of the current direction instead of numbered hypotheses', async () => {
     const { speakOfDirection } = await import('@/lib/ikigai-ui/format');
-    expect(speakOfDirection('¿Qué te mueve en la hipótesis 1?')).toBe('¿Qué te mueve en esta dirección?');
-    expect(speakOfDirection('La hipótesis 2 no toca lo que te mueve.')).toBe(
-      'Esta dirección no toca lo que te mueve.',
+    expect(speakOfDirection('¿Qué de lo que amas entra en la hipótesis 1?')).toBe(
+      '¿Qué de lo que amas entra en esta dirección?',
+    );
+    expect(speakOfDirection('La hipótesis 2 no toca lo que amas.')).toBe(
+      'Esta dirección no toca lo que amas.',
     );
     expect(speakOfDirection('Esta hipótesis utiliza actividades que podría sostener durante años.')).toBe(
       'Esta dirección utiliza actividades que podría sostener durante años.',
@@ -51,18 +53,18 @@ describe('ikigai ui helpers', () => {
     const { clusterSignals } = await import('@/lib/ikigai-ui/format');
     const definition = {
       fields: [
-        { key: 'PASION', title: 'Lo que te mueve' },
-        { key: 'CAPACIDAD', title: 'Lo que puedes aportar' },
-        { key: 'NECESIDAD', title: 'Lo que vale la pena atender' },
-        { key: 'VALOR', title: 'Lo que puede sostenerte' },
+        { key: 'PASION', title: 'Lo que amas' },
+        { key: 'CAPACIDAD', title: 'En lo que eres bueno' },
+        { key: 'NECESIDAD', title: 'Lo que el mundo necesita' },
+        { key: 'VALOR', title: 'Por lo que te pueden pagar' },
       ],
     } as never;
     const blocks = clusterSignals(
       [
-        { ruleId: 'T_FIELD_EMPTY', fieldKey: 'PASION', text: 'No anotaste nada en Lo que te mueve.' },
-        { ruleId: 'T_FIELD_EMPTY', fieldKey: 'CAPACIDAD', text: 'No anotaste nada en Lo que puedes aportar.' },
-        { ruleId: 'T_FIELD_EMPTY', fieldKey: 'NECESIDAD', text: 'No anotaste nada en Lo que vale la pena atender.' },
-        { ruleId: 'T_FIELD_THIN', fieldKey: 'VALOR', text: 'Lo que puede sostenerte tiene poco material.' },
+        { ruleId: 'T_FIELD_EMPTY', fieldKey: 'PASION', text: 'No anotaste nada en Lo que amas.' },
+        { ruleId: 'T_FIELD_EMPTY', fieldKey: 'CAPACIDAD', text: 'No anotaste nada en En lo que eres bueno.' },
+        { ruleId: 'T_FIELD_EMPTY', fieldKey: 'NECESIDAD', text: 'No anotaste nada en Lo que el mundo necesita.' },
+        { ruleId: 'T_FIELD_THIN', fieldKey: 'VALOR', text: 'Por lo que te pueden pagar tiene poco material.' },
         {
           ruleId: 'T_ALL_UNLINKED',
           text: 'Tus hipótesis no unen campos distintos. Todavía son listas, no direcciones.',
@@ -78,9 +80,9 @@ describe('ikigai ui helpers', () => {
       {
         kind: 'areas',
         lead: 'Todavía no hay piezas en:',
-        titles: ['Lo que te mueve', 'Lo que puedes aportar', 'Lo que vale la pena atender'],
+        titles: ['Lo que amas', 'En lo que eres bueno', 'Lo que el mundo necesita'],
       },
-      { kind: 'note', key: 'T_FIELD_THIN-VALOR-', text: 'Lo que puede sostenerte tiene poco material.' },
+      { kind: 'note', key: 'T_FIELD_THIN-VALOR-', text: 'Por lo que te pueden pagar tiene poco material.' },
       {
         kind: 'note',
         key: 'T_ALL_UNLINKED--',

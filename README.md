@@ -2,6 +2,13 @@
 
 Web platform and REST API for user accounts and authentication.
 
+Product docs are local (not in git). Map: `docs/README.md`.
+
+- Phase 1 (current web, reference): `docs/phase-1/`
+- Phase 2 (operating set, includes Phase 1.5): `docs/phase-2/` — start at `docs/phase-2/BASELINE.md`
+- Philosophy (not backlog): `docs/philosophy/`
+- Leftovers on disk: `_archive/`
+
 ## Stack
 
 - **API** — NestJS, PostgreSQL, Prisma
@@ -72,7 +79,7 @@ npm run dev:web   # terminal 2
 | `CORS_ORIGINS` | Allowed web origins, comma-separated |
 | `NODE_ENV` | `development` or `production` |
 | `PORT` | API port (default 4000) |
-| `WEB_URL` | Public web URL for password-reset links (e.g. `http://localhost:3000`) |
+| `WEB_URL` | Public web URL of this environment for password-reset links (e.g. `http://localhost:3000`) |
 | `RESEND_API_KEY` | Optional — sends reset emails via Resend; without it, reset URL is logged |
 | `RESEND_FROM` | Sender address for Resend (use `Maximus Kratos <contacto@maximus-kratos.com>` in prod; default onboarding@resend.dev) |
 
@@ -108,7 +115,9 @@ Add a Postgres plugin in the same Railway project/environment.
 | `DATABASE_URL` | **Reference** → Postgres → `DATABASE_URL` (private). If P1000 persists after volume reset, use Reference → `DATABASE_PUBLIC_URL` instead. |
 | `JWT_ACCESS_SECRET` | Random string, 32+ characters |
 | `NODE_ENV` | `production` |
-| `CORS_ORIGINS` | Public Web URL, e.g. `https://web-production-xxxx.up.railway.app` (no trailing `/`) |
+| `CORS_ORIGINS` | Public Web URL of **this** environment, e.g. `https://web-production-xxxx.up.railway.app` (no trailing `/`) |
+| `WEB_URL` | Same origin as `CORS_ORIGINS`. Password-reset CTAs use this URL. Staging must not point at production. |
+| `APP_URL` | Optional alias of `WEB_URL` |
 
 Do **not** put `NEXT_PUBLIC_*` on the API. You may keep `DATABASE_PUBLIC_URL` as an extra reference for the startup retry script, but Prisma needs a resolved URL via `DATABASE_URL` or `DATABASE_PUBLIC_URL` (see `scripts/resolve-database-url.sh`).
 

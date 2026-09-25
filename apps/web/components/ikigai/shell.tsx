@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, type ReactNode } from 'react';
+import { Logo } from '@/components/logo';
 import { EXIT_BODY, EXIT_LEAVE, EXIT_STAY, EXIT_TITLE, REVIEW_LABEL, BACK_LABEL } from '@/lib/ikigai-ui/copy';
 
 export type IkigaiStopState = 'done' | 'current' | 'todo';
@@ -39,10 +40,12 @@ export function IkigaiShell({
   stops,
   banner,
   onRetry,
+  retryLabel = 'Reintentar',
   onExit,
   exitLabel = 'Salir',
   confirmExit = false,
   onBack,
+  backText,
   actions,
   ctaHint,
   stackActions = false,
@@ -53,10 +56,12 @@ export function IkigaiShell({
   stops?: IkigaiStopState[];
   banner?: string | null;
   onRetry?: () => void;
+  retryLabel?: string;
   onExit: () => void;
   exitLabel?: string;
   confirmExit?: boolean;
   onBack?: () => void;
+  backText?: string;
   actions?: ReactNode;
   ctaHint?: string | null;
   stackActions?: boolean;
@@ -93,7 +98,7 @@ export function IkigaiShell({
           <span>{banner}</span>
           {onRetry ? (
             <button type="button" className="ik-text" onClick={onRetry}>
-              Reintentar
+              {retryLabel}
             </button>
           ) : null}
         </div>
@@ -101,12 +106,15 @@ export function IkigaiShell({
       <header className="ik-top">
         <div className="ik-top__lead">
           {onBack ? (
-            <button type="button" className="ik-back" onClick={onBack} aria-label={BACK_LABEL}>
-              <span aria-hidden>‹</span>
+            <button type="button" className="ik-back" onClick={onBack} aria-label={backText ? `Volver a ${backText.toLowerCase()}` : BACK_LABEL}>
+              <svg className="ik-back__chev" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              {backText ? <span className="ik-back__text">{backText}</span> : null}
             </button>
           ) : null}
           <p className="ik-top__id">
-            <span className="ik-brand">MK</span>
+            <Logo size="sm" markOnly className="ik-brand" />
             {moment ? (
               <span className="ik-moment">
                 {moment}
@@ -146,7 +154,14 @@ export function IkigaiShell({
               <button type="button" className="ag-btn-primary font-label-lg" onClick={() => setExitOpen(false)}>
                 {EXIT_STAY}
               </button>
-              <button type="button" className="ik-btn-quiet" onClick={onExit}>
+              <button
+                type="button"
+                className="ik-btn-quiet"
+                onClick={() => {
+                  setExitOpen(false);
+                  onExit();
+                }}
+              >
                 {EXIT_LEAVE}
               </button>
             </div>

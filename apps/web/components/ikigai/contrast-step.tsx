@@ -36,15 +36,17 @@ export function IkigaiContrastStep({
     });
   }
 
+  const skipped = answered && value == null;
+
   return (
-    <>
-      <div className="ik-direction ik-direction--subject">
-        <p className="ik-direction__label">{CONTRAST_SUBJECT}</p>
-        <p>{hyp.text}</p>
-      </div>
-      <p className="ik-kicker">{criterion.label}</p>
+    <div className="ik-contrast">
+      <article className="ik-contrast__subject">
+        <p className="ik-contrast__label">{CONTRAST_SUBJECT}</p>
+        <p className="ik-contrast__phrase">{hyp.text}</p>
+      </article>
+      <p className="ik-contrast__kicker">{criterion.label}</p>
       <h1 className="ik-question font-body">{prompt}</h1>
-      <div className="ik-likert" role="radiogroup" aria-label={prompt}>
+      <div className="ik-contrast__options" role="radiogroup" aria-label={prompt}>
         {definition.likertAnchors.map((anchor) => {
           const on = value === anchor.value;
           return (
@@ -56,16 +58,16 @@ export function IkigaiContrastStep({
               aria-checked={on}
               onClick={() => setValue(anchor.value)}
             >
+              <span className="ik-contrast__check" aria-hidden />
               <span>{anchor.label}</span>
-              <span className={`ik-likert__choice${on ? ' is-on' : ''}`} aria-hidden />
             </button>
           );
         })}
       </div>
-      <button type="button" className="ik-text" onClick={() => setValue(null)}>
+      <button type="button" className={`ik-contrast__skip${skipped ? ' is-on' : ''}`} onClick={() => setValue(null)}>
         {definition.skipCriterionLabel}
       </button>
       {answered ? <span className="sr-only">Respondido</span> : null}
-    </>
+    </div>
   );
 }

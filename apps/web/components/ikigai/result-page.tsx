@@ -7,6 +7,7 @@ import { IkigaiShell, trackStops } from '@/components/ikigai/shell';
 import {
   IkigaiApiError,
   ikigaiApi,
+  type ExperimentContext,
   type IkigaiDefinition,
   type IkigaiNextExperiment,
   type IkigaiResult,
@@ -17,6 +18,9 @@ export function ResultPage({ sessionId }: { sessionId: string }) {
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
   const [result, setResult] = useState<IkigaiResult | null>(null);
+  const [experiment, setExperiment] = useState<ExperimentContext>({ state: 'NONE' });
+  const [draftVersion, setDraftVersion] = useState(0);
+  const [definitionSha, setDefinitionSha] = useState('');
   const [revision, setRevision] = useState(1);
   const [definition, setDefinition] = useState<IkigaiDefinition | null>(null);
   const [busy, setBusy] = useState(false);
@@ -40,6 +44,9 @@ export function ResultPage({ sessionId }: { sessionId: string }) {
       ]);
       setDefinition(sessionRes.definition);
       setResult(resultRes.result);
+      setExperiment(resultRes.experiment);
+      setDraftVersion(sessionRes.session.draftVersion);
+      setDefinitionSha(resultRes.definitionSha256);
       setRevision(resultRes.revision);
     } catch {
       router.replace(`/ikigai/s/${sessionId}`);
@@ -53,7 +60,7 @@ export function ResultPage({ sessionId }: { sessionId: string }) {
   async function onReopen() {
     if (!token) return;
     try {
-      await ikigaiApi.reopen(sessionId, token);
+      await ikigaiApi.reopen(sessionId, token, { draftVersion, definitionSha256: definitionSha });
       router.push(`/ikigai/s/${sessionId}`);
     } catch (err) {
       setError(err instanceof IkigaiApiError ? err.message : 'No pudimos reabrir el mapa.');
@@ -65,8 +72,13 @@ export function ResultPage({ sessionId }: { sessionId: string }) {
     setBusy(true);
     setError(null);
     try {
-      const res = await ikigaiApi.nextExperiment(sessionId, token, body);
-      setResult((prev) => (prev ? { ...prev, nextExperiment: res.nextExperiment } : prev));
+      const res = await ikigaiApi.nextExperiment(sessionId, token, {
+        ...body,
+        draftVersion,
+        definitionSha256: definitionSha,
+      });
+      setDraftVersion(res.draftVersion);
+      setExperiment({ state: 'CURRENT', experiment: res.nextExperiment });
     } catch (err) {
       setError(err instanceof IkigaiApiError ? err.message : 'No pudimos guardar el experimento.');
       throw err;
@@ -89,6 +101,7 @@ export function ResultPage({ sessionId }: { sessionId: string }) {
         result={result}
         revision={revision}
         definition={definition}
+        experiment={experiment}
         onReopen={() => void onReopen()}
         onSaveExperiment={onSaveExperiment}
         busy={busy}

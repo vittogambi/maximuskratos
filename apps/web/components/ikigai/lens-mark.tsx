@@ -4,7 +4,7 @@ import { LENS_ICONS } from '@/lib/ikigai-ui/format';
 
 export function IkigaiLensMark({
   field,
-  size = 14,
+  size = 18,
 }: {
   field: IkigaiFieldKey;
   size?: number;

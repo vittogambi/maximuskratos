@@ -1,42 +1,115 @@
-import { allItems, filledItemsOf, normalizeDraft, resolveSelectedHypothesisId, validHypotheses } from './draft';
-import { CRITERION_KEYS, FIELD_KEYS, type CompletionCheck, type IkigaiDefinition, type IkigaiDraft } from './types';
+import { filledItemsOf, normalizeDraft, resolveSelectedHypothesisId } from './draft';
+import {
+  CRITERION_KEYS,
+  FIELD_KEYS,
+  type CompletionCheck,
+  type IkigaiCriterionKey,
+  type IkigaiDefinition,
+  type IkigaiDraft,
+  type IkigaiFieldKey,
+} from './types';
 
-export function validateDraft(definition: IkigaiDefinition, draft: IkigaiDraft): string[] {
-  const errors: string[] = [];
-  const knownIds = new Set(definition.fields.flatMap((f) => f.evidenceOptions.map((o) => o.key)));
-  const knownItemIds = new Set(allItems(draft).map((item) => item.id));
-  for (const field of FIELD_KEYS) {
-    const items = draft.items[field] ?? [];
-    if (items.length > 5) errors.push(`${field} has more than 5 items`);
-    const clarity = draft.fieldClarity?.[field];
-    if (clarity != null && clarity !== 'ANSWERED' && clarity !== 'UNCLEAR') {
-      errors.push(`${field} invalid fieldClarity`);
-    }
-    for (const item of items) {
-      if (item.text.length > 140) errors.push(`${field} item exceeds 140`);
-      if (item.evidence && !knownIds.has(item.evidence)) {
-        errors.push(`${field} unknown evidence ${item.evidence}`);
-      }
-    }
-  }
-  if (draft.hypotheses.length > 3) errors.push('more than 3 hypotheses');
-  if (draft.patternNote && draft.patternNote.length > 280) errors.push('patternNote too long');
-  if (draft.selectedHypothesisId && !draft.hypotheses.some((hyp) => hyp.id === draft.selectedHypothesisId)) {
-    errors.push('selectedHypothesisId not found');
-  }
-  for (const hyp of draft.hypotheses) {
-    if (hyp.itemIds.some((id) => !knownItemIds.has(id))) {
-      errors.push(`hypothesis ${hyp.id} has unknown item ids`);
-    }
-  }
-  return errors;
+export type DraftValidationIssue = { path: string; message: string };
+
+const CRITERION_SET = new Set<string>(CRITERION_KEYS);
+
+function isFieldKey(value: string): value is IkigaiFieldKey {
+  return (FIELD_KEYS as readonly string[]).includes(value);
 }
 
-export function validateForCompletion(
-  definition: IkigaiDefinition,
-  draft: IkigaiDraft,
-): CompletionCheck {
-  void definition;
+export function validateDraftStructure(definition: IkigaiDefinition, draft: IkigaiDraft): DraftValidationIssue[] {
+  const issues: DraftValidationIssue[] = [];
+  const evidenceByField = new Map(definition.fields.map((field) => [field.key, new Set(field.evidenceOptions.map((option) => option.key))]));
+  const seenItemIds = new Set<string>();
+
+  for (const field of FIELD_KEYS) {
+    const items = draft.items?.[field] ?? [];
+    if (items.length > 5) {
+      issues.push({ path: `items.${field}`, message: `${field} has more than 5 items` });
+    }
+    const clarity = draft.fieldClarity?.[field];
+    if (clarity != null && clarity !== 'ANSWERED' && clarity !== 'UNCLEAR') {
+      issues.push({ path: `fieldClarity.${field}`, message: `${field} invalid fieldClarity` });
+    }
+    items.forEach((item, index) => {
+      const path = `items.${field}[${index}]`;
+      if (!item.id) issues.push({ path: `${path}.id`, message: 'empty item id' });
+      else if (seenItemIds.has(item.id)) issues.push({ path: `${path}.id`, message: `duplicate item id ${item.id}` });
+      else seenItemIds.add(item.id);
+      if (item.text.length > 140) issues.push({ path: `${path}.text`, message: `${field} item exceeds 140` });
+      if (item.evidence) {
+        const allowed = evidenceByField.get(field);
+        if (!allowed?.has(item.evidence)) {
+          issues.push({ path: `${path}.evidence`, message: `${field} unknown evidence ${item.evidence}` });
+        }
+      }
+    });
+  }
+
+  if (draft.hypotheses.length > 3) issues.push({ path: 'hypotheses', message: 'more than 3 hypotheses' });
+  if (draft.patternNote && draft.patternNote.length > 280) {
+    issues.push({ path: 'patternNote', message: 'patternNote too long' });
+  }
+  if (draft.noHypothesisYet && (draft.hypotheses.length > 0 || draft.selectedHypothesisId)) {
+    issues.push({
+      path: 'noHypothesisYet',
+      message: 'noHypothesisYet cannot be combined with hypotheses or a selection',
+    });
+  }
+
+  const hypIds = new Set<string>();
+  draft.hypotheses.forEach((hyp, index) => {
+    const path = `hypotheses[${index}]`;
+    if (!hyp.id) issues.push({ path: `${path}.id`, message: 'empty hypothesis id' });
+    else if (hypIds.has(hyp.id)) issues.push({ path: `${path}.id`, message: `duplicate hypothesis id ${hyp.id}` });
+    else hypIds.add(hyp.id);
+    if (hyp.text.length > 400) issues.push({ path: `${path}.text`, message: 'hypothesis text exceeds 400' });
+    const local = new Set<string>();
+    hyp.itemIds.forEach((id, itemIndex) => {
+      if (local.has(id)) {
+        issues.push({ path: `${path}.itemIds[${itemIndex}]`, message: `hypothesis ${hyp.id} repeats item ${id}` });
+      }
+      local.add(id);
+      if (!seenItemIds.has(id)) {
+        issues.push({ path: `${path}.itemIds[${itemIndex}]`, message: `hypothesis ${hyp.id} has unknown item ids` });
+      }
+    });
+    for (const [key, value] of Object.entries(hyp.criteria ?? {})) {
+      if (!CRITERION_SET.has(key)) {
+        issues.push({ path: `${path}.criteria.${key}`, message: `unknown criterion ${key}` });
+        continue;
+      }
+      if (value != null && ![1, 2, 3, 4, 5].includes(value)) {
+        issues.push({ path: `${path}.criteria.${key}`, message: `invalid criterion value ${key}` });
+      }
+    }
+  });
+
+  if (draft.selectedHypothesisId && !draft.hypotheses.some((hyp) => hyp.id === draft.selectedHypothesisId)) {
+    issues.push({ path: 'selectedHypothesisId', message: 'selectedHypothesisId not found' });
+  }
+
+  for (const key of Object.keys(draft.items ?? {})) {
+    if (!isFieldKey(key)) issues.push({ path: `items.${key}`, message: `unknown field ${key}` });
+  }
+
+  return issues;
+}
+
+export function validateDraft(definition: IkigaiDefinition, draft: IkigaiDraft): string[] {
+  return validateDraftStructure(definition, draft).map((issue) => issue.message);
+}
+
+function hypothesisReady(text: string, itemIds: string[]): boolean {
+  return text.trim().length >= 12 && text.length <= 400 && itemIds.length >= 1;
+}
+
+export function validateForCompletion(definition: IkigaiDefinition, draft: IkigaiDraft): CompletionCheck {
+  const structural = validateDraftStructure(definition, draft);
+  if (structural.length > 0) {
+    return { ok: false, step: 'HIPOTESIS', details: structural[0].message };
+  }
+
   const normalized = normalizeDraft(draft);
   for (const field of FIELD_KEYS) {
     const items = filledItemsOf(normalized, field);
@@ -52,41 +125,30 @@ export function validateForCompletion(
   }
 
   if (normalized.noHypothesisYet) {
+    if (normalized.hypotheses.length > 0 || normalized.selectedHypothesisId) {
+      return { ok: false, step: 'HIPOTESIS', details: 'noHypothesisYet cannot be combined with hypotheses or a selection' };
+    }
     return { ok: true };
   }
 
-  const hyps = validHypotheses(normalized);
-  const attempted = normalized.hypotheses.filter((h) => h.text.trim().length > 0 || h.itemIds.length > 0);
-  if (hyps.length < 1) {
+  if (normalized.hypotheses.length < 1) {
     return {
       ok: false,
       step: 'HIPOTESIS',
       details: 'Crea una hipótesis o marca que todavía no ves una clara.',
     };
   }
-  for (const hyp of attempted) {
-    if (hyp.text.trim().length < 12) {
-      return { ok: false, step: 'HIPOTESIS', details: 'Escribe la hipótesis en una frase.' };
-    }
-    if (hyp.text.length > 400) {
-      return { ok: false, step: 'HIPOTESIS', details: 'La hipótesis es demasiado larga.' };
-    }
-    if (hyp.itemIds.length < 1) {
-      return { ok: false, step: 'HIPOTESIS', details: 'Elige al menos un elemento.' };
-    }
-    const known = new Set(allItems(normalized).map((item) => item.id));
-    if (hyp.itemIds.some((id) => !known.has(id))) {
-      return { ok: false, step: 'HIPOTESIS', details: 'Hay piezas que ya no existen.' };
-    }
-  }
 
   const selectedId = resolveSelectedHypothesisId(normalized);
-  const selected = hyps.find((hyp) => hyp.id === selectedId);
+  const selected = normalized.hypotheses.find((hyp) => hyp.id === selectedId);
   if (!selected) {
     return { ok: false, step: 'HIPOTESIS', details: 'Elige qué dirección quieres contrastar primero.' };
   }
+  if (!hypothesisReady(selected.text, selected.itemIds)) {
+    return { ok: false, step: 'HIPOTESIS', details: 'La posibilidad elegida todavía está por completar.' };
+  }
   for (const key of CRITERION_KEYS) {
-    if (!(key in selected.criteria)) {
+    if (!Object.prototype.hasOwnProperty.call(selected.criteria, key)) {
       return { ok: false, step: 'CONTRASTE', details: 'Falta completar este paso.' };
     }
   }
@@ -106,4 +168,8 @@ export function validateNextExperiment(input: {
   if (!input.action.trim() || input.action.length > 280) return 'Escribe una acción concreta.';
   if (!input.signal.trim() || input.signal.length > 200) return 'Escribe una señal observable.';
   return null;
+}
+
+export function criterionAnswered(criteria: Partial<Record<IkigaiCriterionKey, 1 | 2 | 3 | 4 | 5 | null>>): boolean {
+  return CRITERION_KEYS.every((id) => Object.prototype.hasOwnProperty.call(criteria, id));
 }

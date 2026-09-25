@@ -12,6 +12,7 @@ import * as bcrypt from 'bcrypt';
 import { createHash, randomBytes } from 'crypto';
 import { Response } from 'express';
 import { MailService } from '../mail/mail.service';
+import { publicWebUrl } from '../mail/public-web-url';
 import { PrismaService } from '../prisma/prisma.service';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
@@ -77,6 +78,15 @@ export class AuthService {
       const message = err instanceof Error ? err.message : String(err);
       this.logger.warn(`Welcome email failed for ${user.email}: ${message}`);
     });
+
+    void this.mail
+      .sendNewRegistrationNotify(user.email, user.createdAt)
+      .catch((err: unknown) => {
+        const message = err instanceof Error ? err.message : String(err);
+        this.logger.warn(
+          `Registration notify failed for ${user.email}: ${message}`,
+        );
+      });
 
     return {
       accessToken: tokens.accessToken,
@@ -176,7 +186,7 @@ export class AuthService {
     };
   }
 
-  async forgotPassword(dto: ForgotPasswordDto) {
+  async forgotPassword(dto: ForgotPasswordDto, requestOrigin?: string) {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email.toLowerCase() },
     });
@@ -197,9 +207,8 @@ export class AuthService {
       },
     });
 
-    const webUrl =
-      this.config.get<string>('WEB_URL') ?? 'http://localhost:3000';
-    const resetUrl = `${webUrl.replace(/\/$/, '')}/reset-password?token=${rawToken}`;
+    const webUrl = publicWebUrl(requestOrigin);
+    const resetUrl = `${webUrl}/reset-password?token=${rawToken}`;
     await this.mail.sendPasswordResetEmail(user.email, resetUrl);
 
     return { success: true };

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 
 export function IkigaiSheet({
   open,
@@ -10,6 +11,7 @@ export function IkigaiSheet({
   onBack,
   backLabel = 'Volver',
   children,
+  footer,
   variant = 'default',
 }: {
   open: boolean;
@@ -19,6 +21,7 @@ export function IkigaiSheet({
   onBack?: () => void;
   backLabel?: string;
   children: ReactNode;
+  footer?: ReactNode;
   variant?: 'default' | 'library';
 }) {
   const panel = useRef<HTMLDivElement>(null);
@@ -29,10 +32,14 @@ export function IkigaiSheet({
       if (e.key === 'Escape') onClose();
     }
     const prev = document.documentElement.style.overflow;
+    const main = document.querySelector('.ik-main');
+    const prevMain = main instanceof HTMLElement ? main.style.overflow : '';
     document.documentElement.style.overflow = 'hidden';
+    if (main instanceof HTMLElement) main.style.overflow = 'hidden';
     window.addEventListener('keydown', onKey);
     return () => {
       document.documentElement.style.overflow = prev;
+      if (main instanceof HTMLElement) main.style.overflow = prevMain;
       window.removeEventListener('keydown', onKey);
     };
   }, [open, onClose]);
@@ -44,7 +51,7 @@ export function IkigaiSheet({
 
   if (!open) return null;
 
-  return (
+  const sheet = (
     <div className={`ik-sheet${variant === 'library' ? ' ik-sheet--library' : ''}`} role="dialog" aria-modal aria-labelledby="ik-sheet-title">
       <div className="ik-sheet__scrim" onClick={onClose} />
       <div
@@ -69,8 +76,11 @@ export function IkigaiSheet({
             Cerrar
           </button>
         </div>
-        {children}
+        <div className="ik-sheet__body">{children}</div>
+        {footer ? <div className="ik-sheet__foot">{footer}</div> : null}
       </div>
     </div>
   );
+
+  return typeof document === 'undefined' ? sheet : createPortal(sheet, document.body);
 }

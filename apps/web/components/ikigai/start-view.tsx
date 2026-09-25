@@ -107,9 +107,9 @@ export function StartView() {
         <div className="ik-start__copy">
           <h1 className="ik-question font-body">Empieza por ordenar las piezas.</h1>
           <p className="font-body-md ik-support">
-            Explora lo que te mueve, lo que puedes aportar, lo que te importa y lo que puede
-            sostenerte. Conecta lo que tenga sentido para ti y dale forma a una dirección que puedas
-            seguir explorando.
+            Explora lo que amas, en lo que eres bueno, lo que el mundo necesita y por lo que te
+            pueden pagar. Conecta lo que tenga sentido para ti y dale forma a una dirección que
+            puedas seguir explorando.
           </p>
           {resume ? (
             <p className="ik-note">

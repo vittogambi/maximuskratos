@@ -1,6 +1,7 @@
 export { ENGINE_VERSION, IKIGAI_DEFINITION_ID, FIELD_KEYS, CRITERION_KEYS, STEPS } from './types';
 export type {
   CompletionCheck,
+  ExperimentReviewStatus,
   EvidenceClass,
   FieldClarity,
   FieldClarityMap,
@@ -16,6 +17,7 @@ export type {
   Tension,
 } from './types';
 export { loadDefinition, validateDefinition, definitionFilePath } from './definition';
+export { EXPECTED_DEFINITION_REF, EXPECTED_DEFINITION_SHA256 } from './definition-pin';
 export {
   emptyDraft,
   emptyFieldClarity,
@@ -25,7 +27,9 @@ export {
   resolveSelectedHypothesisId,
   validHypotheses,
 } from './draft';
-export { validateDraft, validateForCompletion, validateNextExperiment } from './validate';
+export { validateDraft, validateDraftStructure, validateForCompletion, validateNextExperiment } from './validate';
+export type { DraftValidationIssue } from './validate';
+export { reconcileDraft, materialText, indexItems } from './reconcile-draft';
 export {
   deriveTensions,
   deriveOpenQuestions,

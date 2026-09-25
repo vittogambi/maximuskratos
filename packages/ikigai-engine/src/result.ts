@@ -1,4 +1,4 @@
-import { classifyEvidence, itemById, normalizeDraft, resolveSelectedHypothesisId } from './draft';
+import { classifyEvidence, itemById, normalizeDraft, resolveSelectedHypothesisId, validHypotheses } from './draft';
 import { ENGINE_VERSION } from './types';
 import { deriveConvergences, deriveOpenQuestions, deriveTensions } from './rules';
 import type {
@@ -38,10 +38,17 @@ function likertLabel(definition: IkigaiDefinition, value: 1 | 2 | 3 | 4 | 5 | nu
 
 export function buildResult(definition: IkigaiDefinition, draft: IkigaiDraft, now = '1970-01-01T00:00:00.000Z'): IkigaiResult {
   const normalized = normalizeDraft(draft);
-  const map = itemById(normalized);
-  const tensions = deriveTensions(definition, normalized);
-  const convergences = deriveConvergences(definition, normalized);
-  const openQuestions = deriveOpenQuestions(definition, normalized);
+  const readable: IkigaiDraft = {
+    ...normalized,
+    hypotheses: normalized.noHypothesisYet ? [] : validHypotheses(normalized),
+  };
+  if (readable.selectedHypothesisId && !readable.hypotheses.some((hyp) => hyp.id === readable.selectedHypothesisId)) {
+    readable.selectedHypothesisId = null;
+  }
+  const map = itemById(readable);
+  const tensions = deriveTensions(definition, readable);
+  const convergences = deriveConvergences(definition, readable);
+  const openQuestions = deriveOpenQuestions(definition, readable);
 
   const fields = definition.fields.map((field) => {
     const items = (normalized.items[field.key] ?? [])
@@ -56,7 +63,7 @@ export function buildResult(definition: IkigaiDefinition, draft: IkigaiDraft, no
     };
   });
 
-  const shownHyps = normalized.noHypothesisYet ? [] : normalized.hypotheses;
+  const shownHyps = readable.hypotheses;
 
   const hypotheses = shownHyps.map((hyp, index) => {
     const coverage = {
@@ -100,14 +107,14 @@ export function buildResult(definition: IkigaiDefinition, draft: IkigaiDraft, no
     definitionRef: definition.ref,
     engineVersion: ENGINE_VERSION,
     generatedAt: now,
-    selectedHypothesisId: resolveSelectedHypothesisId(normalized),
-    fieldClarity: normalized.fieldClarity,
+    selectedHypothesisId: resolveSelectedHypothesisId(readable),
+    fieldClarity: readable.fieldClarity,
     material: { fields },
     convergences,
     tensions,
     hypotheses,
     evidence,
     openQuestions,
-    nextExperiment: normalized.nextExperiment,
+    nextExperiment: readable.nextExperiment,
   };
 }

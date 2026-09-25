@@ -1,10 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
+  newRegistrationNotifyEmailHtml,
   passwordResetEmailHtml,
   reengagementEmailHtml,
   welcomeEmailHtml,
 } from './email-templates';
+import { configuredWebUrl } from './public-web-url';
+
+const DEFAULT_CONTACT_EMAIL = 'contacto@maximus-kratos.com';
 
 @Injectable()
 export class MailService {
@@ -20,11 +24,12 @@ export class MailService {
   }
 
   private getWebUrl(): string {
-    return (
-      this.config.get<string>('WEB_URL') ??
-      this.config.get<string>('APP_URL') ??
-      'https://maximus-kratos.com'
-    );
+    return configuredWebUrl();
+  }
+
+  private getContactEmail(): string {
+    const raw = this.config.get<string>('CONTACT_EMAIL')?.trim();
+    return raw || DEFAULT_CONTACT_EMAIL;
   }
 
   private async sendHtml(
@@ -32,6 +37,7 @@ export class MailService {
     subject: string,
     html: string,
     logLabel: string,
+    replyTo?: string,
   ): Promise<boolean> {
     const apiKey = this.config.get<string>('RESEND_API_KEY');
 
@@ -51,6 +57,7 @@ export class MailService {
         to: [to],
         subject,
         html,
+        ...(replyTo ? { reply_to: replyTo } : {}),
       }),
     });
 
@@ -66,6 +73,25 @@ export class MailService {
   async sendWelcomeEmail(to: string): Promise<boolean> {
     const { subject, html } = welcomeEmailHtml(this.getWebUrl());
     return this.sendHtml(to, subject, html, 'welcome email');
+  }
+
+  async sendNewRegistrationNotify(
+    userEmail: string,
+    createdAt: Date,
+  ): Promise<boolean> {
+    const to = this.getContactEmail();
+    const { subject, html } = newRegistrationNotifyEmailHtml(
+      this.getWebUrl(),
+      userEmail,
+      createdAt,
+    );
+    return this.sendHtml(
+      to,
+      subject,
+      html,
+      `registration notify: ${userEmail}`,
+      userEmail,
+    );
   }
 
   async sendPasswordResetEmail(to: string, resetUrl: string): Promise<boolean> {

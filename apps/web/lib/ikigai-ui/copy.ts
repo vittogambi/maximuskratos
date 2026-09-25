@@ -32,9 +32,9 @@ export const FIELD_UI: Record<
 };
 
 export const PIECES_TITLE = 'Mis piezas';
-export const PIECES_EMPTY = 'Todavía no hay piezas en este lente.';
+export const PIECES_EMPTY = 'Todavía no hay piezas en este círculo.';
 export const PIECES_EMPTY_LEAD = 'Empieza con algo tuyo o mira ideas para inspirarte.';
-export const PIECES_FULL = 'Cinco piezas es suficiente para este lente.';
+export const PIECES_FULL = 'Cinco piezas es suficiente para este círculo.';
 
 export const EXPLORE_LEAD = 'Puedes escribir las tuyas o explorar algunas ideas.';
 export const EXPLORE_DISCLAIMER = 'Son ideas para reconocer, no respuestas que tengas que elegir.';
@@ -58,16 +58,28 @@ export const CONTRAST_ONE_NOTE =
   'En esta versión contrastas primero una dirección. Si escribiste más, quedan en el mapa.';
 export const ANSWERS_FRAME = 'Según tus respuestas';
 export const EXPERIMENT_INVITE = 'Ponerla a prueba';
+export const EXPERIMENT_LEAD =
+  'Elige una acción chica de esta dirección y un plazo. Al terminar, miras si quisiste seguir, si pudiste hacerlo, si le sirvió a alguien y si alguien lo valoró lo bastante como para pagarlo.';
+export const EXPERIMENT_HORIZON_NOTE = '30 días alcanza para una primera prueba.';
+export const EXPERIMENT_ACTION = 'Qué vas a hacer';
+export const EXPERIMENT_ACTION_PLACEHOLDER = 'Dar un taller de dos horas.';
+export const EXPERIMENT_FOCUS = 'Qué quieres comprobar';
+export const EXPERIMENT_FOCUS_PLACEHOLDER = 'Si alguien pagaría por esa clase.';
+export const EXPERIMENT_SIGNAL = 'Cómo te vas a dar cuenta';
+export const EXPERIMENT_SIGNAL_PLACEHOLDER = 'Si piden otra y si yo quiero repetirla.';
+export const EXPERIMENT_SAVE = 'Guardar la prueba';
+export const EXPERIMENT_SAVED =
+  'Quedó guardada. Cuando termine el plazo, mira si los cuatro círculos se sostienen.';
 
 export const HYPOTHESIS_GUIDE_ITEMS = [
-  'qué te mueve;',
-  'qué puedes aportar;',
-  'a quién o a qué atiendes;',
-  'cómo puede sostenerse.',
+  'lo que amas;',
+  'en lo que eres bueno;',
+  'lo que el mundo necesita;',
+  'por lo que te pueden pagar.',
 ];
 
 export const HYPOTHESIS_GUIDE_NOTE =
-  'Puedes pensar en esas cuatro lentes. No hace falta que todas entren. No declares un propósito cerrado.';
+  'Puedes pensar en esos cuatro círculos. No hace falta que todos entren. No declares un propósito cerrado.';
 
 export const RELATE_LEAD = 'Toca las piezas que, para ti, parecen formar parte de una misma dirección.';
 export const RELATE_EMPTY =

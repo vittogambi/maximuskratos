@@ -161,6 +161,8 @@ export interface IkigaiHypothesis {
   order: number;
 }
 
+export type ExperimentReviewStatus = 'CURRENT' | 'NEEDS_REVIEW';
+
 export interface IkigaiNextExperiment {
   hypothesisId: string | null;
   focus: string;
@@ -168,6 +170,8 @@ export interface IkigaiNextExperiment {
   action: string;
   signal: string;
   savedAt: string;
+  /** Absent on older drafts. Readers treat absence as NEEDS_REVIEW. */
+  reviewStatus?: ExperimentReviewStatus;
 }
 
 export type FieldClarity = 'ANSWERED' | 'UNCLEAR' | null;

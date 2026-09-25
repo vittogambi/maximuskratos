@@ -33,6 +33,8 @@ export type IkigaiHypothesis = {
   criteria: Partial<Record<IkigaiCriterionKey, 1 | 2 | 3 | 4 | 5 | null>>;
   order: number;
 };
+export type ExperimentReviewStatus = 'CURRENT' | 'NEEDS_REVIEW';
+
 export type IkigaiNextExperiment = {
   hypothesisId: string | null;
   focus: string;
@@ -40,7 +42,13 @@ export type IkigaiNextExperiment = {
   action: string;
   signal: string;
   savedAt: string;
+  reviewStatus?: ExperimentReviewStatus;
 };
+
+export type ExperimentContext =
+  | { state: 'NONE' }
+  | { state: 'CURRENT'; experiment: IkigaiNextExperiment }
+  | { state: 'NEEDS_REVIEW'; experiment: IkigaiNextExperiment };
 export type FieldClarity = 'ANSWERED' | 'UNCLEAR' | null;
 export type FieldClarityMap = Record<IkigaiFieldKey, FieldClarity>;
 
@@ -192,6 +200,7 @@ export const ikigaiApi = {
       session: IkigaiSessionView;
       draft: IkigaiDraft;
       definition: IkigaiDefinition;
+      definitionSha256: string;
       token: string;
     }>('/sessions', { method: 'POST', body: JSON.stringify({ source }) }),
   getSession: (id: string, token: string) =>
@@ -199,31 +208,50 @@ export const ikigaiApi = {
       session: IkigaiSessionView;
       draft: IkigaiDraft;
       definition: IkigaiDefinition;
+      definitionSha256: string;
       latestSnapshot: { revision: number; createdAt: string } | null;
     }>(`/sessions/${id}`, { token }),
   patchDraft: (
     id: string,
     token: string,
-    body: { draftVersion: number; step?: string; patch: Partial<IkigaiDraft> },
+    body: { draftVersion: number; definitionSha256: string; step?: string; patch: IkigaiDraft },
   ) =>
-    ikigaiRequest<{ draftVersion: number; draft: IkigaiDraft; session: IkigaiSessionView }>(
-      `/sessions/${id}/draft`,
-      { method: 'PATCH', token, body: JSON.stringify(body) },
+    ikigaiRequest<{
+      draftVersion: number;
+      draft: IkigaiDraft;
+      definitionSha256: string;
+      affectedHypothesisIds: string[];
+      session: IkigaiSessionView;
+    }>(`/sessions/${id}/draft`, { method: 'PATCH', token, body: JSON.stringify(body) }),
+  complete: (id: string, token: string, body: { draftVersion: number; definitionSha256: string }) =>
+    ikigaiRequest<{ result: IkigaiResult; revision: number; sha256: string; draftVersion: number }>(
+      `/sessions/${id}/complete`,
+      { method: 'POST', token, body: JSON.stringify(body) },
     ),
-  complete: (id: string, token: string) =>
-    ikigaiRequest<{ result: IkigaiResult; revision: number; sha256: string }>(`/sessions/${id}/complete`, {
+  result: (id: string, token: string) =>
+    ikigaiRequest<{
+      result: IkigaiResult;
+      experiment: ExperimentContext;
+      revision: number;
+      sha256: string;
+      createdAt: string;
+      definitionSha256: string;
+    }>(`/sessions/${id}/result`, { token }),
+  reopen: (id: string, token: string, body: { draftVersion: number; definitionSha256: string }) =>
+    ikigaiRequest<{ ok: boolean; draftVersion: number; definitionSha256: string }>(`/sessions/${id}/reopen`, {
       method: 'POST',
       token,
+      body: JSON.stringify(body),
     }),
-  result: (id: string, token: string) =>
-    ikigaiRequest<{ result: IkigaiResult; revision: number; sha256: string; createdAt: string }>(
-      `/sessions/${id}/result`,
-      { token },
-    ),
-  reopen: (id: string, token: string) =>
-    ikigaiRequest<{ ok: boolean }>(`/sessions/${id}/reopen`, { method: 'POST', token }),
-  nextExperiment: (id: string, token: string, body: Omit<IkigaiNextExperiment, 'savedAt'>) =>
-    ikigaiRequest<{ nextExperiment: IkigaiNextExperiment; draftVersion: number }>(
+  nextExperiment: (
+    id: string,
+    token: string,
+    body: Omit<IkigaiNextExperiment, 'savedAt' | 'reviewStatus'> & {
+      draftVersion: number;
+      definitionSha256: string;
+    },
+  ) =>
+    ikigaiRequest<{ nextExperiment: IkigaiNextExperiment; draftVersion: number; definitionSha256: string }>(
       `/sessions/${id}/next-experiment`,
       { method: 'PUT', token, body: JSON.stringify(body) },
     ),

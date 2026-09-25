@@ -6,7 +6,7 @@ import { buildPageMetadata } from '@/lib/seo';
 export const metadata = buildPageMetadata({
   title: 'IKIGAI',
   description:
-    'Empieza por ordenar las piezas. Explora lo que te mueve, lo que puedes aportar, lo que te importa y lo que puede sostenerte. Versión en revisión.',
+    'Empieza por ordenar las piezas. Explora lo que amas, en lo que eres bueno, lo que el mundo necesita y por lo que te pueden pagar. Versión en revisión.',
   path: '/ikigai',
   image: LANDING_IMAGES.ikigaiHero,
 });

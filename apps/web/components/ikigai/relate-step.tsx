@@ -1,439 +1,506 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { IkigaiLensMark } from '@/components/ikigai/lens-mark';
-import type { IkigaiDefinition, IkigaiDraft, IkigaiHypothesis } from '@/lib/ikigai-api';
-import {
-  CONTRAST_ONE_NOTE,
-  HYPOTHESIS_GUIDE_ITEMS,
-  HYPOTHESIS_GUIDE_NOTE,
-  HYPOTHESIS_PLACEHOLDER,
-  RELATE_EMPTY,
-  RELATE_LEAD,
-  RELATE_NO_PIECES_PREFIX,
-  SAVE_DIRECTION,
-  TRAY_EMPTY,
-  TRAY_LABEL,
-  WRITE_PIECES_LABEL,
-} from '@/lib/ikigai-ui/copy';
-import {
-  coverageOf,
-  fieldTitle,
-  FIELD_STEPS,
-  HYPOTHESIS_MAX,
-  missingLensCopy,
-  selectableByField,
-} from '@/lib/ikigai-ui/format';
-
-type Phase = 'map' | 'write' | 'saved' | 'choose' | 'none';
+import { IkigaiCircles } from '@/components/ikigai/ikigai-circles';
+import type { IkigaiDefinition, IkigaiDraft, IkigaiFieldKey, IkigaiHypothesis, IkigaiItem } from '@/lib/ikigai-api';
+import { HYPOTHESIS_GUIDE_NOTE } from '@/lib/ikigai-ui/copy';
+import { fieldTitle, FIELD_STEPS, filledItems, HYPOTHESIS_MAX, newItemId } from '@/lib/ikigai-ui/format';
 
 function newHypId() {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
   return `h-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
+export function gapCopy(text: string, count: number): string | null {
+  if (count < 1) return 'Elige al menos una idea.';
+  const missing = 12 - text.trim().length;
+  if (missing > 0) return `Faltan ${missing} caracteres.`;
+  if (text.length > HYPOTHESIS_MAX) return 'La frase es demasiado larga.';
+  return null;
+}
+
+type Composer = { ids: string[]; text: string; editingId: string | null };
+const EMPTY_COMPOSER: Composer = { ids: [], text: '', editingId: null };
+const CENTER_ZONE = 'CAPACIDAD+NECESIDAD+PASION+VALOR';
+
+const ZONE_CAPTION: Record<string, string> = {
+  'CAPACIDAD+PASION': 'Pasión. Lo que amas y en lo que eres bueno.',
+  'NECESIDAD+PASION': 'Misión. Lo que amas y el mundo necesita, aunque todavía no seas tan bueno en ello.',
+  'CAPACIDAD+VALOR': 'Profesión. En lo que eres bueno y por lo que te pueden pagar, aunque no te guste especialmente.',
+  'NECESIDAD+VALOR': 'Vocación. Lo que el mundo necesita y por lo que te pueden pagar, aunque no te guste ni se te dé bien.',
+  [CENTER_ZONE]: 'Ikigai. Lo que cumple los cuatro a la vez.',
+};
+
+function zoneCaption(id: string | null): string {
+  if (!id) return '';
+  return ZONE_CAPTION[id] ?? '';
+}
+
 export function IkigaiRelateStep({
   definition,
   draft,
   onChange,
-  onContrast,
+  onExplore,
+  onStopExplore,
   onNoHypothesis,
-  onBackToLenses,
+  onEditField,
+  onShapeChange,
 }: {
   definition: IkigaiDefinition;
   draft: IkigaiDraft;
   onChange: (patch: Partial<IkigaiDraft>) => void;
-  onContrast: (selectedHypothesisId: string) => void;
+  onExplore: (selectedHypothesisId: string) => void;
+  onStopExplore: () => void;
   onNoHypothesis: () => void;
-  onBackToLenses?: () => void;
+  onEditField: (field: IkigaiFieldKey) => void;
+  onShapeChange?: (open: boolean) => void;
 }) {
-  const saved = draft.hypotheses.filter(
-    (h) => h.text.trim().length >= 12 && h.itemIds.length >= 1,
-  );
-  const [phase, setPhase] = useState<Phase>(saved.length > 0 ? 'saved' : 'map');
-  const [itemIds, setItemIds] = useState<string[]>([]);
-  const [text, setText] = useState('');
-  const [guide, setGuide] = useState(false);
-  const [examples, setExamples] = useState(false);
+  const [composer, setComposer] = useState<Composer>(EMPTY_COMPOSER);
+  const [confirmDrop, setConfirmDrop] = useState<string | null>(null);
   const [confirmNone, setConfirmNone] = useState(false);
-  const byField = selectableByField(draft);
-  const covered = coverageOf({ itemIds }, draft);
-  const missing = missingLensCopy(covered, definition);
-  const canWrite = itemIds.length >= 1;
-  const canSave = text.trim().length >= 12 && text.length <= HYPOTHESIS_MAX && itemIds.length >= 1;
-  const canAddAnother = saved.length < 3;
+  const [adding, setAdding] = useState<IkigaiFieldKey | null>(null);
+  const [manage, setManage] = useState<IkigaiFieldKey | null>(null);
+  const [shape, setShape] = useState(false);
+  const [narrow, setNarrow] = useState(false);
+  const [live, setLive] = useState('');
+  const [flashId, setFlashId] = useState<string | null>(null);
+  const [composing, setComposing] = useState(false);
+  const [asList, setAsList] = useState(false);
+  const [hoverZone, setHoverZone] = useState<string | null>(null);
 
   useEffect(() => {
-    document.querySelector('.ik-main')?.scrollTo(0, 0);
-  }, [phase]);
+    const query = window.matchMedia('(max-width: 899px)');
+    const sync = () => setNarrow(query.matches);
+    sync();
+    query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync);
+  }, []);
+
+  useEffect(() => {
+    onShapeChange?.(narrow && shape);
+  }, [narrow, shape, onShapeChange]);
+
+  useEffect(() => {
+    if (!live) return;
+    const timer = window.setTimeout(() => setLive(''), 1600);
+    return () => window.clearTimeout(timer);
+  }, [live]);
+
+  const counts = useMemo(() => {
+    const next = { PASION: 0, CAPACIDAD: 0, NECESIDAD: 0, VALOR: 0 };
+    for (const key of FIELD_STEPS) next[key] = filledItems(draft.items[key] ?? []).length;
+    return next;
+  }, [draft.items]);
+  const unclear = {
+    PASION: draft.fieldClarity.PASION === 'UNCLEAR' && counts.PASION === 0,
+    CAPACIDAD: draft.fieldClarity.CAPACIDAD === 'UNCLEAR' && counts.CAPACIDAD === 0,
+    NECESIDAD: draft.fieldClarity.NECESIDAD === 'UNCLEAR' && counts.NECESIDAD === 0,
+    VALOR: draft.fieldClarity.VALOR === 'UNCLEAR' && counts.VALOR === 0,
+  };
+  const ideasMet = composer.ids.length > 0;
+  const charsMet = composer.text.trim().length >= 12;
+  const reason = gapCopy(composer.text, composer.ids.length);
+  const atLimit = draft.hypotheses.length >= 3 && !composer.editingId;
+  const showSavedPanel = draft.hypotheses.length > 0 && !composing && !composer.editingId && composer.ids.length === 0 && !composer.text;
+
+  useEffect(() => {
+    if (!showSavedPanel) return;
+    document.querySelector<HTMLElement>('.ik-connect__card .ag-btn-primary')?.focus();
+  }, [showSavedPanel]);
+
+  function announce(message: string) {
+    setLive('');
+    window.setTimeout(() => setLive(message), 20);
+  }
 
   function toggle(id: string) {
-    setItemIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
-  }
-
-  function saveCurrent() {
-    const hyp: IkigaiHypothesis = {
-      id: newHypId(),
-      text: text.trim(),
-      itemIds,
-      criteria: {},
-      order: saved.length,
-    };
-    onChange({
-      hypotheses: [...saved, hyp],
-      noHypothesisYet: false,
-      selectedHypothesisId: saved.length === 0 ? hyp.id : draft.selectedHypothesisId ?? hyp.id,
+    setComposing(true);
+    setComposer((current) => {
+      const on = current.ids.includes(id);
+      announce(on ? 'Idea quitada.' : 'Idea añadida.');
+      if (!on) setFlashId(id);
+      return { ...current, ids: on ? current.ids.filter((item) => item !== id) : [...current.ids, id] };
     });
-    setItemIds([]);
-    setText('');
-    setGuide(false);
-    setExamples(false);
-    setPhase('saved');
   }
 
-  const chosen = FIELD_STEPS.flatMap((key) =>
-    byField[key].filter((row) => itemIds.includes(row.id)).map((row) => ({ ...row, field: key })),
-  );
-
-  if (phase === 'write') {
-    return (
-      <>
-        <h1 className="ik-question font-body">{definition.hypothesis.label}</h1>
-        <p className="font-body-md ik-support">{definition.hypothesis.help}</p>
-        <div className="ik-chosen">
-          <p className="ik-chosen__label">{WRITE_PIECES_LABEL}</p>
-          <div className="ik-chosen__chips">
-            {chosen.map((row) => (
-                <span className="ik-token" key={row.id}>
-                <span className="ik-token__lens">
-                  <IkigaiLensMark field={row.field} size={12} />
-                  {fieldTitle(definition, row.field)}
-                </span>
-                {row.text}
-              </span>
-            ))}
-          </div>
-        </div>
-        <label className="sr-only" htmlFor="hyp-text">
-          Dirección
-        </label>
-        <textarea
-          id="hyp-text"
-          className="ik-area ik-area--write"
-          rows={5}
-          maxLength={HYPOTHESIS_MAX}
-          placeholder={HYPOTHESIS_PLACEHOLDER}
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
-        <p className={`ik-count${text.length >= HYPOTHESIS_MAX ? ' is-over' : ''}`}>
-          {text.length} / {HYPOTHESIS_MAX}
-        </p>
-        <div className="ik-aux-row">
-          <button
-            type="button"
-            className="ik-text"
-            aria-pressed={guide}
-            onClick={() => {
-              setGuide((open) => !open);
-              setExamples(false);
-            }}
-          >
-            Necesito una guía
-          </button>
-          <button
-            type="button"
-            className="ik-text"
-            aria-pressed={examples}
-            onClick={() => {
-              setExamples((open) => !open);
-              setGuide(false);
-            }}
-          >
-            Ver ejemplos
-          </button>
-        </div>
-        {guide ? (
-          <div className="ik-guide">
-            <p className="ik-note">Puedes pensar en:</p>
-            <ul className="ik-help-list">
-              {HYPOTHESIS_GUIDE_ITEMS.map((row) => (
-                <li key={row}>{row}</li>
-              ))}
-            </ul>
-            <p className="ik-hint">{HYPOTHESIS_GUIDE_NOTE}</p>
-          </div>
-        ) : null}
-        {examples ? (
-          <ul className="ik-help-list">
-            {definition.hypothesis.examples.map((row) => (
-              <li key={row}>{row}</li>
-            ))}
-          </ul>
-        ) : null}
-        <div className="ik-write-foot">
-          <button type="button" className="ik-text" onClick={() => setPhase('map')}>
-            ← Volver
-          </button>
-          <button
-            type="button"
-            className="ag-btn-primary font-label-lg"
-            disabled={!canSave}
-            onClick={saveCurrent}
-          >
-            {SAVE_DIRECTION}
-          </button>
-        </div>
-      </>
-    );
+  function saveComposer() {
+    if (reason || atLimit) return;
+    const next: IkigaiHypothesis = {
+      id: composer.editingId ?? newHypId(),
+      text: composer.text.trim(),
+      itemIds: composer.ids,
+      criteria: draft.hypotheses.find((hyp) => hyp.id === composer.editingId)?.criteria ?? {},
+      order: draft.hypotheses.find((hyp) => hyp.id === composer.editingId)?.order ?? draft.hypotheses.length,
+    };
+    const exists = draft.hypotheses.some((hyp) => hyp.id === next.id);
+    onChange({
+      hypotheses: exists ? draft.hypotheses.map((hyp) => (hyp.id === next.id ? next : hyp)) : [...draft.hypotheses, next],
+      noHypothesisYet: false,
+    });
+    setComposer(EMPTY_COMPOSER);
+    setComposing(false);
+    setShape(false);
+    setFlashId(null);
   }
 
-  if (phase === 'choose') {
-    return (
-      <>
-        <h1 className="ik-question font-body">¿Cuál quieres poner a prueba primero?</h1>
-        <div className="ik-stack">
-          {saved.map((hyp) => (
-            <button
-              key={hyp.id}
-              type="button"
-              className="ik-item"
-              onClick={() => onContrast(hyp.id)}
-            >
-              <p className="ik-item__text">{hyp.text}</p>
-            </button>
-          ))}
-        </div>
-      </>
-    );
+  function addIdea(field: IkigaiFieldKey, text: string) {
+    const current = filledItems(draft.items[field] ?? []);
+    if (current.length >= 5) return;
+    const item: IkigaiItem = { id: newItemId(), text, evidence: null, order: current.length };
+    onChange({
+      items: { ...draft.items, [field]: [...current, item] },
+      fieldClarity: { ...draft.fieldClarity, [field]: 'ANSWERED' },
+    });
+    setComposer((state) => ({ ...state, ids: [...state.ids, item.id] }));
+    setComposing(true);
+    setAdding(null);
+    setManage(null);
+    announce('Idea añadida.');
+    setFlashId(item.id);
   }
 
-  if (phase === 'saved') {
-    const last = saved[saved.length - 1];
-    const lastPieces = last
-      ? FIELD_STEPS.flatMap((key) =>
-          byField[key]
-            .filter((row) => last.itemIds.includes(row.id))
-            .map((row) => ({ ...row, field: key })),
-        )
-      : [];
-    return (
-      <>
-        <h1 className="ik-question font-body">Una dirección que apareció</h1>
-        {last ? (
-          <div className="ik-direction ik-direction--saved">
-            <p>{last.text}</p>
-          </div>
-        ) : null}
-        {lastPieces.length > 0 ? (
-          <div className="ik-chosen">
-            <p className="ik-chosen__label">{WRITE_PIECES_LABEL}</p>
-            <div className="ik-chosen__chips">
-              {lastPieces.map((row) => (
-                <span className="ik-token" key={row.id}>
-                <span className="ik-token__lens">
-                  <IkigaiLensMark field={row.field} size={12} />
-                  {fieldTitle(definition, row.field)}
-                </span>
-                {row.text}
-              </span>
-              ))}
-            </div>
-          </div>
-        ) : null}
-        {saved.length > 1
-          ? saved.slice(0, -1).map((hyp) => (
-              <div className="ik-direction" key={hyp.id}>
-                <p>{hyp.text}</p>
-                <small>Otra dirección</small>
-              </div>
-            ))
-          : null}
-        <p className="ik-hint">{CONTRAST_ONE_NOTE}</p>
-        <div className="ik-inline-actions">
-          <button
-            type="button"
-            className="ag-btn-primary font-label-lg"
-            onClick={() => {
-              if (saved.length === 1) onContrast(saved[0].id);
-              else setPhase('choose');
-            }}
-          >
-            {saved.length === 1 ? 'Contrastar esta dirección' : 'Elegir cuál contrastar'}
-          </button>
-          {canAddAnother ? (
-            <button
-              type="button"
-              className="ik-btn-quiet"
-              onClick={() => {
-                setItemIds([]);
-                setText('');
-                setPhase('map');
-              }}
-            >
-              Explorar otra dirección
-            </button>
-          ) : null}
-        </div>
-        <button type="button" className="ik-text" onClick={() => setConfirmNone(true)}>
-          {definition.hypothesis.noHypothesisLabel}
-        </button>
-        {confirmNone ? <NoneModal onCancel={() => setConfirmNone(false)} onConfirm={onNoHypothesis} /> : null}
-      </>
-    );
-  }
+  const picks = composer.ids.flatMap((id) => {
+    for (const key of FIELD_STEPS) {
+      const item = filledItems(draft.items[key] ?? []).find((row) => row.id === id);
+      if (item) return [{ id, text: item.text, field: fieldTitle(definition, key) }];
+    }
+    return [];
+  });
 
-  const withPieces = FIELD_STEPS.filter((key) => byField[key].length > 0);
-  const withoutPieces = FIELD_STEPS.filter((key) => byField[key].length === 0);
-
-  if (withPieces.length === 0) {
-    return (
-      <>
-        <h1 className="ik-question font-body">¿Qué piezas parecen pertenecer a una misma dirección?</h1>
-        <div className="ik-slot">
-          <p className="ik-slot__text">{RELATE_EMPTY}</p>
-          {onBackToLenses ? (
-            <div className="ik-add-row">
-              <button type="button" className="ik-add" onClick={onBackToLenses}>
-                <span className="ik-add__mark" aria-hidden>
-                  +
-                </span>
-                Volver a explorar
-              </button>
-            </div>
-          ) : null}
-        </div>
-        <button type="button" className="ik-text" onClick={() => setConfirmNone(true)}>
-          {definition.hypothesis.noHypothesisLabel}
-        </button>
-        {confirmNone ? <NoneModal onCancel={() => setConfirmNone(false)} onConfirm={onNoHypothesis} /> : null}
-      </>
-    );
-  }
-
-  return (
-    <>
-      <h1 className="ik-question font-body">¿Qué piezas parecen pertenecer a una misma dirección?</h1>
-      <p className="font-body-md ik-support">{RELATE_LEAD}</p>
-      {withPieces.map((key) => (
-        <LensGroup
-          key={key}
-          title={fieldTitle(definition, key)}
-          items={byField[key]}
-          selected={itemIds}
-          onToggle={toggle}
+  const shapeNode = showSavedPanel ? (
+    <div className="ik-connect__saved">
+      <h2 className="ik-connect__step">Tu posibilidad</h2>
+      {draft.hypotheses.map((hyp) => (
+        <SavedCard
+          key={hyp.id}
+          definition={definition}
+          draft={draft}
+          hyp={hyp}
+          onExplore={() => onExplore(hyp.id)}
+          onEdit={() => {
+            setComposer({ ids: [...hyp.itemIds], text: hyp.text, editingId: hyp.id });
+            setComposing(true);
+            setShape(true);
+          }}
+          onDrop={() => setConfirmDrop(hyp.id)}
+          onStop={hyp.id === draft.selectedHypothesisId ? onStopExplore : undefined}
         />
       ))}
-      {withoutPieces.length > 0 ? (
-        <p className="ik-hint ik-hint--gap">
-          {RELATE_NO_PIECES_PREFIX}{' '}
-          {withoutPieces.map((key) => fieldTitle(definition, key).toLowerCase()).join(', ')}.
-        </p>
-      ) : null}
-      <div className="ik-aux-row">
-        {onBackToLenses ? (
-          <button type="button" className="ik-text" onClick={onBackToLenses}>
-            Volver a explorar
-          </button>
+      {!atLimit ? (
+        <button type="button" className="ik-connect__secondary" onClick={() => setComposing(true)}>
+          Escribir otra posibilidad
+        </button>
+      ) : (
+        <p className="ik-hint">Tres posibilidades es el límite. Edita o elimina una para escribir otra.</p>
+      )}
+    </div>
+  ) : (
+    <ComposerPanel
+      picks={picks}
+      text={composer.text}
+      ideasMet={ideasMet}
+      charsMet={charsMet}
+      flashId={flashId}
+      live={live}
+      atLimit={atLimit}
+      disabled={Boolean(reason) || atLimit}
+      onText={(value) => {
+        setComposing(true);
+        setComposer({ ...composer, text: value });
+      }}
+      onRemove={(id) => {
+        setComposer({ ...composer, ids: composer.ids.filter((item) => item !== id) });
+        announce('Idea quitada.');
+      }}
+      onSave={saveComposer}
+    />
+  );
+
+  return (
+    <div className={`ik-connect${narrow && shape ? ' is-shape' : ''}`}>
+      <p className="ik-live" aria-live="polite">{live}</p>
+      <div className="ik-connect__pick">
+        <h1 className="ik-connect__title">Conecta tus ideas</h1>
+        <p className="ik-connect__lead">Ahora conecta las ideas que para ti van en la misma dirección. Toca una idea para llevarla al centro.</p>
+        <button type="button" className="ik-text" onClick={() => setAsList((value) => !value)}>{asList ? 'Ver como mapa' : 'Ver como lista'}</button>
+        {!asList ? (
+          <IkigaiCircles
+            definition={definition}
+            counts={counts}
+            unclear={unclear}
+            markers={draft.hypotheses.map((hyp, index) => ({
+              id: hyp.id,
+              index: index + 1,
+              fields: FIELD_STEPS.filter((key) => filledItems(draft.items[key] ?? []).some((item) => hyp.itemIds.includes(item.id))),
+            }))}
+            reached={[...FIELD_STEPS]}
+            onHoverZone={setHoverZone}
+            onOpenCircle={(key) => {
+              if (counts[key] === 0) return;
+              document.getElementById(`ik-lens-${key}`)?.scrollIntoView({ block: 'nearest' });
+            }}
+          />
         ) : null}
-        <button type="button" className="ik-text" onClick={() => setConfirmNone(true)}>
+        {!asList ? <p className="ik-connect__zone">{zoneCaption(hoverZone)}</p> : null}
+        <div className="ik-connect__lenses">
+          {FIELD_STEPS.map((key) => {
+            const items = filledItems(draft.items[key] ?? []);
+            const expanded = true;
+            return (
+              <section className={`ik-connect__lens${expanded ? ' is-open' : ''}`} id={`ik-lens-${key}`} key={key}>
+                <div className="ik-connect__lens-head">
+                  <button
+                    type="button"
+                    className="ik-connect__lens-toggle"
+                    aria-expanded={expanded}
+                    onClick={() => undefined}
+                  >
+                    <IkigaiLensMark field={key} />
+                    <span>
+                      <span className="ik-connect__lens-name">{fieldTitle(definition, key)}</span>
+                      <span className="ik-connect__count">
+                        {unclear[key] ? 'sin ideas' : `${counts[key]} ${counts[key] === 1 ? 'idea' : 'ideas'}`}
+                      </span>
+                    </span>
+                  </button>
+                  <div className="ik-connect__manage">
+                    <button
+                      type="button"
+                      className="ik-connect__manage-btn"
+                      aria-haspopup="menu"
+                      aria-expanded={manage === key}
+                      aria-label={`Gestionar ideas de ${fieldTitle(definition, key)}`}
+                      onClick={() => setManage(manage === key ? null : key)}
+                    >
+                      Gestionar
+                    </button>
+                    {manage === key ? (
+                      <div className="ik-connect__menu" role="menu">
+                        {items.length < 5 ? (
+                          <button type="button" role="menuitem" onClick={() => { setAdding(key); setManage(null); }}>
+                            Añadir idea
+                          </button>
+                        ) : null}
+                        <button type="button" role="menuitem" onClick={() => onEditField(key)}>
+                          Editar respuestas
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+                {expanded ? (
+                  <div className="ik-connect__lens-body">
+                    {unclear[key] ? <p className="ik-connect__unclear">Por ahora no lo tienes claro. Puedes seguir sin ideas aquí.</p> : null}
+                    {items.map((item) => {
+                      const on = composer.ids.includes(item.id);
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          className={`ik-connect__idea${on ? ' is-on' : ''}${flashId === item.id ? ' is-flash' : ''}`}
+                          aria-pressed={on}
+                          onClick={() => toggle(item.id)}
+                        >
+                          <span className="ik-connect__check" aria-hidden />
+                          <span>{item.text}</span>
+                        </button>
+                      );
+                    })}
+                    {adding === key ? (
+                      <IdeaBox onCancel={() => setAdding(null)} onSubmit={(text) => addIdea(key, text)} />
+                    ) : null}
+                  </div>
+                ) : null}
+              </section>
+            );
+          })}
+        </div>
+        <button type="button" className="ik-connect__exit" onClick={() => setConfirmNone(true)}>
           {definition.hypothesis.noHypothesisLabel}
         </button>
       </div>
-      <div className="ik-tray">
-        <div className="ik-tray__head">
-          <p className="ik-tray__label">{TRAY_LABEL}</p>
-          {chosen.length > 0 ? <span className="ik-tray__count">{chosen.length}</span> : null}
+      <aside className="ik-connect__shape">{shapeNode}</aside>
+      {narrow && ideasMet && !shape ? (
+        <div className="ik-connect__tray">
+          <p>{composer.ids.length === 1 ? '1 seleccionada' : `${composer.ids.length} seleccionadas`}</p>
+          <button
+            type="button"
+            className="ag-btn-primary font-label-lg"
+            onClick={() => {
+              setShape(true);
+              window.setTimeout(() => document.querySelector('.ik-connect__shape')?.scrollIntoView({ block: 'start' }), 0);
+            }}
+          >
+            Darles forma
+          </button>
         </div>
-        {chosen.length > 0 ? (
-          <div className="ik-tray__chips">
-            {chosen.map((row) => (
-              <span className="ik-token ik-token--chip" key={row.id}>
-                <IkigaiLensMark field={row.field} size={12} />
-                {row.text}
-              </span>
-            ))}
-          </div>
-        ) : (
-          <p className="ik-tray__empty">{TRAY_EMPTY}</p>
-        )}
-        {missing ? <p className="ik-tray__note">{missing}</p> : null}
-        <button
-          type="button"
-          className="ag-btn-primary font-label-lg"
-          disabled={!canWrite}
-          onClick={() => {
-            setText('');
-            setPhase('write');
+      ) : null}
+      {confirmDrop ? (
+        <Confirm
+          title="Eliminar posibilidad"
+          body="Se eliminará solo esta posibilidad."
+          confirmLabel="Eliminar"
+          onCancel={() => setConfirmDrop(null)}
+          onConfirm={() => {
+            onChange({
+              hypotheses: draft.hypotheses.filter((hyp) => hyp.id !== confirmDrop),
+              selectedHypothesisId: draft.selectedHypothesisId === confirmDrop ? null : draft.selectedHypothesisId,
+            });
+            if (composer.editingId === confirmDrop) setComposer(EMPTY_COMPOSER);
+            setConfirmDrop(null);
           }}
-        >
-          Ponerlo en palabras
-        </button>
+        />
+      ) : null}
+      {confirmNone ? (
+        <Confirm
+          title="También es un resultado."
+          body="Puedes terminar con lo que encontraste hasta ahora y volver más adelante."
+          confirmLabel="Guardar mi mapa"
+          onCancel={() => setConfirmNone(false)}
+          onConfirm={onNoHypothesis}
+        />
+      ) : null}
+    </div>
+  );
+}
+
+function ComposerPanel({
+  picks,
+  text,
+  ideasMet,
+  charsMet,
+  flashId,
+  live,
+  atLimit,
+  disabled,
+  onText,
+  onRemove,
+  onSave,
+}: {
+  picks: { id: string; text: string; field: string }[];
+  text: string;
+  ideasMet: boolean;
+  charsMet: boolean;
+  flashId: string | null;
+  live: string;
+  atLimit: boolean;
+  disabled: boolean;
+  onText: (value: string) => void;
+  onRemove: (id: string) => void;
+  onSave: () => void;
+}) {
+  return (
+    <>
+      <h2 className="ik-connect__step">Dale forma</h2>
+      <p className="ik-connect__countline">
+        <span>{picks.length} {picks.length === 1 ? 'idea elegida' : 'ideas elegidas'}</span>
+        {live ? <span className="ik-connect__added">{live}</span> : null}
+      </p>
+      {picks.length === 0 ? <p className="ik-connect__empty">Las ideas que elijas aparecerán aquí.</p> : null}
+      <div className="ik-connect__picks">
+        {picks.map((row) => (
+          <div className={`ik-connect__pickrow${flashId === row.id ? ' is-in' : ''}`} key={row.id}>
+            <p><b>{row.text}</b><span>{row.field}</span></p>
+            <button type="button" aria-label={`Quitar ${row.text}`} onClick={() => onRemove(row.id)}>×</button>
+          </div>
+        ))}
       </div>
-      {confirmNone ? <NoneModal onCancel={() => setConfirmNone(false)} onConfirm={onNoHypothesis} /> : null}
+      {atLimit ? <p className="ik-hint">Tres posibilidades es el límite. Edita o elimina una para escribir otra.</p> : null}
+      <label htmlFor="hyp-text">Descríbela con tus palabras</label>
+      <textarea id="hyp-text" className="ik-connect__text" rows={4} maxLength={HYPOTHESIS_MAX} placeholder="Me gustaría…" value={text} onChange={(event) => onText(event.target.value)} />
+      <ul className="ik-connect__reqs" aria-label="Condiciones para guardar">
+        <li className={ideasMet ? 'is-met' : ''} id="req-ideas"><span aria-hidden />Elige al menos una idea</li>
+        <li className={charsMet ? 'is-met' : ''} id="req-chars"><span aria-hidden />Escribe al menos 12 caracteres</li>
+      </ul>
+      <button type="button" className="ag-btn-primary font-label-lg ik-connect__save" disabled={disabled} aria-describedby="req-ideas req-chars" onClick={onSave}>
+        Guardar posibilidad
+      </button>
+      <p className="ik-hint">Guardar crea un borrador. Después podrás decidir si quieres explorar esta posibilidad.</p>
+      <details className="ik-guide">
+        <summary>¿Te cuesta conectarlas? Ver una guía</summary>
+        <p className="ik-hint">{HYPOTHESIS_GUIDE_NOTE}</p>
+      </details>
     </>
   );
 }
 
-function LensGroup({
-  title,
-  items,
-  selected,
-  onToggle,
+function SavedCard({
+  definition,
+  draft,
+  hyp,
+  onExplore,
+  onEdit,
+  onDrop,
+  onStop,
 }: {
-  title: string;
-  items: { id: string; text: string }[];
-  selected: string[];
-  onToggle: (id: string) => void;
+  definition: IkigaiDefinition;
+  draft: IkigaiDraft;
+  hyp: IkigaiHypothesis;
+  onExplore: () => void;
+  onEdit: () => void;
+  onDrop: () => void;
+  onStop?: () => void;
 }) {
+  const ready = !gapCopy(hyp.text, hyp.itemIds.length);
+  const sources = FIELD_STEPS.flatMap((key) =>
+    filledItems(draft.items[key] ?? []).filter((item) => hyp.itemIds.includes(item.id)).map((item) => ({ id: item.id, text: item.text, field: fieldTitle(definition, key), key })),
+  );
   return (
-    <section className="ik-section">
-      <h2>{title}</h2>
-      <div className="ik-stack ik-stack--tight">
-        {items.map((item) => {
-          const on = selected.includes(item.id);
-          return (
-            <button
-              key={item.id}
-              type="button"
-              className={`ik-item ik-item--pick${on ? ' is-on' : ''}`}
-              aria-pressed={on}
-              onClick={() => onToggle(item.id)}
-            >
-              <span className={`ik-check${on ? ' is-on' : ''}`} aria-hidden>
-                {on ? '✓' : ''}
-              </span>
-              <p className="ik-item__text">{item.text}</p>
-            </button>
-          );
-        })}
+    <article className="ik-connect__card" id={`ik-hyp-${hyp.id}`}>
+      <p className="ik-connect__status">Guardada. Todavía no la has elegido para explorar.</p>
+      <p className="ik-connect__phrase">{hyp.text}</p>
+      <ul className="ik-connect__sources">
+        {sources.map((row) => (
+          <li key={row.id}>
+            <IkigaiLensMark field={row.key} />
+            <span>
+              <b>{row.text}</b>
+              <span>{row.field}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+      <button type="button" className="ag-btn-primary font-label-lg" disabled={!ready} onClick={onExplore}>
+        Explorar esta posibilidad
+      </button>
+      <div className="ik-aux-row">
+        <button type="button" className="ik-text" onClick={onEdit}>Editar</button>
+        <button type="button" className="ik-text" onClick={onDrop}>Eliminar</button>
+        {onStop ? <button type="button" className="ik-text" onClick={onStop}>Dejar de explorar esta</button> : null}
       </div>
-    </section>
+    </article>
   );
 }
 
-function NoneModal({ onCancel, onConfirm }: { onCancel: () => void; onConfirm: () => void }) {
+function IdeaBox({ onCancel, onSubmit }: { onCancel: () => void; onSubmit: (text: string) => void }) {
+  const [text, setText] = useState('');
+  const short = text.length > 0 && text.trim().length < 3;
   return (
-    <div className="ik-modal" role="dialog" aria-modal aria-labelledby="ik-none-title">
-      <button type="button" className="ik-modal__scrim" aria-label="Cerrar" onClick={onCancel} />
-      <div className="ik-modal__panel">
-        <h2 id="ik-none-title" className="ik-question font-body">
-          También es un resultado.
-        </h2>
-        <p className="font-body-md ik-support">
-          Puedes terminar con lo que encontraste hasta ahora y volver más adelante.
-        </p>
-        <div className="ik-inline-actions">
-          <button type="button" className="ag-btn-primary font-label-lg" onClick={onConfirm}>
-            Ver mi mapa
-          </button>
-          <button type="button" className="ik-btn-quiet" onClick={onCancel}>
-            Seguir explorando
-          </button>
-        </div>
+    <div className="ik-editor">
+      <label htmlFor="ik-relate-add">Escribe tu idea</label>
+      <textarea id="ik-relate-add" className="ik-area" rows={3} maxLength={140} value={text} onChange={(event) => setText(event.target.value)} />
+      {short ? <p className="ik-hint">Escribe al menos 3 caracteres.</p> : null}
+      <div className="ik-editor__actions">
+        <button type="button" className="ik-text" onClick={onCancel}>Cancelar</button>
+        <button type="button" className="ag-btn-primary font-label-lg" disabled={text.trim().length < 3} onClick={() => onSubmit(text.trim())}>Añadir</button>
       </div>
     </div>
   );
 }
 
-export { IkigaiRelateStep as IkigaiHypothesisBuilder };
+function Confirm({ title, body, confirmLabel, onCancel, onConfirm }: { title: string; body: string; confirmLabel: string; onCancel: () => void; onConfirm: () => void }) {
+  return (
+    <div className="ik-modal" role="dialog" aria-modal aria-labelledby="ik-confirm-title">
+      <button type="button" className="ik-modal__scrim" aria-label="Cerrar" onClick={onCancel} />
+      <div className="ik-modal__panel">
+        <h2 id="ik-confirm-title" className="ik-question font-body">{title}</h2>
+        <p className="font-body-md ik-support">{body}</p>
+        <div className="ik-inline-actions">
+          <button type="button" className="ag-btn-primary font-label-lg" onClick={onConfirm}>{confirmLabel}</button>
+          <button type="button" className="ik-text" onClick={onCancel}>Cancelar</button>
+        </div>
+      </div>
+    </div>
+  );
+}

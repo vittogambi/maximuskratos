@@ -72,8 +72,8 @@ export class AuthController {
   @Post('forgot-password')
   @Throttle({ auth: { limit: 10, ttl: 60_000 } })
   @ApiOperation({ summary: 'Request password reset email' })
-  forgotPassword(@Body() dto: ForgotPasswordDto) {
-    return this.auth.forgotPassword(dto);
+  forgotPassword(@Body() dto: ForgotPasswordDto, @Req() req: Request) {
+    return this.auth.forgotPassword(dto, req.headers.origin);
   }
 
   @Post('reset-password')

@@ -3,12 +3,15 @@ import {
   buildResult,
   classifyEvidence,
   emptyDraft,
+  EXPECTED_DEFINITION_SHA256,
   hashDefinition,
   hashResult,
   loadDefinition,
   normalizeDraft,
+  reconcileDraft,
   validateDefinition,
   validateDraft,
+  validateDraftStructure,
   validateForCompletion,
   deriveTensions,
   ENGINE_VERSION,
@@ -57,7 +60,7 @@ describe('ikigai-v0.1 definition', () => {
       'Resuelve una necesidad concreta de personas o comunidades.',
       'Puede generar una forma ética y realista de sustento o intercambio.',
       'Es coherente con sus valores, responsabilidades y límites.',
-      'Puede probarse con los recursos disponibles en los próximos noventa días.',
+      'Podrías probar esta dirección en los próximos 90 días con el tiempo, la plata y las herramientas que ya tienes.',
     ]);
   });
 });
@@ -124,6 +127,7 @@ describe('validateForCompletion', () => {
         order: 0,
       },
     ];
+    draft.selectedHypothesisId = 'h1';
     expect(validateForCompletion(definition, draft)).toEqual({ ok: true });
   });
 
@@ -152,6 +156,7 @@ describe('validateForCompletion', () => {
         order: 0,
       },
     ];
+    draft.selectedHypothesisId = 'h1';
     expect(validateForCompletion(definition, draft)).toEqual({ ok: true });
   });
 
@@ -264,6 +269,7 @@ describe('result presentation fields', () => {
         order: 0,
       },
     ];
+    draft.selectedHypothesisId = 'h1';
     const result = buildResult(definition, draft, '2026-01-01T00:00:00.000Z');
     expect(result.selectedHypothesisId).toBe('h1');
     expect(result.fieldClarity.PASION).toBe('ANSWERED');
@@ -441,6 +447,196 @@ describe('buildResult', () => {
 
   it('stable definition hash', () => {
     expect(hashDefinition(definition)).toBe(hashDefinition(loadDefinition()));
-    expect(hashDefinition(definition)).toMatch(/^[a-f0-9]{64}$/);
+    expect(hashDefinition(definition)).toBe(EXPECTED_DEFINITION_SHA256);
+  });
+
+  it('does not treat the only hypothesis as selected', () => {
+    const draft = baseDraft();
+    draft.hypotheses = [
+      {
+        id: 'h1',
+        text: 'Una dirección que quiero explorar es enseñar con sistemas.',
+        itemIds: ['p1', 'c1'],
+        criteria: {
+          DISFRUTE_SOSTENIBLE: 4,
+          CAPACIDAD_DEMOSTRABLE: 4,
+          UTILIDAD_REAL: 4,
+          VALOR_ECONOMICO: 4,
+          COHERENCIA_MORAL: 4,
+          FACTIBILIDAD: 4,
+        },
+        order: 0,
+      },
+    ];
+    const check = validateForCompletion(definition, draft);
+    expect(check.ok).toBe(false);
+    if (!check.ok) expect(check.details).toMatch(/contrastar/);
+    expect(buildResult(definition, draft).selectedHypothesisId).toBeNull();
+  });
+
+  it('rejects noHypothesisYet when phrases already exist', () => {
+    const draft = baseDraft();
+    draft.noHypothesisYet = true;
+    draft.hypotheses = [
+      {
+        id: 'h1',
+        text: 'Una dirección que quiero explorar es enseñar con sistemas.',
+        itemIds: ['p1'],
+        criteria: {},
+        order: 0,
+      },
+    ];
+    const before = draft.hypotheses.length;
+    const issues = validateDraftStructure(definition, draft);
+    expect(issues.some((issue) => issue.path === 'noHypothesisYet')).toBe(true);
+    expect(draft.hypotheses).toHaveLength(before);
+    expect(validateForCompletion(definition, draft).ok).toBe(false);
+  });
+
+  it('closes when the chosen possibility is complete and another is still short', () => {
+    const draft = baseDraft();
+    draft.fieldClarity = {
+      PASION: 'ANSWERED',
+      CAPACIDAD: 'ANSWERED',
+      NECESIDAD: 'ANSWERED',
+      VALOR: 'ANSWERED',
+    };
+    draft.hypotheses = [
+      {
+        id: 'h1',
+        text: 'Una dirección que quiero explorar es enseñar con sistemas.',
+        itemIds: ['p1', 'c1'],
+        criteria: {
+          DISFRUTE_SOSTENIBLE: 4,
+          CAPACIDAD_DEMOSTRABLE: 4,
+          UTILIDAD_REAL: 4,
+          VALOR_ECONOMICO: null,
+          COHERENCIA_MORAL: 4,
+          FACTIBILIDAD: 4,
+        },
+        order: 0,
+      },
+      {
+        id: 'h2',
+        text: 'adadada',
+        itemIds: ['p2'],
+        criteria: {},
+        order: 1,
+      },
+    ];
+    draft.selectedHypothesisId = 'h1';
+    expect(validateForCompletion(definition, draft)).toEqual({ ok: true });
+    const built = buildResult(definition, draft, '2026-01-01T00:00:00.000Z');
+    expect(built.hypotheses.map((hyp) => hyp.id)).toEqual(['h1']);
+    expect(built.selectedHypothesisId).toBe('h1');
+    expect(draft.hypotheses.map((hyp) => hyp.id)).toEqual(['h1', 'h2']);
+  });
+});
+
+function fullCriteria() {
+  return {
+    DISFRUTE_SOSTENIBLE: 4 as const,
+    CAPACIDAD_DEMOSTRABLE: 4 as const,
+    UTILIDAD_REAL: 4 as const,
+    VALOR_ECONOMICO: 4 as const,
+    COHERENCIA_MORAL: 4 as const,
+    FACTIBILIDAD: 4 as const,
+  };
+}
+
+describe('reconcileDraft', () => {
+  it('clears criteria when a shared card changes and keeps the other hypothesis', () => {
+    const previous = baseDraft();
+    previous.hypotheses = [
+      {
+        id: 'h1',
+        text: 'Una dirección que quiero explorar es enseñar con sistemas.',
+        itemIds: ['p1', 'c1'],
+        criteria: fullCriteria(),
+        order: 0,
+      },
+      {
+        id: 'h2',
+        text: 'Otra dirección escrita con suficientes palabras.',
+        itemIds: ['p2', 'v1'],
+        criteria: fullCriteria(),
+        order: 1,
+      },
+    ];
+    previous.selectedHypothesisId = 'h1';
+    const candidate = structuredClone(previous);
+    candidate.items.PASION[0].text = 'enseñar de otra forma';
+    const { draft, affectedHypothesisIds } = reconcileDraft(previous, candidate);
+    expect(affectedHypothesisIds).toEqual(['h1']);
+    expect(draft.hypotheses[0].criteria).toEqual({});
+    expect(draft.hypotheses[0].text).toContain('enseñar');
+    expect(draft.hypotheses[1].criteria).toEqual(fullCriteria());
+    expect(draft.items.PASION[0].evidence).toBeNull();
+    expect(draft.items.PASION[1].evidence).toBe('ATRACCION');
+  });
+
+  it('does not invalidate when only order or outer space changes', () => {
+    const previous = baseDraft();
+    previous.hypotheses = [
+      {
+        id: 'h1',
+        text: 'Una dirección que quiero explorar es enseñar con sistemas.',
+        itemIds: ['p1', 'c1'],
+        criteria: fullCriteria(),
+        order: 0,
+      },
+    ];
+    previous.selectedHypothesisId = 'h1';
+    const candidate = structuredClone(previous);
+    candidate.hypotheses[0].itemIds = ['c1', 'p1'];
+    candidate.hypotheses[0].text = '  Una dirección que quiero explorar es enseñar con sistemas.  ';
+    candidate.items.PASION[0].text = '  enseñar  ';
+    const { draft } = reconcileDraft(previous, candidate);
+    expect(draft.hypotheses[0].criteria).toEqual(fullCriteria());
+    expect(draft.items.PASION[0].evidence).toBe('SOSTENIDO');
+  });
+
+  it('keeps an experiment that needs review and drops its hypothesis id', () => {
+    const previous = baseDraft();
+    previous.hypotheses = [
+      {
+        id: 'h1',
+        text: 'Una dirección que quiero explorar es enseñar con sistemas.',
+        itemIds: ['p1'],
+        criteria: fullCriteria(),
+        order: 0,
+      },
+    ];
+    previous.selectedHypothesisId = 'h1';
+    previous.nextExperiment = {
+      hypothesisId: 'h1',
+      focus: 'si alguien vuelve',
+      horizonDays: 30,
+      action: 'una sesión',
+      signal: 'piden otra',
+      savedAt: '2026-01-01T00:00:00.000Z',
+      reviewStatus: 'CURRENT',
+    };
+    const candidate = structuredClone(previous);
+    candidate.hypotheses[0].text = 'Una dirección distinta que quiero explorar ahora.';
+    candidate.nextExperiment = {
+      ...previous.nextExperiment,
+      reviewStatus: 'CURRENT',
+      focus: 'intento de reemplazo',
+    };
+    const { draft } = reconcileDraft(previous, candidate);
+    expect(draft.hypotheses[0].criteria).toEqual({});
+    expect(draft.nextExperiment?.focus).toBe('si alguien vuelve');
+    expect(draft.nextExperiment?.reviewStatus).toBe('NEEDS_REVIEW');
+    expect(draft.nextExperiment?.hypothesisId).toBeNull();
+  });
+
+  it('rejects evidence from another field without dropping the item', () => {
+    const draft = baseDraft();
+    draft.items.PASION[0].evidence = 'RESULTADOS';
+    const issues = validateDraftStructure(definition, draft);
+    expect(issues.some((issue) => issue.path.includes('evidence'))).toBe(true);
+    expect(draft.items.PASION).toHaveLength(2);
+    expect(validateDraft(definition, draft).length).toBeGreaterThan(0);
   });
 });

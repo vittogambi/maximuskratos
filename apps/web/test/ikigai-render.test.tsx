@@ -39,7 +39,7 @@ const definition: IkigaiDefinition = {
   fields: [
     {
       key: 'PASION',
-      title: 'Lo que te mueve',
+      title: 'Lo que amas',
       prompt: '¿Qué actividades te hacen sentir interesado, energizado o con ganas de seguir mejorando?',
       help: 'Ayuda de campo',
       examples: ['Enseñar'],
@@ -57,11 +57,11 @@ const definition: IkigaiDefinition = {
     },
   ],
   nextExperiment: {
-    focusLabel: '¿Qué necesitarías descubrir para saber si esta dirección merece seguir creciendo?',
-    horizonLabel: 'Durante:',
+    focusLabel: 'Qué quieres comprobar',
+    horizonLabel: 'Durante',
     horizons: [30, 60, 90],
-    actionLabel: 'Voy a:',
-    signalLabel: 'Sabré algo nuevo si:',
+    actionLabel: 'Qué vas a hacer',
+    signalLabel: 'Cómo te vas a dar cuenta',
   },
 };
 
@@ -80,7 +80,7 @@ const result: IkigaiResult = {
     fields: [
       {
         key: 'PASION',
-        title: 'Lo que te mueve',
+        title: 'Lo que amas',
         items: [
           {
             id: 'p1',
@@ -116,7 +116,8 @@ describe('ikigai player copy', () => {
     expect(body).not.toContain('este dispositivo');
     expect(body).toContain('Empezar');
     expect(body).toContain('Salir');
-    expect(body).toContain('MK');
+    expect(html).toContain('mk-shield.png');
+    expect(body).not.toMatch(/\bMK\b/);
     expect(body).toContain('Versión en revisión');
     expect(html).toContain('/images/ikigai/ikigai-hero.png');
     expect(body).not.toContain('Antes de empezar');
@@ -139,13 +140,16 @@ describe('ikigai player copy', () => {
     const body = text(html);
     expect(body).toContain('¿Qué actividades te hacen sentir interesado, energizado o con ganas de seguir mejorando?');
     expect(body).toContain('Ayuda de campo');
-    expect(body).toContain('Escribir una pieza');
+    expect(body).toContain('Añadir al círculo');
     expect(body).toContain('Ver ideas');
     expect(body).toContain('Todavía no lo tengo claro');
-    expect(body).toContain('Empieza con algo tuyo o mira ideas para inspirarte.');
+    expect(body).toContain('LO QUE');
+    expect(body).toContain('AMAS');
+    expect(body).not.toContain('Sin ideas');
+    expect(body).not.toContain('Algo que te encienda');
     expect(body).not.toContain('Elemento 1');
     expect(body).not.toContain('Añade al menos 2');
-    expect(html).not.toContain('textarea');
+    expect(html).toContain('textarea');
     expect(body).not.toMatch(/%|purpose_score|Vocación|Profesión/);
   });
 
@@ -195,13 +199,18 @@ describe('ikigai player copy', () => {
         definition={definition}
         draft={draft}
         onChange={() => undefined}
-        onContrast={() => undefined}
+        onExplore={() => undefined}
+        onStopExplore={() => undefined}
         onNoHypothesis={() => undefined}
+        onEditField={() => undefined}
       />,
     );
+    expect(html).toContain('1 idea');
+    expect(html).toContain('Conecta tus ideas');
+    expect(html).toContain('Guardar posibilidad');
+    expect(html).toContain('PASIÓN');
+    expect(html).toContain('IKIGAI');
     expect(html).toContain('explicar cosas difíciles');
-    expect(html).toContain('¿Qué piezas parecen pertenecer a una misma dirección?');
-    expect(html).toContain('Toca las piezas que, para ti, parecen formar parte de una misma dirección.');
     expect(html).not.toContain('¿Qué actividades disfrutas');
     expect(html).not.toContain('Lo que te mueve: no');
     expect(html).not.toContain('Ayuda de campo');
@@ -222,6 +231,7 @@ describe('ikigai player copy', () => {
     expect(body).toContain('Esto es lo que recogiste.');
     expect(body).toContain('Volver a explorar');
     expect(body).not.toMatch(/purpose_score|%\b|nivel|badge|confetti/i);
+    expect(body).not.toContain('Esto es lo que construiste');
     expect(body).not.toContain('poco material');
     expect(body).not.toContain('comprobado');
   });

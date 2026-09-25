@@ -186,6 +186,43 @@ export function renderBrandedEmail(
 </html>`;
 }
 
+function formatChileDateTime(date: Date): string {
+  return date.toLocaleString('es-CL', {
+    timeZone: 'America/Santiago',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+/** Internal alert to the contact inbox when a founder account is created. */
+export function newRegistrationNotifyEmailHtml(
+  webUrl: string,
+  userEmail: string,
+  createdAt: Date,
+): { subject: string; html: string } {
+  const site = webUrl.replace(/\/$/, '');
+  return {
+    subject: `Nuevo fundador: ${userEmail}`,
+    html: renderBrandedEmail(webUrl, {
+      preheader: `${userEmail} acaba de crear su cuenta de fundador.`,
+      eyebrow: 'Registro',
+      title: 'Nuevo fundador.',
+      paragraphs: [
+        `${userEmail} acaba de crear su cuenta.`,
+        `Fecha: ${formatChileDateTime(createdAt)} (hora de Chile).`,
+        'Ya recibió el correo de bienvenida. Puedes verlo en el panel de administración.',
+      ],
+      cta: {
+        label: 'Ver usuarios',
+        href: `${site}/admin/users`,
+      },
+    }),
+  };
+}
+
 export function welcomeEmailHtml(webUrl: string): {
   subject: string;
   html: string;

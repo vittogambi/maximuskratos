@@ -19,14 +19,14 @@ import { trackIkigai } from '@/lib/ikigai-ui/analytics';
 import { useIkigaiAutosave } from '@/lib/ikigai-ui/autosave';
 import { FIELD_CTA_HINT } from '@/lib/ikigai-ui/copy';
 import {
-  compactDraft,
   contrastReady,
   contrastScreens,
   emptyUiDraft,
   FIELD_STEPS,
+  fieldTitle,
   filledCount,
-  HYPOTHESIS_MAX,
 } from '@/lib/ikigai-ui/format';
+import { reconcileDraft } from '@/lib/ikigai-ui/reconcile';
 import { readStoredSession } from '@/lib/ikigai-ui/storage';
 
 const STEPS = [
@@ -45,17 +45,17 @@ function isStep(value: string): value is Step {
   return (STEPS as readonly string[]).includes(value);
 }
 
-function pruneDraft(draft: IkigaiDraft): IkigaiDraft {
-  const compact = compactDraft(draft);
-  if (compact.noHypothesisYet) {
-    return { ...compact, hypotheses: [], selectedHypothesisId: null };
+function applyDraft(previous: IkigaiDraft, candidate: IkigaiDraft): IkigaiDraft {
+  return reconcileDraft(previous, candidate).draft;
+}
+
+function saveFailure(saved: { kind: string; message?: string }): string {
+  if (saved.kind === 'conflict') {
+    return 'Esta sesión cambió en otra pestaña. Tus cambios siguen aquí y aún no se han guardado.';
   }
-  return {
-    ...compact,
-    hypotheses: compact.hypotheses.filter(
-      (h) => h.text.trim().length >= 12 && h.text.length <= HYPOTHESIS_MAX && h.itemIds.length >= 1,
-    ),
-  };
+  if (saved.kind === 'invalid' && saved.message) return saved.message;
+  if (saved.kind === 'definition_changed') return 'La definición de esta prueba cambió. No se escribió nada.';
+  return 'No pudimos guardar. Reintenta.';
 }
 
 function momentFor(step: Step) {
@@ -75,13 +75,14 @@ export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
   const [definition, setDefinition] = useState<IkigaiDefinition | null>(null);
   const [draft, setDraft] = useState<IkigaiDraft | null>(null);
   const [draftVersion, setDraftVersion] = useState(0);
+  const [definitionSha, setDefinitionSha] = useState('');
   const [step, setStep] = useState<Step>('PASION');
   const [loadKey, setLoadKey] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [conflict, setConflict] = useState(false);
+  const [notice, setNotice] = useState<{ message: string; step?: Step } | null>(null);
   const [completing, setCompleting] = useState(false);
   const [contrastIndex, setContrastIndex] = useState(0);
   const [fieldEditing, setFieldEditing] = useState(false);
+  const [connectShape, setConnectShape] = useState(false);
 
   useEffect(() => {
     const stored = readStoredSession();
@@ -100,14 +101,14 @@ export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
         router.replace(`/ikigai/s/${sessionId}/resultado`);
         return;
       }
-      const next = compactDraft(res.draft);
       setDefinition(res.definition);
-      setDraft(next);
+      setDraft(res.draft);
       setDraftVersion(res.session.draftVersion);
+      setDefinitionSha(res.definitionSha256);
       const incoming = isStep(res.session.currentStep) ? res.session.currentStep : 'PASION';
       setStep(incoming === 'REVISION' ? 'HIPOTESIS' : incoming);
       setLoadKey(`${res.session.draftVersion}:${Date.now()}`);
-      setError(null);
+      setNotice(null);
     } catch {
       router.replace('/ikigai/empezar');
     }
@@ -123,13 +124,11 @@ export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
     step,
     draft: draft ?? emptyUiDraft(),
     draftVersion,
+    definitionSha256: definitionSha,
     loadKey,
-    enabled: Boolean(token && definition && draft),
+    enabled: Boolean(token && definition && draft && definitionSha),
     onVersion: setDraftVersion,
-    onReload: async () => {
-      setConflict(true);
-      await load();
-    },
+    onCanonical: (next) => setDraft(next),
   });
 
   const screens = draft ? contrastScreens(draft) : [];
@@ -141,6 +140,8 @@ export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
 
   function go(next: Step) {
     setFieldEditing(false);
+    setConnectShape(false);
+    setNotice(null);
     setStep(next);
     if (next === 'CONTRASTE') {
       setContrastIndex(0);
@@ -149,27 +150,36 @@ export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
   }
 
   function updateDraft(patch: Partial<IkigaiDraft>) {
-    setDraft((prev) => (prev ? compactDraft({ ...prev, ...patch }) : prev));
+    setDraft((prev) => {
+      if (!prev) return prev;
+      const candidate: IkigaiDraft = {
+        ...prev,
+        ...patch,
+        items: patch.items ? { ...prev.items, ...patch.items } : prev.items,
+        fieldClarity: patch.fieldClarity ? { ...prev.fieldClarity, ...patch.fieldClarity } : prev.fieldClarity,
+      };
+      return applyDraft(prev, candidate);
+    });
   }
 
   function setItems(key: IkigaiFieldKey, items: IkigaiItem[]) {
-    setDraft((prev) =>
-      prev
-        ? compactDraft({
-            ...prev,
-            items: { ...prev.items, [key]: items.map((item, order) => ({ ...item, order, evidence: null })) },
-            fieldClarity: {
-              ...prev.fieldClarity,
-              [key]: items.filter((item) => item.text.trim().length >= 3).length > 0 ? 'ANSWERED' : prev.fieldClarity[key],
-            },
-          })
-        : prev,
-    );
+    setDraft((prev) => {
+      if (!prev) return prev;
+      const candidate: IkigaiDraft = {
+        ...prev,
+        items: { ...prev.items, [key]: items.map((item, order) => ({ ...item, order })) },
+        fieldClarity: {
+          ...prev.fieldClarity,
+          [key]: items.filter((item) => item.text.trim().length >= 3).length > 0 ? 'ANSWERED' : prev.fieldClarity[key],
+        },
+      };
+      return applyDraft(prev, candidate);
+    });
   }
 
   function setClarity(key: IkigaiFieldKey, clarity: FieldClarity) {
     setDraft((prev) =>
-      prev ? compactDraft({ ...prev, fieldClarity: { ...prev.fieldClarity, [key]: clarity } }) : prev,
+      prev ? applyDraft(prev, { ...prev, fieldClarity: { ...prev.fieldClarity, [key]: clarity } }) : prev,
     );
   }
 
@@ -192,24 +202,29 @@ export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
     if (!token) return;
     setDraft(nextDraft);
     setCompleting(true);
-    setError(null);
+    setNotice(null);
     try {
-      const ok = await autosave.flush({ draft: nextDraft, step });
-      if (!ok) {
+      const saved = await autosave.flush(nextDraft);
+      if (saved.kind !== 'saved') {
         setCompleting(false);
-        setError('No pudimos guardar. Reintenta.');
+        setNotice({ message: saveFailure(saved) });
         return;
       }
       if (nextDraft.hypotheses.length > 0) trackIkigai('contrast_completed');
-      await ikigaiApi.complete(sessionId, token);
+      await ikigaiApi.complete(sessionId, token, {
+        draftVersion: saved.draftVersion,
+        definitionSha256: saved.definitionSha256,
+      });
       router.push(`/ikigai/s/${sessionId}/resultado`);
     } catch (err) {
       setCompleting(false);
       if (err instanceof IkigaiApiError) {
-        setError(err.message);
-        if (err.step && isStep(err.step)) setStep(err.step);
+        setNotice({
+          message: err.message,
+          step: err.step && isStep(err.step) ? err.step : undefined,
+        });
       } else {
-        setError('No pudimos cerrar el mapa. Reintenta.');
+        setNotice({ message: 'No pudimos cerrar el mapa. Reintenta.' });
       }
     }
   }
@@ -226,7 +241,7 @@ export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
         return;
       }
       if (!contrastReady(draft)) return;
-      await completeWith(pruneDraft(draft));
+      await completeWith(draft);
     }
   }
 
@@ -248,7 +263,11 @@ export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
   }
 
   async function onExit() {
-    await autosave.flush();
+    const saved = await autosave.flush();
+    if (saved.kind !== 'saved') {
+      setNotice({ message: saveFailure(saved) });
+      return;
+    }
     router.push('/ikigai/empezar');
   }
 
@@ -260,11 +279,23 @@ export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
     );
   }
 
-  const banner = conflict
-    ? 'Este mapa cambió en otra pestaña. Recargamos la versión más reciente.'
-    : autosave.state === 'error'
-      ? 'No pudimos guardar. Reintentando…'
-      : null;
+  const banner = autosave.conflict
+    ? 'Esta sesión cambió en otra pestaña. Tus cambios siguen aquí y aún no se han guardado.'
+    : notice?.message
+      ? notice.message
+      : autosave.detail
+        ? autosave.detail
+        : autosave.state === 'error'
+          ? 'No pudimos guardar. Reintenta.'
+          : null;
+  const retry = notice?.step
+    ? () => {
+        setStep(notice.step as Step);
+        setNotice(null);
+      }
+    : autosave.state === 'error' && !autosave.detail
+      ? () => void autosave.retry()
+      : undefined;
 
   let body: ReactNode = null;
   if ((FIELD_STEPS as readonly string[]).includes(step)) {
@@ -278,6 +309,15 @@ export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
         onChange={(items) => setItems(step as IkigaiFieldKey, items)}
         onClarity={(clarity) => setClarity(step as IkigaiFieldKey, clarity)}
         onEditingChange={setFieldEditing}
+        linkedUses={(id) => draft.hypotheses.filter((hyp) => hyp.itemIds.includes(id)).length}
+        itemsByField={draft.items}
+        clarityByField={draft.fieldClarity}
+        onContinue={() => void onNext()}
+        continueLabel={
+          step === 'VALOR'
+            ? 'Ver mi mapa completo'
+            : `Explorar ${fieldTitle(definition, step === 'PASION' ? 'CAPACIDAD' : step === 'CAPACIDAD' ? 'NECESIDAD' : 'VALOR').toLowerCase()}`
+        }
       />
     );
   } else if (step === 'HIPOTESIS' || step === 'REVISION') {
@@ -286,14 +326,21 @@ export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
         definition={definition}
         draft={draft}
         onChange={updateDraft}
-        onContrast={(selectedHypothesisId) => {
-          updateDraft({ selectedHypothesisId, noHypothesisYet: false });
-          go('CONTRASTE');
+        onExplore={(selectedHypothesisId) => {
+          const next = applyDraft(draft, { ...draft, selectedHypothesisId, noHypothesisYet: false });
+          setDraft(next);
+          void autosave.flush(next).then((saved) => {
+            if (saved.kind === 'saved') go('CONTRASTE');
+            else setNotice({ message: saveFailure(saved) });
+          });
         }}
+        onStopExplore={() => updateDraft({ selectedHypothesisId: null })}
         onNoHypothesis={() => {
-          void completeWith(pruneDraft({ ...draft, noHypothesisYet: true, hypotheses: [] }));
+          if (draft.hypotheses.length > 0) return;
+          void completeWith({ ...draft, noHypothesisYet: true, hypotheses: [], selectedHypothesisId: null });
         }}
-        onBackToLenses={() => go('VALOR')}
+        onEditField={(field) => go(field)}
+        onShapeChange={setConnectShape}
       />
     );
   } else {
@@ -307,11 +354,15 @@ export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
     );
   }
 
-  const hideShellCta = step === 'HIPOTESIS' || step === 'REVISION' || fieldEditing;
+  const hideShellCta = step === 'HIPOTESIS' || step === 'REVISION' || fieldEditing || (FIELD_STEPS as readonly string[]).includes(step);
   const nextLabel =
-    step === 'CONTRASTE' && contrastIndex >= screens.length - 1 ? 'Ver mi mapa' : 'Continuar';
+    step === 'CONTRASTE' && contrastIndex >= screens.length - 1 ? 'Guardar mi mapa' : 'Continuar';
   const ctaHint =
-    canNext || completing || step === 'CONTRASTE' ? null : FIELD_CTA_HINT;
+    canNext || completing
+      ? null
+      : step === 'CONTRASTE'
+        ? 'Elige una respuesta o prefiere no responder.'
+        : FIELD_CTA_HINT;
 
   return (
     <IkigaiShell
@@ -319,10 +370,18 @@ export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
       stops={trackStops(moment.position)}
       ctaHint={hideShellCta ? null : ctaHint}
       banner={banner}
-      onRetry={autosave.state === 'error' ? () => void autosave.retry() : undefined}
+      onRetry={retry}
+      retryLabel={notice?.step ? 'Ir allí' : 'Reintentar'}
       onExit={() => void onExit()}
       confirmExit
-      onBack={step !== 'PASION' || contrastIndex > 0 ? onBack : undefined}
+      backText={connectShape ? 'Ideas' : undefined}
+      onBack={
+        connectShape
+          ? () => setConnectShape(false)
+          : step !== 'PASION' || contrastIndex > 0
+            ? onBack
+            : undefined
+      }
       actions={
         hideShellCta ? null : (
           <button
@@ -337,10 +396,37 @@ export function IkigaiPlayer({ sessionId }: { sessionId: string }) {
       }
     >
       <div className="ik-step" key={`${step}-${contrastIndex}`}>
-        {error ? (
-          <p className="ik-warn" role="alert">
-            {error}
-          </p>
+        {autosave.conflict ? (
+          <div className="ik-inline-actions">
+            <button
+              type="button"
+              className="ik-text"
+              onClick={() => {
+                const readable = {
+                  ideas: draft.items,
+                  posibilidades: draft.hypotheses.map((hyp) => ({ texto: hyp.text, ideas: hyp.itemIds })),
+                };
+                void navigator.clipboard?.writeText(JSON.stringify(readable, null, 2));
+              }}
+            >
+              Copiar mis cambios
+            </button>
+            <button
+              type="button"
+              className="ik-text"
+              onClick={() => {
+                if (!window.confirm('Se sustituirá lo que ves por la versión guardada.')) return;
+                void ikigaiApi.getSession(sessionId, token).then((res) => {
+                  autosave.replaceWithServer(res.draft, res.session.draftVersion, res.definitionSha256);
+                  setDraft(res.draft);
+                  setDraftVersion(res.session.draftVersion);
+                  setDefinitionSha(res.definitionSha256);
+                });
+              }}
+            >
+              Cargar la versión guardada
+            </button>
+          </div>
         ) : null}
         {body}
       </div>

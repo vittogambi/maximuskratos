@@ -17,18 +17,18 @@ export function newItemId(): string {
 }
 
 export const COVERAGE_LABELS = {
-  PASION: 'Lo que te mueve',
-  CAPACIDAD: 'Lo que puedes aportar',
-  NECESIDAD: 'Lo que vale la pena atender',
-  VALOR: 'Lo que puede sostenerte',
+  PASION: 'Lo que amas',
+  CAPACIDAD: 'En lo que eres bueno',
+  NECESIDAD: 'Lo que el mundo necesita',
+  VALOR: 'Por lo que te pueden pagar',
 } as const;
 
 /** Chrome only. Same four marks as the public /ikigai page. */
 export const LENS_ICONS = {
-  PASION: 'flame',
-  CAPACIDAD: 'target',
-  NECESIDAD: 'globe',
-  VALOR: 'briefcase',
+  PASION: 'heart',
+  CAPACIDAD: 'medal',
+  NECESIDAD: 'world',
+  VALOR: 'coins',
 } as const;
 
 export function fieldTitle(definition: IkigaiDefinition | null | undefined, key: IkigaiFieldKey): string {
@@ -108,17 +108,8 @@ export function compactDraft(draft: IkigaiDraft): IkigaiDraft {
     NECESIDAD: compactItems(draft.items.NECESIDAD ?? []),
     VALOR: compactItems(draft.items.VALOR ?? []),
   };
-  const known = new Set(
-    (Object.keys(items) as IkigaiFieldKey[]).flatMap((key) => items[key].map((item) => item.id)),
-  );
-  const hypotheses = (draft.hypotheses ?? []).map((hyp) => ({
-    ...hyp,
-    itemIds: hyp.itemIds.filter((id) => known.has(id)),
-  }));
-  const selected =
-    draft.selectedHypothesisId && hypotheses.some((hyp) => hyp.id === draft.selectedHypothesisId)
-      ? draft.selectedHypothesisId
-      : null;
+  const hypotheses = draft.hypotheses ?? [];
+  const selected = draft.selectedHypothesisId ?? null;
   return {
     ...emptyUiDraft(),
     ...draft,
@@ -143,16 +134,12 @@ export function hypothesesReady(draft: IkigaiDraft) {
 }
 
 export function resolveSelectedHypothesisId(draft: IkigaiDraft): string | null {
-  if (draft.noHypothesisYet) return null;
-  const hyps = validHypotheses(draft);
-  if (draft.selectedHypothesisId && hyps.some((hyp) => hyp.id === draft.selectedHypothesisId)) {
-    return draft.selectedHypothesisId;
-  }
-  return hyps.length === 1 ? hyps[0].id : null;
+  const id = draft.selectedHypothesisId;
+  return id && draft.hypotheses.some((hypothesis) => hypothesis.id === id) ? id : null;
 }
 
 export function contrastReady(draft: IkigaiDraft) {
-  if (draft.noHypothesisYet) return true;
+  if (draft.noHypothesisYet) return draft.hypotheses.length === 0;
   const selectedId = resolveSelectedHypothesisId(draft);
   const selected = draft.hypotheses.find((h) => h.id === selectedId);
   if (!selected) return false;
@@ -228,16 +215,16 @@ export function missingLensCopy(
   const last = missing[missing.length - 1];
   const open =
     last === 'VALOR'
-      ? 'cómo podría sostenerse'
+      ? 'por lo que te pueden pagar'
       : last === 'PASION'
-        ? 'lo que te mueve'
+        ? 'lo que amas'
         : last === 'CAPACIDAD'
-          ? 'lo que puedes aportar'
-          : 'lo que vale la pena atender';
+          ? 'en lo que eres bueno'
+          : 'lo que el mundo necesita';
   if (missing.length === 1) {
     return `Esta dirección ya conecta ${joined}. Todavía no está claro ${open}.`;
   }
-  return `Esta dirección ya conecta ${joined}. Todavía no están claros algunos lentes.`;
+  return `Esta dirección ya conecta ${joined}. Todavía no están claros algunos círculos.`;
 }
 
 export type CriterionBand = 'solid' | 'uncertain' | 'needs' | 'unknown';

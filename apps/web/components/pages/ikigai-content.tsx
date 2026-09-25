@@ -40,29 +40,29 @@ const IKIGAI_FIELDS: ReadonlyArray<{
 }> = [
   {
     num: '01',
-    label: 'Lo que te mueve',
-    icon: 'flame',
+    label: 'Lo que amas',
+    icon: 'heart',
     question: '¿Qué actividades te hacen sentir interesado, energizado o con ganas de seguir mejorando?',
     body: 'Piensa en cosas que haces por iniciativa propia, que despiertan tu curiosidad o en las que disfrutas progresar.',
   },
   {
     num: '02',
-    label: 'Lo que puedes aportar',
-    icon: 'target',
+    label: 'En lo que eres bueno',
+    icon: 'medal',
     question: '¿Qué capacidades tienes hoy o has demostrado que puedes desarrollar bien?',
     body: 'Piensa en resultados que ya has conseguido, experiencia que has acumulado o cosas que aprendes con especial facilidad.',
   },
   {
     num: '03',
-    label: 'Lo que vale la pena atender',
-    icon: 'globe',
+    label: 'Lo que el mundo necesita',
+    icon: 'world',
     question: '¿Qué problemas, necesidades o personas sientes que vale la pena ayudar?',
     body: 'Piensa en situaciones que te importaría mejorar, aunque todavía no tengas claro cómo hacerlo.',
   },
   {
     num: '04',
-    label: 'Lo que puede sostenerte',
-    icon: 'briefcase',
+    label: 'Por lo que te pueden pagar',
+    icon: 'coins',
     question: '¿Qué resultados podrías generar que alguien valoraría lo suficiente como para sostenerlos?',
     body: 'Puede ser mediante dinero, intercambio, un producto, un servicio, un oficio o una responsabilidad que otros necesiten.',
   },
@@ -114,7 +114,7 @@ const IKIGAI_PROCESS: ReadonlyArray<{ num: string; title: string; body: string }
   {
     num: '01',
     title: 'Exploras',
-    body: 'Recorres los cuatro lentes y anotas material propio. Puedes usar un banco de ideas, pero cada sugerencia se personaliza antes de entrar a tu mapa.',
+    body: 'Recorres los cuatro círculos y anotas material propio. Puedes usar un banco de ideas, pero cada sugerencia se personaliza antes de entrar a tu mapa.',
   },
   {
     num: '02',
@@ -145,7 +145,7 @@ const RESULT_ITEMS: ReadonlyArray<{ title: string; body: string }> = [
   },
   {
     title: 'Cómo se construye',
-    body: 'Las piezas de los cuatro lentes que tú relacionaste para esa dirección.',
+    body: 'Las piezas de los cuatro círculos que tú relacionaste para esa dirección.',
   },
   {
     title: 'Cómo se ve hoy',
@@ -153,7 +153,7 @@ const RESULT_ITEMS: ReadonlyArray<{ title: string; body: string }> = [
   },
   {
     title: 'Qué falta descubrir',
-    body: 'Lentes abiertos o criterios que todavía no respondiste.',
+    body: 'Círculos vacíos o criterios que todavía no respondiste.',
   },
   {
     title: 'Un experimento',
@@ -192,8 +192,8 @@ export function IkigaiContent() {
             <h1 className="ag-about-hero__title ag-type-display text-white">IKIGAI · Tu mapa de dirección</h1>
             <p className="ag-about-hero__origin font-body-lg">Empieza por ordenar las piezas.</p>
             <p className="font-body-md ag-ikigai-hero__lead">
-              Explora lo que te mueve, lo que puedes aportar, lo que te importa y lo que puede
-              sostenerte. Después conéctalo y dale forma a una dirección para explorar.
+              Explora lo que amas, en lo que eres bueno, lo que el mundo necesita y por lo que te
+              pueden pagar. Después conéctalo y dale forma a una dirección para explorar.
             </p>
             <div className="ag-ikigai-hero__cta">
               <Link href="/ikigai/empezar" className="ag-btn-cta font-label-lg">
@@ -249,10 +249,10 @@ export function IkigaiContent() {
       <section className="ag-section-inner ag-about-block" aria-labelledby="campos-heading">
         <div className="ag-container">
           <SectionIntro
-            eyebrow="CUATRO LENTES"
+            eyebrow="CUATRO CÍRCULOS"
             title="Cuatro formas de mirar. Una dirección que tú formulas."
             lead="El producto ordena la reflexión. No exige completar perfectamente cuatro círculos. No calcula tu propósito."
-            leadMobile="Cuatro lentes para ordenar. Tú formulas la dirección."
+            leadMobile="Cuatro círculos para ordenar. Tú formulas la dirección."
             headingId="campos-heading"
           />
           <ScrollReveal className="ag-ikigai-diagram-wrap" density="default">
@@ -347,7 +347,7 @@ export function IkigaiContent() {
         <div className="ag-container">
           <SectionIntro
             eyebrow="DESALINEACIÓN"
-            title="Cuatro lentes desequilibrados dejan una dirección incompleta."
+            title="Cuatro círculos desequilibrados dejan una dirección incompleta."
             lead="Estos son ejemplos de desequilibrio. El ejercicio no diagnostica fracturas automáticas."
             headingId="tension-heading"
           />
@@ -488,7 +488,7 @@ export function IkigaiContent() {
       <SubpageCta
         eyebrow="MK · MAPA"
         title="Construye tu mapa de dirección."
-        lead="Empieza por ordenar las piezas. Explora lo que te mueve, lo que puedes aportar, lo que te importa y lo que puede sostenerte."
+        lead="Empieza por ordenar las piezas. Explora lo que amas, en lo que eres bueno, lo que el mundo necesita y por lo que te pueden pagar."
         ctaLabel="Empezar mi mapa"
         ctaHref="/ikigai/empezar"
       />
