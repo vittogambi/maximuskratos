@@ -3,11 +3,14 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useAuthSession } from '@/components/auth-session-provider';
+import { ReviewVersionNote } from '@/components/app-shell/ReviewVersionNote';
+import { ExcelProfile } from '@/components/profile/ExcelProfile';
 import { SystemReport } from '@/components/profile/SystemReport';
 import { apiDiagnosticProfile, apiDiagnosticProgress, type DiagnosticProgressDto, type MasterProfileDto } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth-storage';
+import { journeyState, type AlignmentReading, type JourneyState } from '@/lib/journey-api';
 import { getArchetype } from '@/lib/archetypes';
-import { isFounderAccessPhase } from '@/lib/product-phase';
+import { canUseMemberProduct } from '@/lib/member-access';
 
 const DIAGNOSTIC_IN_PROGRESS_STEPS = new Set([
   'TERMS_PENDING',
@@ -36,6 +39,11 @@ export function PerfilContent() {
   const [diagnosticStarted, setDiagnosticStarted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error,   setError]   = useState<string | null>(null);
+  const [alignment, setAlignment] = useState<AlignmentReading | null>(null);
+  const [indexes, setIndexes] = useState<JourneyState['indexes']>(undefined);
+  const [alignmentError, setAlignmentError] = useState(false);
+  const [indexesError, setIndexesError] = useState(false);
+  const [sheetSigned, setSheetSigned] = useState(false);
 
   useEffect(() => {
     if (status === 'loading') return;
@@ -44,11 +52,25 @@ export function PerfilContent() {
 
     async function load() {
       try {
-        const [p, progress] = await Promise.all([
+        const [p, progress, journey] = await Promise.all([
           apiDiagnosticProfile(token!),
           apiDiagnosticProgress(token!).catch(() => null),
+          journeyState(token!).then((row) => row).catch(() => null),
         ]);
         setProfile(p);
+        if (journey) {
+          setAlignment(journey.alignment);
+          setIndexes(journey.indexes);
+          setAlignmentError(false);
+          setIndexesError(false);
+          setSheetSigned(journey.purposeConfirmed);
+        } else {
+          setAlignment(null);
+          setIndexes(undefined);
+          setAlignmentError(true);
+          setIndexesError(true);
+          setSheetSigned(false);
+        }
         setDiagnosticStarted(isDiagnosticStarted(user?.onboardingStep, progress));
       } catch {
         setError('No pudimos cargar tu perfil.');
@@ -69,7 +91,7 @@ export function PerfilContent() {
   }
 
   if (error || !profile) {
-    if (isFounderAccessPhase()) {
+    if (!canUseMemberProduct(user)) {
       return (
         <div className="mk-dashboard">
           <div className="mk-progress-hero">
@@ -111,10 +133,22 @@ export function PerfilContent() {
   const secondaryMeta = profile.archetypeSecondary ? getArchetype(profile.archetypeSecondary) : null;
   const scores  = (profile.scores  ?? {}) as Record<string, number>;
   const indices = (profile.indices ?? {}) as Record<string, number>;
+  const rawIndices = (profile.indices ?? {}) as Record<string, unknown>;
+  // Provenance decides the layout. A missing audit total does not switch to the system report.
+  const isFormularioReading = typeof rawIndices.scoringVersion === 'string' && rawIndices.scoringVersion.startsWith('formulario-score');
+  if (isFormularioReading) {
+    return (
+      <div className="mk-dashboard">
+        <ExcelProfile form={indices as never} alignment={alignment} alignmentError={alignmentError} indexes={indexes} indexesError={indexesError} sheetSigned={sheetSigned} />
+        <ReviewVersionNote />
+      </div>
+    );
+  }
 
   return (
     <div className="mk-dashboard">
       <SystemReport scores={scores} indices={indices} archetype={archetype} secondaryArchetype={secondaryMeta} />
+      <ReviewVersionNote />
     </div>
   );
 }

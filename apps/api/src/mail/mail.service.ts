@@ -10,6 +10,11 @@ import { configuredWebUrl } from './public-web-url';
 
 const DEFAULT_CONTACT_EMAIL = 'contacto@maximus-kratos.com';
 
+/** Fixture accounts must never receive real mail. */
+export function isFixtureAddress(email: string): boolean {
+  return email.trim().toLowerCase().endsWith('@fixtures.mk.invalid');
+}
+
 @Injectable()
 export class MailService {
   private readonly logger = new Logger(MailService.name);
@@ -39,6 +44,11 @@ export class MailService {
     logLabel: string,
     replyTo?: string,
   ): Promise<boolean> {
+    if (isFixtureAddress(to)) {
+      this.logger.warn(`Skipped ${logLabel}: fixture address`);
+      return false;
+    }
+
     const apiKey = this.config.get<string>('RESEND_API_KEY');
 
     if (!apiKey) {
@@ -79,6 +89,11 @@ export class MailService {
     userEmail: string,
     createdAt: Date,
   ): Promise<boolean> {
+    // The recipient is the team, so the fixture guard in sendHtml never sees the fixture account.
+    if (isFixtureAddress(userEmail)) {
+      this.logger.warn('Skipped registration notify: fixture account');
+      return false;
+    }
     const to = this.getContactEmail();
     const { subject, html } = newRegistrationNotifyEmailHtml(
       this.getWebUrl(),

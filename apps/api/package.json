@@ -7,7 +7,9 @@
     "dev": "sh ../../scripts/free-api-port.sh && nest start --watch",
     "start": "node dist/main.js",
     "start:prod": "node dist/main.js",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:domain": "vitest run test/apply-week.test.ts test/purpose-synthesis.test.ts test/answer-rules.test.ts test/question-capture.test.ts test/instrumentos-score.test.ts test/instrumentos-isolation.test.ts test/plan-gate.test.ts test/hdrp-contract.test.ts test/iad-invariants.test.ts test/core-index.test.ts test/accompaniment-rules.test.ts test/execution.test.ts test/devolution.test.ts test/realistic-cases.test.ts test/home-board.test.ts",
+    "test:http": "vitest run --config vitest.integration.config.ts"
   },
   "dependencies": {
     "@mk/database": "*",
@@ -33,10 +35,13 @@
   "devDependencies": {
     "@nestjs/cli": "^11.0.7",
     "@nestjs/schematics": "^11.0.5",
+    "@nestjs/testing": "^11.1.6",
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.2",
     "@types/node": "^22.15.21",
+    "@types/supertest": "^6.0.3",
+    "supertest": "^7.1.4",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4"
   }

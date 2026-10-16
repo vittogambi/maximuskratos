@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { useAuthSession } from '@/components/auth-session-provider';
+import { ReviewVersionNote } from '@/components/app-shell/ReviewVersionNote';
 import {
   apiDiagnosticStart,
   apiDiagnosticState,
@@ -11,7 +12,9 @@ import {
   type DiagnosticState,
 } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth-storage';
-import { ProgressRail } from './ProgressRail';
+import { settleModuleOutro } from '@/lib/diagnostic-continue';
+import { questionnaireStageLabel, ProgressRail } from './ProgressRail';
+import { PlayerStage } from './PlayerStage';
 import { introStaggerContainer, introStaggerItem } from './diagnostic-motion';
 
 function routeFromState(state: DiagnosticState, router: ReturnType<typeof useRouter>) {
@@ -47,9 +50,15 @@ export function DiagnosticWelcome() {
     }
 
     apiDiagnosticState(token)
-      .then((state) => {
+      .then(async (state) => {
         if (!state.sessionState.showWelcomeScreen) {
-          routeFromState(state, router);
+          let settled = state;
+          try {
+            settled = await settleModuleOutro(token, state);
+          } catch {
+            settled = state;
+          }
+          routeFromState(settled, router);
           return;
         }
         setReady(true);
@@ -70,7 +79,12 @@ export function DiagnosticWelcome() {
     try {
       await apiDiagnosticWelcomeSeen(token);
       await refresh({ force: true });
-      const state = await apiDiagnosticStart(token);
+      let state = await apiDiagnosticStart(token);
+      try {
+        state = await settleModuleOutro(token, state);
+      } catch {
+        // The outro route retries the same step.
+      }
       routeFromState(state, router);
     } catch (err) {
       setError(
@@ -83,77 +97,39 @@ export function DiagnosticWelcome() {
   }
 
   return (
-    <main style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-      <ProgressRail pct={0} questionIndex={null} questionTotal={null} />
+    <PlayerStage
+      header={<ProgressRail pct={0} questionIndex={null} questionTotal={null} contextLabel={questionnaireStageLabel(null)} />}
+      primary={{
+        label: loading ? 'Preparando…' : 'Comenzar auditoría',
+        onClick: handleStart,
+        disabled: !ready || loading,
+      }}
+    >
       {!ready ? (
-        <div className="dk-welcome dk-welcome--loading">
+        <div className="dk-welcome--loading">
           <div className="auth-loading">
             <span className="auth-spinner" aria-hidden />
           </div>
         </div>
       ) : (
         <motion.div
-          className="dk-welcome"
+          className="dk-stage__frame dk-read dk-welcome"
           variants={reduced ? undefined : introStaggerContainer}
           initial={reduced ? false : 'hidden'}
           animate={reduced ? undefined : 'show'}
         >
-          <motion.p
-            className="hud-text text-action-red"
-            style={{ letterSpacing: '0.15em' }}
-            variants={reduced ? undefined : introStaggerItem}
-          >
-            DIAGNÓSTICO MAESTRO
-          </motion.p>
-          <motion.p className="dk-welcome__phase" variants={reduced ? undefined : introStaggerItem}>
-            AUDITORÍA INICIAL
-          </motion.p>
-          <motion.h1
-            className="font-display-xl"
-            style={{ marginTop: '1rem', lineHeight: 1.1 }}
-            variants={reduced ? undefined : introStaggerItem}
-          >
-            Esto no es un cuestionario.
+          <motion.h1 className="dk-welcome__title" variants={reduced ? undefined : introStaggerItem}>
+            El punto de partida
           </motion.h1>
-          <motion.p
-            className="font-body-lg"
-            style={{ marginTop: '1.5rem', color: 'var(--color-text-muted)', maxWidth: '520px' }}
-            variants={reduced ? undefined : introStaggerItem}
-          >
-            Es tu punto de partida, no tu sentencia final. Cinco módulos miden las dimensiones
-            clave de tu vida. Al completarla, desbloqueas tu Perfil Maestro MK.
-          </motion.p>
-          <motion.ul className="dk-welcome__list" variants={reduced ? undefined : introStaggerItem}>
-            {[
-              '~25 minutos en la primera sesión (5 módulos)',
-              'Tu progreso se guarda en tiempo real: puedes tomarte varios días',
-              'Responde con honestidad: un diagnóstico falso solo te miente a ti',
-              'Nadie más ve tus respuestas',
-            ].map((item) => (
-              <li key={item} className="font-label-md dk-welcome__list-item">
-                <span style={{ color: 'var(--color-crimson)' }}>—</span>
-                {item}
-              </li>
-            ))}
-          </motion.ul>
-          <motion.div variants={reduced ? undefined : introStaggerItem}>
-            <button
-              type="button"
-              className="ag-btn-cta font-label-lg"
-              onClick={handleStart}
-              disabled={loading}
-              style={{ alignSelf: 'flex-start' }}
-            >
-              {loading ? 'Preparando…' : 'Comenzar diagnóstico'}
-            </button>
-            {error && (
-              <p className="font-body-sm" style={{ color: 'var(--color-error)', marginTop: '0.75rem' }}>
-                {error}
-              </p>
-            )}
+          <motion.div className="dk-welcome__objective" variants={reduced ? undefined : introStaggerItem}>
+            <p>Empieza por mirar cómo estás hoy. Estas preguntas te ayudarán a revisar tus decisiones, tus hábitos y tu entorno para reconocer qué está funcionando y qué necesita atención.</p>
+            <p>Responde según tu situación actual, aunque sea distinta de la que te gustaría tener.</p>
+            <p>Puedes guardar y salir. Al volver, continúas desde la última respuesta guardada.</p>
           </motion.div>
+          <ReviewVersionNote />
+          {error ? <p className="dk-player-error" role="alert">{error}</p> : null}
         </motion.div>
       )}
-    </main>
+    </PlayerStage>
   );
 }

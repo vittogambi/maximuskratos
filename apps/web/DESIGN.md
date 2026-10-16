@@ -1,5 +1,5 @@
-# Moved
+# Movido
 
-The design source of truth is **[DESIGN.md](../../DESIGN.md)** at the repository root.
+El contrato vigente es [DESIGN.md](../../DESIGN.md) en la raíz.
 
-Do not extend or follow this file. All UI work in `apps/web` must use the root spec only.
+El export antiguo está en [docs/design-history/DESIGN-aethelgard.md](../../docs/design-history/DESIGN-aethelgard.md). No seguir ese archivo.

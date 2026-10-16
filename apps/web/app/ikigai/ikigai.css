@@ -25,14 +25,15 @@ nextjs-portal {
   padding: 0.85rem 1.2rem;
   border-radius: 0;
   box-shadow: none;
-  background: #c00100;
-  border: 1px solid #c00100;
+  background: var(--color-action);
+  border: 1px solid var(--color-action);
   color: #fff;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   text-decoration: none;
+  font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: 1rem;
   cursor: pointer;
 }
 
@@ -41,9 +42,16 @@ nextjs-portal {
 .ik-app .ik-btn-main:hover {
   transform: none;
   box-shadow: none;
-  background: #a80100;
-  border-color: #a80100;
+  background: var(--color-action-hover);
+  border-color: var(--color-action-hover);
   color: #fff;
+}
+
+.ik-app .ag-btn-primary:focus-visible,
+.ik-app .ag-btn-cta:focus-visible,
+.ik-app .ik-btn-main:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
 }
 
 .ik-app .ag-btn-primary:disabled,

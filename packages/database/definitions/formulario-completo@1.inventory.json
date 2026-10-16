@@ -1,0 +1,1837 @@
+{
+  "items": [
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R6",
+      "sheet": "E-AUD-001",
+      "cells": "R6",
+      "block": "Mentalidad e identidad",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R7",
+      "sheet": "E-AUD-001",
+      "cells": "R7",
+      "block": "Mentalidad e identidad",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R8",
+      "sheet": "E-AUD-001",
+      "cells": "R8",
+      "block": "Mentalidad e identidad",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R9",
+      "sheet": "E-AUD-001",
+      "cells": "R9",
+      "block": "Mentalidad e identidad",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R10",
+      "sheet": "E-AUD-001",
+      "cells": "R10",
+      "block": "Mentalidad e identidad",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R16",
+      "sheet": "E-AUD-001",
+      "cells": "R16",
+      "block": "Hábitos y acciones",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R17",
+      "sheet": "E-AUD-001",
+      "cells": "R17",
+      "block": "Hábitos y acciones",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R18",
+      "sheet": "E-AUD-001",
+      "cells": "R18",
+      "block": "Hábitos y acciones",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R19",
+      "sheet": "E-AUD-001",
+      "cells": "R19",
+      "block": "Hábitos y acciones",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R20",
+      "sheet": "E-AUD-001",
+      "cells": "R20",
+      "block": "Hábitos y acciones",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R26",
+      "sheet": "E-AUD-001",
+      "cells": "R26",
+      "block": "Toma de decisiones y entorno",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R27",
+      "sheet": "E-AUD-001",
+      "cells": "R27",
+      "block": "Toma de decisiones y entorno",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R28",
+      "sheet": "E-AUD-001",
+      "cells": "R28",
+      "block": "Toma de decisiones y entorno",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R29",
+      "sheet": "E-AUD-001",
+      "cells": "R29",
+      "block": "Toma de decisiones y entorno",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R30",
+      "sheet": "E-AUD-001",
+      "cells": "R30",
+      "block": "Toma de decisiones y entorno",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R37",
+      "sheet": "E-AUD-001",
+      "cells": "R37",
+      "block": "Soberanía financiera",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R38",
+      "sheet": "E-AUD-001",
+      "cells": "R38",
+      "block": "Soberanía financiera",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R39",
+      "sheet": "E-AUD-001",
+      "cells": "R39",
+      "block": "Soberanía financiera",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R40",
+      "sheet": "E-AUD-001",
+      "cells": "R40",
+      "block": "Soberanía financiera",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R46",
+      "sheet": "E-AUD-001",
+      "cells": "R46",
+      "block": "Calidad de relaciones",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R47",
+      "sheet": "E-AUD-001",
+      "cells": "R47",
+      "block": "Calidad de relaciones",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R48",
+      "sheet": "E-AUD-001",
+      "cells": "R48",
+      "block": "Calidad de relaciones",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R49",
+      "sheet": "E-AUD-001",
+      "cells": "R49",
+      "block": "Calidad de relaciones",
+      "role": "QUESTION",
+      "instrument": "audit"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R56",
+      "sheet": "E-AUD-001",
+      "cells": "R56",
+      "block": "Desarrollo y sentido",
+      "role": "QUESTION",
+      "instrument": "sense"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R57",
+      "sheet": "E-AUD-001",
+      "cells": "R57",
+      "block": "Desarrollo y sentido",
+      "role": "QUESTION",
+      "instrument": "sense"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R59",
+      "sheet": "E-AUD-001",
+      "cells": "R59",
+      "block": "Desarrollo y sentido",
+      "role": "QUESTION",
+      "instrument": "sense"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R60",
+      "sheet": "E-AUD-001",
+      "cells": "R60",
+      "block": "Desarrollo y sentido",
+      "role": "QUESTION",
+      "instrument": "sense"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R62",
+      "sheet": "E-AUD-001",
+      "cells": "R62",
+      "block": "Desarrollo y sentido",
+      "role": "QUESTION",
+      "instrument": "sense"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R63",
+      "sheet": "E-AUD-001",
+      "cells": "R63",
+      "block": "Desarrollo y sentido",
+      "role": "QUESTION",
+      "instrument": "sense"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R65",
+      "sheet": "E-AUD-001",
+      "cells": "R65",
+      "block": "Desarrollo y sentido",
+      "role": "QUESTION",
+      "instrument": "sense"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R66",
+      "sheet": "E-AUD-001",
+      "cells": "R66",
+      "block": "Desarrollo y sentido",
+      "role": "QUESTION",
+      "instrument": "sense"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R67",
+      "sheet": "E-AUD-001",
+      "cells": "R67",
+      "block": "Desarrollo y sentido",
+      "role": "QUESTION",
+      "instrument": "sense"
+    },
+    {
+      "sourceRef": "formulario-v1:E-AUD-001!R68",
+      "sheet": "E-AUD-001",
+      "cells": "R68",
+      "block": "Desarrollo y sentido",
+      "role": "QUESTION",
+      "instrument": "sense"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R6",
+      "sheet": "F-RAD-001",
+      "cells": "R6",
+      "block": "Condiciones físicas",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R18",
+      "sheet": "F-RAD-001",
+      "cells": "R18",
+      "block": "Antecedentes de salud",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R19",
+      "sheet": "F-RAD-001",
+      "cells": "R19",
+      "block": "Antecedentes de salud",
+      "role": "DETAIL",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R20",
+      "sheet": "F-RAD-001",
+      "cells": "R20",
+      "block": "Antecedentes de salud",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R21",
+      "sheet": "F-RAD-001",
+      "cells": "R21",
+      "block": "Antecedentes de salud",
+      "role": "DETAIL",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R22",
+      "sheet": "F-RAD-001",
+      "cells": "R22",
+      "block": "Antecedentes de salud",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R23",
+      "sheet": "F-RAD-001",
+      "cells": "R23",
+      "block": "Antecedentes de salud",
+      "role": "DETAIL",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R24",
+      "sheet": "F-RAD-001",
+      "cells": "R24",
+      "block": "Antecedentes de salud",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R25",
+      "sheet": "F-RAD-001",
+      "cells": "R25",
+      "block": "Antecedentes de salud",
+      "role": "DETAIL",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R27",
+      "sheet": "F-RAD-001",
+      "cells": "R27",
+      "block": "Antecedentes de salud",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R28",
+      "sheet": "F-RAD-001",
+      "cells": "R28",
+      "block": "Antecedentes de salud",
+      "role": "DETAIL",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R34",
+      "sheet": "F-RAD-001",
+      "cells": "R34",
+      "block": "Alimentación",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R35",
+      "sheet": "F-RAD-001",
+      "cells": "R35",
+      "block": "Alimentación",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R36",
+      "sheet": "F-RAD-001",
+      "cells": "R36",
+      "block": "Alimentación",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R37",
+      "sheet": "F-RAD-001",
+      "cells": "R37",
+      "block": "Alimentación",
+      "role": "DETAIL",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R38",
+      "sheet": "F-RAD-001",
+      "cells": "R38",
+      "block": "Alimentación",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R39",
+      "sheet": "F-RAD-001",
+      "cells": "R39",
+      "block": "Alimentación",
+      "role": "DETAIL",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R40",
+      "sheet": "F-RAD-001",
+      "cells": "R40",
+      "block": "Alimentación",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R41",
+      "sheet": "F-RAD-001",
+      "cells": "R41",
+      "block": "Alimentación",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R42",
+      "sheet": "F-RAD-001",
+      "cells": "R42",
+      "block": "Alimentación",
+      "role": "DETAIL",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R48",
+      "sheet": "F-RAD-001",
+      "cells": "R48",
+      "block": "Actividad física",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R49",
+      "sheet": "F-RAD-001",
+      "cells": "R49",
+      "block": "Actividad física",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R50",
+      "sheet": "F-RAD-001",
+      "cells": "R50",
+      "block": "Actividad física",
+      "role": "DETAIL",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R52",
+      "sheet": "F-RAD-001",
+      "cells": "R52",
+      "block": "Actividad física",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R53",
+      "sheet": "F-RAD-001",
+      "cells": "R53",
+      "block": "Actividad física",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R54",
+      "sheet": "F-RAD-001",
+      "cells": "R54",
+      "block": "Actividad física",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R55",
+      "sheet": "F-RAD-001",
+      "cells": "R55",
+      "block": "Actividad física",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R61",
+      "sheet": "F-RAD-001",
+      "cells": "R61",
+      "block": "Sueño y estrés",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R62",
+      "sheet": "F-RAD-001",
+      "cells": "R62",
+      "block": "Sueño y estrés",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R63",
+      "sheet": "F-RAD-001",
+      "cells": "R63",
+      "block": "Sueño y estrés",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R64",
+      "sheet": "F-RAD-001",
+      "cells": "R64",
+      "block": "Sueño y estrés",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R65",
+      "sheet": "F-RAD-001",
+      "cells": "R65",
+      "block": "Sueño y estrés",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R74",
+      "sheet": "F-RAD-001",
+      "cells": "R74",
+      "block": "Percepción corporal",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R75",
+      "sheet": "F-RAD-001",
+      "cells": "R75",
+      "block": "Percepción corporal",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R76",
+      "sheet": "F-RAD-001",
+      "cells": "R76",
+      "block": "Percepción corporal",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R77",
+      "sheet": "F-RAD-001",
+      "cells": "R77",
+      "block": "Percepción corporal",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R78",
+      "sheet": "F-RAD-001",
+      "cells": "R78",
+      "block": "Percepción corporal",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R86",
+      "sheet": "F-RAD-001",
+      "cells": "R86",
+      "block": "Optimización física",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R87",
+      "sheet": "F-RAD-001",
+      "cells": "R87",
+      "block": "Optimización física",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R89",
+      "sheet": "F-RAD-001",
+      "cells": "R89",
+      "block": "Optimización física",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R90",
+      "sheet": "F-RAD-001",
+      "cells": "R90",
+      "block": "Optimización física",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-001!R91",
+      "sheet": "F-RAD-001",
+      "cells": "R91",
+      "block": "Optimización física",
+      "role": "QUESTION",
+      "instrument": "body"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-002!R6",
+      "sheet": "F-RAD-002",
+      "cells": "R6",
+      "block": "Pareja o núcleo íntimo",
+      "role": "QUESTION",
+      "instrument": "relations"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-002!R7",
+      "sheet": "F-RAD-002",
+      "cells": "R7",
+      "block": "Pareja o núcleo íntimo",
+      "role": "QUESTION",
+      "instrument": "relations"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-002!R8",
+      "sheet": "F-RAD-002",
+      "cells": "R8",
+      "block": "Pareja o núcleo íntimo",
+      "role": "QUESTION",
+      "instrument": "relations"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-002!R16",
+      "sheet": "F-RAD-002",
+      "cells": "R16",
+      "block": "Familia",
+      "role": "QUESTION",
+      "instrument": "relations"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-002!R17",
+      "sheet": "F-RAD-002",
+      "cells": "R17",
+      "block": "Familia",
+      "role": "QUESTION",
+      "instrument": "relations"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-002!R18",
+      "sheet": "F-RAD-002",
+      "cells": "R18",
+      "block": "Familia",
+      "role": "QUESTION",
+      "instrument": "relations"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-002!R25",
+      "sheet": "F-RAD-002",
+      "cells": "R25",
+      "block": "Amistades",
+      "role": "QUESTION",
+      "instrument": "relations"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-002!R26",
+      "sheet": "F-RAD-002",
+      "cells": "R26",
+      "block": "Amistades",
+      "role": "QUESTION",
+      "instrument": "relations"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-002!R27",
+      "sheet": "F-RAD-002",
+      "cells": "R27",
+      "block": "Amistades",
+      "role": "QUESTION",
+      "instrument": "relations"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-002!R34",
+      "sheet": "F-RAD-002",
+      "cells": "R34",
+      "block": "Entorno laboral",
+      "role": "QUESTION",
+      "instrument": "relations"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-002!R35",
+      "sheet": "F-RAD-002",
+      "cells": "R35",
+      "block": "Entorno laboral",
+      "role": "QUESTION",
+      "instrument": "relations"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-002!R36",
+      "sheet": "F-RAD-002",
+      "cells": "R36",
+      "block": "Entorno laboral",
+      "role": "QUESTION",
+      "instrument": "relations"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-003!R7",
+      "sheet": "F-RAD-003",
+      "cells": "R7",
+      "block": "Suficiencia y flujo",
+      "role": "QUESTION",
+      "instrument": "finance"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-003!R8",
+      "sheet": "F-RAD-003",
+      "cells": "R8",
+      "block": "Suficiencia y flujo",
+      "role": "QUESTION",
+      "instrument": "finance"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-003!R9",
+      "sheet": "F-RAD-003",
+      "cells": "R9",
+      "block": "Suficiencia y flujo",
+      "role": "QUESTION",
+      "instrument": "finance"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-003!R17",
+      "sheet": "F-RAD-003",
+      "cells": "R17",
+      "block": "Ahorro",
+      "role": "QUESTION",
+      "instrument": "finance"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-003!R18",
+      "sheet": "F-RAD-003",
+      "cells": "R18",
+      "block": "Ahorro",
+      "role": "QUESTION",
+      "instrument": "finance"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-003!R19",
+      "sheet": "F-RAD-003",
+      "cells": "R19",
+      "block": "Ahorro",
+      "role": "QUESTION",
+      "instrument": "finance"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-003!R26",
+      "sheet": "F-RAD-003",
+      "cells": "R26",
+      "block": "Inversión",
+      "role": "QUESTION",
+      "instrument": "finance"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-003!R27",
+      "sheet": "F-RAD-003",
+      "cells": "R27",
+      "block": "Inversión",
+      "role": "QUESTION",
+      "instrument": "finance"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-003!R28",
+      "sheet": "F-RAD-003",
+      "cells": "R28",
+      "block": "Inversión",
+      "role": "QUESTION",
+      "instrument": "finance"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-003!R35",
+      "sheet": "F-RAD-003",
+      "cells": "R35",
+      "block": "Deudas",
+      "role": "QUESTION",
+      "instrument": "finance"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-003!R36",
+      "sheet": "F-RAD-003",
+      "cells": "R36",
+      "block": "Deudas",
+      "role": "QUESTION",
+      "instrument": "finance"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-003!R37",
+      "sheet": "F-RAD-003",
+      "cells": "R37",
+      "block": "Deudas",
+      "role": "QUESTION",
+      "instrument": "finance"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-003!R46",
+      "sheet": "F-RAD-003",
+      "cells": "R46",
+      "block": "Proyección financiera",
+      "role": "QUESTION",
+      "instrument": "finance-projection"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-003!R47",
+      "sheet": "F-RAD-003",
+      "cells": "R47",
+      "block": "Proyección financiera",
+      "role": "QUESTION",
+      "instrument": "finance-projection"
+    },
+    {
+      "sourceRef": "formulario-v1:F-RAD-003!R48",
+      "sheet": "F-RAD-003",
+      "cells": "R48",
+      "block": "Proyección financiera",
+      "role": "QUESTION",
+      "instrument": "finance-projection"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R7",
+      "sheet": "E-PER-000",
+      "cells": "R7",
+      "block": "Origen y linaje",
+      "role": "QUESTION",
+      "instrument": "origin"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R8",
+      "sheet": "E-PER-000",
+      "cells": "R8",
+      "block": "Origen y linaje",
+      "role": "QUESTION",
+      "instrument": "origin"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R9",
+      "sheet": "E-PER-000",
+      "cells": "R9",
+      "block": "Origen y linaje",
+      "role": "QUESTION",
+      "instrument": "origin"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R10",
+      "sheet": "E-PER-000",
+      "cells": "R10",
+      "block": "Origen y linaje",
+      "role": "QUESTION",
+      "instrument": "origin"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R12",
+      "sheet": "E-PER-000",
+      "cells": "R12",
+      "block": "Origen y linaje",
+      "role": "QUESTION",
+      "instrument": "origin"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R13",
+      "sheet": "E-PER-000",
+      "cells": "R13",
+      "block": "Origen y linaje",
+      "role": "QUESTION",
+      "instrument": "origin"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R14",
+      "sheet": "E-PER-000",
+      "cells": "R14",
+      "block": "Origen y linaje",
+      "role": "QUESTION",
+      "instrument": "origin"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R15",
+      "sheet": "E-PER-000",
+      "cells": "R15",
+      "block": "Origen y linaje",
+      "role": "QUESTION",
+      "instrument": "origin"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R17",
+      "sheet": "E-PER-000",
+      "cells": "R17",
+      "block": "Origen y linaje",
+      "role": "QUESTION",
+      "instrument": "origin"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R18",
+      "sheet": "E-PER-000",
+      "cells": "R18",
+      "block": "Origen y linaje",
+      "role": "QUESTION",
+      "instrument": "origin"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R19",
+      "sheet": "E-PER-000",
+      "cells": "R19",
+      "block": "Origen y linaje",
+      "role": "QUESTION",
+      "instrument": "origin"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R20",
+      "sheet": "E-PER-000",
+      "cells": "R20",
+      "block": "Origen y linaje",
+      "role": "QUESTION",
+      "instrument": "origin"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R22",
+      "sheet": "E-PER-000",
+      "cells": "R22",
+      "block": "Origen y linaje",
+      "role": "QUESTION",
+      "instrument": "origin"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R28",
+      "sheet": "E-PER-000",
+      "cells": "R28",
+      "block": "Visión",
+      "role": "QUESTION",
+      "instrument": "vision"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R29",
+      "sheet": "E-PER-000",
+      "cells": "R29",
+      "block": "Visión",
+      "role": "QUESTION",
+      "instrument": "vision"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R30",
+      "sheet": "E-PER-000",
+      "cells": "R30",
+      "block": "Visión",
+      "role": "QUESTION",
+      "instrument": "vision"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R31",
+      "sheet": "E-PER-000",
+      "cells": "R31",
+      "block": "Visión",
+      "role": "QUESTION",
+      "instrument": "vision"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R32",
+      "sheet": "E-PER-000",
+      "cells": "R32",
+      "block": "Visión",
+      "role": "QUESTION",
+      "instrument": "vision"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R33",
+      "sheet": "E-PER-000",
+      "cells": "R33",
+      "block": "Visión",
+      "role": "QUESTION",
+      "instrument": "vision"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R34",
+      "sheet": "E-PER-000",
+      "cells": "R34",
+      "block": "Visión",
+      "role": "QUESTION",
+      "instrument": "vision"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R40",
+      "sheet": "E-PER-000",
+      "cells": "R40",
+      "block": "Valores",
+      "role": "QUESTION",
+      "instrument": "values"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R50",
+      "sheet": "E-PER-000",
+      "cells": "R50",
+      "block": "Valores",
+      "role": "QUESTION",
+      "instrument": "values"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R51",
+      "sheet": "E-PER-000",
+      "cells": "R51",
+      "block": "Valores",
+      "role": "QUESTION",
+      "instrument": "values"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R54",
+      "sheet": "E-PER-000",
+      "cells": "R54",
+      "block": "Valores",
+      "role": "QUESTION",
+      "instrument": "values"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R60",
+      "sheet": "E-PER-000",
+      "cells": "R60",
+      "block": "Estándares",
+      "role": "QUESTION",
+      "instrument": "standards"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R61",
+      "sheet": "E-PER-000",
+      "cells": "R61",
+      "block": "Estándares",
+      "role": "QUESTION",
+      "instrument": "standards"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R62",
+      "sheet": "E-PER-000",
+      "cells": "R62",
+      "block": "Estándares",
+      "role": "QUESTION",
+      "instrument": "standards"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R73",
+      "sheet": "E-PER-000",
+      "cells": "R73",
+      "block": "Identidad",
+      "role": "QUESTION",
+      "instrument": "identity"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R74",
+      "sheet": "E-PER-000",
+      "cells": "R74",
+      "block": "Identidad",
+      "role": "QUESTION",
+      "instrument": "identity"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R76",
+      "sheet": "E-PER-000",
+      "cells": "R76",
+      "block": "Identidad",
+      "role": "QUESTION",
+      "instrument": "identity"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R77",
+      "sheet": "E-PER-000",
+      "cells": "R77",
+      "block": "Identidad",
+      "role": "QUESTION",
+      "instrument": "identity"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R79",
+      "sheet": "E-PER-000",
+      "cells": "R79",
+      "block": "Identidad",
+      "role": "QUESTION",
+      "instrument": "identity"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R80",
+      "sheet": "E-PER-000",
+      "cells": "R80",
+      "block": "Identidad",
+      "role": "QUESTION",
+      "instrument": "identity"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R82",
+      "sheet": "E-PER-000",
+      "cells": "R82",
+      "block": "Identidad",
+      "role": "QUESTION",
+      "instrument": "identity"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R83",
+      "sheet": "E-PER-000",
+      "cells": "R83",
+      "block": "Identidad",
+      "role": "QUESTION",
+      "instrument": "identity"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R85",
+      "sheet": "E-PER-000",
+      "cells": "R85",
+      "block": "Identidad",
+      "role": "QUESTION",
+      "instrument": "identity"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R86",
+      "sheet": "E-PER-000",
+      "cells": "R86",
+      "block": "Identidad",
+      "role": "QUESTION",
+      "instrument": "identity"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R187",
+      "sheet": "E-PER-000",
+      "cells": "R187",
+      "block": "Personalidad",
+      "role": "QUESTION",
+      "instrument": "personality"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R188",
+      "sheet": "E-PER-000",
+      "cells": "R188",
+      "block": "Personalidad",
+      "role": "QUESTION",
+      "instrument": "personality"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R189",
+      "sheet": "E-PER-000",
+      "cells": "R189",
+      "block": "Personalidad",
+      "role": "QUESTION",
+      "instrument": "personality"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R191",
+      "sheet": "E-PER-000",
+      "cells": "R191",
+      "block": "Personalidad",
+      "role": "QUESTION",
+      "instrument": "personality"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R192",
+      "sheet": "E-PER-000",
+      "cells": "R192",
+      "block": "Personalidad",
+      "role": "QUESTION",
+      "instrument": "personality"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R193",
+      "sheet": "E-PER-000",
+      "cells": "R193",
+      "block": "Personalidad",
+      "role": "QUESTION",
+      "instrument": "personality"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R195",
+      "sheet": "E-PER-000",
+      "cells": "R195",
+      "block": "Personalidad",
+      "role": "QUESTION",
+      "instrument": "personality"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R196",
+      "sheet": "E-PER-000",
+      "cells": "R196",
+      "block": "Personalidad",
+      "role": "QUESTION",
+      "instrument": "personality"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R197",
+      "sheet": "E-PER-000",
+      "cells": "R197",
+      "block": "Personalidad",
+      "role": "QUESTION",
+      "instrument": "personality"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R199",
+      "sheet": "E-PER-000",
+      "cells": "R199",
+      "block": "Personalidad",
+      "role": "QUESTION",
+      "instrument": "personality"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R200",
+      "sheet": "E-PER-000",
+      "cells": "R200",
+      "block": "Personalidad",
+      "role": "QUESTION",
+      "instrument": "personality"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R201",
+      "sheet": "E-PER-000",
+      "cells": "R201",
+      "block": "Personalidad",
+      "role": "QUESTION",
+      "instrument": "personality"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R203",
+      "sheet": "E-PER-000",
+      "cells": "R203",
+      "block": "Personalidad",
+      "role": "QUESTION",
+      "instrument": "personality"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R204",
+      "sheet": "E-PER-000",
+      "cells": "R204",
+      "block": "Personalidad",
+      "role": "QUESTION",
+      "instrument": "personality"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R205",
+      "sheet": "E-PER-000",
+      "cells": "R205",
+      "block": "Personalidad",
+      "role": "QUESTION",
+      "instrument": "personality"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R266",
+      "sheet": "E-PER-000",
+      "cells": "R266",
+      "block": "Huella",
+      "role": "QUESTION",
+      "instrument": "footprint"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R267",
+      "sheet": "E-PER-000",
+      "cells": "R267",
+      "block": "Huella",
+      "role": "QUESTION",
+      "instrument": "footprint"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R268",
+      "sheet": "E-PER-000",
+      "cells": "R268",
+      "block": "Huella",
+      "role": "QUESTION",
+      "instrument": "footprint"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R270",
+      "sheet": "E-PER-000",
+      "cells": "R270",
+      "block": "Huella",
+      "role": "QUESTION",
+      "instrument": "footprint"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R271",
+      "sheet": "E-PER-000",
+      "cells": "R271",
+      "block": "Huella",
+      "role": "QUESTION",
+      "instrument": "footprint"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R272",
+      "sheet": "E-PER-000",
+      "cells": "R272",
+      "block": "Huella",
+      "role": "QUESTION",
+      "instrument": "footprint"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R274",
+      "sheet": "E-PER-000",
+      "cells": "R274",
+      "block": "Huella",
+      "role": "QUESTION",
+      "instrument": "footprint"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R275",
+      "sheet": "E-PER-000",
+      "cells": "R275",
+      "block": "Huella",
+      "role": "QUESTION",
+      "instrument": "footprint"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R276",
+      "sheet": "E-PER-000",
+      "cells": "R276",
+      "block": "Huella",
+      "role": "QUESTION",
+      "instrument": "footprint"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R277",
+      "sheet": "E-PER-000",
+      "cells": "R277",
+      "block": "Huella",
+      "role": "QUESTION",
+      "instrument": "footprint"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R94",
+      "sheet": "E-PER-000",
+      "cells": "R94",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R95",
+      "sheet": "E-PER-000",
+      "cells": "R95",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R96",
+      "sheet": "E-PER-000",
+      "cells": "R96",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R98",
+      "sheet": "E-PER-000",
+      "cells": "R98",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R99",
+      "sheet": "E-PER-000",
+      "cells": "R99",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R100",
+      "sheet": "E-PER-000",
+      "cells": "R100",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R102",
+      "sheet": "E-PER-000",
+      "cells": "R102",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R103",
+      "sheet": "E-PER-000",
+      "cells": "R103",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R104",
+      "sheet": "E-PER-000",
+      "cells": "R104",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R107",
+      "sheet": "E-PER-000",
+      "cells": "R107",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R108",
+      "sheet": "E-PER-000",
+      "cells": "R108",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R109",
+      "sheet": "E-PER-000",
+      "cells": "R109",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R111",
+      "sheet": "E-PER-000",
+      "cells": "R111",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R112",
+      "sheet": "E-PER-000",
+      "cells": "R112",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R113",
+      "sheet": "E-PER-000",
+      "cells": "R113",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R115",
+      "sheet": "E-PER-000",
+      "cells": "R115",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R116",
+      "sheet": "E-PER-000",
+      "cells": "R116",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R117",
+      "sheet": "E-PER-000",
+      "cells": "R117",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R120",
+      "sheet": "E-PER-000",
+      "cells": "R120",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R121",
+      "sheet": "E-PER-000",
+      "cells": "R121",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R122",
+      "sheet": "E-PER-000",
+      "cells": "R122",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R124",
+      "sheet": "E-PER-000",
+      "cells": "R124",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R125",
+      "sheet": "E-PER-000",
+      "cells": "R125",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R126",
+      "sheet": "E-PER-000",
+      "cells": "R126",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R128",
+      "sheet": "E-PER-000",
+      "cells": "R128",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R129",
+      "sheet": "E-PER-000",
+      "cells": "R129",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R130",
+      "sheet": "E-PER-000",
+      "cells": "R130",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R133",
+      "sheet": "E-PER-000",
+      "cells": "R133",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R134",
+      "sheet": "E-PER-000",
+      "cells": "R134",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R135",
+      "sheet": "E-PER-000",
+      "cells": "R135",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R137",
+      "sheet": "E-PER-000",
+      "cells": "R137",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R138",
+      "sheet": "E-PER-000",
+      "cells": "R138",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R139",
+      "sheet": "E-PER-000",
+      "cells": "R139",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R141",
+      "sheet": "E-PER-000",
+      "cells": "R141",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R142",
+      "sheet": "E-PER-000",
+      "cells": "R142",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R143",
+      "sheet": "E-PER-000",
+      "cells": "R143",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R146",
+      "sheet": "E-PER-000",
+      "cells": "R146",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R147",
+      "sheet": "E-PER-000",
+      "cells": "R147",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R148",
+      "sheet": "E-PER-000",
+      "cells": "R148",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R150",
+      "sheet": "E-PER-000",
+      "cells": "R150",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R151",
+      "sheet": "E-PER-000",
+      "cells": "R151",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R152",
+      "sheet": "E-PER-000",
+      "cells": "R152",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R154",
+      "sheet": "E-PER-000",
+      "cells": "R154",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R155",
+      "sheet": "E-PER-000",
+      "cells": "R155",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R156",
+      "sheet": "E-PER-000",
+      "cells": "R156",
+      "block": "Dificultades y recursos",
+      "role": "QUESTION",
+      "instrument": "difficulties"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R220",
+      "sheet": "E-PER-000",
+      "cells": "R220",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R221",
+      "sheet": "E-PER-000",
+      "cells": "R221",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R222",
+      "sheet": "E-PER-000",
+      "cells": "R222",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R223",
+      "sheet": "E-PER-000",
+      "cells": "R223",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R224",
+      "sheet": "E-PER-000",
+      "cells": "R224",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R227",
+      "sheet": "E-PER-000",
+      "cells": "R227",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R228",
+      "sheet": "E-PER-000",
+      "cells": "R228",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R229",
+      "sheet": "E-PER-000",
+      "cells": "R229",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R230",
+      "sheet": "E-PER-000",
+      "cells": "R230",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R231",
+      "sheet": "E-PER-000",
+      "cells": "R231",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R234",
+      "sheet": "E-PER-000",
+      "cells": "R234",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R235",
+      "sheet": "E-PER-000",
+      "cells": "R235",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R236",
+      "sheet": "E-PER-000",
+      "cells": "R236",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R237",
+      "sheet": "E-PER-000",
+      "cells": "R237",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R238",
+      "sheet": "E-PER-000",
+      "cells": "R238",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R241",
+      "sheet": "E-PER-000",
+      "cells": "R241",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R242",
+      "sheet": "E-PER-000",
+      "cells": "R242",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R243",
+      "sheet": "E-PER-000",
+      "cells": "R243",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R244",
+      "sheet": "E-PER-000",
+      "cells": "R244",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    },
+    {
+      "sourceRef": "formulario-v1:E-PER-000!R245",
+      "sheet": "E-PER-000",
+      "cells": "R245",
+      "block": "IKIGAI",
+      "role": "QUESTION",
+      "instrument": "ikigai"
+    }
+  ],
+  "count": 229
+}

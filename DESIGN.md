@@ -1,211 +1,177 @@
----
-name: Aethelgard High-Performance System
-colors:
-  surface: '#131313'
-  surface-dim: '#131313'
-  surface-bright: '#3a3939'
-  surface-container-lowest: '#0e0e0e'
-  surface-container-low: '#1c1b1b'
-  surface-container: '#201f1f'
-  surface-container-high: '#2a2a2a'
-  surface-container-highest: '#353534'
-  on-surface: '#e5e2e1'
-  on-surface-variant: '#ebbbb4'
-  inverse-surface: '#e5e2e1'
-  inverse-on-surface: '#313030'
-  outline: '#b18780'
-  outline-variant: '#603e39'
-  surface-tint: '#ffb4a8'
-  primary: '#ffb4a8'
-  on-primary: '#690100'
-  primary-container: '#ff5540'
-  on-primary-container: '#5c0000'
-  inverse-primary: '#c00100'
-  secondary: '#ffb4a8'
-  on-secondary: '#690000'
-  secondary-container: '#920703'
-  on-secondary-container: '#ff9a8a'
-  tertiary: '#acc7ff'
-  on-tertiary: '#002f67'
-  tertiary-container: '#488fff'
-  on-tertiary-container: '#00285b'
-  error: '#ffb4ab'
-  on-error: '#690005'
-  error-container: '#93000a'
-  on-error-container: '#ffdad6'
-  primary-fixed: '#ffdad4'
-  primary-fixed-dim: '#ffb4a8'
-  on-primary-fixed: '#410000'
-  on-primary-fixed-variant: '#930100'
-  secondary-fixed: '#ffdad4'
-  secondary-fixed-dim: '#ffb4a8'
-  on-secondary-fixed: '#410000'
-  on-secondary-fixed-variant: '#920703'
-  tertiary-fixed: '#d7e2ff'
-  tertiary-fixed-dim: '#acc7ff'
-  on-tertiary-fixed: '#001a40'
-  on-tertiary-fixed-variant: '#004491'
-  background: '#131313'
-  on-background: '#e5e2e1'
-  surface-variant: '#353534'
-typography:
-  display-xl:
-    fontFamily: Bitte BC
-    fontSize: 64px
-    fontWeight: '700'
-    lineHeight: 72px
-    letterSpacing: 0.02em
-  headline-lg:
-    fontFamily: Bitte BC
-    fontSize: 40px
-    fontWeight: '700'
-    lineHeight: 48px
-    letterSpacing: 0.02em
-  headline-md:
-    fontFamily: Bitte BC
-    fontSize: 32px
-    fontWeight: '700'
-    lineHeight: 40px
-  headline-sm:
-    fontFamily: Bitte BC
-    fontSize: 24px
-    fontWeight: '700'
-    lineHeight: 32px
-  body-lg:
-    fontFamily: Hanken Grotesk
-    fontSize: 18px
-    fontWeight: '400'
-    lineHeight: 28px
-  body-md:
-    fontFamily: Hanken Grotesk
-    fontSize: 16px
-    fontWeight: '400'
-    lineHeight: 24px
-  label-lg:
-    fontFamily: Hanken Grotesk
-    fontSize: 14px
-    fontWeight: '600'
-    lineHeight: 20px
-    letterSpacing: 0.05em
-  label-sm:
-    fontFamily: Hanken Grotesk
-    fontSize: 12px
-    fontWeight: '500'
-    lineHeight: 16px
-    letterSpacing: 0.02em
-  headline-lg-mobile:
-    fontFamily: Bitte BC
-    fontSize: 32px
-    fontWeight: '700'
-    lineHeight: 40px
-  score-display:
-    fontFamily: Bitte BC
-    fontSize: clamp(2.5rem, 6vw, 4.5rem)
-    fontWeight: '900'
-    lineHeight: 1
-    letterSpacing: -0.01em
-    fontVariantNumeric: tabular-nums
-spacing:
-  unit: 4px
-  gutter: 24px
-  margin-mobile: 16px
-  margin-desktop: 48px
-  stack-sm: 8px
-  stack-md: 16px
-  stack-lg: 32px
----
+# Maximus Kratos: contrato de diseño del producto web
 
-## Implementado en el piloto Ikigai
+## Alcance y autoridad
 
-Candidato visual, pendiente de aceptación. No es todavía el estándar de snapshots.
+Este contrato define identidad, jerarquía, navegación, estados y validación de UI/UX. Aplica a marketing, sesiones de producto, miembros y admin con las diferencias indicadas aquí.
 
-- Conectar (`apps/web/components/ikigai/relate-step.tsx`) muestra el diagrama. Los círculos se llaman Lo que amas, En lo que eres bueno, Lo que el mundo necesita y Por lo que te pueden pagar. Los cruces se llaman Pasión, Misión, Profesión, Vocación e Ikigai. Guardar una posibilidad no la elige.
-- El botón de acción del player es `#c00100` con texto blanco, radio 0, en `.ik-app .ag-btn-primary`. El `#ff0000` de esta prosa no es el fondo de ese botón: blanco sobre `#ff0000` queda en 4,00:1.
-- Un botón deshabilitado muestra el motivo en texto.
-- La barra del player usa el escudo (`Logo`, `markOnly`), no las letras MK.
-- El YAML de arriba sigue siendo el export antiguo. `primary: #ffb4a8` no es el botón. Si esta prosa y `apps/web/app/globals.css` divergen, manda el CSS de la superficie.
+Orden para resolver conflictos:
 
-## Brand & Style
+1. Instrucción actual del usuario y contratos funcionales vigentes.
+2. Referencia visual aprobada para la superficie y este contrato.
+3. Tokens y componentes compartidos que implementan el contrato.
+4. CSS y componentes heredados, como evidencia de la implementación actual.
 
-The visual identity is rooted in the intersection of **Ancient Stoicism and Modern Precision**. It targets high-achieving men seeking discipline, self-mastery, and elite performance. The aesthetic direction merges the gravitas of classical antiquity with the clinical, high-tech efficiency of a premium developer tool.
+Cuando la implementación no cumpla el contrato, corregirla en el componente compartido. Actualizar documentación y referencias en el mismo cambio. Un screenshot nuevo no se convierte automáticamente en referencia aprobada.
 
-The design style is a hybrid of **Minimalist Luxury and Glassmorphism**. We utilize deep, matte surfaces to create a sense of focused intensity, while vibrant crimson accents act as "blood-lines" that guide the eye to primary actions. The use of classical imagery (marble textures and Greco-Roman sculptures) is treated with modern cinematic lighting—strong highlights and deep shadows—to evoke a feeling of "monumental achievement."
+El CSS no decide metodología, permisos, cálculos ni persistencia. Una regla visual tampoco puede eliminar una capacidad del producto.
 
-**Key Visual Principles:**
-- **Atmospheric Depth:** Use of subtle background blurs and tinted overlays to create a layered, multi-dimensional workspace.
-- **Aggressive Focus:** Sharp, precise elements that convey discipline and high performance.
-- **Cinematic Contrast:** High-contrast text and luminous accents against a void-like matte background.
+## Identidad
 
-## Colors
+MK combina fondo negro, blanco legible, rojo contenido, geometría fina y recursos clásicos usados con intención. En Inicio de miembros, la referencia es la escena integrada de estatua, geometría y tres métricas. En las páginas operativas, la identidad debe ayudar a leer y actuar.
 
-The palette is intentionally restricted to maintain a high-stakes, premium atmosphere. 
+Las capturas originales de Inicio, diagnóstico y Ruta son referencias visuales. Están en el repositorio como material de revisión, no como imágenes aplanadas de la interfaz. Los números que contienen son ejemplos.
 
-- **Primary Action Red (#ff0000):** Reserved for critical CTAs, progress indicators, and active states. It represents the "spark" of action.
-- **Blood Red (#8b0000):** Used for hover states, depth gradients, and secondary accents to provide a sense of heritage and weight.
-- **Matte Black & Deep Charcoal:** The foundation of the UI. Backgrounds are pure matte black (#0a0a0a) to ensure the hardware-inspired elements pop. Surface levels use #1a1a1a to define containers and interactive cards.
-- **Marble White (#f5f5f5):** The primary typography color, chosen for its high legibility and "chiseled" feel compared to pure digital white.
+Usar el componente `Logo` y los assets originales. Conservar proporciones. No reemplazar el escudo por texto MK ni por un icono genérico.
 
-## Typography
+## Superficies
 
-This design system employs a high-contrast typographic pairing aligned with the BrandCrowd logo.
+| Superficie | Shell | Navegación | Densidad y movimiento |
+| --- | --- | --- | --- |
+| Marketing público | `PublicLayout` en `apps/web/app/(public)/layout.tsx` | `PublicNav` y `PublicFooter` | Lectura editorial. Motion de landing solo aquí. |
+| Player IKIGAI y otras sesiones inmersivas | `IkigaiShell` (`apps/web/components/ikigai/shell.tsx`), scope `.ik-app` | Logo, salida, progreso y acciones de sesión | Una tarea principal. Transiciones breves. Sin nav ni footer de marketing dentro de la sesión. |
+| App de miembros | `AppShell` (`apps/web/components/app-shell/AppShell.tsx`), clase `.mk-app-shell` | Sidebar en escritorio. En móvil, barra inferior y panel Más | Orientación, datos y acciones. Motion funcional. |
+| Diagnóstico en sesión | `.dk-shell` en `apps/web/app/diagnostico/layout.tsx` | Salida y progreso del recorrido | Una tarea principal. No es marketing aunque la URL no esté bajo `(member)`. |
+| Admin y Lab | `AdminShell` (`apps/web/components/admin-shell.tsx`) | Navegación administrativa | Densidad de trabajo. Sin escenografía de landing. |
 
-**Bitte BC** (BrandCrowd) is used for display type and the MAXIMUS KRATOS wordmark. Condensed, bold, industrial — matches the logo’s distinctive letterforms (including the K).
+Una URL pública no implica que la pantalla sea marketing. Clasificar por la tarea del usuario. Cada superficie tiene un único shell compartido. Corregirlo cuando falle en vez de copiarlo.
 
-**Bauhaus BC** (BrandCrowd) is reserved for the brand tagline «Alíneate» and similar micro-brand lines.
+No añadir IntroGate, scroll cinematográfico o footer comercial a sesiones y páginas operativas por una regla general de marca.
 
-**Hanken Grotesk** serves as the functional workhorse for body text, UI, data, and navigation. Its neo-grotesque clarity balances the geometric display face.
+## Tokens
 
-**Web note:** BrandCrowd does not distribute BC font files with logo downloads. The site self-hosts OFL substitutes mapped to the same CSS names: Barlow Condensed ExtraBold → `Bitte BC`, Sulphur Point Light → `Bauhaus BC` (see `apps/web/public/fonts/OFL-NOTICE.txt`).
+Una sola fuente de tokens: `apps/web/app/globals.css`, bloque `@theme`. El player puede ajustar alcance en `apps/web/app/ikigai/ikigai.css`, usando los mismos roles. No añadir una paleta local por módulo.
 
-**Usage Rules:**
-- All labels should utilize uppercase styling with increased letter-spacing to reinforce the "engineered" aesthetic.
-- Narrative body text should use `body-lg` to ensure a premium, spacious reading experience.
-- Host Bitte BC and Bauhaus BC webfonts in `apps/web/public/fonts/` (see `brand-fonts.css`).
+| Rol semántico | Token | Valor | Uso |
+| --- | --- | --- | --- |
+| Fondo | `--color-bg` | `#0a0a0a` | Fondo principal. `--color-obsidian` apunta al mismo valor. |
+| Superficie | `--color-surface` | `#141414` | Agrupaciones que necesitan separarse del fondo. |
+| Superficie elevada | `--color-surface-raised` | `#1c1c1c` | Menús, diálogos y paneles. |
+| Texto principal | `--color-text` | `#f5f5f5` | Títulos y texto principal. |
+| Texto secundario | `--color-text-secondary` | `#b5b5b5` | Contexto y metadatos. `--color-text-muted` usa este rol. |
+| Borde decorativo | `--color-border-decorative` | `#2d2d2d` | Separaciones y tarjetas. No identifica un control por sí solo. |
+| Borde funcional | `--color-border-functional` | `#6b6b6b` | Límite de controles. Verificar contraste real. |
+| Acción principal | `--color-action` | `#c00100` | Botón primario con texto blanco. Alias: `--color-action-red`. |
+| Acción hover | `--color-action-hover` | `#a50000` | Hover del primario. |
+| Foco | `--color-focus` | `#f5f5f5` | Contorno visible, separado del componente. |
 
-## Layout & Spacing
+`--color-crimson` (`#ff0000`) queda como alias de marketing mientras sus consumidores no migren. No es el botón del player ni el de miembros. Blanco sobre `#ff0000` no cumple contraste de texto normal.
 
-The layout follows a **Fixed-Fluid Hybrid** model. Dashboards and data-heavy views utilize a 12-column fluid grid to maximize screen real estate, while editorial or "learning" pages are constrained to a fixed 800px center column to maintain readability.
+Estas propuestas se validan en contexto. Un borde decorativo tenue no puede ser el único modo de identificar un input. Un rojo adecuado como fondo con texto blanco puede fallar como texto pequeño sobre negro.
 
-**Spacing Philosophy:**
-- We use a 4px base unit. 
-- **Density:** High density in utility areas (sidebars, toolbars) and generous, luxurious whitespace in content areas (articles, profile overviews).
-- **Gaps:** Use a standard 24px gutter between major components to allow the dark surfaces to "breathe" without merging.
+Estados de éxito, advertencia y error usan `--color-success`, `--color-error` y texto o icono. No convertir cada estado en una variante de rojo ni comunicar significado solo por color.
 
-## Elevation & Depth
+## Tipografía por función
 
-Visual hierarchy is achieved through **Tonal Elevation** and **Glassmorphism**, rather than traditional heavy shadows.
+| Rol | Fuente y criterio | Uso |
+| --- | --- | --- |
+| Marca y display de marketing | Bitte BC. No es una serif. El archivo activo es `apps/web/public/fonts/bitte-bc.woff`, declarado en `apps/web/app/brand-fonts.css`. Si no carga, el fallback es Barlow Condensed 600, 700 y 800 (`--font-bitte-fallback` en `apps/web/app/layout.tsx`). | Identidad de marca y piezas donde esta fuente pertenece a la referencia de marketing. |
+| Editorial de miembros | Noto Serif, ya en el repo (OFL), token `--font-editorial`. No hay un archivo serif de BrandCrowd. Georgia es el fallback. `--font-greek` apunta a este mismo rol. | Títulos principales de Inicio, Ruta y perfil, encabezados del diagnóstico y métricas destacadas. |
+| Interfaz y cuerpo | Hanken Grotesk, `apps/web/app/fonts/hanken-grotesk-latin.woff2`, token `--font-body`. | Navegación, formularios, botones, estados, tablas y texto corrido. |
+| Microtexto | La fuente de interfaz, 12 px. | Etiquetas cortas, sin tracking excesivo. |
 
-- **Level 0 (Background):** Matte Black (#0a0a0a). No elevation.
-- **Level 1 (Cards/Containers):** Deep Charcoal (#1a1a1a) with a subtle 1px border of #2d2d2d. This creates a "milled" look.
-- **Level 2 (Modals/Popovers):** Semi-transparent charcoal (80% opacity) with a background blur of 20px. This creates a premium glass effect that feels like dark obsidian.
-- **Highlights:** Use a top-down "inner glow" (0.5px white border at 10% opacity) on primary containers to simulate light hitting the edge of a marble slab.
+Definir un rol editorial compartido, no una fuente nueva por página. El alias Bitte no certifica que el recurso original de BrandCrowd esté disponible y no significa serif. Bauhaus BC (`apps/web/public/fonts/bauhaus-bc.woff`) sigue reservada a la línea de marca «Alíneate».
 
-## Shapes
+Base móvil: cuerpo 16 px con line-height cercano a 1.5. Secundarios 14 px. Microetiquetas 12 px solo para información no principal. Controles de texto a 16 px. Títulos de página 28 a 34 px. En escritorio los títulos pueden crecer a 40 a 48 px según composición. Estos rangos se ajustan a la fuente cargada. No son una obligación para cada H1.
 
-The design system uses **Sharp (0px)** roundedness. 
+Mayúsculas y tracking solo en eyebrows breves y marca. Navegación, instrucciones y estados usan escritura normal. No abreviar contenido para ocultar un problema de layout. No truncar títulos esenciales sin una vía para leerlos.
 
-The choice of 90-degree angles is a deliberate nod to architectural precision and classical stone cutting. It conveys strength, stability, and a no-nonsense approach to personal development. 
+## Mobile first
 
-*Exception:* Only circular avatars and specific "status pips" (like notification dots) may deviate from the sharp-edged rule. Everything else—buttons, inputs, cards—must remain strictly rectangular.
+Diseñar e implementar primero el flujo a 390 px. El CSS base debe resolver la pantalla pequeña y sus estados. Añadir columnas, sidebar y composición de escritorio mediante mejoras a anchos mayores.
 
-## Components
+Revisar 320 px para reflow, 375 × 667 para un teléfono de poca altura, 390 × 844 para el caso principal, 768 px para transición y 1440 × 900 para escritorio. La selección final de breakpoints depende del contenido.
 
-### Buttons
-- **Primary:** Action Red (#ff0000) background, white text. Sharp corners. No gradient, but a subtle inner glow on top.
-- **Secondary:** Transparent background, #f5f5f5 border (1px), white text.
-- **Ghost:** No border, #a1a1a1 text, turns white on hover with a red underline.
+En móvil:
 
-### Input Fields
-- **Style:** Underline only or 1px border on all sides using #2d2d2d. 
-- **Focus State:** Border changes to #ff0000 with a subtle red outer glow. 
-- **Text:** Input text is #f5f5f5; placeholders are #555555.
+- Una columna principal y orden de lectura coherente con el DOM.
+- Gutter base de 16 px, ajustable hasta 20 px si el contenido lo permite. El selector de siete días puede usar menos gutter para caber.
+- Controles frecuentes con área táctil de al menos 44 × 44 px. Primarios del player conservan min-height de 52 px.
+- Barra inferior con safe area. El contenido scrollea encima de esa barra, sin un segundo hueco del mismo alto.
+- Acciones sticky que no tapen el contenido, el foco o los campos al abrir el teclado.
+- Navegación secundaria en el panel Más. En escritorio esas rutas están en el sidebar. Ninguna ruta desaparece por estar en móvil.
+- Sin interacción que dependa exclusivamente de hover, drag o swipe.
+- Texto largo, teclado, errores y datos ausentes deben funcionar en el layout base.
 
-### Cards
-- **Structure:** #1a1a1a background, 1px #2d2d2d border.
-- **Header:** Cards should feature a `label-lg` category tag in Action Red at the top left.
+No ocultar overflow para disimular un componente que excede el viewport. Las tablas o diagramas que necesiten desplazamiento propio tienen un contenedor explícito. La página permanece legible.
 
-### Progress Bars
-- **Style:** Thin (4px height) tracks. The background is #2d2d2d, and the fill is a linear gradient from #8b0000 to #ff0000.
+No aplicar `height: 100vh` al contenido de páginas para acomodar una escena. El shell de miembros usa `100dvh` para mantener la barra. El contenido crece y scrollea dentro de `.mk-app-content`.
 
-### Navigation
-- **Sidebar:** Vertical, high-density navigation. Active links are indicated by a 2px vertical red line on the far left of the item.
+En escritorio, el área operativa de miembros puede alcanzar unos 1120 px. La lectura continua de marketing usa la medida que ya tiene esa superficie. No imponer una columna de 650 u 800 px a todas las páginas.
+
+## Inicio de miembros
+
+Objetivo: entender el estado personal y encontrar la siguiente acción.
+
+La escena central integra estatua, círculo, cuadrado, triángulo y líneas en un sistema de coordenadas (`viewBox` 0 0 100 100). Los tres indicadores se mantienen dentro del encuadre en escritorio. En móvil, si el texto superpuesto no se lee, los tres valores y nombres pasan debajo de la escena y las líneas de anclaje no apuntan al vacío. La estatua es `apps/web/public/images/landing/statue-standing.png` (RGBA, sin caja opaca). `statue-aligned.jpg` y `statue-clean.jpg` son bustos, no esta figura.
+
+La referencia de composición es `apps/web/public/images/landing/dashboard-alineacion-desktop.png`. Los porcentajes de esa imagen son ejemplos. No pintarlos.
+
+La acción depende del estado real de `GET /journey/state`: empezar, continuar, revisar resultado o seguir la ruta. No inventar progreso, histórico ni recomendaciones.
+
+No convertir null en 0 o 100. Mientras la API no entrega un índice de Mente, Espíritu o Cuerpo: «Por completar» si el paso siguiente es el diagnóstico, «No disponible» si ya no lo es, «Cargando» y «Error» en esos estados. La placa y los tres círculos usan la misma lectura. No mostrar el porcentaje de tareas de la semana como índice de alineación.
+
+## Calendario y tareas
+
+Objetivo: elegir un día, entender sus tareas, cambiar un estado y revisar la semana.
+
+El selector semanal usa siete celdas de ancho equivalente (`grid-template-columns: repeat(7, minmax(0, 1fr))`). Seleccionar cambia color, no dimensiones. En 320 px se reducen gap y padding del bloque. El texto ampliado puede requerir otra presentación accesible sin perder los siete días.
+
+Las fechas son civiles (`YYYY-MM-DD` de la API). Se formatean en UTC para que la zona del navegador no las corra un día. La zona del producto que devuelve la API se muestra en la pantalla. En copy, rangos como 28 sep a 4 oct.
+
+Una tarea muestra título, pilar si aporta contexto, estado y acción principal. Las alternativas viven en «Otros estados». Conservar Pendiente, Hecho, Omitido y No aplica. El estado seleccionado se lee en texto, no solo por color.
+
+Notas, historial y edición tienen una vía clara. La revisión semanal queda aparte de cada fila. Conservar las decisiones y endpoints existentes.
+
+El fondo operativo es `#0a0a0a`. Sin la fotografía de columnas en el shell de miembros.
+
+Agregar tarea usa un botón proporcionado. El estado vacío puede darle mayor protagonismo.
+
+## Componentes y UX
+
+Corregir o extender los componentes compartidos antes de crear copias. Se permiten componentes nuevos para capacidades o patrones que no existen. Deben usar tokens y documentar su alcance. Reutilizar no obliga a mantener defectos.
+
+Cada pantalla identifica su tarea, su acción principal y sus destinos. Los botones tienen variantes claras: principal (`.mk-member-btn` o `.ik-app .ag-btn-primary`), secundaria, discreta y destructiva. No dar el mismo peso a cuatro acciones distintas.
+
+Estados mínimos de operaciones asíncronas: disponible, en curso, completada y error. Los formularios conservan lo escrito al fallar. Los controles deshabilitados explican el motivo. Tras cerrar un diálogo, devolver foco al control que lo abrió. Guardar y salir conserva su garantía de persistencia.
+
+Las métricas y estados informativos no se estilizan como botones. Los elementos interactivos deben parecer interactivos. No usar texto técnico de enums, IDs o timestamps como explicación al usuario.
+
+Mantener copy de producto en español natural. Aplicar el léxico vigente. La restricción de guiones en copy sigue vigente. No aplica a IDs, nombres de clases ni código.
+
+## Motion
+
+Marketing puede usar `PublicMotionProvider`, `ScrollReveal` y los patrones de `apps/web/components/motion/` donde pertenezcan a esa superficie.
+
+Miembros, player y admin usan motion funcional breve, normalmente 150 a 220 ms. El contenido útil no espera un intro ni un reveal al hacer scroll. No ocultar formularios mientras una animación termina. Con `prefers-reduced-motion`, la información y las acciones siguen disponibles de inmediato.
+
+No añadir librerías de animación duplicadas. No introducir 3D para resolver una composición estática.
+
+## Accesibilidad
+
+Comprobar contraste sobre fondos reales: texto normal al menos 4.5:1, texto grande al menos 3:1. Revisar límites e indicadores de controles. La política de áreas táctiles de MK es 44 px, aunque el mínimo AA de WCAG 2.2 tiene otros tamaños y excepciones. En 320 px, siete días equivalentes no llegan a 44 px de ancho. Se usa todo el ancho del bloque y se mantiene el alto mínimo.
+
+Usar semántica nativa, nombres accesibles, foco visible y mensajes asociados a sus campos. No anunciar cada cambio decorativo mediante aria-live. Loading, errores y cambios relevantes se anuncian con moderación.
+
+Revisar texto al 200% y reflow a 320 CSS px. No declarar accesibilidad completa por pasar una sola prueba automática.
+
+## Criterio de terminado
+
+Una pantalla se considera terminada cuando:
+
+1. Se recorrió en navegador a los tamaños indicados, con sus estados reales.
+2. No tiene acciones ocultas por barras, recortes esenciales ni overflow inesperado.
+3. El contenido móvil tiene jerarquía y permite completar la tarea.
+4. Cumple la referencia de su superficie en composición, tipografía y densidad.
+5. Sus interacciones, errores y persistencia funcionan.
+6. Las comprobaciones técnicas afectadas pasan o las limitaciones previas están identificadas.
+7. Hay capturas revisadas y registro de evidencia.
+
+Build y tests funcionales no certifican calidad visual. Los snapshots ayudan a detectar regresiones respecto de una referencia revisada. No determinan por sí solos si el diseño es bueno.
+
+## Inventario comprobado en esta base
+
+Rutas de miembros en `apps/web/app/(member)/`: panel, ruta, perfil, cuenta, calendario, planes, proposito, asesores, mente, espiritu, cuerpo, diagnostico/resultado. El player del diagnóstico vive en `apps/web/app/diagnostico/`, fuera de ese grupo.
+
+Referencias de revisión, no de producción: `apps/web/public/images/landing/dashboard-alineacion-desktop.png`, `dashboard-diagnostico-desktop.png`, `dashboard-ruta-desktop.png`, `dashboard-panel-desktop.png`, `dashboard-proposito-desktop.png`.
+
+El export antiguo con `name: Aethelgard High-Performance System` y `primary: #ffb4a8` está en `docs/design-history/DESIGN-aethelgard.md`. No es el contrato activo.

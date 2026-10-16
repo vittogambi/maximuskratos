@@ -1,7 +1,8 @@
 import type { AppIconName } from '@/components/icons/registry';
+import { PRODUCT_STAGES, type ProductStageFocus } from '@/lib/product-stages';
 import { isEarlyAccessMode } from '@/lib/product-phase';
 
-type InsideMkFocus = 'overview' | 'diagnostico' | 'ruta' | 'perfil' | 'proposito';
+type InsideMkFocus = ProductStageFocus;
 
 /** Primary public CTA: early access account or full diagnostic. */
 export const LANDING_PRIMARY_CTA = isEarlyAccessMode()
@@ -133,38 +134,12 @@ export const LANDING_INSIDE_MK_STAGES: ReadonlyArray<{
   title: string;
   body: string;
   focus: InsideMkFocus;
-}> = [
-  {
-    id: 'diagnostico',
-    title: 'Diagnóstico',
-    body: 'Responde preguntas estructuradas en Espíritu, Mente y Cuerpo.',
-    focus: 'diagnostico',
-  },
-  {
-    id: 'perfil',
-    title: 'Perfil Maestro',
-    body: 'Comprende tus fortalezas, brechas y prioridades iniciales.',
-    focus: 'perfil',
-  },
-  {
-    id: 'hdrp',
-    title: 'Hoja de Ruta de Propósito',
-    body: 'Define el criterio que orientará tus decisiones.',
-    focus: 'proposito',
-  },
-  {
-    id: 'ruta',
-    title: 'Ruta MK',
-    body: 'Convierte esa dirección en planes, acciones y hábitos.',
-    focus: 'ruta',
-  },
-  {
-    id: 'panel',
-    title: 'Panel e índices',
-    body: 'Revisa tu coherencia y ajusta el proceso con nueva información.',
-    focus: 'overview',
-  },
-];
+}> = PRODUCT_STAGES.map((stage) => ({
+  id: stage.id,
+  title: stage.title,
+  body: stage.body,
+  focus: stage.focus,
+}));
 
 // ── 4. Diferenciación sin copy defensivo ────────────────────────────────────
 export const LANDING_DIFFERENTIATION = {

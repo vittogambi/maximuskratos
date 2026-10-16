@@ -1,15 +1,25 @@
+import type { QuestionCapture } from '../question-capture';
+
 export type DimensionScores = Record<string, number>;
 
 export type QuestionDto = {
   id: string;
   type: string;
   textEs: string;
+  sourceRef?: string | null;
   contextEs: string | null;
   maxSelections: number | null;
   scaleType: string | null;
   reasonPromptEs: string | null;
   reasonThreshold: number | null;
   options: AnswerOptionDto[];
+  capture: QuestionCapture | null;
+  heading: string | null;
+  allowedExceptions: string[];
+  answerRevision: number;
+  savedChoices?: Record<string, string>;
+  filledActivities?: string[];
+  activityNotes?: { sourceRef: string; text: string }[];
 };
 
 export type AnswerOptionDto = {
@@ -23,6 +33,7 @@ export type OutroDto = {
   moduleSlug: string;
   titleEs: string;
   outroText: string;
+  readings: { label: string; detail: string }[];
 };
 
 export type PhaseResultsDto = {

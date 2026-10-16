@@ -256,16 +256,16 @@ export function computeDomainScores(scores: Record<string, number>): Record<Doma
 }
 
 // ─── Índices de presentación ───────────────────────────────────────────────────
-// Reetiquetan los índices ya calculados por el API (indices.mk_global, indices.clarity)
-// sin tocar el motor de scoring: mk_global ya clasifica "Desalineación Total" →
-// "Alineación y Control" (es el índice de alineación); clarity promedia
-// propósito/identidad/ikigai (es la profundidad del trabajo interior).
+// Nombran los índices que calcula el API para el cuestionario prototipo, sin
+// tocar el scoring. mk_global es el promedio de las dimensiones medidas y clarity
+// el promedio de propósito, identidad e ikigai medidos. Las fórmulas de los
+// índices de Alineación y Profundidad no están definidas: no se presentan así.
 
 export type PresentationIndexKey = 'alineacion' | 'profundidad' | 'ejecucion' | 'estabilidad';
 
 export const PRESENTATION_INDICES: Record<PresentationIndexKey, { sourceKey: string; label: string }> = {
-  alineacion: { sourceKey: 'mk_global', label: 'Alineación' },
-  profundidad: { sourceKey: 'clarity', label: 'Profundidad' },
+  alineacion: { sourceKey: 'mk_global', label: 'Promedio general' },
+  profundidad: { sourceKey: 'clarity', label: 'Claridad' },
   ejecucion: { sourceKey: 'execution', label: 'Ejecución' },
   estabilidad: { sourceKey: 'stability', label: 'Estabilidad' },
 };

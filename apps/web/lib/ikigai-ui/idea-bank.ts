@@ -280,7 +280,7 @@ export const IDEA_BANK: IkigaiIdea[] = [
   idea(
     'tecnologia',
     'Tecnología',
-    'Probar herramientas nuevas, videojuegos o inteligencia artificial.',
+    'Probar herramientas nuevas, videojuegos y ver qué se puede hacer con ellas.',
     'PASION',
     [['PASION', 'bienestar']],
     { PASION: 'Probar herramientas nuevas y ver qué se puede hacer con ellas' },

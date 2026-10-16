@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { AdminFilterChip, AdminToolbar } from '@/components/admin/admin-toolbar';
 import { AdminPageHeader } from '@/components/admin/admin-page-header';
@@ -93,6 +94,7 @@ export default function AdminUsersPage() {
                 <th>Suscripción</th>
                 <th>Trial hasta</th>
                 <th>Registro</th>
+                <th>Recorrido</th>
               </tr>
             </thead>
             <tbody>
@@ -108,11 +110,12 @@ export default function AdminUsersPage() {
                   <td className="admin-table__muted">{u.subscriptionStatus ?? '—'}</td>
                   <td className="admin-table__muted">{formatAdminDate(u.trialEnd)}</td>
                   <td className="admin-table__muted">{formatAdminDate(u.createdAt)}</td>
+                  <td><Link href={`/admin/users/${u.id}/recorrido`}>Ver recorrido</Link></td>
                 </tr>
               ))}
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="admin-table__empty">
+                  <td colSpan={7} className="admin-table__empty">
                     {users.length === 0
                       ? 'Sin usuarios registrados'
                       : 'Ningún usuario coincide con la búsqueda'}

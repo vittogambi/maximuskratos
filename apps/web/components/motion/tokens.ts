@@ -80,6 +80,11 @@ export const APP_MOTION = {
     reveal: 0.28,
     page: 0.16,
     unlock: 0.6,
+    homeEnter: 0.22,
+    scene: 0.42,
+    press: 0.12,
+    panel: 0.2,
+    swap: 0.16,
   },
   distance: {
     micro: 4,

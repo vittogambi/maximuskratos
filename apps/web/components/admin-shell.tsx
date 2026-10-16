@@ -12,6 +12,7 @@ import { LabFlash } from '@/components/admin/lab/primitives';
 const NAV = [
   { href: '/admin', label: 'Resumen', icon: 'layout-dashboard', exact: true },
   { href: '/admin/users', label: 'Usuarios', icon: 'users' },
+  { href: '/admin/alertas', label: 'Alertas', icon: 'shield' },
   { href: '/admin/leads', label: 'Leads', icon: 'mail' },
   { href: '/admin/planes', label: 'Planes', icon: 'layout-grid' },
   { href: '/admin/lab', label: 'Laboratorio', icon: 'target' },

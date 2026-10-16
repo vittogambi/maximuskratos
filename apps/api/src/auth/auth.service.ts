@@ -23,6 +23,8 @@ import {
   REFRESH_COOKIE_NAME,
   REFRESH_TOKEN_TTL_DAYS,
 } from './auth.constants';
+import type { ClientKind } from './client-kind';
+import { MemberAccessService } from './member-access';
 
 export type AuthTokens = {
   accessToken: string;
@@ -35,6 +37,8 @@ export type JwtPayload = {
   role: string;
 };
 
+type SessionUser = { id: string; email: string; role: string };
+
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
@@ -44,9 +48,10 @@ export class AuthService {
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
     private readonly mail: MailService,
+    private readonly memberAccess: MemberAccessService,
   ) {}
 
-  async register(dto: RegisterDto, res: Response) {
+  async register(dto: RegisterDto, client: ClientKind, res: Response) {
     const existing = await this.prisma.user.findUnique({
       where: { email: dto.email.toLowerCase() },
     });
@@ -72,7 +77,6 @@ export class AuthService {
     });
 
     const tokens = await this.issueTokens(user.id, user.email, user.role);
-    this.setRefreshCookie(res, tokens.refreshToken);
 
     void this.mail.sendWelcomeEmail(user.email).catch((err: unknown) => {
       const message = err instanceof Error ? err.message : String(err);
@@ -88,13 +92,10 @@ export class AuthService {
         );
       });
 
-    return {
-      accessToken: tokens.accessToken,
-      user: { id: user.id, email: user.email, role: user.role },
-    };
+    return this.deliverSession(client, res, tokens, user);
   }
 
-  async login(dto: LoginDto, res: Response) {
+  async login(dto: LoginDto, client: ClientKind, res: Response) {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email.toLowerCase() },
     });
@@ -108,54 +109,48 @@ export class AuthService {
     }
 
     const tokens = await this.issueTokens(user.id, user.email, user.role);
-    this.setRefreshCookie(res, tokens.refreshToken);
-
-    return {
-      accessToken: tokens.accessToken,
-      user: { id: user.id, email: user.email, role: user.role },
-    };
+    return this.deliverSession(client, res, tokens, user);
   }
 
-  async refresh(refreshToken: string | undefined, res: Response) {
+  async refresh(refreshToken: string | undefined, client: ClientKind, res: Response) {
     if (!refreshToken) {
       throw new UnauthorizedException('Refresh token required');
     }
 
-    const tokenHash = this.hashToken(refreshToken);
-    const stored = await this.prisma.refreshToken.findUnique({
-      where: { tokenHash },
-      include: { user: true },
-    });
-
-    if (!stored || stored.revokedAt || stored.expiresAt < new Date()) {
-      throw new UnauthorizedException('Invalid refresh token');
+    const tokens = await this.rotateRefreshToken(refreshToken);
+    if (client === 'native') {
+      return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken };
     }
-
-    await this.prisma.refreshToken.update({
-      where: { id: stored.id },
-      data: { revokedAt: new Date() },
-    });
-
-    const tokens = await this.issueTokens(
-      stored.user.id,
-      stored.user.email,
-      stored.user.role,
-    );
     this.setRefreshCookie(res, tokens.refreshToken);
-
     return { accessToken: tokens.accessToken };
   }
 
-  async logout(refreshToken: string | undefined, res: Response) {
+  async logout(refreshToken: string | undefined, client: ClientKind, res: Response) {
+    if (client === 'native' && !refreshToken) {
+      throw new BadRequestException('Refresh token required');
+    }
     if (refreshToken) {
-      const tokenHash = this.hashToken(refreshToken);
       await this.prisma.refreshToken.updateMany({
-        where: { tokenHash, revokedAt: null },
+        where: { tokenHash: this.hashToken(refreshToken), revokedAt: null },
         data: { revokedAt: new Date() },
       });
     }
-    this.clearRefreshCookie(res);
+    if (client === 'web') {
+      this.clearRefreshCookie(res);
+    }
     return { success: true };
+  }
+
+  /** Revokes every refresh token of the account. Access JWTs already issued stay valid until they expire. */
+  async logoutAll(userId: string, client: ClientKind, res: Response) {
+    const { count } = await this.prisma.refreshToken.updateMany({
+      where: { userId, revokedAt: null },
+      data: { revokedAt: new Date() },
+    });
+    if (client === 'web') {
+      this.clearRefreshCookie(res);
+    }
+    return { success: true, revokedSessions: count };
   }
 
   async me(userId: string) {
@@ -183,6 +178,7 @@ export class AuthService {
     return {
       ...rest,
       subscription: subscription ?? null,
+      access: this.memberAccess.forUser(user.id),
     };
   }
 
@@ -244,31 +240,85 @@ export class AuthService {
     return { success: true };
   }
 
+  private deliverSession(client: ClientKind, res: Response, tokens: AuthTokens, user: SessionUser) {
+    const sessionUser = { id: user.id, email: user.email, role: user.role };
+    if (client === 'native') {
+      return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, user: sessionUser };
+    }
+    this.setRefreshCookie(res, tokens.refreshToken);
+    return { accessToken: tokens.accessToken, user: sessionUser };
+  }
+
   private async issueTokens(
     userId: string,
     email: string,
     role: string,
   ): Promise<AuthTokens> {
-    const payload: JwtPayload = { sub: userId, email, role };
-    const accessSecret = this.config.getOrThrow<string>('JWT_ACCESS_SECRET');
-    const accessToken = await this.jwt.signAsync(payload, {
-      secret: accessSecret,
-      expiresIn: ACCESS_TOKEN_TTL,
-    });
-
-    const refreshToken = randomBytes(48).toString('hex');
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + REFRESH_TOKEN_TTL_DAYS);
-
+    const accessToken = await this.signAccessToken({ id: userId, email, role });
+    const refreshToken = this.newRefreshSecret();
     await this.prisma.refreshToken.create({
       data: {
         userId,
         tokenHash: this.hashToken(refreshToken),
-        expiresAt,
+        expiresAt: this.refreshExpiry(),
       },
     });
-
     return { accessToken, refreshToken };
+  }
+
+  private async rotateRefreshToken(presented: string): Promise<AuthTokens> {
+    const stored = await this.prisma.refreshToken.findUnique({
+      where: { tokenHash: this.hashToken(presented) },
+      include: { user: { select: { id: true, email: true, role: true } } },
+    });
+    const now = new Date();
+    if (!stored || stored.revokedAt || stored.expiresAt <= now) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    // Signed before the write so nothing can fail between committing the rotation and replying.
+    const accessToken = await this.signAccessToken(stored.user);
+    const refreshToken = this.newRefreshSecret();
+
+    const rotated = await this.prisma.$transaction(async (tx) => {
+      const consumed = await tx.refreshToken.updateMany({
+        where: { id: stored.id, revokedAt: null, expiresAt: { gt: now } },
+        data: { revokedAt: now },
+      });
+      // Zero rows: a concurrent rotation consumed this token first.
+      if (consumed.count !== 1) return false;
+      await tx.refreshToken.create({
+        data: {
+          userId: stored.userId,
+          tokenHash: this.hashToken(refreshToken),
+          expiresAt: this.refreshExpiry(),
+        },
+      });
+      return true;
+    });
+
+    if (!rotated) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+    return { accessToken, refreshToken };
+  }
+
+  private signAccessToken(user: SessionUser): Promise<string> {
+    const payload: JwtPayload = { sub: user.id, email: user.email, role: user.role };
+    return this.jwt.signAsync(payload, {
+      secret: this.config.getOrThrow<string>('JWT_ACCESS_SECRET'),
+      expiresIn: ACCESS_TOKEN_TTL,
+    });
+  }
+
+  private newRefreshSecret(): string {
+    return randomBytes(48).toString('hex');
+  }
+
+  private refreshExpiry(): Date {
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + REFRESH_TOKEN_TTL_DAYS);
+    return expiresAt;
   }
 
   private hashToken(token: string): string {

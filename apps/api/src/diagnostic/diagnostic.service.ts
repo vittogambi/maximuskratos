@@ -2,11 +2,25 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  ConflictException,
   ServiceUnavailableException,
 } from '@nestjs/common';
+import { withoutInternalAlerts } from '../admin/public-reading';
 import { PrismaService } from '../prisma/prisma.service';
 import { DiagnosticCatalogService } from './diagnostic-catalog.service';
 import { SubmitResponseDto } from './dto/submit-response.dto';
+import { moduleReading, persistExcelScore, sleepReading, type SectionLine } from './excel-score';
+import { childDisposition, isSettled, revisionDecision, validateSubmission } from './answer-rules';
+import { ambitsOf } from '../instrumentos/ikigai-lists';
+import { ResponseWriteHook } from './response-write-hook';
+import {
+  isRequiredActivity,
+  isRequiredBasal,
+  parseQuestionContext,
+  readQuestionContext,
+  SEX_SOURCE,
+  type QuestionCapture,
+} from './question-capture';
 import type {
   DiagnosticProgressDto,
   DiagnosticResponsePayload,
@@ -43,12 +57,37 @@ const ARCHETYPE_MATRIX: { dims: string[]; slug: string }[] = [
   { dims: ['ikigai', 'purpose'], slug: 'amante' },
 ];
 
+function presentCapture(capture: QuestionCapture | null): QuestionCapture | null {
+  if (capture?.kind !== 'activity') return capture;
+  return { ...capture, ambits: ambitsOf(capture.field) };
+}
+
 @Injectable()
 export class DiagnosticService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly catalog: DiagnosticCatalogService,
+    private readonly responseWrite: ResponseWriteHook,
   ) {}
+
+  /** The one open session. Completed and abandoned sessions stay readable by id. */
+  private findActiveSession(userId: string) {
+    return this.prisma.diagnosticSession.findFirst({
+      where: { userId, status: 'ACTIVE' },
+      orderBy: { startedAt: 'desc' },
+    });
+  }
+
+  async restart(userId: string) {
+    const active = await this.findActiveSession(userId);
+    if (active) {
+      await this.prisma.diagnosticSession.update({
+        where: { id: active.id },
+        data: { status: active.completedAt ? 'COMPLETED' : 'ABANDONED' },
+      });
+    }
+    return this.startOrResume(userId);
+  }
 
   async startOrResume(userId: string) {
     try {
@@ -73,9 +112,7 @@ export class DiagnosticService {
       throw new NotFoundException('No active diagnostic version found');
     }
 
-    let session = await this.prisma.diagnosticSession.findUnique({
-      where: { userId },
-    });
+    let session = await this.findActiveSession(userId);
 
     if (!session) {
       let isNewSession = false;
@@ -84,6 +121,7 @@ export class DiagnosticService {
           data: {
             userId,
             versionId: version.id,
+            status: 'ACTIVE',
             metadata: {},
           },
         });
@@ -91,7 +129,7 @@ export class DiagnosticService {
       } catch (err: unknown) {
         // P2002 = unique constraint — a concurrent request already created the session
         if ((err as { code?: string })?.code === 'P2002') {
-          session = await this.prisma.diagnosticSession.findUnique({ where: { userId } });
+          session = await this.findActiveSession(userId);
           if (!session) throw err;
         } else {
           throw err;
@@ -141,9 +179,7 @@ export class DiagnosticService {
   }
 
   async getState(userId: string): Promise<{ sessionState: SessionStateDto; nextStep: NextStep }> {
-    const session = await this.prisma.diagnosticSession.findUnique({
-      where: { userId },
-    });
+    const session = await this.findActiveSession(userId);
     if (!session) {
       throw new NotFoundException('No diagnostic session found');
     }
@@ -151,11 +187,23 @@ export class DiagnosticService {
   }
 
   async getProfile(userId: string) {
-    const session = await this.prisma.diagnosticSession.findUnique({
-      where: { userId },
-      include: { profile: true, moduleProgress: true },
+    const current = await this.prisma.masterProfile.findFirst({
+      where: { userId, isCurrent: true },
+      include: { session: { include: { moduleProgress: true } } },
     });
-    if (!session) return null;
+    if (current?.session) {
+      const allDone =
+        current.session.moduleProgress.length > 0 &&
+        current.session.moduleProgress.every((m) => m.status === 'COMPLETE' && m.outroSeen);
+      if (allDone) return this.toProfileDto(current);
+    }
+
+    const session = await this.prisma.diagnosticSession.findFirst({
+      where: { userId, status: 'ACTIVE' },
+      include: { profile: true, moduleProgress: true },
+      orderBy: { startedAt: 'desc' },
+    });
+    if (!session) return current ? this.toProfileDto(current) : null;
 
     // Only expose a profile once every module has been completed and its outro seen.
     // This prevents showing partial/corrupt profiles created before the diagnostic is done.
@@ -167,7 +215,9 @@ export class DiagnosticService {
     if (!session.profile) {
       // Backfill profile for users who completed before generation was wired
       await this.buildState(session.id, userId);
-      const refreshed = await this.prisma.masterProfile.findUnique({ where: { userId } });
+      const refreshed = await this.prisma.masterProfile.findFirst({
+        where: { userId, isCurrent: true },
+      });
       return refreshed ? this.toProfileDto(refreshed) : null;
     }
 
@@ -175,8 +225,10 @@ export class DiagnosticService {
   }
 
   async getProgress(userId: string): Promise<DiagnosticProgressDto | null> {
-    const session = await this.prisma.diagnosticSession.findUnique({
-      where: { userId },
+    const active = await this.findActiveSession(userId);
+    const session = await this.prisma.diagnosticSession.findFirst({
+      where: { id: active?.id ?? undefined, userId },
+      orderBy: { startedAt: 'desc' },
       include: {
         moduleProgress: {
           include: {
@@ -221,9 +273,7 @@ export class DiagnosticService {
     userId: string,
     dto: SubmitResponseDto,
   ): Promise<DiagnosticResponsePayload> {
-    const session = await this.prisma.diagnosticSession.findUnique({
-      where: { userId },
-    });
+    const session = await this.findActiveSession(userId);
     if (!session) throw new NotFoundException('No diagnostic session found');
 
     const question = await this.prisma.question.findUnique({
@@ -232,53 +282,119 @@ export class DiagnosticService {
     });
     if (!question) throw new NotFoundException('Question not found');
 
-    // Validate option IDs if applicable
-    if (dto.selectedOptionIds?.length) {
-      const validIds = new Set(question.options.map((o) => o.id));
-      for (const id of dto.selectedOptionIds) {
-        if (!validIds.has(id)) {
-          throw new BadRequestException(`Invalid option id: ${id}`);
-        }
+    const optionIds = dto.exceptionKind ? [] : dto.selectedOptionIds ?? [];
+    const freeText = dto.exceptionKind ? null : dto.freeText?.trim() || null;
+    if (optionIds.length) {
+      const validIds = new Set(question.options.map((option) => option.id));
+      for (const id of optionIds) {
+        if (!validIds.has(id)) throw new BadRequestException(`Invalid option id: ${id}`);
       }
     }
-
-    // Upsert response (allow editing within open module)
-    await this.prisma.response.upsert({
-      where: { sessionId_questionId: { sessionId: session.id, questionId: dto.questionId } },
-      update: {
-        selectedOptionIds: dto.selectedOptionIds ?? [],
-        freeText: dto.freeText,
-        rankingOrder: dto.rankingOrder ?? [],
-        answeredAt: new Date(),
-        latencyMs: dto.latencyMs,
-        editCount: { increment: 1 },
-      },
-      create: {
-        sessionId: session.id,
-        questionId: dto.questionId,
-        selectedOptionIds: dto.selectedOptionIds ?? [],
-        freeText: dto.freeText,
-        rankingOrder: dto.rankingOrder ?? [],
-        latencyMs: dto.latencyMs,
-        editCount: 0,
-      },
-    });
-
-    // Wire many-to-many for selected options
-    if (dto.selectedOptionIds?.length) {
-      const response = await this.prisma.response.findUnique({
-        where: { sessionId_questionId: { sessionId: session.id, questionId: dto.questionId } },
+    const parsed = readQuestionContext(question.sourceRef, question.contextEs);
+    let priorValues: string[] | null = null;
+    if (parsed.subsetRef) {
+      const parent = await this.prisma.question.findFirst({
+        where: { sourceRef: parsed.subsetRef, module: { versionId: session.versionId } },
+        include: { options: true },
       });
-      if (response) {
-        await this.prisma.response.update({
-          where: { id: response.id },
-          data: {
-            selectedOptions: {
-              set: dto.selectedOptionIds.map((id) => ({ id })),
+      const prior = await this.prisma.response.findFirst({
+        where: { sessionId: session.id, questionId: parent?.id ?? '' },
+        include: { selectedOptions: true },
+      });
+      const chosenIds = new Set(prior?.selectedOptionIds ?? []);
+      const fromIds = parent?.options.filter((option) => chosenIds.has(option.id)).map((option) => option.value) ?? [];
+      priorValues = fromIds.length > 0 ? fromIds : (prior?.selectedOptions.map((option) => option.value) ?? []);
+    }
+    const selectedValues = question.options.filter((option) => optionIds.includes(option.id)).map((option) => option.value);
+    const number = parsed.capture?.kind === 'number' || parsed.capture?.kind === 'hours'
+      ? { min: parsed.capture.min, max: parsed.capture.max }
+      : null;
+    const birthdate = parsed.capture?.kind === 'birthdate'
+      ? { minAge: parsed.capture.minAge, maxAge: parsed.capture.maxAge }
+      : null;
+    const check = validateSubmission({
+      exceptionKind: dto.exceptionKind ?? null,
+      allowed: question.allowedExceptions,
+      optionIds,
+      freeText,
+      maxSelections: question.maxSelections,
+      selectedValues,
+      priorValues,
+      number,
+      birthdate,
+      forbidException: isRequiredBasal(question.sourceRef) || isRequiredActivity(question.sourceRef),
+      mustChoose: question.sourceRef === SEX_SOURCE,
+      ikigaiLenses: parsed.capture?.kind === 'ikigai' ? parsed.capture.others : null,
+      activity: parsed.capture?.kind === 'activity' ? { ambits: ambitsOf(parsed.capture.field) } : null,
+    });
+    if (!check.ok) throw new BadRequestException(check.message);
+    if (!dto.exceptionKind && question.sourceRef === 'formulario-v1:E-PER-000!R40' && (optionIds.length < 4 || optionIds.length > 10)) {
+      throw new BadRequestException('Elige entre 4 y 10 valores.');
+    }
+    if (!dto.exceptionKind && question.sourceRef === 'formulario-v1:E-PER-000!R51') {
+      const available = priorValues && priorValues.length > 0 ? priorValues.length : question.options.length;
+      const needed = Math.min(3, available);
+      if (optionIds.length !== needed) throw new BadRequestException('Elige 3 de los valores que ya marcaste.');
+    }
+
+    try {
+      await this.prisma.$transaction(async (tx) => {
+        const existing = await tx.response.findUnique({
+          where: { sessionId_questionId: { sessionId: session.id, questionId: dto.questionId } },
+        });
+        const decision = revisionDecision(dto.expectedRevision, existing?.revision ?? null);
+        if (decision === 'conflict') {
+          throw new ConflictException('Esta respuesta cambió en otra sesión. Recarga el cuestionario antes de guardar.');
+        }
+        await this.responseWrite.beforeUpsert();
+        if (existing) {
+          await tx.responseRevision.create({
+            data: {
+              responseId: existing.id,
+              revision: existing.revision,
+              freeText: existing.freeText,
+              selectedOptionIds: existing.selectedOptionIds,
+              exceptionKind: existing.exceptionKind,
+              exceptionOrigin: existing.exceptionOrigin,
             },
+          });
+        }
+        await tx.response.upsert({
+          where: { sessionId_questionId: { sessionId: session.id, questionId: dto.questionId } },
+          update: {
+            selectedOptionIds: optionIds,
+            freeText,
+            rankingOrder: dto.rankingOrder ?? [],
+            answeredAt: new Date(),
+            latencyMs: dto.latencyMs,
+            editCount: { increment: 1 },
+            skipped: false,
+            exceptionKind: dto.exceptionKind ?? null,
+            exceptionOrigin: dto.exceptionKind ? 'USER' : null,
+            revision: { increment: 1 },
+            selectedOptions: { set: optionIds.map((id) => ({ id })) },
+          },
+          create: {
+            sessionId: session.id,
+            questionId: dto.questionId,
+            selectedOptionIds: optionIds,
+            freeText,
+            rankingOrder: dto.rankingOrder ?? [],
+            latencyMs: dto.latencyMs,
+            editCount: 0,
+            skipped: false,
+            exceptionKind: dto.exceptionKind ?? null,
+            exceptionOrigin: dto.exceptionKind ? 'USER' : null,
+            revision: 1,
+            selectedOptions: { connect: optionIds.map((id) => ({ id })) },
           },
         });
+      });
+    } catch (error) {
+      if ((error as { code?: string }).code === 'P2002') {
+        throw new ConflictException('Esta respuesta cambió en otra sesión. Recarga el cuestionario antes de guardar.');
       }
+      throw error;
     }
 
     await this.prisma.diagnosticEvent.create({
@@ -332,7 +448,7 @@ export class DiagnosticService {
   }
 
   async markOutroSeen(userId: string, moduleSlug: string) {
-    const session = await this.prisma.diagnosticSession.findUnique({ where: { userId } });
+    const session = await this.findActiveSession(userId);
     if (!session) throw new NotFoundException('No diagnostic session found');
 
     const module = await this.prisma.diagnosticModule.findFirst({
@@ -346,43 +462,48 @@ export class DiagnosticService {
     if (!progress) throw new NotFoundException('Module progress not found');
 
     if (!progress.outroSeen) {
-      await this.prisma.userModuleProgress.update({
-        where: { id: progress.id },
-        data: { outroSeen: true },
-      });
-
-      // Fire module_completed event
-      await this.prisma.diagnosticEvent.create({
-        data: {
-          sessionId: session.id,
-          type: 'module_completed',
-          payload: { moduleSlug, moduleId: module.id, moduleOrder: module.order },
-        },
-      });
-
-      // Fire diagnostic_activated on first module completion (activation event)
-      if (module.order === 1) {
-        await this.prisma.diagnosticEvent.create({
-          data: {
-            sessionId: session.id,
-            type: 'diagnostic_activated',
-            payload: { moduleSlug, triggeredBy: 'first_module_outro' },
-          },
-        });
-      }
-
-      // Unlock next module
       const nextModule = await this.prisma.diagnosticModule.findFirst({
         where: { versionId: session.versionId, order: module.order + 1 },
       });
-      if (nextModule) {
-        await this.prisma.userModuleProgress.updateMany({
-          where: { sessionId: session.id, moduleId: nextModule.id },
-          data: { status: 'AVAILABLE' },
+
+      // One transaction: a concurrent GET /state must never see this outro seen
+      // while the next module is still LOCKED (it would finalise the diagnostic).
+      await this.prisma.$transaction(async (tx) => {
+        const marked = await tx.userModuleProgress.updateMany({
+          where: { id: progress.id, outroSeen: false },
+          data: { outroSeen: true },
         });
-      }
+        if (marked.count === 0) return;
+
+        if (nextModule) {
+          await tx.userModuleProgress.updateMany({
+            where: { sessionId: session.id, moduleId: nextModule.id, status: 'LOCKED' },
+            data: { status: 'AVAILABLE' },
+          });
+        }
+
+        await tx.diagnosticEvent.create({
+          data: {
+            sessionId: session.id,
+            type: 'module_completed',
+            payload: { moduleSlug, moduleId: module.id, moduleOrder: module.order },
+          },
+        });
+
+        // Fire diagnostic_activated on first module completion (activation event)
+        if (module.order === 1) {
+          await tx.diagnosticEvent.create({
+            data: {
+              sessionId: session.id,
+              type: 'diagnostic_activated',
+              payload: { moduleSlug, triggeredBy: 'first_module_outro' },
+            },
+          });
+        }
+      });
     }
 
+    await persistExcelScore(this.prisma, session.id);
     return { success: true };
   }
 
@@ -420,7 +541,22 @@ export class DiagnosticService {
 
     if (!session) throw new NotFoundException('Session not found');
 
-    const answeredIds = new Set(session.responses.map((r) => r.questionId));
+    const activeForFollow =
+      session.moduleProgress.find(
+        (p) => p.status === 'AVAILABLE' || p.status === 'IN_PROGRESS',
+      ) ??
+      session.moduleProgress.find((p) => p.status === 'COMPLETE' && !p.outroSeen);
+    if (activeForFollow) {
+      session.responses = await this.reconcileFollowups(
+        session.id,
+        activeForFollow.module.questions,
+        session.responses,
+      );
+    }
+
+    const settledIds = new Set(
+      session.responses.filter((response) => isSettled(response)).map((response) => response.questionId),
+    );
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { onboardingStep: true },
@@ -441,6 +577,16 @@ export class DiagnosticService {
       );
 
     if (!activeProgress) {
+      const allModulesClosed =
+        session.moduleProgress.length > 0 &&
+        session.moduleProgress.every((p) => p.status === 'COMPLETE' && p.outroSeen);
+      if (!allModulesClosed) {
+        // A later module is still LOCKED: another write is mid-flight. Never finalise on a partial state.
+        throw new ConflictException(
+          'El diagnóstico se está actualizando. Intenta de nuevo en unos segundos.',
+        );
+      }
+
       // All modules done — diagnostic complete
       const lastSnapshot = await this.prisma.scoreSnapshot.findFirst({
         where: { sessionId },
@@ -479,9 +625,7 @@ export class DiagnosticService {
 
     const currentModule = activeProgress.module;
     const totalQuestions = currentModule.questions.length;
-    const answeredInModule = currentModule.questions.filter((q) =>
-      answeredIds.has(q.id),
-    ).length;
+    const answeredInModule = currentModule.questions.filter((question) => settledIds.has(question.id)).length;
 
     // Check if module needs outro
     if (answeredInModule === totalQuestions && totalQuestions > 0 && !activeProgress.outroSeen) {
@@ -521,14 +665,15 @@ export class DiagnosticService {
           data: {
             moduleSlug: currentModule.slug,
             titleEs: currentModule.titleEs,
-            outroText: activeProgress.outroText ?? currentModule.outroTemplateEs,
+            outroText: this.outroSentence(currentModule.slug, activeProgress.outroText ?? currentModule.outroTemplateEs),
+            readings: this.moduleReadings(currentModule, session.responses),
           },
         },
       };
     }
 
     // Find next unanswered question
-    const nextQuestion = currentModule.questions.find((q) => !answeredIds.has(q.id));
+    const nextQuestion = currentModule.questions.find((question) => !settledIds.has(question.id));
 
     if (!nextQuestion) {
       throw new BadRequestException('Unexpected state: no next question found');
@@ -545,8 +690,29 @@ export class DiagnosticService {
 
     const isModuleStart = answeredInModule === 0;
 
-    // 1-indexed position of the current question in the module
-    const currentQuestionIndex = answeredInModule + 1;
+    const skippedIds = new Set(
+      session.responses.filter((response) => response.skipped).map((response) => response.questionId),
+    );
+    const visibleQuestions = currentModule.questions.filter((question) => !skippedIds.has(question.id));
+    const answeredVisible = visibleQuestions.filter((question) => settledIds.has(question.id)).length;
+    const currentQuestionIndex = answeredVisible + 1;
+    const visibleCount = visibleQuestions.length;
+
+    const question = this.toQuestionDto(
+      {
+        ...(nextQuestion as typeof nextQuestion & { scaleType: string | null; reasonPromptEs: string | null; reasonThreshold: number | null; allowedExceptions: string[]; options: { id: string; order: number; textEs: string; value: string }[] }),
+        options: this.subsetOptions(nextQuestion, currentModule.questions, session.responses),
+      },
+      session.responses.find((response) => response.questionId === nextQuestion.id)?.revision ?? 0,
+    );
+    if (currentModule.slug === 'e-per-dificultades' || currentModule.slug === 'e-per-personalidad') {
+      question.savedChoices = this.shadowSavedChoices(currentModule.questions, session.responses);
+    }
+    if (currentModule.slug === 'e-per-ikigai') {
+      const notes = this.activityNotes(currentModule.questions, session.responses);
+      question.activityNotes = notes;
+      question.filledActivities = notes.map((note) => note.sourceRef);
+    }
 
     return {
       sessionState: {
@@ -560,7 +726,7 @@ export class DiagnosticService {
         selfKnowledgePct: this.calcSelfKnowledgePct(pct / 100),
         isModuleStart,
         currentQuestionIndex,
-        moduleQuestionCount: totalQuestions,
+          moduleQuestionCount: visibleCount,
         showWelcomeScreen,
         currentModuleOrder: currentModule.order,
         totalModules,
@@ -568,9 +734,47 @@ export class DiagnosticService {
       },
       nextStep: {
         type: 'question',
-        data: this.toQuestionDto(nextQuestion as typeof nextQuestion & { scaleType: string | null; reasonPromptEs: string | null; reasonThreshold: number | null; options: { id: string; order: number; textEs: string; value: string }[] }),
+        data: question,
       },
     };
+  }
+
+  private activityNotes(
+    questions: { id: string; sourceRef: string | null; contextEs: string | null }[],
+    responses: { questionId: string; skipped: boolean; freeText: string | null }[],
+  ): { sourceRef: string; text: string }[] {
+    const byQuestion = new Map(responses.map((response) => [response.questionId, response]));
+    const notes: { sourceRef: string; text: string }[] = [];
+    for (const question of questions) {
+      if (!question.sourceRef || !question.contextEs?.startsWith('@actividad:')) continue;
+      const response = byQuestion.get(question.id);
+      if (!response || response.skipped || !response.freeText) continue;
+      try {
+        const parsed = JSON.parse(response.freeText) as { ambit?: string; option?: string; answer?: string };
+        const text = parsed.answer?.trim() ?? '';
+        if (parsed.ambit && parsed.option && text) notes.push({ sourceRef: question.sourceRef, text });
+      } catch {
+        continue;
+      }
+    }
+    return notes;
+  }
+
+  private shadowSavedChoices(
+    questions: { id: string; sourceRef: string | null; options: { id: string; value: string }[] }[],
+    responses: { questionId: string; selectedOptionIds: string[]; skipped: boolean }[],
+  ): Record<string, string> {
+    const byQuestion = new Map(responses.map((response) => [response.questionId, response]));
+    const choices: Record<string, string> = {};
+    for (const question of questions) {
+      if (!question.sourceRef) continue;
+      const response = byQuestion.get(question.id);
+      if (!response || response.skipped || response.selectedOptionIds.length === 0) continue;
+      const option = question.options.find((item) => response.selectedOptionIds.includes(item.id));
+      if (!option) continue;
+      choices[question.sourceRef] = option.value;
+    }
+    return choices;
   }
 
   /**
@@ -604,53 +808,59 @@ export class DiagnosticService {
       Object.fromEntries(DIMENSIONS.map((d) => [d, 50]));
     const indices =
       (lastSnapshot?.indices as Record<string, number> | null) ?? {};
-    const archetype = this.deriveArchetype(dimensionScores);
+    const version = await this.prisma.diagnosticVersion.findUnique({ where: { id: session?.versionId } });
+    const isFormularioCompleto = version?.definitionRef === 'formulario-completo';
+    const archetype = isFormularioCompleto ? 'sin-clasificar' : this.deriveArchetype(dimensionScores);
     const secondaryArchetype = this.deriveSecondaryArchetype(dimensionScores, archetype);
 
-    // Create MasterProfile
-    await this.prisma.masterProfile.create({
-      data: {
-        userId,
-        sessionId,
-        archetypePrimary: archetype,
-        archetypeSecondary: secondaryArchetype,
-        strengths: [],
-        weaknesses: [],
-        risks: [],
-        potentials: [],
-        bottlenecks: [],
-        priorities: [],
-        scores: dimensionScores,
-        indices,
-        segmentTags: [],
-        recommendationSeeds: [],
-      },
-    });
-
-    // Mark session as completed
-    await this.prisma.diagnosticSession.update({
-      where: { id: sessionId },
-      data: { completedAt: new Date() },
-    });
-
-    // Advance onboardingStep
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
-    if (user && user.onboardingStep !== 'PROFILE_COMPLETE' && user.onboardingStep !== 'BLUEPRINT_READY') {
-      await this.prisma.user.update({
-        where: { id: userId },
-        data: { onboardingStep: 'PROFILE_COMPLETE' },
+    try {
+      await this.prisma.$transaction(async (tx) => {
+        await tx.masterProfile.create({
+          data: {
+            userId,
+            sessionId,
+            archetypePrimary: archetype,
+            archetypeSecondary: secondaryArchetype,
+            strengths: [],
+            weaknesses: [],
+            risks: [],
+            potentials: [],
+            bottlenecks: [],
+            priorities: [],
+            scores: dimensionScores,
+            indices,
+            segmentTags: [],
+            recommendationSeeds: [],
+          },
+        });
+        await tx.masterProfile.updateMany({ where: { userId, isCurrent: true }, data: { isCurrent: false } });
+        await tx.masterProfile.updateMany({ where: { sessionId }, data: { isCurrent: true } });
+        await tx.diagnosticSession.update({
+          where: { id: sessionId },
+          data: { completedAt: new Date(), status: 'COMPLETED' },
+        });
+        const user = await tx.user.findUnique({ where: { id: userId } });
+        if (user && user.onboardingStep !== 'PROFILE_COMPLETE' && user.onboardingStep !== 'BLUEPRINT_READY') {
+          await tx.user.update({ where: { id: userId }, data: { onboardingStep: 'PROFILE_COMPLETE' } });
+        }
+        await tx.diagnosticEvent.create({
+          data: { sessionId, type: 'diagnostic_completed', payload: { archetypePrimary: archetype, userId } },
+        });
+        await persistExcelScore(tx, sessionId);
+        if (isFormularioCompleto) {
+          const { persistFormularioReading } = await import('../instrumentos/reading');
+          const { materializeInitialAlignment } = await import('../instrumentos/core-reading');
+          await persistFormularioReading(tx, sessionId);
+          await materializeInitialAlignment(tx, sessionId);
+        }
       });
+    } catch (err: unknown) {
+      if ((err as { code?: string })?.code === 'P2002') {
+        const existing = await this.prisma.masterProfile.findUnique({ where: { sessionId } });
+        if (existing) return existing.archetypePrimary;
+      }
+      throw err;
     }
-
-    // Fire diagnostic_completed event
-    await this.prisma.diagnosticEvent.create({
-      data: {
-        sessionId,
-        type: 'diagnostic_completed',
-        payload: { archetypePrimary: archetype, userId },
-      },
-    });
-
     return archetype;
   }
 
@@ -853,7 +1063,7 @@ export class DiagnosticService {
       archetypePrimary: profile.archetypePrimary,
       archetypeSecondary: profile.archetypeSecondary,
       scores: profile.scores as Record<string, number>,
-      indices: profile.indices as Record<string, number>,
+      indices: withoutInternalAlerts(profile.indices) as Record<string, number>,
       strengths: profile.strengths as string[],
       weaknesses: profile.weaknesses as string[],
       risks: profile.risks as string[],
@@ -865,22 +1075,197 @@ export class DiagnosticService {
     };
   }
 
+  private subsetOptions<T extends { id: string; value: string }>(
+    question: { contextEs: string | null; options: T[] },
+    moduleQuestions: { id: string; sourceRef: string | null; options: { id: string; value: string }[] }[],
+    responses: { questionId: string; selectedOptionIds: string[] }[],
+  ): T[] {
+    const subsetRef = parseQuestionContext(question.contextEs).subsetRef;
+    if (!subsetRef) return question.options;
+    const parent = moduleQuestions.find((item) => item.sourceRef === subsetRef);
+    if (!parent) return question.options;
+    const prior = responses.find((item) => item.questionId === parent.id);
+    const chosen = new Set(prior?.selectedOptionIds ?? []);
+    const values = new Set(parent.options.filter((option) => chosen.has(option.id)).map((option) => option.value));
+    if (values.size === 0) return [];
+    return question.options.filter((option) => values.has(option.value));
+  }
+
   private toQuestionDto(
-    question: { id: string; type: string; textEs: string; contextEs: string | null; maxSelections: number | null; scaleType: string | null; reasonPromptEs: string | null; reasonThreshold: number | null; options: { id: string; order: number; textEs: string; value: string }[] },
+    question: { id: string; type: string; textEs: string; sourceRef?: string | null; contextEs: string | null; maxSelections: number | null; scaleType: string | null; reasonPromptEs: string | null; reasonThreshold: number | null; allowedExceptions?: string[]; options: { id: string; order: number; textEs: string; value: string }[] },
+    answerRevision = 0,
   ): import('./types/diagnostic.types').QuestionDto {
+    const parsed = readQuestionContext(question.sourceRef, question.contextEs);
     return {
       id: question.id,
       type: question.type,
       textEs: question.textEs,
-      contextEs: question.contextEs,
+      sourceRef: question.sourceRef ?? null,
+      contextEs: parsed.contextEs,
       maxSelections: question.maxSelections,
       scaleType: question.scaleType,
       reasonPromptEs: question.reasonPromptEs,
       reasonThreshold: question.reasonThreshold,
+      capture: presentCapture(parsed.capture),
+      heading: parsed.heading,
+      allowedExceptions: isRequiredBasal(question.sourceRef) || isRequiredActivity(question.sourceRef)
+        ? []
+        : (question.allowedExceptions ?? []).filter((kind) => kind !== 'PENDING'),
+      answerRevision,
       options: question.options
         .sort((a, b) => a.order - b.order)
         .map((o) => ({ id: o.id, order: o.order, textEs: o.textEs, value: o.value })),
     };
+  }
+
+  private outroSentence(slug: string, template: string): string {
+    if (slug === 'e-aud-s6') return 'Estas respuestas se leen aparte de la auditoría principal.';
+    if (slug === 'f-rad-001') return 'Quedó tu autorreporte.';
+    if (slug === 'e-per-000') return 'Quedó lo que escribiste.';
+    return template || 'Así queda esta sección.';
+  }
+
+  private moduleReadings(
+    module: {
+      slug: string;
+      questions: { id: string; contextEs: string | null; options: { id: string; value: string }[] }[];
+    },
+    responses: { questionId: string; selectedOptionIds: string[]; skipped: boolean; freeText: string | null }[],
+  ): SectionLine[] {
+    const values = module.questions.map((question) => {
+      const response = responses.find((item) => item.questionId === question.id);
+      if (!response || response.skipped) return null;
+      const option = question.options.find((item) => response.selectedOptionIds.includes(item.id));
+      if (!option) return null;
+      const numeric = Number(option.value);
+      return Number.isFinite(numeric) ? numeric : null;
+    });
+    const lines = moduleReading(module.slug, values);
+    const sleep = module.questions.find((question) => parseQuestionContext(question.contextEs).capture?.kind === 'hours');
+    if (!sleep) return lines;
+    const response = responses.find((item) => item.questionId === sleep.id);
+    const hours = response?.freeText != null && response.freeText !== '' ? Number(response.freeText) : null;
+    const line = sleepReading(Number.isFinite(hours) ? hours : null);
+    return line ? [...lines, line] : lines;
+  }
+
+  private async reconcileFollowups<T extends {
+    id: string;
+    questionId: string;
+    selectedOptionIds: string[];
+    skipped: boolean;
+    freeText: string | null;
+    exceptionKind: string | null;
+    exceptionOrigin: string | null;
+    revision: number;
+  }>(
+    sessionId: string,
+    questions: { id: string; order: number; contextEs: string | null; options: { id: string; value: string }[] }[],
+    responses: T[],
+  ): Promise<T[]> {
+    const pending = [...responses];
+    for (const question of questions) {
+      const rule = parseQuestionContext(question.contextEs).follows;
+      if (!rule) continue;
+      const prior = questions.find((item) => item.order === rule.order);
+      if (!prior) continue;
+      const priorResponse = pending.find((item) => item.questionId === prior.id) ?? null;
+      const selectedValues = prior.options
+        .filter((option) => priorResponse?.selectedOptionIds.includes(option.id))
+        .map((option) => option.value);
+      const disposition = childDisposition(
+        priorResponse
+          ? {
+              settled: isSettled(priorResponse),
+              exceptionKind: priorResponse.exceptionKind,
+              value: selectedValues[0] ?? null,
+              values: selectedValues,
+            }
+          : null,
+        rule,
+      );
+      const existing = pending.find((item) => item.questionId === question.id);
+      if (disposition === 'ask') {
+        if (existing?.exceptionOrigin === 'CONDITION') {
+          await this.archiveResponse(existing);
+          await this.prisma.response.update({
+            where: { id: existing.id },
+            data: {
+              skipped: false,
+              exceptionKind: null,
+              exceptionOrigin: null,
+              freeText: null,
+              selectedOptionIds: [],
+              selectedOptions: { set: [] },
+              revision: { increment: 1 },
+            },
+          });
+          existing.skipped = false;
+          existing.exceptionKind = null;
+          existing.exceptionOrigin = null;
+          existing.freeText = null;
+          existing.selectedOptionIds = [];
+          existing.revision += 1;
+        }
+        continue;
+      }
+      const kind = disposition === 'pending' ? 'PENDING' : 'NOT_APPLICABLE';
+      if (existing?.exceptionKind === kind && existing.exceptionOrigin === 'CONDITION' && existing.skipped) continue;
+      if (existing) await this.archiveResponse(existing);
+      const saved = await this.prisma.response.upsert({
+        where: { sessionId_questionId: { sessionId, questionId: question.id } },
+        update: {
+          skipped: true,
+          exceptionKind: kind,
+          exceptionOrigin: 'CONDITION',
+          freeText: null,
+          selectedOptionIds: [],
+          selectedOptions: { set: [] },
+          revision: { increment: 1 },
+        },
+        create: {
+          sessionId,
+          questionId: question.id,
+          skipped: true,
+          exceptionKind: kind,
+          exceptionOrigin: 'CONDITION',
+          selectedOptionIds: [],
+          freeText: null,
+          revision: 1,
+        },
+      });
+      if (existing) {
+        existing.skipped = true;
+        existing.exceptionKind = kind;
+        existing.exceptionOrigin = 'CONDITION';
+        existing.freeText = null;
+        existing.selectedOptionIds = [];
+        existing.revision = saved.revision;
+      } else {
+        pending.push({ ...saved, selectedOptionIds: saved.selectedOptionIds } as unknown as T);
+      }
+    }
+    return pending;
+  }
+
+  private archiveResponse(response: {
+    id: string;
+    revision: number;
+    freeText: string | null;
+    selectedOptionIds: string[];
+    exceptionKind: string | null;
+    exceptionOrigin: string | null;
+  }) {
+    return this.prisma.responseRevision.create({
+      data: {
+        responseId: response.id,
+        revision: response.revision,
+        freeText: response.freeText,
+        selectedOptionIds: response.selectedOptionIds,
+        exceptionKind: response.exceptionKind,
+        exceptionOrigin: response.exceptionOrigin,
+      },
+    });
   }
 
   private calcSelfKnowledgePct(completionRatio: number): number {

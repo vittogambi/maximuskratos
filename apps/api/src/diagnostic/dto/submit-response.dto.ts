@@ -1,4 +1,4 @@
-import { IsArray, IsNumber, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsArray, IsIn, IsInt, IsNumber, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class SubmitResponseDto {
   @IsString()
@@ -11,8 +11,16 @@ export class SubmitResponseDto {
 
   @IsOptional()
   @IsString()
-  @MaxLength(500)
+  @MaxLength(2000)
   freeText?: string;
+
+  @IsOptional()
+  @IsIn(['UNKNOWN', 'NOT_APPLICABLE', 'DECLINED', 'PENDING'])
+  exceptionKind?: 'UNKNOWN' | 'NOT_APPLICABLE' | 'DECLINED' | 'PENDING';
+
+  @IsOptional()
+  @IsInt()
+  expectedRevision?: number;
 
   @IsOptional()
   @IsArray()

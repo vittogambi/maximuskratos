@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useAuthSession } from '@/components/auth-session-provider';
 import { apiDiagnosticStart, type DiagnosticState } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth-storage';
-import { isEarlyAccessMode } from '@/lib/product-phase';
+import { settleModuleOutro } from '@/lib/diagnostic-continue';
 
 function routeFromState(state: DiagnosticState, router: ReturnType<typeof useRouter>) {
   if (state.sessionState.showWelcomeScreen) {
@@ -39,11 +39,6 @@ export function DiagnosticEntry() {
   const { status } = useAuthSession();
 
   useEffect(() => {
-    if (isEarlyAccessMode()) {
-      router.replace('/panel');
-      return;
-    }
-
     if (status === 'guest') {
       router.replace('/login');
       return;
@@ -61,9 +56,16 @@ export function DiagnosticEntry() {
     let cancelled = false;
 
     apiDiagnosticStart(token)
-      .then((state) => {
+      .then(async (state) => {
         if (cancelled) return;
-        routeFromState(state, router);
+        let settled = state;
+        try {
+          settled = await settleModuleOutro(token, state);
+        } catch {
+          settled = state;
+        }
+        if (cancelled) return;
+        routeFromState(settled, router);
       })
       .catch(() => {
         if (cancelled) return;

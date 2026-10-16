@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
-import { RutaContent } from '@/components/pages/RutaContent';
+import { ComingSoon } from '@/components/journey/ComingSoon';
 
-export const metadata: Metadata = {
-  title: 'Ruta MK',
-  robots: { index: false, follow: false },
-};
+export const metadata: Metadata = { title: 'Ruta MK', robots: { index: false, follow: false } };
 
 export default function RutaPage() {
-  return <RutaContent />;
+  return (
+    <ComingSoon
+      title="Ruta"
+      body="Aquí encontrarás las fichas del cuestionario en orden, con lo que ya respondiste y lo que sigue bloqueado hasta terminar la anterior."
+    />
+  );
 }

@@ -1,7 +1,7 @@
 /**
  * Internal launch switch only — never surface "fase" language in UI.
- * `true` = site + founder accounts (product not fully open yet).
- * `false` = full product (diagnostic + apps) is open to users.
+ * `true` = public site stays in early access copy.
+ * Authenticated accounts still enter the questionnaire. `false` = that public copy also opens.
  *
  * Keep in sync with apps/api/src/product-phase.ts. Flip both in the same commit.
  */
@@ -9,11 +9,6 @@ export const EARLY_ACCESS_MODE = true;
 
 export function isEarlyAccessMode(): boolean {
   return EARLY_ACCESS_MODE;
-}
-
-/** @deprecated Use isEarlyAccessMode */
-export function isFounderAccessPhase(): boolean {
-  return isEarlyAccessMode();
 }
 
 export function isFullProductOpen(): boolean {

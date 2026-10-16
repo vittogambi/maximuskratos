@@ -45,6 +45,7 @@ import { LucideMailPlus } from '@/components/icons/lucide/mail-plus';
 import { LucideMap } from '@/components/icons/lucide/map';
 import { LucideMenu } from '@/components/icons/lucide/menu';
 import { LucideMoon } from '@/components/icons/lucide/moon';
+import { LucideRubik } from '@/components/icons/lucide/rubik';
 import { LucideMuscles } from '@/components/icons/lucide/muscles';
 import { LucideScanEye } from '@/components/icons/lucide/scan-eye';
 import { LucideScanLine } from '@/components/icons/lucide/scan-line';
@@ -120,6 +121,7 @@ export const ICON_REGISTRY = {
   medal: LucideMedal,
   menu: LucideMenu,
   moon: LucideMoon,
+  rubik: LucideRubik,
   muscles: LucideMuscles,
   'scan-eye': LucideScanEye,
   'scan-line': LucideScanLine,

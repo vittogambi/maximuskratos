@@ -7,10 +7,12 @@ import { AppIcon } from '@/components/app-icon';
 import { useAuthSession } from '@/components/auth-session-provider';
 import { AppReveal, useAppEntranceOnce } from '@/components/motion/app-reveal';
 import { APP_MOTION } from '@/components/motion/tokens';
-import { apiDiagnosticProfile, apiDiagnosticProgress, type DiagnosticProgressDto, type MasterProfileDto } from '@/lib/api';
+import { ReviewVersionNote } from '@/components/app-shell/ReviewVersionNote';
+import { AmbitStage } from '@/components/journey/AmbitStage';
+import { apiDiagnosticProfile, type DiagnosticProgressDto, type MasterProfileDto } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth-storage';
+import { canUseMemberProduct } from '@/lib/member-access';
 import { computePillarScores, PILLARS, PRESENTATION_INDICES } from '@/lib/mk-system';
-import { isFounderAccessPhase } from '@/lib/product-phase';
 import { KpiCard } from '@/components/charts/KpiCard';
 
 // Lazy-load recharts to keep first paint fast
@@ -42,6 +44,8 @@ function DashboardSkeleton() {
 function InProgressDashboard({ progress }: { progress: DiagnosticProgressDto }) {
   const pct = progress?.selfKnowledgePct ?? 0;
   const completionPct = progress?.completionPct ?? 0;
+  const hasStarted =
+    completionPct > 0 || (progress?.modules.some((m) => m.answeredQuestions > 0) ?? false);
 
   return (
     <div className="mk-dashboard">
@@ -68,7 +72,7 @@ function InProgressDashboard({ progress }: { progress: DiagnosticProgressDto }) 
         </div>
 
         <Link href="/diagnostico" className="mk-btn-primary">
-          Continuar diagnóstico →
+          {hasStarted ? 'Continuar diagnóstico →' : 'Comenzar diagnóstico →'}
         </Link>
       </div>
 
@@ -117,6 +121,8 @@ function InProgressDashboard({ progress }: { progress: DiagnosticProgressDto }) 
           Tu arquetipo, fortalezas y prioridades a 90 días se revelan al completar la auditoría.
         </p>
       </div>
+
+      <ReviewVersionNote />
     </div>
   );
 }
@@ -168,6 +174,9 @@ function ProfileDashboard({
             <KpiCard label={PRESENTATION_INDICES.ejecucion.label}   value={execution} animateEntrance={entrance} />
             <KpiCard label={PRESENTATION_INDICES.estabilidad.label} value={stability} animateEntrance={entrance} />
           </div>
+          <p className="sys-header__method">
+            Promedios de las dimensiones que respondiste en este cuestionario.
+          </p>
         </section>
       </AppReveal>
 
@@ -228,7 +237,12 @@ function ProfileDashboard({
         <Link href="/perfil" className="mk-btn-primary" style={{ textAlign: 'center' }}>
           Ver mi perfil completo →
         </Link>
+        <Link href="/proposito" className="mk-btn-ghost" style={{ textAlign: 'center' }}>
+          Hoja de ruta
+        </Link>
       </AppReveal>
+
+      <ReviewVersionNote />
     </div>
   );
 }
@@ -266,7 +280,6 @@ function FounderAccessDashboard({ email, entrance }: { email: string; entrance: 
 
 export function InicioDashboard() {
   const { status, user } = useAuthSession();
-  const [progress, setProgress] = useState<DiagnosticProgressDto>(null);
   const [profile,  setProfile]  = useState<MasterProfileDto>(null);
   const [loaded,   setLoaded]   = useState(false);
   const { shouldAnimate: entrance } = useAppEntranceOnce();
@@ -280,8 +293,8 @@ export function InicioDashboard() {
 
     const step = user.onboardingStep ?? 'TERMS_PENDING';
 
-    // Early access: no diagnostic progress for the public panel yet.
-    if (isFounderAccessPhase()) {
+    // Founder accounts during early access: no diagnostic progress on the panel.
+    if (!canUseMemberProduct(user)) {
       if (step === 'PROFILE_COMPLETE' || step === 'BLUEPRINT_READY') {
         apiDiagnosticProfile(token)
           .then((p) => setProfile(p))
@@ -293,51 +306,15 @@ export function InicioDashboard() {
       return;
     }
 
-    if (DIAGNOSTIC_IN_PROGRESS_STEPS.has(step)) {
-      apiDiagnosticProgress(token)
-        .then((p) => setProgress(p))
-        .catch(() => {})
-        .finally(() => setLoaded(true));
-    } else if (step === 'PROFILE_COMPLETE' || step === 'BLUEPRINT_READY') {
-      apiDiagnosticProfile(token)
-        .then((p) => setProfile(p))
-        .catch(() => {})
-        .finally(() => setLoaded(true));
-    } else {
-      setLoaded(true);
-    }
+    setLoaded(true);
   }, [status, user]);
 
   if (!loaded || status !== 'authenticated') return <DashboardSkeleton />;
 
-  const step = user?.onboardingStep ?? 'TERMS_PENDING';
-
-  if (isFounderAccessPhase()) {
+  if (!canUseMemberProduct(user)) {
     if (profile) return <ProfileDashboard profile={profile} entrance={entrance} />;
     return <FounderAccessDashboard email={user?.email ?? ''} entrance={entrance} />;
   }
 
-  if (DIAGNOSTIC_IN_PROGRESS_STEPS.has(step)) {
-    return <InProgressDashboard progress={progress} />;
-  }
-
-  if (profile) {
-    return <ProfileDashboard profile={profile} entrance={entrance} />;
-  }
-
-  // Recovery or unknown state
-  return (
-    <div className="mk-dashboard">
-      <div className="mk-progress-hero">
-        <p className="mk-section-eyebrow">PERFIL MAESTRO MK</p>
-        <h2 className="mk-progress-hero__title">Tu perfil no está disponible.</h2>
-        <p className="mk-progress-hero__sub">
-          Completa la auditoría inicial para generar tu perfil.
-        </p>
-        <Link href="/diagnostico" className="mk-btn-primary">
-          Comenzar auditoría →
-        </Link>
-      </div>
-    </div>
-  );
+  return <AmbitStage />;
 }

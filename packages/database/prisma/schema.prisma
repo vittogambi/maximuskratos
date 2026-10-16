@@ -30,8 +30,20 @@ model User {
   refreshTokens       RefreshToken[]
   subscription        Subscription?
   passwordResetTokens PasswordResetToken[]
-  diagnosticSession   DiagnosticSession?
-  masterProfile       MasterProfile?
+  diagnosticSessions  DiagnosticSession[]
+  masterProfiles      MasterProfile[]
+  purposeRevisions    PurposeRevision[]
+  personalPlans       PersonalPlan[]
+  weekReviews         WeekReview[]
+  guidanceRequests    GuidanceRequest[]
+  clarifications      MemberClarification[]
+  coreReadings        CoreReading[]
+  measurements        QuestionnaireMeasurement[]
+  priorityDecisions   PriorityDecision[]
+  depthConfirmations  DepthConfirmation[]
+  accompanimentDecisions AccompanimentDecision[]
+  ikigaiExperiments   IkigaiExperiment[]
+  questionnaireAlerts QuestionnaireAlert[]
 
   @@map("users")
 }
@@ -145,14 +157,22 @@ enum ModuleStatus {
   COMPLETE
 }
 
+enum DiagnosticSessionStatus {
+  ACTIVE
+  COMPLETED
+  ABANDONED
+}
+
 model DiagnosticVersion {
-  id          String             @id @default(uuid())
-  version     String             @unique
-  isActive    Boolean            @default(false) @map("is_active")
-  publishedAt DateTime?          @map("published_at")
-  createdAt   DateTime           @default(now()) @map("created_at")
-  modules     DiagnosticModule[]
-  sessions    DiagnosticSession[]
+  id              String             @id @default(uuid())
+  version         String             @unique
+  isActive        Boolean            @default(false) @map("is_active")
+  publishedAt     DateTime?          @map("published_at")
+  definitionRef   String?            @map("definition_ref")
+  definitionSha256 String?           @map("definition_sha256")
+  createdAt       DateTime           @default(now()) @map("created_at")
+  modules         DiagnosticModule[]
+  sessions        DiagnosticSession[]
 
   @@map("diagnostic_versions")
 }
@@ -192,6 +212,10 @@ model Question {
   scaleType          ScaleType?       @map("scale_type")
   reasonPromptEs     String?          @map("reason_prompt_es")
   reasonThreshold    Int?             @map("reason_threshold")
+  sourceRef          String?          @map("source_ref")
+  instrument         String?
+  polarity           String?
+  allowedExceptions  String[]         @default([]) @map("allowed_exceptions")
   options            AnswerOption[]
   responses          Response[]
 
@@ -216,23 +240,27 @@ model AnswerOption {
 }
 
 model DiagnosticSession {
-  id              String             @id @default(uuid())
-  userId          String             @unique @map("user_id")
-  user            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  versionId       String             @map("version_id")
-  version         DiagnosticVersion  @relation(fields: [versionId], references: [id])
-  currentPhase    DiagnosticPhase    @default(FASE1) @map("current_phase")
-  currentModuleId String?            @map("current_module_id")
-  startedAt       DateTime           @default(now()) @map("started_at")
-  completedAt     DateTime?          @map("completed_at")
-  lastActivityAt  DateTime           @default(now()) @map("last_activity_at")
+  id              String                   @id @default(uuid())
+  userId          String                   @map("user_id")
+  user            User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  versionId       String                   @map("version_id")
+  version         DiagnosticVersion        @relation(fields: [versionId], references: [id])
+  status          DiagnosticSessionStatus  @default(ACTIVE)
+  currentPhase    DiagnosticPhase          @default(FASE1) @map("current_phase")
+  currentModuleId String?                  @map("current_module_id")
+  startedAt       DateTime                 @default(now()) @map("started_at")
+  completedAt     DateTime?                @map("completed_at")
+  lastActivityAt  DateTime                 @default(now()) @map("last_activity_at")
   metadata        Json?
   responses       Response[]
   moduleProgress  UserModuleProgress[]
   snapshots       ScoreSnapshot[]
   events          DiagnosticEvent[]
   profile         MasterProfile?
+  formResults     DiagnosticFormResult[]
+  questionnaireAlerts QuestionnaireAlert[]
 
+  @@index([userId, status])
   @@map("diagnostic_sessions")
 }
 
@@ -265,10 +293,30 @@ model Response {
   answeredAt        DateTime          @default(now()) @map("answered_at")
   latencyMs         Int?              @map("latency_ms")
   editCount         Int               @default(0) @map("edit_count")
+  skipped           Boolean           @default(false)
+  exceptionKind     String?           @map("exception_kind")
+  exceptionOrigin   String?           @map("exception_origin")
+  revision          Int               @default(0)
+  revisions         ResponseRevision[]
 
   @@unique([sessionId, questionId])
   @@index([sessionId])
   @@map("responses")
+}
+
+model ResponseRevision {
+  id                String   @id @default(uuid())
+  responseId        String   @map("response_id")
+  response          Response @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  revision          Int
+  freeText          String?  @map("free_text")
+  selectedOptionIds String[] @map("selected_option_ids")
+  exceptionKind     String?  @map("exception_kind")
+  exceptionOrigin   String?  @map("exception_origin")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  @@index([responseId, revision])
+  @@map("response_revisions")
 }
 
 model ScoreSnapshot {
@@ -304,10 +352,11 @@ model DiagnosticEvent {
 
 model MasterProfile {
   id                 String            @id @default(uuid())
-  userId             String            @unique @map("user_id")
+  userId             String            @map("user_id")
   user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   sessionId          String            @unique @map("session_id")
   session            DiagnosticSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  isCurrent          Boolean           @default(false) @map("is_current")
   version            Int               @default(1)
   archetypePrimary   String            @map("archetype_primary")
   archetypeSecondary String?           @map("archetype_secondary")
@@ -324,6 +373,7 @@ model MasterProfile {
   generatedAt        DateTime          @default(now()) @map("generated_at")
   updatedAt          DateTime          @updatedAt @map("updated_at")
 
+  @@index([userId, isCurrent])
   @@map("master_profiles")
 }
 
@@ -876,4 +926,432 @@ model IkigaiResultSnapshot {
 
   @@unique([sessionId, revision])
   @@map("ikigai_result_snapshots")
+}
+
+/// One firing of a questionnaire rule. The key is per account, not global.
+model QuestionnaireAlert {
+  id               String            @id @default(uuid())
+  userId           String            @map("user_id")
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId        String            @map("session_id")
+  session          DiagnosticSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  occurrenceKey    String            @unique @map("occurrence_key")
+  questionRef      String            @map("question_ref")
+  ruleVersion      String            @map("rule_version")
+  nativeRule       String            @map("native_rule")
+  productRule      String            @map("product_rule")
+  responseRevision Int               @map("response_revision")
+  responseValue    String?           @map("response_value")
+  catalogVersion   String            @map("catalog_version")
+  moduleSlug       String?           @map("module_slug")
+  answeredAt       DateTime?         @map("answered_at")
+  detectedAt       DateTime          @default(now()) @map("detected_at")
+  provenance       String
+
+  @@index([userId, sessionId, detectedAt])
+  @@index([questionRef])
+  @@map("questionnaire_alerts")
+}
+
+/// Who opened a member record. No answer text, token or signature.
+model AdminAccessLog {
+  id           String   @id @default(uuid())
+  actorId      String   @map("actor_id")
+  targetUserId String   @map("target_user_id")
+  resource     String
+  resourceId   String?  @map("resource_id")
+  requestId    String   @map("request_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([actorId, createdAt])
+  @@index([targetUserId, createdAt])
+  @@map("admin_access_logs")
+}
+
+model DiagnosticFormResult {
+  id         String            @id @default(uuid())
+  sessionId  String            @map("session_id")
+  session    DiagnosticSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  formCode   String            @map("form_code")
+  payload    Json
+  computedAt DateTime          @default(now()) @map("computed_at")
+
+  @@unique([sessionId, formCode])
+  @@map("diagnostic_form_results")
+}
+
+model PurposeRevision {
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId   String?   @map("session_id")
+  revision    Int
+  content     Json
+  confirmedAt DateTime? @map("confirmed_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  @@unique([userId, revision])
+  @@map("purpose_revisions")
+}
+
+enum PersonalPlanStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ARCHIVED
+}
+
+enum ActionRecordStatus {
+  PENDING
+  DONE
+  SKIPPED
+  NOT_APPLICABLE
+}
+
+enum ActionDomain {
+  MENTE
+  ESPIRITU
+  CUERPO
+}
+
+/// Dated operational clarification. It does not rewrite questionnaire answers.
+model MemberClarification {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scope     String
+  outcome   String
+  /// Null on rows written before subject-scoped clarifications. Do not guess a subject.
+  subjectRef   String?  @map("subject_ref")
+  detail       String?
+  source       String?
+  rulesVersion String?  @map("rules_version")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId, scope, createdAt])
+  @@map("member_clarifications")
+}
+
+model PersonalPlan {
+  id           String             @id @default(uuid())
+  userId       String             @map("user_id")
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title        String
+  outcome      String
+  priorityNote String?            @map("priority_note")
+  /// DIRECT, ENABLING, PROTECTIVE or EXPLORATORY. The note is the artifact, not the link.
+  linkKind     String?            @map("link_kind")
+  /// Value or standard the person chose for this plan. It does not score the plan.
+  valueRef     String?            @map("value_ref")
+  /// Purpose revision that was current when the plan was written.
+  purposeRevisionId String?       @map("purpose_revision_id")
+  /// IKIGAI combination this plan is testing, when it came from the cross.
+  sourceCombinationId String?     @map("source_combination_id")
+  status       PersonalPlanStatus @default(DRAFT)
+  createdAt    DateTime           @default(now()) @map("created_at")
+  updatedAt    DateTime           @updatedAt @map("updated_at")
+  actions      PlanAction[]
+
+  @@index([userId, status])
+  @@map("personal_plans")
+}
+
+model PlanAction {
+  id           String     @id @default(uuid())
+  planId       String     @map("plan_id")
+  plan         PersonalPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  title        String
+  doneWhen     String     @map("done_when")
+  domain       ActionDomain?
+  weekday      Int?
+  /// Days between occasions. 7 is weekly. A later review can raise it without rewriting past records.
+  intervalDays Int        @default(7) @map("interval_days")
+  pausedAt     DateTime?  @map("paused_at")
+  /// The earlier action this one replaced. Records stay on the earlier action.
+  replacesActionId String? @map("replaces_action_id")
+  /// What to prepare before the occasion. Does not score alignment.
+  preparation  String?
+  /// Published territory. domain stays the pillar.
+  territory    String?
+  effectiveFrom String? @map("effective_from")
+  /// Marks the member declared for this action. Empty means they declared none.
+  contentTags  String[]   @default([]) @map("content_tags")
+  /// VIABLE when this action was declared a confrontation the member can hold. Null otherwise.
+  conversationOutcome String? @map("conversation_outcome")
+  /// Null means the origin was not recorded. Do not backfill MEMBER or SYSTEM_TEMPLATE.
+  origin       String?
+  decisionId   String?    @map("decision_id")
+  familyId     String?    @map("family_id")
+  templateVersion String? @map("template_version")
+  templateTags String[]   @default([]) @map("template_tags")
+  minutesPerOccasion Int? @map("minutes_per_occasion")
+  occasionsPerWeek Int?   @map("occasions_per_week")
+  minimumVersion String?  @map("minimum_version")
+  alternative  String?
+  active       Boolean    @default(true)
+  createdAt    DateTime   @default(now()) @map("created_at")
+  records      ActionRecord[]
+  cancellations OccasionCancellation[]
+
+  @@index([planId])
+  @@map("plan_actions")
+}
+
+model ActionRecord {
+  id        String             @id @default(uuid())
+  actionId  String             @map("action_id")
+  action    PlanAction         @relation(fields: [actionId], references: [id], onDelete: Cascade)
+  day       String
+  status     ActionRecordStatus @default(PENDING)
+  note       String?
+  /// What was observed. Separate from whether the action was done.
+  resultNote String?            @map("result_note")
+  /// Null on older rows. A note alone is not an observed result.
+  resultStatus String?          @map("result_status")
+  updatedAt  DateTime           @updatedAt @map("updated_at")
+
+  @@unique([actionId, day])
+  @@map("action_records")
+}
+
+model WeekReview {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weekStart   String   @map("week_start")
+  timezone    String   @default("America/Santiago")
+  snapshot    Json
+  note        String?
+  /// Null on closes written before this contract. Do not invent a digest.
+  commandDigest String? @map("command_digest")
+  /// False when the row is only a reflection and did not change the plan.
+  applied     Boolean  @default(true)
+  closedAt    DateTime @default(now()) @map("closed_at")
+
+  @@unique([userId, weekStart])
+  @@map("week_reviews")
+}
+
+model GuidanceRequest {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  source    String
+  note      String?
+  status    String   @default("SENT")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@map("guidance_requests")
+}
+
+/// Immutable alignment, reconstruction, remeasure or depth snapshot.
+model CoreReading {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind              String
+  methodVersion     String   @map("method_version")
+  definitionSha     String   @map("definition_sha")
+  sessionId         String?  @map("session_id")
+  measurementId     String?  @map("measurement_id")
+  baselineReadingId String?  @map("baseline_reading_id")
+  commandKey        String   @unique @map("command_key")
+  input             Json
+  output            Json
+  computedAt        DateTime @default(now()) @map("computed_at")
+
+  @@index([userId, methodVersion, computedAt])
+  @@map("core_readings")
+}
+
+model QuestionnaireMeasurement {
+  id              String                @id @default(uuid())
+  userId          String                @map("user_id")
+  user            User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind            String
+  status          String
+  methodVersion   String                @map("method_version")
+  sessionId       String?               @map("session_id")
+  commandKey      String                @unique @map("command_key")
+  closedAt        DateTime?             @map("closed_at")
+  createdAt       DateTime              @default(now()) @map("created_at")
+  responses       MeasurementResponse[]
+
+  @@index([userId, status])
+  @@map("questionnaire_measurements")
+}
+
+model MeasurementResponse {
+  id            String                   @id @default(uuid())
+  measurementId String                   @map("measurement_id")
+  measurement   QuestionnaireMeasurement @relation(fields: [measurementId], references: [id], onDelete: Cascade)
+  sourceRef     String                   @map("source_ref")
+  value         String?
+  exceptionKind String?                  @map("exception_kind")
+  revision      Int                      @default(0)
+  answeredAt    DateTime?                @map("answered_at")
+
+  @@unique([measurementId, sourceRef])
+  @@map("measurement_responses")
+}
+
+model PriorityDecision {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  engineVersion String   @map("engine_version")
+  readingId     String?  @map("reading_id")
+  digest        String
+  proposal      Json
+  choice        Json
+  commandKey    String   @unique @map("command_key")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@index([userId, createdAt])
+  @@map("priority_decisions")
+}
+
+model PriorityHead {
+  userId     String @id @map("user_id")
+  decisionId String @map("decision_id")
+  version    Int    @default(1)
+
+  @@map("priority_heads")
+}
+
+model DepthConfirmation {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  component         String
+  payload           Json
+  purposeRevisionId String?  @map("purpose_revision_id")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  @@index([userId, component, createdAt])
+  @@map("depth_confirmations")
+}
+
+/// One row per confirmed or rejected accompaniment. The head points at the principal plan only.
+model AccompanimentDecision {
+  id              String   @id @default(uuid())
+  userId          String   @map("user_id")
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  engineVersion   String   @map("engine_version")
+  rulesVersion    String   @map("rules_version")
+  catalogVersion  String   @map("catalog_version")
+  familyId        String?  @map("family_id")
+  templateVersion String?  @map("template_version")
+  territory       String?
+  pillar          String?
+  mode            String?
+  modeStatus      String?  @map("mode_status")
+  situation       String
+  goalText        String?  @map("goal_text")
+  goalKind        String?  @map("goal_kind")
+  planId          String?  @map("plan_id")
+  purposeRevisionId String? @map("purpose_revision_id")
+  readingId       String?  @map("reading_id")
+  context         Json
+  reasons         Json
+  help            Json
+  digest          String
+  canonicalHash   String   @map("canonical_hash")
+  status          String
+  rejectReason    String?  @map("reject_reason")
+  alternativeOf   String?  @map("alternative_of")
+  effect          Json?
+  /// Unique together with the account. The same text can belong to two people.
+  commandKey      String   @map("command_key")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, commandKey])
+  @@index([userId, createdAt])
+  @@map("accompaniment_decisions")
+}
+
+model AccompanimentHead {
+  userId     String @id @map("user_id")
+  decisionId String @map("decision_id")
+  version    Int    @default(1)
+
+  @@map("accompaniment_heads")
+}
+
+model OccasionCancellation {
+  id            String     @id @default(uuid())
+  actionId      String     @map("action_id")
+  action        PlanAction @relation(fields: [actionId], references: [id], onDelete: Cascade)
+  day           String
+  reason        String
+  source        String
+  rulesVersion  String     @map("rules_version")
+  effectiveFrom String     @map("effective_from")
+  createdAt     DateTime   @default(now()) @map("created_at")
+
+  @@unique([actionId, day])
+  @@map("occasion_cancellations")
+}
+
+model IkigaiExperiment {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId        String   @map("plan_id")
+  combinationId String?  @map("combination_id")
+  status        String   @default("ACTIVE")
+  createdAt     DateTime @default(now()) @map("created_at")
+  revisions     IkigaiExperimentRevision[]
+
+  @@index([userId, planId, createdAt])
+  @@map("ikigai_experiments")
+}
+
+model IkigaiExperimentRevision {
+  id                String   @id @default(uuid())
+  experimentId      String   @map("experiment_id")
+  experiment        IkigaiExperiment @relation(fields: [experimentId], references: [id], onDelete: Cascade)
+  revision          Int
+  hypothesis        String
+  sample            String?
+  opportunity       String?
+  missing           String?
+  purposeRevisionId String?  @map("purpose_revision_id")
+  createdAt         DateTime @default(now()) @map("created_at")
+  observations      ExperimentObservation[]
+  reviews           ExperimentReview[]
+
+  @@unique([experimentId, revision])
+  @@map("ikigai_experiment_revisions")
+}
+
+model ExperimentObservation {
+  id             String   @id @default(uuid())
+  experimentId   String   @map("experiment_id")
+  revisionId     String   @map("revision_id")
+  revision       IkigaiExperimentRevision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+  aspect         String
+  status         String
+  recipient      String?
+  observed       String?
+  source         String   @default("DECLARED_BY_MEMBER")
+  actionRecordId String?  @map("action_record_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@index([experimentId, revisionId])
+  @@map("experiment_observations")
+}
+
+model ExperimentReview {
+  id         String   @id @default(uuid())
+  experimentId String @map("experiment_id")
+  revisionId String   @map("revision_id")
+  revision   IkigaiExperimentRevision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+  decision   String
+  evidence   String?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([experimentId, createdAt])
+  @@map("experiment_reviews")
 }

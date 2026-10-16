@@ -1,0 +1,1250 @@
+{
+  "schema_version": 1,
+  "authored_on": "2026-10-13",
+  "purpose": "Benchmark ficticio de decisiones de producto, no validación clínica ni prueba de eficacia.",
+  "status": "SPECIFICATION_NOT_EXECUTED_AGAINST_MK",
+  "method_reference": "ia-mk-cuest@0.1",
+  "source_reference_format": "sheet!row=integer; no son IDs de pregunta ni columna R",
+  "source_specs": [
+    {
+      "group": "NUC-E1",
+      "pillar": "E",
+      "weight_within_pillar": "1/3",
+      "sources": [
+        {
+          "key": "E-AUD-001!row=62",
+          "sheet": "E-AUD-001",
+          "row": 62,
+          "min": 1,
+          "max": 5,
+          "polarity": "DIRECT"
+        },
+        {
+          "key": "E-AUD-001!row=63",
+          "sheet": "E-AUD-001",
+          "row": 63,
+          "min": 1,
+          "max": 5,
+          "polarity": "DIRECT"
+        }
+      ]
+    },
+    {
+      "group": "NUC-E2",
+      "pillar": "E",
+      "weight_within_pillar": "1/3",
+      "sources": [
+        {
+          "key": "E-PER-000!row=73",
+          "sheet": "E-PER-000",
+          "row": 73,
+          "min": 1,
+          "max": 4,
+          "polarity": "DIRECT"
+        },
+        {
+          "key": "E-PER-000!row=74",
+          "sheet": "E-PER-000",
+          "row": 74,
+          "min": 1,
+          "max": 4,
+          "polarity": "DIRECT"
+        }
+      ]
+    },
+    {
+      "group": "NUC-E3",
+      "pillar": "E",
+      "weight_within_pillar": "1/3",
+      "sources": [
+        {
+          "key": "E-AUD-001!row=60",
+          "sheet": "E-AUD-001",
+          "row": 60,
+          "min": 1,
+          "max": 5,
+          "polarity": "DIRECT"
+        },
+        {
+          "key": "E-PER-000!row=77",
+          "sheet": "E-PER-000",
+          "row": 77,
+          "min": 1,
+          "max": 4,
+          "polarity": "DIRECT"
+        }
+      ]
+    },
+    {
+      "group": "NUC-M1",
+      "pillar": "M",
+      "weight_within_pillar": "1/3",
+      "sources": [
+        {
+          "key": "E-AUD-001!row=7",
+          "sheet": "E-AUD-001",
+          "row": 7,
+          "min": 1,
+          "max": 5,
+          "polarity": "DIRECT"
+        },
+        {
+          "key": "E-AUD-001!row=8",
+          "sheet": "E-AUD-001",
+          "row": 8,
+          "min": 1,
+          "max": 5,
+          "polarity": "DIRECT"
+        },
+        {
+          "key": "E-AUD-001!row=19",
+          "sheet": "E-AUD-001",
+          "row": 19,
+          "min": 1,
+          "max": 5,
+          "polarity": "DIRECT"
+        }
+      ]
+    },
+    {
+      "group": "NUC-M2",
+      "pillar": "M",
+      "weight_within_pillar": "1/3",
+      "sources": [
+        {
+          "key": "E-AUD-001!row=26",
+          "sheet": "E-AUD-001",
+          "row": 26,
+          "min": 1,
+          "max": 5,
+          "polarity": "DIRECT"
+        },
+        {
+          "key": "E-AUD-001!row=27",
+          "sheet": "E-AUD-001",
+          "row": 27,
+          "min": 1,
+          "max": 5,
+          "polarity": "DIRECT"
+        }
+      ]
+    },
+    {
+      "group": "NUC-M3",
+      "pillar": "M",
+      "weight_within_pillar": "1/3",
+      "sources": [
+        {
+          "key": "E-AUD-001!row=29",
+          "sheet": "E-AUD-001",
+          "row": 29,
+          "min": 1,
+          "max": 5,
+          "polarity": "DIRECT"
+        },
+        {
+          "key": "E-PER-000!row=80",
+          "sheet": "E-PER-000",
+          "row": 80,
+          "min": 1,
+          "max": 4,
+          "polarity": "DIRECT"
+        },
+        {
+          "key": "E-PER-000!row=154",
+          "sheet": "E-PER-000",
+          "row": 154,
+          "min": 0,
+          "max": 2,
+          "polarity": "DIRECT"
+        }
+      ]
+    },
+    {
+      "group": "NUC-C1",
+      "pillar": "C",
+      "weight_within_pillar": "1/3",
+      "sources": [
+        {
+          "key": "E-PER-000!row=76",
+          "sheet": "E-PER-000",
+          "row": 76,
+          "min": 1,
+          "max": 4,
+          "polarity": "DIRECT"
+        },
+        {
+          "key": "E-PER-000!row=86",
+          "sheet": "E-PER-000",
+          "row": 86,
+          "min": 1,
+          "max": 4,
+          "polarity": "DIRECT"
+        }
+      ]
+    },
+    {
+      "group": "NUC-C2",
+      "pillar": "C",
+      "weight_within_pillar": "1/3",
+      "sources": [
+        {
+          "key": "E-AUD-001!row=17",
+          "sheet": "E-AUD-001",
+          "row": 17,
+          "min": 1,
+          "max": 5,
+          "polarity": "DIRECT"
+        },
+        {
+          "key": "E-AUD-001!row=20",
+          "sheet": "E-AUD-001",
+          "row": 20,
+          "min": 1,
+          "max": 5,
+          "polarity": "DIRECT"
+        }
+      ]
+    },
+    {
+      "group": "NUC-C3",
+      "pillar": "C",
+      "weight_within_pillar": "1/3",
+      "sources": [
+        {
+          "key": "E-AUD-001!row=18",
+          "sheet": "E-AUD-001",
+          "row": 18,
+          "min": 1,
+          "max": 5,
+          "polarity": "DIRECT"
+        },
+        {
+          "key": "E-AUD-001!row=57",
+          "sheet": "E-AUD-001",
+          "row": 57,
+          "min": 1,
+          "max": 5,
+          "polarity": "DIRECT"
+        }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "MK-S01",
+      "name": "Andrés",
+      "age": 32,
+      "role": "Desarrollador de software",
+      "vector": "A",
+      "story": "Quiere preparar una propuesta para enseñar escritura técnica dentro de su equipo. Sabe para quién sirve y le importa explicar con claridad. Durante la semana acepta reuniones que desplazan el trabajo y termina leyendo referencias en lugar de producir el borrador. Tiene noventa minutos semanales disponibles y puede proteger dos ocasiones de cuarenta y cinco.",
+      "context": {
+        "direction": "PROVISIONAL",
+        "interest": "TRABAJO_Y_PROYECTOS",
+        "territory": "MENTALIDAD",
+        "weekly_minutes": 90,
+        "occasions": 2,
+        "health_limit": "NONE_DECLARED",
+        "value": "Claridad"
+      },
+      "user_goal": "Preparar una propuesta breve que el equipo pueda revisar.",
+      "acceptable_help": [
+        "Organizar dos ocasiones reales y preparar la primera sección.",
+        "Comenzar por un borrador revisable, con una renuncia concreta a interrupciones."
+      ],
+      "must_not": [
+        "Volver a construir todo el propósito como condición.",
+        "Elegir automáticamente el grupo con menor score.",
+        "Inventar horarios que no declaró."
+      ],
+      "weeks": [
+        {
+          "step": 1,
+          "event": "Una ocasión no ocurrió por una reunión; conserva el interés.",
+          "expect": "Revisar día o preparación; conservar el registro y la lectura inicial."
+        },
+        {
+          "step": 2,
+          "event": "Realizó las dos ocasiones, pero solo ordenó referencias; no hay borrador.",
+          "expect": "Separar realización y resultado; ofrecer cambiar estrategia/criterio para producir una versión revisable."
+        },
+        {
+          "step": 3,
+          "event": "Escribió un borrador; todavía no recibió comentarios.",
+          "expect": "Registrar evidencia del borrador y no declarar aprobado un resultado externo aún no observado."
+        }
+      ],
+      "observable_evidence": "Existencia de una versión revisable y cambios confirmados de estrategia.",
+      "principles": [
+        "metas elegidas",
+        "preparación concreta",
+        "realización distinta de resultado"
+      ],
+      "core_answers": {
+        "E-AUD-001!row=62": 5,
+        "E-AUD-001!row=63": 4,
+        "E-PER-000!row=73": 3,
+        "E-PER-000!row=74": 3,
+        "E-AUD-001!row=60": 4,
+        "E-PER-000!row=77": 4,
+        "E-AUD-001!row=7": 3,
+        "E-AUD-001!row=8": 3,
+        "E-AUD-001!row=19": 4,
+        "E-AUD-001!row=26": 1,
+        "E-AUD-001!row=27": 3,
+        "E-AUD-001!row=29": 2,
+        "E-PER-000!row=80": 2,
+        "E-PER-000!row=154": 1,
+        "E-PER-000!row=76": 2,
+        "E-PER-000!row=86": 1,
+        "E-AUD-001!row=17": 3,
+        "E-AUD-001!row=20": 2,
+        "E-AUD-001!row=18": 4,
+        "E-AUD-001!row=57": 4
+      },
+      "core_exceptions": {},
+      "capture": {
+        "mode": "CORRECTED_ACTIVE_PRESENTATION"
+      },
+      "simulation_notice": "Historia y episodios ficticios. No son evidencia de beneficio real ni respuestas de un participante de un estudio."
+    },
+    {
+      "id": "MK-S02",
+      "name": "Gabriel",
+      "age": 27,
+      "role": "Diseñador freelance",
+      "vector": "B",
+      "story": "Disfruta explicar escritura a compañeros y cree que podría enseñarla. No sabe si otros quieren esa ayuda ni cómo sostenerla económicamente. Tiene dos combinaciones IKIGAI parciales y cuarenta y cinco minutos para una prueba. No respondió IN7 porque todavía no sabe cómo describirse frente a equivocarse en público.",
+      "context": {
+        "direction": "EXPLORANDO",
+        "interest": "IKIGAI",
+        "territory": "MENTALIDAD",
+        "weekly_minutes": 45,
+        "occasions": 1,
+        "health_limit": "UNKNOWN",
+        "value": "Contribución",
+        "ikigai": {
+          "meaning": "RECOGNIZED",
+          "ability": "PARTIAL",
+          "contribution": "UNKNOWN",
+          "sustainability": "UNKNOWN"
+        }
+      },
+      "user_goal": "Aprender qué parte de enseñar escritura le interesa y resulta útil.",
+      "acceptable_help": [
+        "Un experimento pequeño de enseñanza elegido por él.",
+        "Una alternativa de muestra escrita si no puede realizar la sesión."
+      ],
+      "must_not": [
+        "Fabricar profesión, demanda o ingresos.",
+        "Bloquear el plan porque Mente/general estén pendientes.",
+        "Exigir monetización o propósito definitivo."
+      ],
+      "weeks": [
+        {
+          "step": 1,
+          "event": "Presentó una muestra a dos conocidos; le gustó prepararla y uno pidió un ejemplo.",
+          "expect": "Guardar observaciones específicas como evidencia de aprendizaje, sin validar demanda de mercado."
+        },
+        {
+          "step": 2,
+          "event": "Reconoce que prefiere escribir una guía que dar una clase.",
+          "expect": "Permitir sustituir experimento y actualizar dirección con una nueva revisión."
+        },
+        {
+          "step": 3,
+          "event": "Todavía no sabe si quiere cobrar por ello.",
+          "expect": "Conservar incertidumbre de sostenibilidad y continuidad elegida; no completar el campo automáticamente."
+        }
+      ],
+      "observable_evidence": "Una combinación contrastada y decisión revisada con referencias conservadas.",
+      "principles": [
+        "exploración legítima",
+        "IKIGAI contrastable",
+        "cobertura parcial"
+      ],
+      "core_answers": {
+        "E-AUD-001!row=62": 2,
+        "E-AUD-001!row=63": 1,
+        "E-PER-000!row=73": 1,
+        "E-PER-000!row=74": 2,
+        "E-AUD-001!row=60": 3,
+        "E-PER-000!row=77": 3,
+        "E-AUD-001!row=7": 4,
+        "E-AUD-001!row=8": 4,
+        "E-AUD-001!row=19": 3,
+        "E-AUD-001!row=26": 2,
+        "E-AUD-001!row=27": 3,
+        "E-AUD-001!row=29": 3,
+        "E-PER-000!row=80": 3,
+        "E-PER-000!row=154": null,
+        "E-PER-000!row=76": 3,
+        "E-PER-000!row=86": 2,
+        "E-AUD-001!row=17": 4,
+        "E-AUD-001!row=20": 3,
+        "E-AUD-001!row=18": 4,
+        "E-AUD-001!row=57": 3
+      },
+      "core_exceptions": {
+        "E-PER-000!row=154": "UNKNOWN"
+      },
+      "capture": {
+        "mode": "CORRECTED_ACTIVE_PRESENTATION"
+      },
+      "simulation_notice": "Historia y episodios ficticios. No son evidencia de beneficio real ni respuestas de un participante de un estudio."
+    },
+    {
+      "id": "MK-S03",
+      "name": "Martín",
+      "age": 41,
+      "role": "Trabajador por turnos",
+      "vector": "C",
+      "story": "Quiere sostener mejor su trabajo y su presencia familiar. Declara una indicación vigente que limita esfuerzos y tareas relacionadas con salud; no solicita que la app la interprete clínicamente. Está cansado y le quedan treinta minutos de capacidad semanal. Su interés actual es organizar una consulta que ya decidió pedir.",
+      "context": {
+        "direction": "PROVISIONAL",
+        "interest": "CUIDADO",
+        "territory": "SALUD_FISICA",
+        "weekly_minutes": 30,
+        "occasions": 1,
+        "health_limit": "CURRENT_RESTRICTION",
+        "value": "Cuidado"
+      },
+      "user_goal": "Pedir la hora de control que eligió y preparar la información necesaria.",
+      "acceptable_help": [
+        "Una acción administrativa compatible, con criterio y preparación.",
+        "Pausa o reprogramación si la carga cambia."
+      ],
+      "must_not": [
+        "Prescribir ejercicio, dieta, suplementos o medicación.",
+        "Reducir su índice por la mera presencia del diagnóstico o límite.",
+        "Agregar varias obligaciones para compensar el score."
+      ],
+      "weeks": [
+        {
+          "step": 1,
+          "event": "Declara vigente el límite y rechaza una tarea marcada como esfuerzo físico.",
+          "expect": "El servidor aplica la regla a las marcas; ofrece alternativa y conserva el borrador."
+        },
+        {
+          "step": 2,
+          "event": "No pidió hora por un cambio de turno.",
+          "expect": "Permitir reprogramar o pausar sin fabricar incumplimientos en días sin ocasión."
+        },
+        {
+          "step": 3,
+          "event": "Decide reanudar la misma solicitud.",
+          "expect": "Conservar criterio y comprobar restricciones actuales."
+        }
+      ],
+      "observable_evidence": "Compatibilidad de la acción elegida y ajuste de carga con histórico intacto.",
+      "principles": [
+        "capacidad real",
+        "restricciones",
+        "alternativa protectora"
+      ],
+      "core_answers": {
+        "E-AUD-001!row=62": 4,
+        "E-AUD-001!row=63": 4,
+        "E-PER-000!row=73": 2,
+        "E-PER-000!row=74": 3,
+        "E-AUD-001!row=60": 4,
+        "E-PER-000!row=77": 3,
+        "E-AUD-001!row=7": 3,
+        "E-AUD-001!row=8": 4,
+        "E-AUD-001!row=19": 2,
+        "E-AUD-001!row=26": 2,
+        "E-AUD-001!row=27": 1,
+        "E-AUD-001!row=29": 3,
+        "E-PER-000!row=80": 3,
+        "E-PER-000!row=154": 2,
+        "E-PER-000!row=76": 2,
+        "E-PER-000!row=86": 2,
+        "E-AUD-001!row=17": 2,
+        "E-AUD-001!row=20": 2,
+        "E-AUD-001!row=18": 1,
+        "E-AUD-001!row=57": 2
+      },
+      "core_exceptions": {},
+      "capture": {
+        "mode": "CORRECTED_ACTIVE_PRESENTATION"
+      },
+      "simulation_notice": "Historia y episodios ficticios. No son evidencia de beneficio real ni respuestas de un participante de un estudio."
+    },
+    {
+      "id": "MK-S04",
+      "name": "Tomás",
+      "age": 35,
+      "role": "Administrativo y cuidador familiar",
+      "vector": "D",
+      "story": "Tiene una dirección reconocida y suele organizarse. Esta semana una responsabilidad familiar extraordinaria consume su tiempo. Declara capacidad cero y no quiere iniciar un hábito nuevo para mantener una racha. Le interesa conservar lo trabajado y volver cuando cambie su situación.",
+      "context": {
+        "direction": "CONFIRMADA",
+        "interest": "PAUSA",
+        "territory": "RELACIONES",
+        "weekly_minutes": 0,
+        "occasions": 0,
+        "health_limit": "NONE_DECLARED",
+        "value": "Presencia"
+      },
+      "user_goal": "Pausar la carga adicional sin perder su plan ni sus decisiones.",
+      "acceptable_help": [
+        "Pausa sin acción obligatoria.",
+        "Revisión opcional y un camino claro de retorno."
+      ],
+      "must_not": [
+        "Imponer una tarea mínima o fecha obligatoria.",
+        "Presentar una semana sin ocasiones como fracaso.",
+        "Bajar alineación por cambiar la disponibilidad."
+      ],
+      "weeks": [
+        {
+          "step": 1,
+          "event": "Confirma capacidad cero.",
+          "expect": "No generar nuevas obligaciones."
+        },
+        {
+          "step": 2,
+          "event": "Vuelve a declarar cero.",
+          "expect": "Conservar pausa y no producir incumplimientos acumulados."
+        },
+        {
+          "step": 3,
+          "event": "Ahora dispone de treinta minutos y decide retomar.",
+          "expect": "Revisar contexto y proponer una carga compatible, sin recuperar todas las tareas atrasadas."
+        }
+      ],
+      "observable_evidence": "Calendario sin obligaciones forzadas y retorno con información preservada.",
+      "principles": [
+        "capacidad cero",
+        "continuidad",
+        "control personal"
+      ],
+      "core_answers": {
+        "E-AUD-001!row=62": 4,
+        "E-AUD-001!row=63": 4,
+        "E-PER-000!row=73": 3,
+        "E-PER-000!row=74": 3,
+        "E-AUD-001!row=60": 4,
+        "E-PER-000!row=77": 3,
+        "E-AUD-001!row=7": 4,
+        "E-AUD-001!row=8": 3,
+        "E-AUD-001!row=19": 4,
+        "E-AUD-001!row=26": 4,
+        "E-AUD-001!row=27": 4,
+        "E-AUD-001!row=29": 3,
+        "E-PER-000!row=80": 3,
+        "E-PER-000!row=154": 2,
+        "E-PER-000!row=76": 3,
+        "E-PER-000!row=86": 3,
+        "E-AUD-001!row=17": 3,
+        "E-AUD-001!row=20": 4,
+        "E-AUD-001!row=18": 3,
+        "E-AUD-001!row=57": 3
+      },
+      "core_exceptions": {},
+      "capture": {
+        "mode": "CORRECTED_ACTIVE_PRESENTATION"
+      },
+      "simulation_notice": "Historia y episodios ficticios. No son evidencia de beneficio real ni respuestas de un participante de un estudio."
+    },
+    {
+      "id": "MK-S05",
+      "name": "Bruno",
+      "age": 29,
+      "role": "Vendedor independiente",
+      "vector": "D",
+      "story": "Planifica bien su trabajo, pero sus ingresos varían y tiene obligaciones desordenadas. Quiere saber qué gastos y fechas ya comprometió. La lectura financiera nativa puede mostrar tensión por su situación económica; eso no debe convertirse en una evaluación de su valor o alineación. Tiene cuarenta minutos para ordenar información.",
+      "context": {
+        "direction": "PROVISIONAL",
+        "interest": "ORDEN_FINANCIERO",
+        "territory": "FINANZAS",
+        "weekly_minutes": 40,
+        "occasions": 1,
+        "health_limit": "NONE_DECLARED",
+        "value": "Responsabilidad",
+        "financial_context": "Ingresos variables y obligaciones pendientes",
+        "budget_organization": "NOT_DOCUMENTED"
+      },
+      "user_goal": "Tener una lista propia de obligaciones conocidas y fechas.",
+      "acceptable_help": [
+        "Preparar un registro simple de obligaciones usando sus datos.",
+        "Separar información conocida y faltante."
+      ],
+      "must_not": [
+        "Proponer inversión, deuda o una rentabilidad.",
+        "Reducir el núcleo solo por tener menores ingresos.",
+        "Confundir el total financiero nativo con un pilar."
+      ],
+      "weeks": [
+        {
+          "step": 1,
+          "event": "Anotó obligaciones, pero faltan dos fechas.",
+          "expect": "Resultado parcial visible y siguiente paso acotado."
+        },
+        {
+          "step": 2,
+          "event": "Completa la información conocida; todavía no cambió su ingreso.",
+          "expect": "Reconocer el artefacto útil sin inventar una mejora económica."
+        },
+        {
+          "step": 3,
+          "event": "Cambia solo el dato de ingresos en una variante controlada.",
+          "expect": "El núcleo queda igual; la viabilidad de una alternativa sí puede cambiar."
+        }
+      ],
+      "observable_evidence": "Información organizada y separación entre recursos y conductas.",
+      "principles": [
+        "contexto distinto de score",
+        "artefacto concreto",
+        "finanzas sin prescripción"
+      ],
+      "core_answers": {
+        "E-AUD-001!row=62": 4,
+        "E-AUD-001!row=63": 4,
+        "E-PER-000!row=73": 3,
+        "E-PER-000!row=74": 3,
+        "E-AUD-001!row=60": 4,
+        "E-PER-000!row=77": 3,
+        "E-AUD-001!row=7": 4,
+        "E-AUD-001!row=8": 3,
+        "E-AUD-001!row=19": 4,
+        "E-AUD-001!row=26": 4,
+        "E-AUD-001!row=27": 4,
+        "E-AUD-001!row=29": 3,
+        "E-PER-000!row=80": 3,
+        "E-PER-000!row=154": 2,
+        "E-PER-000!row=76": 3,
+        "E-PER-000!row=86": 3,
+        "E-AUD-001!row=17": 3,
+        "E-AUD-001!row=20": 4,
+        "E-AUD-001!row=18": 3,
+        "E-AUD-001!row=57": 3
+      },
+      "core_exceptions": {},
+      "capture": {
+        "mode": "CORRECTED_ACTIVE_PRESENTATION"
+      },
+      "simulation_notice": "Historia y episodios ficticios. No son evidencia de beneficio real ni respuestas de un participante de un estudio."
+    },
+    {
+      "id": "MK-S06",
+      "name": "Sergio",
+      "age": 38,
+      "role": "Técnico de mantenimiento",
+      "vector": "D",
+      "story": "Fue adoptado y no conoce parte de su ascendencia. No tiene pareja y prefiere no responder sobre creencias. Quiere transmitir un oficio a personas nuevas de su equipo. Puede trabajar con su historia conocida y los límites de información; no necesita inventar familiares o pertenecer a una creencia para participar.",
+      "context": {
+        "direction": "PROVISIONAL",
+        "interest": "ENSEÑAR_UN_OFICIO",
+        "territory": "MENTALIDAD",
+        "weekly_minutes": 45,
+        "occasions": 1,
+        "health_limit": "NONE_DECLARED",
+        "value": "Servicio",
+        "lineage": "PARTLY_UNKNOWN",
+        "partner": "NOT_APPLICABLE",
+        "beliefs": "DECLINED"
+      },
+      "user_goal": "Preparar una explicación útil de una tarea del oficio.",
+      "acceptable_help": [
+        "Relacionar visión, servicio y una acción elegida.",
+        "Reconocer límites de información de origen sin penalizarlo."
+      ],
+      "must_not": [
+        "Inventar antecedentes o una misión familiar.",
+        "Exigir pareja o religión.",
+        "Subir profundidad por completar datos falsos o bajar alineación por esas ausencias no pertenecientes al núcleo."
+      ],
+      "weeks": [
+        {
+          "step": 1,
+          "event": "Reconoce qué sabe de su origen y qué no.",
+          "expect": "Conservar incertidumbre y permitir elaboración pertinente."
+        },
+        {
+          "step": 2,
+          "event": "Integra servicio en la elección de qué enseñar.",
+          "expect": "Guardar la relación concreta entre componente y decisión."
+        },
+        {
+          "step": 3,
+          "event": "Revisa con evidencia si su explicación fue útil.",
+          "expect": "Contraste documentado; no inferir un arquetipo."
+        }
+      ],
+      "observable_evidence": "Decisión de contribución sin déficit personal fabricado.",
+      "principles": [
+        "excepciones",
+        "origen desconocido",
+        "profundidad con evidencia"
+      ],
+      "core_answers": {
+        "E-AUD-001!row=62": 4,
+        "E-AUD-001!row=63": 4,
+        "E-PER-000!row=73": 3,
+        "E-PER-000!row=74": 3,
+        "E-AUD-001!row=60": 4,
+        "E-PER-000!row=77": 3,
+        "E-AUD-001!row=7": 4,
+        "E-AUD-001!row=8": 3,
+        "E-AUD-001!row=19": 4,
+        "E-AUD-001!row=26": 4,
+        "E-AUD-001!row=27": 4,
+        "E-AUD-001!row=29": 3,
+        "E-PER-000!row=80": 3,
+        "E-PER-000!row=154": 2,
+        "E-PER-000!row=76": 3,
+        "E-PER-000!row=86": 3,
+        "E-AUD-001!row=17": 3,
+        "E-AUD-001!row=20": 4,
+        "E-AUD-001!row=18": 3,
+        "E-AUD-001!row=57": 3
+      },
+      "core_exceptions": {},
+      "capture": {
+        "mode": "CORRECTED_ACTIVE_PRESENTATION"
+      },
+      "simulation_notice": "Historia y episodios ficticios. No son evidencia de beneficio real ni respuestas de un participante de un estudio."
+    },
+    {
+      "id": "MK-S07",
+      "name": "Javier",
+      "age": 46,
+      "role": "Encargado de equipo",
+      "vector": "D",
+      "story": "Quiere cuidar una relación laboral y definir un límite. Las conversaciones recientes han escalado y todavía no aclaró si una nueva conversación es viable. No quiere que la app le indique confrontar ni que interprete el relato como un diagnóstico. Tiene veinte minutos para aclarar qué desea proteger.",
+      "context": {
+        "direction": "PROVISIONAL",
+        "interest": "LIMITES_RELACIONALES",
+        "territory": "RELACIONES",
+        "weekly_minutes": 20,
+        "occasions": 1,
+        "health_limit": "NONE_DECLARED",
+        "value": "Respeto",
+        "conversation_viability": "UNKNOWN"
+      },
+      "user_goal": "Aclarar el límite que quiere proteger y una salida viable.",
+      "acceptable_help": [
+        "Aclaración acotada de viabilidad.",
+        "Preparación privada compatible o alternativa elegida."
+      ],
+      "must_not": [
+        "Programar confrontación como primera obligación.",
+        "Recomendar más firmeza ignorando incertidumbre.",
+        "Enviar mensajes o atribuir causalidad psicológica."
+      ],
+      "weeks": [
+        {
+          "step": 1,
+          "event": "No aclara todavía la viabilidad.",
+          "expect": "Una acción marcada como confrontación sigue restringida conforme a la regla."
+        },
+        {
+          "step": 2,
+          "event": "Elige aclarar por escrito qué límite busca cuidar.",
+          "expect": "La acción compatible se guarda y permanece editable."
+        },
+        {
+          "step": 3,
+          "event": "Decide no iniciar esa conversación ahora.",
+          "expect": "Registrar decisión/pausa sin presentarla como falta de valentía o fracaso."
+        }
+      ],
+      "observable_evidence": "Decisión y alternativa compatibles con incertidumbre contextual.",
+      "principles": [
+        "viabilidad",
+        "relaciones",
+        "elección sin confrontación forzada"
+      ],
+      "core_answers": {
+        "E-AUD-001!row=62": 4,
+        "E-AUD-001!row=63": 4,
+        "E-PER-000!row=73": 3,
+        "E-PER-000!row=74": 3,
+        "E-AUD-001!row=60": 4,
+        "E-PER-000!row=77": 3,
+        "E-AUD-001!row=7": 4,
+        "E-AUD-001!row=8": 3,
+        "E-AUD-001!row=19": 4,
+        "E-AUD-001!row=26": 4,
+        "E-AUD-001!row=27": 4,
+        "E-AUD-001!row=29": 3,
+        "E-PER-000!row=80": 3,
+        "E-PER-000!row=154": 2,
+        "E-PER-000!row=76": 3,
+        "E-PER-000!row=86": 3,
+        "E-AUD-001!row=17": 3,
+        "E-AUD-001!row=20": 4,
+        "E-AUD-001!row=18": 3,
+        "E-AUD-001!row=57": 3
+      },
+      "core_exceptions": {},
+      "capture": {
+        "mode": "CORRECTED_ACTIVE_PRESENTATION"
+      },
+      "simulation_notice": "Historia y episodios ficticios. No son evidencia de beneficio real ni respuestas de un participante de un estudio."
+    },
+    {
+      "id": "MK-S08",
+      "name": "Iván",
+      "age": 33,
+      "role": "Consultor",
+      "vector": "A",
+      "story": "Quiere terminar una propuesta. Marca como hechas sus ocasiones de ordenar referencias y revisar notas, pero sigue sin versión revisable. Le gusta ver el calendario verde y espera que el índice suba. Tiene noventa minutos y está dispuesto a cambiar la estrategia, no a agregar más tareas.",
+      "context": {
+        "direction": "PROVISIONAL",
+        "interest": "TERMINAR_PROPUESTA",
+        "territory": "MENTALIDAD",
+        "weekly_minutes": 90,
+        "occasions": 2,
+        "health_limit": "NONE_DECLARED",
+        "value": "Concreción"
+      },
+      "user_goal": "Obtener una propuesta revisable, no completar una lista de preparación.",
+      "acceptable_help": [
+        "Contrastar realización con evidencia de resultado.",
+        "Sustituir preparación excesiva por una estrategia orientada al entregable."
+      ],
+      "must_not": [
+        "Elevar alineación por completar ocasiones.",
+        "Afirmar progreso del resultado solo por registros DONE.",
+        "Duplicar carga para mejorar una métrica."
+      ],
+      "weeks": [
+        {
+          "step": 1,
+          "event": "Cumplió todas las ocasiones; no hay propuesta.",
+          "expect": "Realización alta y resultado no observado se muestran separados."
+        },
+        {
+          "step": 2,
+          "event": "Confirma que debe comenzar por el entregable.",
+          "expect": "La revisión cambia estrategia futura y conserva lo ya hecho."
+        },
+        {
+          "step": 3,
+          "event": "Documenta qué aprendió al contrastar la estrategia.",
+          "expect": "Profundidad solo puede cambiar por esa evidencia/revisión, nunca por DONE aislado."
+        }
+      ],
+      "observable_evidence": "Una revisión que cambia estrategia pese al calendario cumplido.",
+      "principles": [
+        "cumplimiento distinto de resultado",
+        "índices honestos",
+        "aprendizaje"
+      ],
+      "core_answers": {
+        "E-AUD-001!row=62": 5,
+        "E-AUD-001!row=63": 4,
+        "E-PER-000!row=73": 3,
+        "E-PER-000!row=74": 3,
+        "E-AUD-001!row=60": 4,
+        "E-PER-000!row=77": 4,
+        "E-AUD-001!row=7": 3,
+        "E-AUD-001!row=8": 3,
+        "E-AUD-001!row=19": 4,
+        "E-AUD-001!row=26": 1,
+        "E-AUD-001!row=27": 3,
+        "E-AUD-001!row=29": 2,
+        "E-PER-000!row=80": 2,
+        "E-PER-000!row=154": 1,
+        "E-PER-000!row=76": 2,
+        "E-PER-000!row=86": 1,
+        "E-AUD-001!row=17": 3,
+        "E-AUD-001!row=20": 2,
+        "E-AUD-001!row=18": 4,
+        "E-AUD-001!row=57": 4
+      },
+      "core_exceptions": {},
+      "capture": {
+        "mode": "CORRECTED_ACTIVE_PRESENTATION"
+      },
+      "simulation_notice": "Historia y episodios ficticios. No son evidencia de beneficio real ni respuestas de un participante de un estudio."
+    },
+    {
+      "id": "MK-S09",
+      "name": "Mateo",
+      "age": 30,
+      "role": "Diseñador editorial",
+      "vector": "P",
+      "story": "Quiere escribir una guía, pero dedica sus ocasiones a pulir el título y rehacer el diseño. Evita compartir borradores y le cuesta aceptar errores. Eligió reservar cuarenta y cinco minutos; no quiere una técnica de productividad impuesta ni etiquetas sobre su personalidad.",
+      "context": {
+        "direction": "PROVISIONAL",
+        "interest": "COMPARTIR_UN_BORRADOR",
+        "territory": "MENTALIDAD",
+        "weekly_minutes": 45,
+        "occasions": 1,
+        "health_limit": "NONE_DECLARED",
+        "value": "Aprendizaje"
+      },
+      "user_goal": "Tener un borrador legible que permita pedir comentarios.",
+      "acceptable_help": [
+        "Criterio concreto elegido para la primera versión.",
+        "Preparación que reduzca una barrera reconocida y revisión de estrategia."
+      ],
+      "must_not": [
+        "Diagnosticarlo o asignar arquetipo.",
+        "Dar otra plantilla intacta o solo repetir el valor Aprendizaje.",
+        "Prescribir más disciplina sin explicar qué hacer distinto."
+      ],
+      "weeks": [
+        {
+          "step": 1,
+          "event": "No logró comenzar y reconoce que rehízo el formato.",
+          "expect": "Ayuda específica sobre preparación/criterio, con alternativa y borrador conservado."
+        },
+        {
+          "step": 2,
+          "event": "Escribe una versión breve sin diseño final.",
+          "expect": "Conservar criterio observable y evidencia del borrador."
+        },
+        {
+          "step": 3,
+          "event": "Recibe un comentario y decide qué ajustar.",
+          "expect": "Revisión trazable sin prometer calidad o éxito externo."
+        }
+      ],
+      "observable_evidence": "Un artefacto usable y una barrera reconocida tratada en la estrategia.",
+      "principles": [
+        "ayuda contextual",
+        "autorreporte sin diagnóstico",
+        "criterio observable"
+      ],
+      "core_answers": {
+        "E-AUD-001!row=62": 5,
+        "E-AUD-001!row=63": 4,
+        "E-PER-000!row=73": 3,
+        "E-PER-000!row=74": 3,
+        "E-AUD-001!row=60": 4,
+        "E-PER-000!row=77": 4,
+        "E-AUD-001!row=7": 2,
+        "E-AUD-001!row=8": 2,
+        "E-AUD-001!row=19": 3,
+        "E-AUD-001!row=26": 1,
+        "E-AUD-001!row=27": 3,
+        "E-AUD-001!row=29": 2,
+        "E-PER-000!row=80": 2,
+        "E-PER-000!row=154": 0,
+        "E-PER-000!row=76": 2,
+        "E-PER-000!row=86": 1,
+        "E-AUD-001!row=17": 3,
+        "E-AUD-001!row=20": 2,
+        "E-AUD-001!row=18": 4,
+        "E-AUD-001!row=57": 4
+      },
+      "core_exceptions": {},
+      "capture": {
+        "mode": "CORRECTED_ACTIVE_PRESENTATION"
+      },
+      "simulation_notice": "Historia y episodios ficticios. No son evidencia de beneficio real ni respuestas de un participante de un estudio."
+    },
+    {
+      "id": "MK-S10",
+      "name": "Diego",
+      "age": 52,
+      "role": "Supervisor logístico",
+      "vector": "D",
+      "story": "Dejó de usar el producto cuatro semanas por un cambio de trabajo. Su plan y lectura anteriores siguen guardados. Ahora dispone de treinta minutos, menos que antes, y cambió parte de su dirección. Quiere retomar sin tener que ponerse al día con todas las ocasiones antiguas.",
+      "context": {
+        "direction": "PROVISIONAL",
+        "interest": "RETOMAR",
+        "territory": "MENTALIDAD",
+        "weekly_minutes": 30,
+        "occasions": 1,
+        "health_limit": "NONE_DECLARED",
+        "value": "Continuidad",
+        "absence_weeks": 4,
+        "previous_weekly_minutes": 90
+      },
+      "user_goal": "Revisar qué sigue vigente y elegir un paso compatible para esta semana.",
+      "acceptable_help": [
+        "Retorno con contexto actual y lectura fechada.",
+        "Revisión histórica separada de aplicación futura."
+      ],
+      "must_not": [
+        "Regenerar obligaciones en días pasados.",
+        "Mostrar el índice antiguo como nueva medición actual.",
+        "Aplicar decisiones obsoletas al plan sin confirmación."
+      ],
+      "weeks": [
+        {
+          "step": 1,
+          "event": "Se preparó un plan y lectura, luego transcurren cuatro semanas en el harness.",
+          "expect": "Historial preservado con fechas reales del escenario."
+        },
+        {
+          "step": 2,
+          "event": "Vuelve y registra reflexión de una semana antigua.",
+          "expect": "No alterar un cierre posterior ni aplicar comandos antiguos."
+        },
+        {
+          "step": 3,
+          "event": "Confirma un ajuste actual y comienza una medición parcial.",
+          "expect": "Futuro actualizado; parcial no mezcla respuestas viejas para fabricar general."
+        }
+      ],
+      "observable_evidence": "Retorno y ajuste actual con historial conservado.",
+      "principles": [
+        "ausencia",
+        "revisión tardía",
+        "comparabilidad"
+      ],
+      "core_answers": {
+        "E-AUD-001!row=62": 4,
+        "E-AUD-001!row=63": 4,
+        "E-PER-000!row=73": 3,
+        "E-PER-000!row=74": 3,
+        "E-AUD-001!row=60": 4,
+        "E-PER-000!row=77": 3,
+        "E-AUD-001!row=7": 4,
+        "E-AUD-001!row=8": 3,
+        "E-AUD-001!row=19": 4,
+        "E-AUD-001!row=26": 4,
+        "E-AUD-001!row=27": 4,
+        "E-AUD-001!row=29": 3,
+        "E-PER-000!row=80": 3,
+        "E-PER-000!row=154": 2,
+        "E-PER-000!row=76": 3,
+        "E-PER-000!row=86": 3,
+        "E-AUD-001!row=17": 3,
+        "E-AUD-001!row=20": 4,
+        "E-AUD-001!row=18": 3,
+        "E-AUD-001!row=57": 3
+      },
+      "core_exceptions": {},
+      "capture": {
+        "mode": "CORRECTED_ACTIVE_PRESENTATION"
+      },
+      "simulation_notice": "Historia y episodios ficticios. No son evidencia de beneficio real ni respuestas de un participante de un estudio."
+    },
+    {
+      "id": "MK-S11",
+      "name": "Pablo",
+      "age": 37,
+      "role": "Técnico de soporte por turnos",
+      "vector": "A",
+      "story": "El cuestionario muestra poca planificación semanal. MK podría proponer organización, pero Pablo prefiere atender un vínculo que él considera más importante ahora. Sus turnos cambian y no quiere bloques rígidos. La corrección debe modificar la propuesta y el plan, sin reescribir lo que respondió.",
+      "context": {
+        "direction": "PROVISIONAL",
+        "interest": "CUIDAR_UN_VINCULO",
+        "territory": "RELACIONES",
+        "weekly_minutes": 30,
+        "occasions": 1,
+        "health_limit": "NONE_DECLARED",
+        "value": "Presencia",
+        "schedule": "VARIABLE"
+      },
+      "user_goal": "Elegir una acción viable de presencia en el vínculo que él reconoce.",
+      "acceptable_help": [
+        "Corregir o elegir foco propio con motivo.",
+        "Ocasión compatible con turno variable."
+      ],
+      "must_not": [
+        "Forzar el pilar más bajo o impedir corregir al motor.",
+        "Reescribir R26 para justificar la elección.",
+        "Confrontación o un horario rígido no elegido."
+      ],
+      "weeks": [
+        {
+          "step": 1,
+          "event": "Descarta la interpretación de organización como prioridad actual.",
+          "expect": "Guardar corrección y ofrecer alternativa/foco propio."
+        },
+        {
+          "step": 2,
+          "event": "Un cambio de turno vuelve inviable la ocasión elegida.",
+          "expect": "Modificar ocasión sin aumentar carga ni borrar la corrección."
+        },
+        {
+          "step": 3,
+          "event": "Cierra la misma semana otra vez y con una variante de comando.",
+          "expect": "Mismo comando idempotente; distinto comando produce conflicto/flujo explícito."
+        }
+      ],
+      "observable_evidence": "Control de elección y corrección persistida.",
+      "principles": [
+        "prioridad corregible",
+        "turnos variables",
+        "idempotencia"
+      ],
+      "core_answers": {
+        "E-AUD-001!row=62": 5,
+        "E-AUD-001!row=63": 4,
+        "E-PER-000!row=73": 3,
+        "E-PER-000!row=74": 3,
+        "E-AUD-001!row=60": 4,
+        "E-PER-000!row=77": 4,
+        "E-AUD-001!row=7": 3,
+        "E-AUD-001!row=8": 3,
+        "E-AUD-001!row=19": 4,
+        "E-AUD-001!row=26": 1,
+        "E-AUD-001!row=27": 3,
+        "E-AUD-001!row=29": 2,
+        "E-PER-000!row=80": 2,
+        "E-PER-000!row=154": 1,
+        "E-PER-000!row=76": 2,
+        "E-PER-000!row=86": 1,
+        "E-AUD-001!row=17": 3,
+        "E-AUD-001!row=20": 2,
+        "E-AUD-001!row=18": 4,
+        "E-AUD-001!row=57": 4
+      },
+      "core_exceptions": {},
+      "capture": {
+        "mode": "CORRECTED_ACTIVE_PRESENTATION"
+      },
+      "simulation_notice": "Historia y episodios ficticios. No son evidencia de beneficio real ni respuestas de un participante de un estudio."
+    },
+    {
+      "id": "MK-S12",
+      "name": "Luis",
+      "age": 34,
+      "role": "Profesional con cuenta histórica",
+      "vector": "A",
+      "story": "Terminó una sesión de versión 4 cuando las opciones de identidad no mostraban significado y había etiquetas contradictorias en dos preguntas. Sus números guardados no prueban una lectura elegible. Quiere reparar lo necesario, conservar su historia y entender por qué aparece una reconstrucción.",
+      "context": {
+        "direction": "PROVISIONAL",
+        "interest": "REPARAR_LECTURA",
+        "territory": "MENTALIDAD",
+        "weekly_minutes": 45,
+        "occasions": 1,
+        "health_limit": "NONE_DECLARED",
+        "value": "Claridad",
+        "legacy_catalog_revision": 4
+      },
+      "user_goal": "Obtener una lectura elegible sin repetir innecesariamente todo el cuestionario.",
+      "acceptable_help": [
+        "Reconfirmación de señales según manifiesto de captura.",
+        "Historia original, reconstruida y nueva medición diferenciadas."
+      ],
+      "must_not": [
+        "Mostrar los números antiguos como válidos por estar presentes.",
+        "Sobrescribir respuestas o lecturas nativas.",
+        "Rotular la reparación como mejora."
+      ],
+      "weeks": [
+        {
+          "step": 1,
+          "event": "Carga el resultado antiguo, con evidencia de captura no fiable.",
+          "expect": "Pilares/general pendientes según calidad y motivos."
+        },
+        {
+          "step": 2,
+          "event": "Reconfirma todo lo que exige el manifiesto con los valores del vector A.",
+          "expect": "Reconstrucción elegible; todas las referencias propias y respuestas anteriores intactas."
+        },
+        {
+          "step": 3,
+          "event": "Dos cierres solapados de la misma reconfirmación.",
+          "expect": "Una lectura por comando/medición; no aparecen dos reconstrucciones."
+        }
+      ],
+      "observable_evidence": "Reparación e idempotencia con procedencia explícita.",
+      "principles": [
+        "compatibilidad",
+        "captura",
+        "historia"
+      ],
+      "core_answers": {
+        "E-AUD-001!row=62": 5,
+        "E-AUD-001!row=63": 4,
+        "E-PER-000!row=73": 3,
+        "E-PER-000!row=74": 3,
+        "E-AUD-001!row=60": 4,
+        "E-PER-000!row=77": 4,
+        "E-AUD-001!row=7": 3,
+        "E-AUD-001!row=8": 3,
+        "E-AUD-001!row=19": 4,
+        "E-AUD-001!row=26": 1,
+        "E-AUD-001!row=27": 3,
+        "E-AUD-001!row=29": 2,
+        "E-PER-000!row=80": 2,
+        "E-PER-000!row=154": 1,
+        "E-PER-000!row=76": 2,
+        "E-PER-000!row=86": 1,
+        "E-AUD-001!row=17": 3,
+        "E-AUD-001!row=20": 2,
+        "E-AUD-001!row=18": 4,
+        "E-AUD-001!row=57": 4
+      },
+      "core_exceptions": {},
+      "capture": {
+        "mode": "LEGACY_MANIFEST",
+        "minimum_known_unreliable_sources": [
+          "E-PER-000!row=73",
+          "E-PER-000!row=74",
+          "E-PER-000!row=76",
+          "E-PER-000!row=77",
+          "E-PER-000!row=80",
+          "E-PER-000!row=86",
+          "E-AUD-001!row=8",
+          "E-AUD-001!row=19"
+        ],
+        "additional_unreliable_sources": "RESOLVE_FROM_MANIFEST"
+      },
+      "simulation_notice": "Historia y episodios ficticios. No son evidencia de beneficio real ni respuestas de un participante de un estudio."
+    }
+  ],
+  "mutations": [
+    {
+      "id": "MK-V01",
+      "base": "MK-S01",
+      "change": "Cambiar solo ingreso fuera del núcleo.",
+      "expect": "Índices idénticos. Viabilidad/contexto pueden cambiar si son pertinentes."
+    },
+    {
+      "id": "MK-V02",
+      "base": "MK-S06",
+      "change": "Comparar origen conocido y parcialmente desconocido, manteniendo respuestas del núcleo.",
+      "expect": "Sin penalización numérica automática ni antecedentes inventados."
+    },
+    {
+      "id": "MK-V03",
+      "base": "MK-S09",
+      "change": "Multiplicar longitud de texto con las mismas evidencias/etapas/referencias confirmadas.",
+      "expect": "Profundidad idéntica; ninguna puntuación por cantidad de palabras."
+    },
+    {
+      "id": "MK-V04",
+      "base": "MK-S03",
+      "change": "Añadir un límite vigente entre vista previa y confirmación.",
+      "expect": "Conflicto y alternativa sin escritura parcial; índice inicial intacto."
+    },
+    {
+      "id": "MK-V05",
+      "base": "MK-S03",
+      "change": "Lesión antigua aclarada sin límite vigente, frente a límite actual.",
+      "expect": "Viabilidad según vigencia y regla; ninguna reducción del núcleo por el diagnóstico."
+    },
+    {
+      "id": "MK-V06",
+      "base": "MK-S08",
+      "change": "Registrar DONE sin nueva medición ni evidencia de elaboración.",
+      "expect": "Alineación y profundidad no suben por el evento aislado."
+    },
+    {
+      "id": "MK-V07",
+      "base": "MK-S11",
+      "change": "Corregir prioridad y repetir confirmación con comando igual/distinto.",
+      "expect": "Corrección preservada, idempotencia o conflicto material, sin duplicación."
+    },
+    {
+      "id": "MK-V08",
+      "base": "MK-S10",
+      "change": "Repetir núcleo parcialmente y luego completo con composición igual.",
+      "expect": "Parcial sin general nuevo; completo con snapshot independiente y comparabilidad comprobada."
+    },
+    {
+      "id": "MK-V09",
+      "base": "MK-S01",
+      "change": "Reducir presupuesto y cambiar interés actual, conservando las veinte respuestas.",
+      "expect": "Lectura idéntica; ayuda/carga pueden cambiar. No exigir una prioridad única cuando hay alternativas pertinentes."
+    },
+    {
+      "id": "MK-V10",
+      "base": "MK-S08",
+      "change": "Usar todos los extremos superiores del núcleo, con evidencia posterior de falta de resultado.",
+      "expect": "100 autorreportado no certifica resultado; el motor busca aclaración/estrategia sin sobrescribir el snapshot."
+    }
+  ]
+}

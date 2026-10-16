@@ -27,7 +27,7 @@ export default function AppRedirectPage() {
           setAccessToken(token);
         }
         const me = await apiMe(token);
-        if (!cancelled) router.replace(getPostAuthPath(me.role));
+        if (!cancelled) router.replace(getPostAuthPath(me));
       } catch {
         if (!cancelled) {
           clearAccessToken();

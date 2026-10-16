@@ -4,6 +4,7 @@ import { MailModule } from '../mail/mail.module';
 import { DiagnosticCatalogService } from './diagnostic-catalog.service';
 import { DiagnosticController } from './diagnostic.controller';
 import { DiagnosticOpenGuard } from './diagnostic-open.guard';
+import { ResponseWriteHook } from './response-write-hook';
 import { DiagnosticService } from './diagnostic.service';
 import { ReengagementService } from './reengagement.service';
 
@@ -12,6 +13,7 @@ import { ReengagementService } from './reengagement.service';
   controllers: [DiagnosticController],
   providers: [
     DiagnosticService,
+    ResponseWriteHook,
     DiagnosticOpenGuard,
     ReengagementService,
     DiagnosticCatalogService,

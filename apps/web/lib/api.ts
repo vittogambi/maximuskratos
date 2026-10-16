@@ -24,6 +24,12 @@ export type AuthResponse = {
   user: AuthUser;
 };
 
+/** Decided by the API from the authenticated account. The client never grants it. */
+export type MemberAccess = {
+  canUseMemberProduct: boolean;
+  isMemberPreview: boolean;
+};
+
 export type MeResponse = AuthUser & {
   onboardingStep: string;
   createdAt: string;
@@ -32,6 +38,7 @@ export type MeResponse = AuthUser & {
     trialEnd: string | null;
     currentPeriodEnd: string | null;
   } | null;
+  access: MemberAccess;
 };
 
 export type AdminUser = {
@@ -58,6 +65,15 @@ export type AdminStats = {
   users: { total: number; last7Days: number };
   leads: { total: number; last7Days: number };
 };
+
+export class HttpError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+  ) {
+    super(message);
+  }
+}
 
 async function parseError(
   res: Response,
@@ -116,7 +132,7 @@ export async function apiRefresh(): Promise<{ accessToken: string }> {
     credentials: 'include',
     body: JSON.stringify({}),
   });
-  if (!res.ok) throw new Error(await parseError(res));
+  if (!res.ok) throw new HttpError(await parseError(res), res.status);
   return res.json();
 }
 
@@ -132,7 +148,7 @@ export async function apiMe(accessToken: string): Promise<MeResponse> {
     headers: authHeaders(accessToken),
     credentials: 'include',
   });
-  if (!res.ok) throw new Error(await parseError(res));
+  if (!res.ok) throw new HttpError(await parseError(res), res.status);
   return res.json();
 }
 
@@ -173,6 +189,108 @@ export async function apiCreateLead(data: {
   if (!res.ok) throw new Error(await parseError(res));
   return res.json();
 }
+
+export async function apiAdminJourney(accessToken: string, userId: string, sessionId?: string): Promise<AdminJourney> {
+  const query = sessionId ? `?sessionId=${encodeURIComponent(sessionId)}` : '';
+  const res = await fetch(`${apiBaseUrl()}/api/v1/admin/users/${userId}/journey${query}`, {
+    headers: authHeaders(accessToken),
+    credentials: 'include',
+    cache: 'no-store',
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+
+export async function apiAdminResponses(accessToken: string, userId: string, sessionId: string, module: string, page = 1): Promise<AdminResponsePage> {
+  const query = `?module=${encodeURIComponent(module)}&page=${page}`;
+  const res = await fetch(`${apiBaseUrl()}/api/v1/admin/users/${userId}/sessions/${sessionId}/responses${query}`, {
+    headers: authHeaders(accessToken),
+    credentials: 'include',
+    cache: 'no-store',
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+
+export async function apiAdminAlerts(accessToken: string, query: { userId?: string; sessionId?: string; page?: number; module?: string; rule?: string } = {}): Promise<AdminAlertPage> {
+  const params = new URLSearchParams();
+  if (query.userId) params.set('userId', query.userId);
+  if (query.sessionId) params.set('sessionId', query.sessionId);
+  if (query.module) params.set('module', query.module);
+  if (query.rule) params.set('rule', query.rule);
+  if (query.page) params.set('page', String(query.page));
+  const path = query.userId ? `/api/v1/admin/users/${query.userId}/alerts` : '/api/v1/admin/alerts';
+  const res = await fetch(`${apiBaseUrl()}${path}?${params.toString()}`, {
+    headers: authHeaders(accessToken),
+    credentials: 'include',
+    cache: 'no-store',
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+
+export type AdminJourney = {
+  account: { id: string; email: string; role: string; onboardingStep: string };
+  sessions: { id: string; status: string; version: string; definitionRef: string | null; startedAt: string; completedAt: string | null; lastActivityAt: string; responseCount: number }[];
+  selectedSessionId: string | null;
+  modules: { slug: string; phase?: string; sheet?: string; title: string; intro: string; answered: number; total: number }[];
+  profile: Record<string, unknown> | null;
+  alertState: 'NONE' | 'PENDING' | 'HISTORY_UNAVAILABLE' | 'READY' | 'ERROR';
+  alignment: { id: string; kind: string; methodVersion: string; sessionId: string | null; computedAt: string; output: unknown }[];
+  declared: { status: string; total: number | null; pillars: { E: number | null; M: number | null; C: number | null }; coverage: { answered: number; required: number }; revision: number | null } | null;
+  direction: { revision: number; confirmedAt: string | null; status: string | null; statement: string | null; name: string | null } | null;
+  signed: { revision: number; confirmedAt: string | null; name: string | null; contract: string | null; contractView: unknown } | null;
+  draftIsLater: boolean;
+  rules: { questionId: string | null; questionRef: string; text: string; moduleSlug: string | null; value: string | null; status: 'FIRED' | 'NOT_FIRED'; rule: string }[];
+  ikigai: {
+    activities: { sourceRef: string | null; field: string | null; ambit: string; option: string; answer: string; recognized: boolean; raw: string | null }[];
+    synthesis: unknown;
+    experiments: { id: string; status: string; hypothesis: string | null; sample?: string | null; opportunity?: string | null; missing?: string | null }[];
+  };
+};
+
+export type AdminResponsePage = {
+  module: { slug: string; title: string; intro: string };
+  page: number;
+  pageSize?: number;
+  total: number;
+  items: {
+    questionId: string;
+    text: string;
+    type: string;
+    status: string;
+    sourceRef?: string | null;
+    instrument?: string | null;
+    anchors: { label: string; value: string }[];
+    selected: { label: string; value: string }[];
+    freeText: string | null;
+    answeredAt: string | null;
+    revision: number | null;
+  }[];
+};
+
+export type AdminAlertPage = {
+  state: 'READY' | 'ERROR';
+  page: number;
+  total: number;
+  items: {
+    id: string;
+    userId: string;
+    email: string;
+    sessionId: string;
+    questionId: string | null;
+    questionRef: string;
+    ruleVersion: string;
+    productRule: string;
+    responseValue: string | null;
+    responseRevision: number;
+    answeredAt: string | null;
+    detectedAt: string;
+    provenance: string;
+    matchesCurrentResponse: boolean;
+    moduleSlug: string | null;
+  }[];
+};
 
 export async function apiAdminUsers(accessToken: string): Promise<AdminUser[]> {
   const res = await fetch(`${apiBaseUrl()}/api/v1/admin/users`, {
@@ -336,16 +454,46 @@ export type AnswerOptionDto = {
   value: string;
 };
 
+export type MeasureField = {
+  key: string;
+  label: string;
+  unit: string;
+  min: number;
+  max: number;
+};
+
+export type LineField = { key: string; label: string };
+
+export type QuestionCapture =
+  | { kind: 'measures'; fields: MeasureField[] }
+  | { kind: 'hours'; min: number; max: number }
+  | { kind: 'lines'; fields: LineField[] }
+  | { kind: 'number'; unit: string; min: number; max: number }
+  | { kind: 'birthdate'; minAge: number; maxAge: number }
+  | { kind: 'ikigai'; lens: string; others: string[] }
+  | { kind: 'activity'; field: 'pasion' | 'vocacion' | 'mision' | 'profesion'; ambits?: { label: string; options: string[] }[] }
+  | { kind: 'archetype' };
+
 export type QuestionDto = {
   id: string;
   type: 'SINGLE_CHOICE' | 'MULTI_CHOICE' | 'SCALE_1_5' | 'FREE_TEXT' | 'RANKING';
   textEs: string;
+  sourceRef?: string | null;
   contextEs: string | null;
   maxSelections: number | null;
   scaleType: 'BEHAVIORAL' | 'FREQUENCY' | null;
   reasonPromptEs: string | null;
   reasonThreshold: number | null;
   options: AnswerOptionDto[];
+  capture?: QuestionCapture | null;
+  heading?: string | null;
+  allowedExceptions?: string[];
+  answerRevision?: number;
+  /** Option values already saved in this module, keyed by sourceRef. */
+  savedChoices?: Record<string, string>;
+  /** Activity questions in this module that already have ámbito, idea y respuesta. */
+  filledActivities?: string[];
+  activityNotes?: { sourceRef: string; text: string }[];
 };
 
 export type SessionStateDto = {
@@ -399,7 +547,7 @@ export type MasterProfileDto = {
 
 export type NextStep =
   | { type: 'question'; data: QuestionDto }
-  | { type: 'module_outro'; data: { moduleSlug: string; titleEs: string; outroText: string } }
+  | { type: 'module_outro'; data: { moduleSlug: string; titleEs: string; outroText: string; readings?: { label: string; detail: string }[] } }
   | { type: 'phase_end'; data: { phase: string; completionPct: number; selfKnowledgePct: number } }
   | { type: 'diagnostic_complete'; data: { archetypePrimary: string; selfKnowledgePct: number } };
 
@@ -415,7 +563,20 @@ export type SubmitResponsePayload = {
   rankingOrder?: string[];
   latencyMs?: number;
   editCount?: number;
+  exceptionKind?: 'UNKNOWN' | 'NOT_APPLICABLE' | 'DECLINED' | 'PENDING';
+  expectedRevision?: number;
 };
+
+export async function apiDiagnosticRestart(accessToken: string): Promise<DiagnosticState> {
+  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/restart`, {
+    method: 'POST',
+    headers: { ...authHeaders(accessToken), 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({}),
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
 
 export async function apiDiagnosticStart(accessToken: string): Promise<DiagnosticState> {
   const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/start`, {
@@ -447,7 +608,11 @@ export async function apiDiagnosticSubmitResponse(
     credentials: 'include',
     body: JSON.stringify(payload),
   });
-  if (!res.ok) throw new Error(await parseError(res));
+  if (!res.ok) {
+    const error = new Error(await parseError(res)) as Error & { status?: number };
+    error.status = res.status;
+    throw error;
+  }
   return res.json();
 }
 

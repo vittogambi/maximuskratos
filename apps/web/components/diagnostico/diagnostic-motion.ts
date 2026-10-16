@@ -12,16 +12,14 @@ export const DIAGNOSTIC_EASE_OUT = MOTION_EASE.exit;
 export const OPTION_STAGGER_S = MOTION_STAGGER.tight;
 
 export const questionScreenVariants = {
-  initial: { opacity: 0, y: 16 },
+  initial: { opacity: 0 },
   animate: {
     opacity: 1,
-    y: 0,
-    transition: { duration: 0.35, ease: DIAGNOSTIC_EASE },
+    transition: { duration: MOTION_DURATION.pageApp, ease: DIAGNOSTIC_EASE },
   },
   exit: {
     opacity: 0,
-    y: -12,
-    transition: { duration: MOTION_DURATION.micro, ease: DIAGNOSTIC_EASE_OUT },
+    transition: { duration: 0.12, ease: DIAGNOSTIC_EASE_OUT },
   },
 };
 

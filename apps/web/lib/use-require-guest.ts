@@ -16,7 +16,7 @@ export function useRequireGuest() {
     // user may be null for one render if React batching splits the two setState calls.
     // In that case the effect fires again when user arrives (dependency array includes user).
     if (!user) return;
-    router.replace(getPostAuthPath(user.role, user.onboardingStep));
+    router.replace(getPostAuthPath(user));
   }, [status, user, router]);
 
   return status;

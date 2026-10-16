@@ -712,15 +712,15 @@ export const CASEBOOK_META: CasebookMeta[] = [
   {
     key: 'R17',
     file: 'R17.json',
-    name: 'Lucas',
-    label: 'R17 · Lucas',
+    name: 'Mateo',
+    label: 'R17 · Mateo',
     purpose_answered: false,
     testIntent: 'Finanzas claramente más comprometidas',
     story:
-      'Lucas tiene el cuestionario completo. Incluye las preguntas de Finanzas.',
+      'El cuestionario de Mateo está completo. Incluye las preguntas de Finanzas.',
     facilitator_note: brief({
       test:
-        'Lucas queda claramente más bajo en Finanzas que en el resto. Queremos revisar si, cuando la diferencia es evidente, la Matriz debería empezar por el ámbito más bajo.',
+        'Mateo queda claramente más bajo en Finanzas que en el resto. Queremos revisar si, cuando la diferencia es evidente, la Matriz debería empezar por el ámbito más bajo.',
       matrix:
         'Finanzas termina en 25 puntos y Contención. Los otros tres ámbitos quedan en 75 y Consolidación. La Matriz pone Finanzas primero.',
       decision: '¿Coincides en trabajar primero el ámbito que está claramente más bajo?',

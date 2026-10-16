@@ -1,0 +1,315 @@
+{
+  "status": "INDEPENDENT_ARITHMETIC_REFERENCE_NOT_MK_RESULT",
+  "tolerance": 0.0001,
+  "cases": [
+    {
+      "case_id": "MK-S01",
+      "initial": {
+        "groups": {
+          "NUC-E1": 87.5,
+          "NUC-E2": 66.6667,
+          "NUC-E3": 87.5,
+          "NUC-M1": 58.3333,
+          "NUC-M2": 25.0,
+          "NUC-M3": 36.1111,
+          "NUC-C1": 16.6667,
+          "NUC-C2": 37.5,
+          "NUC-C3": 75.0
+        },
+        "pillars": {
+          "E": 80.5556,
+          "M": 39.8148,
+          "C": 43.0556
+        },
+        "general": 54.4753,
+        "eligible_reference_count": 20
+      },
+      "capture_coverage_exact_expected": true
+    },
+    {
+      "case_id": "MK-S02",
+      "initial": {
+        "groups": {
+          "NUC-E1": 12.5,
+          "NUC-E2": 16.6667,
+          "NUC-E3": 58.3333,
+          "NUC-M1": 66.6667,
+          "NUC-M2": 37.5,
+          "NUC-M3": null,
+          "NUC-C1": 50.0,
+          "NUC-C2": 62.5,
+          "NUC-C3": 62.5
+        },
+        "pillars": {
+          "E": 29.1667,
+          "M": null,
+          "C": 58.3333
+        },
+        "general": null,
+        "eligible_reference_count": 19
+      },
+      "capture_coverage_exact_expected": true
+    },
+    {
+      "case_id": "MK-S03",
+      "initial": {
+        "groups": {
+          "NUC-E1": 75.0,
+          "NUC-E2": 50.0,
+          "NUC-E3": 70.8333,
+          "NUC-M1": 50.0,
+          "NUC-M2": 12.5,
+          "NUC-M3": 72.2222,
+          "NUC-C1": 33.3333,
+          "NUC-C2": 25.0,
+          "NUC-C3": 12.5
+        },
+        "pillars": {
+          "E": 65.2778,
+          "M": 44.9074,
+          "C": 23.6111
+        },
+        "general": 44.5988,
+        "eligible_reference_count": 20
+      },
+      "capture_coverage_exact_expected": true
+    },
+    {
+      "case_id": "MK-S04",
+      "initial": {
+        "groups": {
+          "NUC-E1": 75.0,
+          "NUC-E2": 66.6667,
+          "NUC-E3": 70.8333,
+          "NUC-M1": 66.6667,
+          "NUC-M2": 75.0,
+          "NUC-M3": 72.2222,
+          "NUC-C1": 66.6667,
+          "NUC-C2": 62.5,
+          "NUC-C3": 50.0
+        },
+        "pillars": {
+          "E": 70.8333,
+          "M": 71.2963,
+          "C": 59.7222
+        },
+        "general": 67.284,
+        "eligible_reference_count": 20
+      },
+      "capture_coverage_exact_expected": true
+    },
+    {
+      "case_id": "MK-S05",
+      "initial": {
+        "groups": {
+          "NUC-E1": 75.0,
+          "NUC-E2": 66.6667,
+          "NUC-E3": 70.8333,
+          "NUC-M1": 66.6667,
+          "NUC-M2": 75.0,
+          "NUC-M3": 72.2222,
+          "NUC-C1": 66.6667,
+          "NUC-C2": 62.5,
+          "NUC-C3": 50.0
+        },
+        "pillars": {
+          "E": 70.8333,
+          "M": 71.2963,
+          "C": 59.7222
+        },
+        "general": 67.284,
+        "eligible_reference_count": 20
+      },
+      "capture_coverage_exact_expected": true
+    },
+    {
+      "case_id": "MK-S06",
+      "initial": {
+        "groups": {
+          "NUC-E1": 75.0,
+          "NUC-E2": 66.6667,
+          "NUC-E3": 70.8333,
+          "NUC-M1": 66.6667,
+          "NUC-M2": 75.0,
+          "NUC-M3": 72.2222,
+          "NUC-C1": 66.6667,
+          "NUC-C2": 62.5,
+          "NUC-C3": 50.0
+        },
+        "pillars": {
+          "E": 70.8333,
+          "M": 71.2963,
+          "C": 59.7222
+        },
+        "general": 67.284,
+        "eligible_reference_count": 20
+      },
+      "capture_coverage_exact_expected": true
+    },
+    {
+      "case_id": "MK-S07",
+      "initial": {
+        "groups": {
+          "NUC-E1": 75.0,
+          "NUC-E2": 66.6667,
+          "NUC-E3": 70.8333,
+          "NUC-M1": 66.6667,
+          "NUC-M2": 75.0,
+          "NUC-M3": 72.2222,
+          "NUC-C1": 66.6667,
+          "NUC-C2": 62.5,
+          "NUC-C3": 50.0
+        },
+        "pillars": {
+          "E": 70.8333,
+          "M": 71.2963,
+          "C": 59.7222
+        },
+        "general": 67.284,
+        "eligible_reference_count": 20
+      },
+      "capture_coverage_exact_expected": true
+    },
+    {
+      "case_id": "MK-S08",
+      "initial": {
+        "groups": {
+          "NUC-E1": 87.5,
+          "NUC-E2": 66.6667,
+          "NUC-E3": 87.5,
+          "NUC-M1": 58.3333,
+          "NUC-M2": 25.0,
+          "NUC-M3": 36.1111,
+          "NUC-C1": 16.6667,
+          "NUC-C2": 37.5,
+          "NUC-C3": 75.0
+        },
+        "pillars": {
+          "E": 80.5556,
+          "M": 39.8148,
+          "C": 43.0556
+        },
+        "general": 54.4753,
+        "eligible_reference_count": 20
+      },
+      "capture_coverage_exact_expected": true
+    },
+    {
+      "case_id": "MK-S09",
+      "initial": {
+        "groups": {
+          "NUC-E1": 87.5,
+          "NUC-E2": 66.6667,
+          "NUC-E3": 87.5,
+          "NUC-M1": 33.3333,
+          "NUC-M2": 25.0,
+          "NUC-M3": 19.4444,
+          "NUC-C1": 16.6667,
+          "NUC-C2": 37.5,
+          "NUC-C3": 75.0
+        },
+        "pillars": {
+          "E": 80.5556,
+          "M": 25.9259,
+          "C": 43.0556
+        },
+        "general": 49.8457,
+        "eligible_reference_count": 20
+      },
+      "capture_coverage_exact_expected": true
+    },
+    {
+      "case_id": "MK-S10",
+      "initial": {
+        "groups": {
+          "NUC-E1": 75.0,
+          "NUC-E2": 66.6667,
+          "NUC-E3": 70.8333,
+          "NUC-M1": 66.6667,
+          "NUC-M2": 75.0,
+          "NUC-M3": 72.2222,
+          "NUC-C1": 66.6667,
+          "NUC-C2": 62.5,
+          "NUC-C3": 50.0
+        },
+        "pillars": {
+          "E": 70.8333,
+          "M": 71.2963,
+          "C": 59.7222
+        },
+        "general": 67.284,
+        "eligible_reference_count": 20
+      },
+      "capture_coverage_exact_expected": true
+    },
+    {
+      "case_id": "MK-S11",
+      "initial": {
+        "groups": {
+          "NUC-E1": 87.5,
+          "NUC-E2": 66.6667,
+          "NUC-E3": 87.5,
+          "NUC-M1": 58.3333,
+          "NUC-M2": 25.0,
+          "NUC-M3": 36.1111,
+          "NUC-C1": 16.6667,
+          "NUC-C2": 37.5,
+          "NUC-C3": 75.0
+        },
+        "pillars": {
+          "E": 80.5556,
+          "M": 39.8148,
+          "C": 43.0556
+        },
+        "general": 54.4753,
+        "eligible_reference_count": 20
+      },
+      "capture_coverage_exact_expected": true
+    },
+    {
+      "case_id": "MK-S12",
+      "initial": {
+        "groups": {
+          "NUC-E1": 87.5,
+          "NUC-E2": null,
+          "NUC-E3": null,
+          "NUC-M1": null,
+          "NUC-M2": 25.0,
+          "NUC-M3": null,
+          "NUC-C1": null,
+          "NUC-C2": 37.5,
+          "NUC-C3": 75.0
+        },
+        "pillars": {
+          "E": null,
+          "M": null,
+          "C": null
+        },
+        "general": null,
+        "eligible_reference_count": 12
+      },
+      "capture_coverage_exact_expected": false,
+      "notice": "El manifiesto real puede excluir más señales. No exigir exactamente 12 elegibles.",
+      "after_complete_reconfirmation": {
+        "groups": {
+          "NUC-E1": 87.5,
+          "NUC-E2": 66.6667,
+          "NUC-E3": 87.5,
+          "NUC-M1": 58.3333,
+          "NUC-M2": 25.0,
+          "NUC-M3": 36.1111,
+          "NUC-C1": 16.6667,
+          "NUC-C2": 37.5,
+          "NUC-C3": 75.0
+        },
+        "pillars": {
+          "E": 80.5556,
+          "M": 39.8148,
+          "C": 43.0556
+        },
+        "general": 54.4753,
+        "eligible_reference_count": 20
+      }
+    }
+  ]
+}

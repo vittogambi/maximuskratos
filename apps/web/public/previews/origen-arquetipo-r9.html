@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vista previa · Origen y linaje · R9</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --surface-raised: #1c1c1c;
+      --border: #353534;
+      --text: #f2f0eb;
+      --text-secondary: #a8a6a0;
+      --accent: #c9a24a;
+      --success: #22c060;
+      --warning: #c9a24a;
+      --font-body: system-ui, -apple-system, Segoe UI, sans-serif;
+      --font-editorial: Georgia, 'Times New Roman', serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      padding: 1rem;
+    }
+    .frame {
+      max-width: 390px;
+      margin: 0 auto;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .top {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .top strong { color: var(--accent); font-weight: 600; }
+    .dk-question {
+      padding: 1.25rem 1rem 1.5rem;
+    }
+    .dk-question__eyebrow {
+      margin: 0 0 0.35rem;
+      font-size: 0.6875rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+    .dk-question__title {
+      margin: 0 0 1rem;
+      font-family: var(--font-editorial);
+      font-size: 1.35rem;
+      line-height: 1.25;
+      font-weight: 400;
+    }
+    .dk-archetype-origin { display: flex; flex-direction: column; gap: 1rem; }
+    .dk-archetype-origin__tabs {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+    @media (min-width: 360px) {
+      .dk-archetype-origin__tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    .dk-archetype-origin__tab {
+      display: grid;
+      grid-template-columns: 4.5rem minmax(0, 1fr);
+      gap: 0.65rem;
+      align-items: center;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      text-align: left;
+      color: inherit;
+      cursor: pointer;
+    }
+    .dk-archetype-origin__tab--active {
+      border-color: var(--accent);
+      outline: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    }
+    .dk-archetype-origin__tab img {
+      width: 4.5rem;
+      height: 5.5rem;
+      object-fit: cover;
+      object-position: center top;
+      border-radius: 4px;
+    }
+    .dk-archetype-origin__tab-label {
+      display: block;
+      font-family: var(--font-editorial);
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+    .dk-archetype-origin__tab-tagline {
+      display: block;
+      font-size: 0.8125rem;
+      line-height: 1.35;
+      color: var(--text-secondary);
+      margin-top: 0.15rem;
+    }
+    .dk-archetype-origin__panel {
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-raised);
+    }
+    .dk-archetype-origin__lead {
+      display: grid;
+      grid-template-columns: 6.5rem minmax(0, 1fr);
+      gap: 0.85rem;
+      margin-bottom: 0.85rem;
+    }
+    .dk-archetype-origin__lead img {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .dk-archetype-origin__function {
+      margin: 0 0 0.35rem;
+      font-family: var(--font-editorial);
+      font-size: 1.05rem;
+      line-height: 1.25;
+    }
+    .dk-archetype-origin__desc {
+      margin: 0;
+      font-size: 0.9375rem;
+      line-height: 1.45;
+      color: var(--text-secondary);
+    }
+    .dk-archetype-origin__modules {
+      display: grid;
+      gap: 0.65rem;
+    }
+    .dk-archetype-origin__module {
+      margin: 0;
+      padding: 0.65rem 0.7rem;
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--text) 4%, transparent);
+      font-size: 0.875rem;
+      line-height: 1.4;
+    }
+    .dk-archetype-origin__module--balance { border-left: 3px solid var(--success); }
+    .dk-archetype-origin__module--shadow { border-left: 3px solid var(--warning); }
+    .dk-archetype-origin__kicker {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-size: 0.6875rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+    .dk-archetype-origin__choice {
+      margin: 0.85rem 0 0;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    .footer {
+      padding: 0.75rem 1rem 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .btn {
+      width: 100%;
+      padding: 0.85rem;
+      border: none;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #0a0a0a;
+      font-weight: 600;
+      font-size: 0.9375rem;
+    }
+    .caption {
+      max-width: 390px;
+      margin: 0.75rem auto 0;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+  <div class="frame" id="preview">
+    <div class="top">Diagnóstico · <strong>Origen y linaje</strong> · pregunta 3 de 22</div>
+    <div class="dk-question">
+      <p class="dk-question__eyebrow">Origen y linaje</p>
+      <h1 class="dk-question__title">Si su nombre fuera un símbolo o arquetipo, ¿qué representaría para usted?</h1>
+      <div class="dk-archetype-origin">
+        <div class="dk-archetype-origin__tabs" role="tablist">
+          <button type="button" class="dk-archetype-origin__tab" data-slug="rey">
+            <img src="/images/archetypes/rey.png" alt="" />
+            <span><span class="dk-archetype-origin__tab-label">El Rey</span><span class="dk-archetype-origin__tab-tagline">Da orden, dirección y responsabilidad.</span></span>
+          </button>
+          <button type="button" class="dk-archetype-origin__tab" data-slug="guerrero">
+            <img src="/images/archetypes/guerrero.png" alt="" />
+            <span><span class="dk-archetype-origin__tab-label">El Guerrero</span><span class="dk-archetype-origin__tab-tagline">Convierte una decisión en acción sostenida.</span></span>
+          </button>
+          <button type="button" class="dk-archetype-origin__tab" data-slug="mago">
+            <img src="/images/archetypes/mago.png" alt="" />
+            <span><span class="dk-archetype-origin__tab-label">El Mago</span><span class="dk-archetype-origin__tab-tagline">Comprende, relaciona y diseña sistemas.</span></span>
+          </button>
+          <button type="button" class="dk-archetype-origin__tab dk-archetype-origin__tab--active" data-slug="amante">
+            <img src="/images/archetypes/amante.png" alt="" />
+            <span><span class="dk-archetype-origin__tab-label">El Amante</span><span class="dk-archetype-origin__tab-tagline">Conecta la vida con significado, presencia y deseo.</span></span>
+          </button>
+        </div>
+        <div class="dk-archetype-origin__panel">
+          <div class="dk-archetype-origin__lead">
+            <img src="/images/archetypes/amante.png" alt="El Amante" />
+            <div>
+              <p class="dk-archetype-origin__function">Conecta la vida con significado, presencia y deseo.</p>
+              <p class="dk-archetype-origin__desc">El Amante permite vincularse profundamente con personas, experiencias, belleza, propósito y creación.</p>
+            </div>
+          </div>
+          <div class="dk-archetype-origin__modules">
+            <article class="dk-archetype-origin__module dk-archetype-origin__module--balance">
+              <span class="dk-archetype-origin__kicker">En equilibrio</span>
+              Conecta, aprecia y da sentido.
+            </article>
+            <article class="dk-archetype-origin__module dk-archetype-origin__module--shadow">
+              <span class="dk-archetype-origin__kicker">Sombra: Adicto</span>
+              Queda sometido a la búsqueda de estímulo.
+            </article>
+            <article class="dk-archetype-origin__module dk-archetype-origin__module--shadow">
+              <span class="dk-archetype-origin__kicker">Sombra: Impotente</span>
+              Se desconecta del deseo para evitar exposición, pérdida o dolor.
+            </article>
+          </div>
+          <p class="dk-archetype-origin__choice">Tu elección: El Amante</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><button type="button" class="btn">Continuar</button></div>
+  </div>
+  <p class="caption">Vista previa estática del player (390px). En la app real los tabs son interactivos y guardan el slug del arquetipo. Abre con el servidor web en <code>/previews/origen-arquetipo-r9.html</code>.</p>
+</body>
+</html>

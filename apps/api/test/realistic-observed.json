@@ -1,0 +1,2575 @@
+{
+  "MK-S01": {
+    "index": {
+      "name": "Índice de alineación MK",
+      "methodVersion": "ia-mk-cuest@0.1",
+      "kind": "INITIAL",
+      "general": 54.4753,
+      "partial": null,
+      "pillars": {
+        "espiritu": 80.5556,
+        "mente": 39.8148,
+        "cuerpo": 43.0556
+      },
+      "coverage": {
+        "eligible": 20,
+        "required": 20
+      },
+      "pending": [],
+      "answeredAt": "2026-10-13T23:00:21.978Z",
+      "computedAt": "2026-10-13T23:00:33.214Z",
+      "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
+      "delta": null
+    },
+    "proposal": {
+      "engineVersion": "acompanamiento@0.1",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "territory": "MENTALIDAD",
+      "pillar": "MENTE",
+      "links": [
+        {
+          "pillar": "CUERPO",
+          "territory": "MENTALIDAD",
+          "note": "La ocasión usa la capacidad declarada. No crea una segunda acción."
+        }
+      ],
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Preparar una propuesta breve que el equipo pueda revisar.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Claridad. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "La planificación que declaraste es baja. Es un candidato de preparación por aclarar, no una falta de ocasión ni de motivación.",
+          "refs": [
+            "formulario-v1:E-AUD-001!R26"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Hay una meta y faltan mínimos de preparación, ocasión o continuidad.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "barrier",
+          "question": "¿Reconoces que la preparación se dispersa, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        },
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "actionCount": 1,
+      "incompatible": null,
+      "alternative": null,
+      "contextReviewInvitation": false,
+      "barrierCandidate": {
+        "kind": "PLANIFICACION_POR_ACLARAR",
+        "sourceRef": "formulario-v1:E-AUD-001!R26"
+      },
+      "barrierRecognized": null,
+      "urgency": null,
+      "load": {
+        "occasions": 2,
+        "minutesPerOccasion": 45,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "newWorkMinutes": 90,
+        "totalMinutes": 90,
+        "fits": true,
+        "adaptedReview": false
+      },
+      "indexUsed": false,
+      "criterionNote": "Quedó hecho según el estándar que escribiste: Texto de recorrido.",
+      "suggestion": "ON",
+      "familyId": "MEN-EST",
+      "mode": "ESTABILIZACION",
+      "modeStatus": "PROPOSED",
+      "situation": "NONE",
+      "requiresAction": true
+    },
+    "help": {
+      "source": "SYSTEM_GENERATED",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "familyId": "MEN-EST",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "cycleResult": {
+        "text": "Preparar una propuesta breve que el equipo pueda revisar.",
+        "from": "USER_GOAL"
+      },
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Preparar una propuesta breve que el equipo pueda revisar.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Claridad. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "La planificación que declaraste es baja. Es un candidato de preparación por aclarar, no una falta de ocasión ni de motivación.",
+          "refs": [
+            "formulario-v1:E-AUD-001!R26"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Hay una meta y faltan mínimos de preparación, ocasión o continuidad.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "barrier",
+          "question": "¿Reconoces que la preparación se dispersa, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        },
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "mode": {
+        "value": "ESTABILIZACION",
+        "status": "PROPOSED",
+        "territory": "MENTALIDAD",
+        "pillar": "MENTE"
+      },
+      "links": [
+        {
+          "pillar": "CUERPO",
+          "territory": "MENTALIDAD",
+          "note": "La ocasión usa la capacidad declarada. No crea una segunda acción."
+        }
+      ],
+      "action": "Prepara una parte revisable del entregable y protégela en las ocasiones que declaraste.",
+      "artifact": {
+        "kind": "DEFINICION_TERMINADO",
+        "fields": [
+          {
+            "key": "entregable",
+            "label": "Qué se puede revisar",
+            "value": "Preparar una propuesta breve que el equipo pueda revisar.",
+            "pending": false,
+            "source": "DECLARED"
+          },
+          {
+            "key": "primera",
+            "label": "Primera parte",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          }
+        ]
+      },
+      "occasion": {
+        "occasions": 2,
+        "minutesPerOccasion": 45,
+        "weeklyMinutes": 90,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "fits": true,
+        "text": "2 ocasiones de 45 minutos. Revisión 0 minutos. El día es el que elegiste."
+      },
+      "doneWhen": "Quedó hecho según el estándar que escribiste: Texto de recorrido.",
+      "minimumVersion": "Una página o un bloque, sin cerrar el trabajo completo.",
+      "alternative": {
+        "barrier": null,
+        "text": "Si la ocasión no existe, deja el material abierto y mueve solo la fecha futura.",
+        "familyId": null,
+        "requiresApproval": false
+      },
+      "learning": {
+        "question": "¿La preparación hizo avanzar el entregable, o solo ordenó el entorno?",
+        "expectedEvidence": "La parte revisable, separada de si alguien ya la comentó."
+      },
+      "stopIf": [
+        "La carga no cabe en lo declarado"
+      ],
+      "futureEffect": "Confirmar escribe el paso en el futuro del plan. La historia y el índice no se reescriben.",
+      "forbids": [
+        "Inventar un horario",
+        "Exigir el trabajo completo"
+      ],
+      "urgency": null,
+      "adopted": true
+    },
+    "authorship": {
+      "proposal": "SYSTEM_GENERATED",
+      "goal": "USER_AUTHORED",
+      "weekSubstitute": "USER_AUTHORED",
+      "records": "SCRIPTED_SIMULATION"
+    },
+    "planId": "d1615a9b-85e1-4ef7-b8b2-3fcf0ceff9c9",
+    "actionId": "a5f20eb2-dffd-40ba-8ee1-be82d8dbeb69"
+  },
+  "MK-S02": {
+    "index": {
+      "name": "Índice de alineación MK",
+      "methodVersion": "ia-mk-cuest@0.1",
+      "kind": "INITIAL",
+      "general": null,
+      "partial": null,
+      "pillars": {
+        "espiritu": 29.1667,
+        "mente": null,
+        "cuerpo": 58.3333
+      },
+      "coverage": {
+        "eligible": 19,
+        "required": 20
+      },
+      "pending": [
+        "IN7 UNKNOWN"
+      ],
+      "answeredAt": "2026-10-13T23:00:34.112Z",
+      "computedAt": "2026-10-13T23:00:45.307Z",
+      "explanation": "Lectura inicial del cuestionario. Falta cobertura para el general. No es cero.",
+      "delta": null
+    },
+    "proposal": {
+      "engineVersion": "acompanamiento@0.1",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "territory": "MENTALIDAD",
+      "pillar": "ESPIRITU",
+      "links": [
+        {
+          "pillar": "CUERPO",
+          "territory": "MENTALIDAD",
+          "note": "La ocasión usa la capacidad declarada. No crea una segunda acción."
+        }
+      ],
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Aprender qué parte de enseñar escritura le interesa y resulta útil.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Contribución. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "La planificación que declaraste es baja. Es un candidato de preparación por aclarar, no una falta de ocasión ni de motivación.",
+          "refs": [
+            "formulario-v1:E-AUD-001!R26"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "La meta es una candidatura a expansión. Los minutos no demuestran que la prueba sea viable. Preparar no comprueba utilidad.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "barrier",
+          "question": "¿Reconoces que la preparación se dispersa, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        },
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "actionCount": 1,
+      "incompatible": null,
+      "alternative": null,
+      "contextReviewInvitation": false,
+      "barrierCandidate": {
+        "kind": "PLANIFICACION_POR_ACLARAR",
+        "sourceRef": "formulario-v1:E-AUD-001!R26"
+      },
+      "barrierRecognized": null,
+      "urgency": null,
+      "load": {
+        "occasions": 1,
+        "minutesPerOccasion": 45,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "newWorkMinutes": 45,
+        "totalMinutes": 45,
+        "fits": true,
+        "adaptedReview": false
+      },
+      "indexUsed": false,
+      "criterionNote": null,
+      "suggestion": "ON",
+      "familyId": "X-IKIGAI",
+      "mode": "EXPANSION",
+      "modeStatus": "PROVISIONAL",
+      "situation": "NONE",
+      "requiresAction": true
+    },
+    "help": {
+      "source": "SYSTEM_GENERATED",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "familyId": "X-IKIGAI",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "cycleResult": {
+        "text": "Aprender qué parte de enseñar escritura le interesa y resulta útil.",
+        "from": "USER_GOAL"
+      },
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Aprender qué parte de enseñar escritura le interesa y resulta útil.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Contribución. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "La planificación que declaraste es baja. Es un candidato de preparación por aclarar, no una falta de ocasión ni de motivación.",
+          "refs": [
+            "formulario-v1:E-AUD-001!R26"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "La meta es una candidatura a expansión. Los minutos no demuestran que la prueba sea viable. Preparar no comprueba utilidad.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "barrier",
+          "question": "¿Reconoces que la preparación se dispersa, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        },
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "mode": {
+        "value": "EXPANSION",
+        "status": "PROVISIONAL",
+        "territory": "MENTALIDAD",
+        "pillar": "ESPIRITU"
+      },
+      "links": [
+        {
+          "pillar": "CUERPO",
+          "territory": "MENTALIDAD",
+          "note": "La ocasión usa la capacidad declarada. No crea una segunda acción."
+        }
+      ],
+      "action": "Arma una prueba pequeña de la combinación: hipótesis, muestra y qué vas a observar por separado.",
+      "artifact": {
+        "kind": "FICHA_EXPERIMENTO",
+        "fields": [
+          {
+            "key": "hipotesis",
+            "label": "Hipótesis",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          },
+          {
+            "key": "muestra",
+            "label": "Muestra o actividad",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          },
+          {
+            "key": "interes",
+            "label": "Interés o aprendizaje",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          },
+          {
+            "key": "utilidad",
+            "label": "Utilidad para alguien",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          },
+          {
+            "key": "sostenibilidad",
+            "label": "Sostenibilidad",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          }
+        ]
+      },
+      "occasion": {
+        "occasions": 1,
+        "minutesPerOccasion": 45,
+        "weeklyMinutes": 45,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "fits": true,
+        "text": "1 ocasiones de 45 minutos. Revisión 0 minutos. El día es el que elegiste."
+      },
+      "doneWhen": "La ficha existe. Las tres observaciones siguen pendientes hasta que las registres.",
+      "minimumVersion": "La hipótesis y la muestra, aunque falte destinatario.",
+      "alternative": {
+        "barrier": null,
+        "text": "Sin destinatario, la prueba puede terminar igual. Eso no valida demanda ni se anota como rechazo.",
+        "familyId": null,
+        "requiresApproval": false
+      },
+      "learning": {
+        "question": "¿Qué pasó con el interés, con la utilidad y con la sostenibilidad, por separado?",
+        "expectedEvidence": "Observaciones separadas. Un gusto al preparar no es utilidad. Una respuesta sin contenido no es demanda."
+      },
+      "stopIf": [
+        "No hay una combinación o una hipótesis que quieras contrastar"
+      ],
+      "futureEffect": "Confirmar escribe el paso en el futuro del plan. La historia y el índice no se reescriben.",
+      "forbids": [
+        "Monetizar como condición",
+        "Fabricar profesión o demanda",
+        "Subir alineación por cerrar la ficha"
+      ],
+      "urgency": null,
+      "adopted": true
+    },
+    "authorship": {
+      "proposal": "SYSTEM_GENERATED",
+      "goal": "USER_AUTHORED",
+      "weekSubstitute": "USER_AUTHORED",
+      "records": "SCRIPTED_SIMULATION"
+    },
+    "planId": "c65e471d-21d9-4f63-86fb-7a12c969027a",
+    "actionId": "e9656a62-25c1-432a-a44f-b846a6580fa0"
+  },
+  "MK-S03": {
+    "index": {
+      "name": "Índice de alineación MK",
+      "methodVersion": "ia-mk-cuest@0.1",
+      "kind": "INITIAL",
+      "general": 44.5988,
+      "partial": null,
+      "pillars": {
+        "espiritu": 65.2778,
+        "mente": 44.9074,
+        "cuerpo": 23.6111
+      },
+      "coverage": {
+        "eligible": 20,
+        "required": 20
+      },
+      "pending": [],
+      "answeredAt": "2026-10-13T23:00:46.068Z",
+      "computedAt": "2026-10-13T23:00:57.255Z",
+      "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
+      "delta": null
+    },
+    "proposal": {
+      "engineVersion": "acompanamiento@0.1",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "territory": "SALUD_FISICA",
+      "pillar": "CUERPO",
+      "links": [],
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Pedir la hora de control que eligió y preparar la información necesaria.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Cuidado. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "La planificación que declaraste es baja. Es un candidato de preparación por aclarar, no una falta de ocasión ni de motivación.",
+          "refs": [
+            "formulario-v1:E-AUD-001!R26"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Hay una necesidad actual declarada de proteger este asunto o de evitar una acción incompatible.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "barrier",
+          "question": "¿Reconoces que la preparación se dispersa, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        },
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "actionCount": 1,
+      "incompatible": null,
+      "alternative": null,
+      "contextReviewInvitation": false,
+      "barrierCandidate": {
+        "kind": "PLANIFICACION_POR_ACLARAR",
+        "sourceRef": "formulario-v1:E-AUD-001!R26"
+      },
+      "barrierRecognized": null,
+      "urgency": null,
+      "load": {
+        "occasions": 1,
+        "minutesPerOccasion": 30,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "newWorkMinutes": 30,
+        "totalMinutes": 30,
+        "fits": true,
+        "adaptedReview": false
+      },
+      "indexUsed": false,
+      "criterionNote": null,
+      "suggestion": "ON",
+      "familyId": "SAL-CONT",
+      "mode": "CONTENCION",
+      "modeStatus": "PROPOSED",
+      "situation": "NONE",
+      "requiresAction": true
+    },
+    "help": {
+      "source": "SYSTEM_GENERATED",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "familyId": "SAL-CONT",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "cycleResult": {
+        "text": "Pedir la hora de control que eligió y preparar la información necesaria.",
+        "from": "USER_GOAL"
+      },
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Pedir la hora de control que eligió y preparar la información necesaria.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Cuidado. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "La planificación que declaraste es baja. Es un candidato de preparación por aclarar, no una falta de ocasión ni de motivación.",
+          "refs": [
+            "formulario-v1:E-AUD-001!R26"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Hay una necesidad actual declarada de proteger este asunto o de evitar una acción incompatible.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "barrier",
+          "question": "¿Reconoces que la preparación se dispersa, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        },
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "mode": {
+        "value": "CONTENCION",
+        "status": "PROPOSED",
+        "territory": "SALUD_FISICA",
+        "pillar": "CUERPO"
+      },
+      "links": [],
+      "action": "Prepara la gestión que ya elegiste, compatible con el límite vigente, y anota qué no vas a hacer.",
+      "artifact": {
+        "kind": "LISTA",
+        "fields": [
+          {
+            "key": "gestion",
+            "label": "Gestión",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          },
+          {
+            "key": "datos",
+            "label": "Información que vas a llevar",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          },
+          {
+            "key": "fuera",
+            "label": "Qué queda fuera",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          }
+        ]
+      },
+      "occasion": {
+        "occasions": 1,
+        "minutesPerOccasion": 30,
+        "weeklyMinutes": 30,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "fits": true,
+        "text": "1 ocasiones de 30 minutos. Revisión 0 minutos. El día es el que elegiste."
+      },
+      "doneWhen": "La gestión quedó preparada o pedida. No es una prescripción.",
+      "minimumVersion": "La lista de lo que vas a preguntar o el trámite, sin una sesión física.",
+      "alternative": {
+        "barrier": null,
+        "text": "Si el turno cambia, se mueve la ocasión futura. Los días sin ocasión no son incumplimientos.",
+        "familyId": null,
+        "requiresApproval": false
+      },
+      "learning": {
+        "question": "¿La gestión era compatible con el límite que declaraste hoy?",
+        "expectedEvidence": "La gestión preparada. No un diagnóstico ni una progresión física."
+      },
+      "stopIf": [
+        "La acción contradice un límite vigente de este asunto"
+      ],
+      "futureEffect": "Confirmar escribe el paso en el futuro del plan. La historia y el índice no se reescriben.",
+      "forbids": [
+        "Esfuerzo físico",
+        "Dieta",
+        "Suplemento",
+        "Medicación",
+        "Borrar un límite vigente al cerrar la semana"
+      ],
+      "urgency": null,
+      "adopted": true
+    },
+    "authorship": {
+      "proposal": "SYSTEM_GENERATED",
+      "goal": "USER_AUTHORED",
+      "weekSubstitute": "USER_AUTHORED",
+      "records": "SCRIPTED_SIMULATION"
+    },
+    "planId": "552f469b-314a-4edf-aa57-121d11d267fe",
+    "actionId": "fe0a21e1-d87a-4957-9bca-798b1d608254"
+  },
+  "MK-S04": {
+    "index": {
+      "name": "Índice de alineación MK",
+      "methodVersion": "ia-mk-cuest@0.1",
+      "kind": "INITIAL",
+      "general": 67.284,
+      "partial": null,
+      "pillars": {
+        "espiritu": 70.8333,
+        "mente": 71.2963,
+        "cuerpo": 59.7222
+      },
+      "coverage": {
+        "eligible": 20,
+        "required": 20
+      },
+      "pending": [],
+      "answeredAt": "2026-10-13T23:00:58.164Z",
+      "computedAt": "2026-10-13T23:01:09.511Z",
+      "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
+      "delta": null
+    },
+    "proposal": {
+      "engineVersion": "acompanamiento@0.1",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "territory": null,
+      "pillar": null,
+      "links": [],
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Pausar la carga adicional sin perder su plan ni sus decisiones.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Presencia. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Declaraste capacidad cero. No hay una acción ni una fecha de regreso.",
+          "refs": [
+            "PAUSE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "actionCount": 0,
+      "incompatible": null,
+      "alternative": null,
+      "contextReviewInvitation": false,
+      "barrierCandidate": null,
+      "barrierRecognized": null,
+      "urgency": null,
+      "load": {
+        "occasions": 0,
+        "minutesPerOccasion": null,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "newWorkMinutes": null,
+        "totalMinutes": null,
+        "fits": null,
+        "adaptedReview": false
+      },
+      "indexUsed": false,
+      "criterionNote": null,
+      "suggestion": "ON",
+      "familyId": "X-PAUSE",
+      "mode": null,
+      "modeStatus": "UNDETERMINED",
+      "situation": "PAUSE",
+      "requiresAction": false
+    },
+    "help": {
+      "source": "SYSTEM_GENERATED",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "familyId": "X-PAUSE",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "cycleResult": {
+        "text": "Pausar la carga adicional sin perder su plan ni sus decisiones.",
+        "from": "USER_GOAL"
+      },
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Pausar la carga adicional sin perder su plan ni sus decisiones.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Presencia. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Declaraste capacidad cero. No hay una acción ni una fecha de regreso.",
+          "refs": [
+            "PAUSE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "mode": {
+        "value": null,
+        "status": "UNDETERMINED",
+        "territory": null,
+        "pillar": null
+      },
+      "links": [],
+      "action": null,
+      "artifact": {
+        "kind": "NOTA",
+        "fields": [
+          {
+            "key": "motivo",
+            "label": "Por qué pausas, si quieres anotarlo",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          }
+        ]
+      },
+      "occasion": null,
+      "doneWhen": "No aparece una tarea nueva ni un incumplimiento de días sin ocasión.",
+      "minimumVersion": "La pausa, sin texto obligatorio.",
+      "alternative": {
+        "barrier": null,
+        "text": "Puedes volver cuando elijas una carga. Ese regreso no está programado.",
+        "familyId": null,
+        "requiresApproval": false
+      },
+      "learning": {
+        "question": "¿La pausa era lo que necesitabas, o falta aclarar un límite?",
+        "expectedEvidence": "La decisión de pausar. No una racha ni un abandono."
+      },
+      "stopIf": [],
+      "futureEffect": "Confirmar deja el plan en pausa, sin acciones nuevas y sin fecha de regreso.",
+      "forbids": [
+        "Fecha obligatoria de regreso",
+        "Obligaciones retroactivas",
+        "Contención automática"
+      ],
+      "urgency": null,
+      "adopted": true
+    },
+    "authorship": {
+      "proposal": "SYSTEM_GENERATED",
+      "goal": "USER_AUTHORED",
+      "weekSubstitute": "USER_AUTHORED",
+      "records": "SCRIPTED_SIMULATION"
+    },
+    "planId": null,
+    "actionId": null
+  },
+  "MK-S05": {
+    "index": {
+      "name": "Índice de alineación MK",
+      "methodVersion": "ia-mk-cuest@0.1",
+      "kind": "INITIAL",
+      "general": 67.284,
+      "partial": null,
+      "pillars": {
+        "espiritu": 70.8333,
+        "mente": 71.2963,
+        "cuerpo": 59.7222
+      },
+      "coverage": {
+        "eligible": 20,
+        "required": 20
+      },
+      "pending": [],
+      "answeredAt": "2026-10-13T23:01:10.260Z",
+      "computedAt": "2026-10-13T23:01:21.467Z",
+      "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
+      "delta": null
+    },
+    "proposal": {
+      "engineVersion": "acompanamiento@0.1",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "territory": "FINANZAS",
+      "pillar": "MENTE",
+      "links": [
+        {
+          "pillar": "CUERPO",
+          "territory": "FINANZAS",
+          "note": "La ocasión usa la capacidad declarada. No crea una segunda acción."
+        }
+      ],
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Tener una lista propia de obligaciones conocidas y fechas.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Responsabilidad. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Hay una meta y faltan mínimos de preparación, ocasión o continuidad.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "actionCount": 1,
+      "incompatible": null,
+      "alternative": null,
+      "contextReviewInvitation": false,
+      "barrierCandidate": null,
+      "barrierRecognized": null,
+      "urgency": null,
+      "load": {
+        "occasions": 1,
+        "minutesPerOccasion": 40,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "newWorkMinutes": 40,
+        "totalMinutes": 40,
+        "fits": true,
+        "adaptedReview": false
+      },
+      "indexUsed": false,
+      "criterionNote": null,
+      "suggestion": "ON",
+      "familyId": "FIN-EST",
+      "mode": "ESTABILIZACION",
+      "modeStatus": "PROPOSED",
+      "situation": "NONE",
+      "requiresAction": true
+    },
+    "help": {
+      "source": "SYSTEM_GENERATED",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "familyId": "FIN-EST",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "cycleResult": {
+        "text": "Tener una lista propia de obligaciones conocidas y fechas.",
+        "from": "USER_GOAL"
+      },
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Tener una lista propia de obligaciones conocidas y fechas.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Responsabilidad. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Hay una meta y faltan mínimos de preparación, ocasión o continuidad.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "mode": {
+        "value": "ESTABILIZACION",
+        "status": "PROPOSED",
+        "territory": "FINANZAS",
+        "pillar": "MENTE"
+      },
+      "links": [
+        {
+          "pillar": "CUERPO",
+          "territory": "FINANZAS",
+          "note": "La ocasión usa la capacidad declarada. No crea una segunda acción."
+        }
+      ],
+      "action": "Arma un registro de obligaciones conocidas y un recordatorio en una ocasión que sí puedes usar.",
+      "artifact": {
+        "kind": "LISTA",
+        "fields": [
+          {
+            "key": "obligaciones",
+            "label": "Obligaciones",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          },
+          {
+            "key": "fechas",
+            "label": "Fechas conocidas",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          },
+          {
+            "key": "pendientes",
+            "label": "Fechas que faltan",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          }
+        ]
+      },
+      "occasion": {
+        "occasions": 1,
+        "minutesPerOccasion": 40,
+        "weeklyMinutes": 40,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "fits": true,
+        "text": "1 ocasiones de 40 minutos. Revisión 0 minutos. El día es el que elegiste."
+      },
+      "doneWhen": "El registro existe y separa fechas conocidas de fechas pendientes.",
+      "minimumVersion": "Una obligación con su fecha, o con la fecha marcada como pendiente.",
+      "alternative": {
+        "barrier": null,
+        "text": "Si no hay una hora fija por turnos, el recordatorio queda en una ocasión flexible, sin un día inventado.",
+        "familyId": null,
+        "requiresApproval": false
+      },
+      "learning": {
+        "question": "¿El registro te alcanzó para ver la próxima fecha, o todavía falta un documento?",
+        "expectedEvidence": "El registro. Un ingreso distinto no cambia el índice."
+      },
+      "stopIf": [
+        "Se pide invertir o endeudarte para seguir"
+      ],
+      "futureEffect": "Confirmar escribe el paso en el futuro del plan. La historia y el índice no se reescriben.",
+      "forbids": [
+        "Inversión",
+        "Deuda",
+        "Una hora fija para cualquier turno"
+      ],
+      "urgency": null,
+      "adopted": true
+    },
+    "authorship": {
+      "proposal": "SYSTEM_GENERATED",
+      "goal": "USER_AUTHORED",
+      "weekSubstitute": "USER_AUTHORED",
+      "records": "SCRIPTED_SIMULATION"
+    },
+    "planId": "3a1ef545-5477-4943-a6ad-1c2e1f4ddaf9",
+    "actionId": "b2f3d987-9842-4b45-babb-a0633ea75443"
+  },
+  "MK-S06": {
+    "index": {
+      "name": "Índice de alineación MK",
+      "methodVersion": "ia-mk-cuest@0.1",
+      "kind": "INITIAL",
+      "general": 67.284,
+      "partial": null,
+      "pillars": {
+        "espiritu": 70.8333,
+        "mente": 71.2963,
+        "cuerpo": 59.7222
+      },
+      "coverage": {
+        "eligible": 20,
+        "required": 20
+      },
+      "pending": [],
+      "answeredAt": "2026-10-13T23:01:22.250Z",
+      "computedAt": "2026-10-13T23:01:33.348Z",
+      "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
+      "delta": null
+    },
+    "proposal": {
+      "engineVersion": "acompanamiento@0.1",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "territory": "MENTALIDAD",
+      "pillar": "ESPIRITU",
+      "links": [
+        {
+          "pillar": "CUERPO",
+          "territory": "MENTALIDAD",
+          "note": "La ocasión usa la capacidad declarada. No crea una segunda acción."
+        }
+      ],
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Preparar una explicación útil de una tarea del oficio.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Servicio. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "La meta es una candidatura a expansión. Los minutos no demuestran que la prueba sea viable. Preparar no comprueba utilidad.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "actionCount": 1,
+      "incompatible": null,
+      "alternative": null,
+      "contextReviewInvitation": false,
+      "barrierCandidate": null,
+      "barrierRecognized": null,
+      "urgency": null,
+      "load": {
+        "occasions": 1,
+        "minutesPerOccasion": 45,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "newWorkMinutes": 45,
+        "totalMinutes": 45,
+        "fits": true,
+        "adaptedReview": false
+      },
+      "indexUsed": false,
+      "criterionNote": null,
+      "suggestion": "ON",
+      "familyId": "MEN-EXP",
+      "mode": "EXPANSION",
+      "modeStatus": "PROVISIONAL",
+      "situation": "NONE",
+      "requiresAction": true
+    },
+    "help": {
+      "source": "SYSTEM_GENERATED",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "familyId": "MEN-EXP",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "cycleResult": {
+        "text": "Preparar una explicación útil de una tarea del oficio.",
+        "from": "USER_GOAL"
+      },
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Preparar una explicación útil de una tarea del oficio.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Servicio. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "La meta es una candidatura a expansión. Los minutos no demuestran que la prueba sea viable. Preparar no comprueba utilidad.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "mode": {
+        "value": "EXPANSION",
+        "status": "PROVISIONAL",
+        "territory": "MENTALIDAD",
+        "pillar": "ESPIRITU"
+      },
+      "links": [
+        {
+          "pillar": "CUERPO",
+          "territory": "MENTALIDAD",
+          "note": "La ocasión usa la capacidad declarada. No crea una segunda acción."
+        }
+      ],
+      "action": "Prepara la secuencia de una tarea que ya dominas y una forma de comprobar si la explicación se entiende.",
+      "artifact": {
+        "kind": "GUION",
+        "fields": [
+          {
+            "key": "tarea",
+            "label": "Tarea que vas a explicar",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          },
+          {
+            "key": "secuencia",
+            "label": "Secuencia",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          },
+          {
+            "key": "comprobacion",
+            "label": "Cómo sabrás si se entendió",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          },
+          {
+            "key": "destinatario",
+            "label": "Destinatario, si lo hay",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          }
+        ]
+      },
+      "occasion": {
+        "occasions": 1,
+        "minutesPerOccasion": 45,
+        "weeklyMinutes": 45,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "fits": true,
+        "text": "1 ocasiones de 45 minutos. Revisión 0 minutos. El día es el que elegiste."
+      },
+      "doneWhen": "Quedó escrita la secuencia y la comprobación. Preparar el material no prueba que haya sido útil.",
+      "minimumVersion": "La secuencia de una sola tarea, sin destinatario si todavía no hay uno.",
+      "alternative": {
+        "barrier": null,
+        "text": "Si no hay destinatario, preparar el material es un paso distinto. Todavía no prueba utilidad.",
+        "familyId": null,
+        "requiresApproval": false
+      },
+      "learning": {
+        "question": "¿Qué se entendió, y qué solo te quedó claro a ti mientras preparabas?",
+        "expectedEvidence": "La secuencia preparada. La utilidad queda pendiente hasta una observación separada."
+      },
+      "stopIf": [
+        "No hay una tarea que ya domines",
+        "La ocasión no cabe"
+      ],
+      "futureEffect": "Confirmar escribe el paso en el futuro del plan. La historia y el índice no se reescriben.",
+      "forbids": [
+        "Tomar la preparación como utilidad",
+        "Inventar un destinatario",
+        "Exigir que todos los ámbitos estén altos"
+      ],
+      "urgency": null,
+      "adopted": true
+    },
+    "authorship": {
+      "proposal": "SYSTEM_GENERATED",
+      "goal": "USER_AUTHORED",
+      "weekSubstitute": "USER_AUTHORED",
+      "records": "SCRIPTED_SIMULATION"
+    },
+    "planId": "e0d84b10-8b01-4bbf-a843-04c471f34906",
+    "actionId": "0acd1e03-d206-47dd-a8b7-dd367483b660"
+  },
+  "MK-S07": {
+    "index": {
+      "name": "Índice de alineación MK",
+      "methodVersion": "ia-mk-cuest@0.1",
+      "kind": "INITIAL",
+      "general": 67.284,
+      "partial": null,
+      "pillars": {
+        "espiritu": 70.8333,
+        "mente": 71.2963,
+        "cuerpo": 59.7222
+      },
+      "coverage": {
+        "eligible": 20,
+        "required": 20
+      },
+      "pending": [],
+      "answeredAt": "2026-10-13T23:01:34.122Z",
+      "computedAt": "2026-10-13T23:01:45.401Z",
+      "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
+      "delta": null
+    },
+    "proposal": {
+      "engineVersion": "acompanamiento@0.1",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "territory": "RELACIONES",
+      "pillar": "ESPIRITU",
+      "links": [
+        {
+          "pillar": "CUERPO",
+          "territory": "RELACIONES",
+          "note": "La ocasión usa la capacidad declarada. No crea una segunda acción."
+        }
+      ],
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Aclarar el límite que quiere proteger y una salida viable.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Respeto. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Hay una meta y faltan mínimos de preparación, ocasión o continuidad.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "actionCount": 1,
+      "incompatible": null,
+      "alternative": null,
+      "contextReviewInvitation": false,
+      "barrierCandidate": null,
+      "barrierRecognized": null,
+      "urgency": null,
+      "load": {
+        "occasions": 1,
+        "minutesPerOccasion": 20,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "newWorkMinutes": 20,
+        "totalMinutes": 20,
+        "fits": true,
+        "adaptedReview": false
+      },
+      "indexUsed": false,
+      "criterionNote": null,
+      "suggestion": "ON",
+      "familyId": "REL-EST",
+      "mode": "ESTABILIZACION",
+      "modeStatus": "PROPOSED",
+      "situation": "NONE",
+      "requiresAction": true
+    },
+    "help": {
+      "source": "SYSTEM_GENERATED",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "familyId": "REL-EST",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "cycleResult": {
+        "text": "Aclarar el límite que quiere proteger y una salida viable.",
+        "from": "USER_GOAL"
+      },
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Aclarar el límite que quiere proteger y una salida viable.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Respeto. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Hay una meta y faltan mínimos de preparación, ocasión o continuidad.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "mode": {
+        "value": "ESTABILIZACION",
+        "status": "PROPOSED",
+        "territory": "RELACIONES",
+        "pillar": "ESPIRITU"
+      },
+      "links": [
+        {
+          "pillar": "CUERPO",
+          "territory": "RELACIONES",
+          "note": "La ocasión usa la capacidad declarada. No crea una segunda acción."
+        }
+      ],
+      "action": "Escribe el pedido o el cuidado que sería viable para las dos partes, y decide si el contacto cabe ahora.",
+      "artifact": {
+        "kind": "GUION",
+        "fields": [
+          {
+            "key": "pedido",
+            "label": "Pedido o cuidado",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          },
+          {
+            "key": "viabilidad",
+            "label": "Viable, no viable o todavía no lo sé",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          }
+        ]
+      },
+      "occasion": {
+        "occasions": 1,
+        "minutesPerOccasion": 20,
+        "weeklyMinutes": 20,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "fits": true,
+        "text": "1 ocasiones de 20 minutos. Revisión 0 minutos. El día es el que elegiste."
+      },
+      "doneWhen": "Quedó la decisión de viabilidad. El mensaje no se envía si la decisión es no viable o todavía no lo sé.",
+      "minimumVersion": "La decisión escrita, sin enviar nada.",
+      "alternative": {
+        "barrier": null,
+        "text": "Un texto privado cumple el paso si el contacto no es viable.",
+        "familyId": null,
+        "requiresApproval": false
+      },
+      "learning": {
+        "question": "¿La viabilidad quedó decidida, o sigues sin el dato que la cambia?",
+        "expectedEvidence": "La decisión. No un acuerdo que la otra persona no haya dado."
+      },
+      "stopIf": [
+        "La conversación se declaró no segura"
+      ],
+      "futureEffect": "Confirmar escribe el paso en el futuro del plan. La historia y el índice no se reescriben.",
+      "forbids": [
+        "Empezar por confrontar",
+        "Contar el silencio como respuesta favorable"
+      ],
+      "urgency": null,
+      "adopted": true
+    },
+    "authorship": {
+      "proposal": "SYSTEM_GENERATED",
+      "goal": "USER_AUTHORED",
+      "weekSubstitute": "USER_AUTHORED",
+      "records": "SCRIPTED_SIMULATION"
+    },
+    "planId": "e89231ae-652a-40b4-9f0d-4b2780c1ef68",
+    "actionId": "a741de52-5a07-470d-b09b-d2564b999265"
+  },
+  "MK-S08": {
+    "index": {
+      "name": "Índice de alineación MK",
+      "methodVersion": "ia-mk-cuest@0.1",
+      "kind": "INITIAL",
+      "general": 54.4753,
+      "partial": null,
+      "pillars": {
+        "espiritu": 80.5556,
+        "mente": 39.8148,
+        "cuerpo": 43.0556
+      },
+      "coverage": {
+        "eligible": 20,
+        "required": 20
+      },
+      "pending": [],
+      "answeredAt": "2026-10-13T23:01:46.172Z",
+      "computedAt": "2026-10-13T23:01:57.330Z",
+      "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
+      "delta": null
+    },
+    "proposal": {
+      "engineVersion": "acompanamiento@0.1",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "territory": "MENTALIDAD",
+      "pillar": "MENTE",
+      "links": [
+        {
+          "pillar": "CUERPO",
+          "territory": "MENTALIDAD",
+          "note": "La ocasión usa la capacidad declarada. No crea una segunda acción."
+        }
+      ],
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Obtener una propuesta revisable, no completar una lista de preparación.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Concreción. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "La planificación que declaraste es baja. Es un candidato de preparación por aclarar, no una falta de ocasión ni de motivación.",
+          "refs": [
+            "formulario-v1:E-AUD-001!R26"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Hay una meta y faltan mínimos de preparación, ocasión o continuidad.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "barrier",
+          "question": "¿Reconoces que la preparación se dispersa, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        },
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "actionCount": 1,
+      "incompatible": null,
+      "alternative": null,
+      "contextReviewInvitation": false,
+      "barrierCandidate": {
+        "kind": "PLANIFICACION_POR_ACLARAR",
+        "sourceRef": "formulario-v1:E-AUD-001!R26"
+      },
+      "barrierRecognized": null,
+      "urgency": null,
+      "load": {
+        "occasions": 2,
+        "minutesPerOccasion": 45,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "newWorkMinutes": 90,
+        "totalMinutes": 90,
+        "fits": true,
+        "adaptedReview": false
+      },
+      "indexUsed": false,
+      "criterionNote": "Quedó hecho según el estándar que escribiste: Texto de recorrido.",
+      "suggestion": "ON",
+      "familyId": "MEN-EST",
+      "mode": "ESTABILIZACION",
+      "modeStatus": "PROPOSED",
+      "situation": "NONE",
+      "requiresAction": true
+    },
+    "help": {
+      "source": "SYSTEM_GENERATED",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "familyId": "MEN-EST",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "cycleResult": {
+        "text": "Obtener una propuesta revisable, no completar una lista de preparación.",
+        "from": "USER_GOAL"
+      },
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Obtener una propuesta revisable, no completar una lista de preparación.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Concreción. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "La planificación que declaraste es baja. Es un candidato de preparación por aclarar, no una falta de ocasión ni de motivación.",
+          "refs": [
+            "formulario-v1:E-AUD-001!R26"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Hay una meta y faltan mínimos de preparación, ocasión o continuidad.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "barrier",
+          "question": "¿Reconoces que la preparación se dispersa, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        },
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "mode": {
+        "value": "ESTABILIZACION",
+        "status": "PROPOSED",
+        "territory": "MENTALIDAD",
+        "pillar": "MENTE"
+      },
+      "links": [
+        {
+          "pillar": "CUERPO",
+          "territory": "MENTALIDAD",
+          "note": "La ocasión usa la capacidad declarada. No crea una segunda acción."
+        }
+      ],
+      "action": "Prepara una parte revisable del entregable y protégela en las ocasiones que declaraste.",
+      "artifact": {
+        "kind": "DEFINICION_TERMINADO",
+        "fields": [
+          {
+            "key": "entregable",
+            "label": "Qué se puede revisar",
+            "value": "Obtener una propuesta revisable, no completar una lista de preparación.",
+            "pending": false,
+            "source": "DECLARED"
+          },
+          {
+            "key": "primera",
+            "label": "Primera parte",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          }
+        ]
+      },
+      "occasion": {
+        "occasions": 2,
+        "minutesPerOccasion": 45,
+        "weeklyMinutes": 90,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "fits": true,
+        "text": "2 ocasiones de 45 minutos. Revisión 0 minutos. El día es el que elegiste."
+      },
+      "doneWhen": "Quedó hecho según el estándar que escribiste: Texto de recorrido.",
+      "minimumVersion": "Una página o un bloque, sin cerrar el trabajo completo.",
+      "alternative": {
+        "barrier": null,
+        "text": "Si la ocasión no existe, deja el material abierto y mueve solo la fecha futura.",
+        "familyId": null,
+        "requiresApproval": false
+      },
+      "learning": {
+        "question": "¿La preparación hizo avanzar el entregable, o solo ordenó el entorno?",
+        "expectedEvidence": "La parte revisable, separada de si alguien ya la comentó."
+      },
+      "stopIf": [
+        "La carga no cabe en lo declarado"
+      ],
+      "futureEffect": "Confirmar escribe el paso en el futuro del plan. La historia y el índice no se reescriben.",
+      "forbids": [
+        "Inventar un horario",
+        "Exigir el trabajo completo"
+      ],
+      "urgency": null,
+      "adopted": true
+    },
+    "authorship": {
+      "proposal": "SYSTEM_GENERATED",
+      "goal": "USER_AUTHORED",
+      "weekSubstitute": "USER_AUTHORED",
+      "records": "SCRIPTED_SIMULATION"
+    },
+    "planId": "e943933a-9b29-430c-9cd3-e35ffde0fc97",
+    "actionId": "3ea63f1d-c205-43ec-97da-436972c3e418"
+  },
+  "MK-S09": {
+    "index": {
+      "name": "Índice de alineación MK",
+      "methodVersion": "ia-mk-cuest@0.1",
+      "kind": "INITIAL",
+      "general": 49.8457,
+      "partial": null,
+      "pillars": {
+        "espiritu": 80.5556,
+        "mente": 25.9259,
+        "cuerpo": 43.0556
+      },
+      "coverage": {
+        "eligible": 20,
+        "required": 20
+      },
+      "pending": [],
+      "answeredAt": "2026-10-13T23:01:58.124Z",
+      "computedAt": "2026-10-13T23:02:09.401Z",
+      "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
+      "delta": null
+    },
+    "proposal": {
+      "engineVersion": "acompanamiento@0.1",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "territory": "MENTALIDAD",
+      "pillar": "MENTE",
+      "links": [
+        {
+          "pillar": "CUERPO",
+          "territory": "MENTALIDAD",
+          "note": "La ocasión usa la capacidad declarada. No crea una segunda acción."
+        }
+      ],
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Tener un borrador legible que permita pedir comentarios.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Aprendizaje. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "La planificación que declaraste es baja. Es un candidato de preparación por aclarar, no una falta de ocasión ni de motivación.",
+          "refs": [
+            "formulario-v1:E-AUD-001!R26"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Reconociste una barrera para esta conducta. Aceptar el plan no habría bastado para afirmarla.",
+          "refs": [
+            "BARRIER"
+          ]
+        },
+        {
+          "text": "Hay una meta y faltan mínimos de preparación, ocasión o continuidad.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "barrier",
+          "question": "¿Reconoces que la preparación se dispersa, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        },
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        },
+        {
+          "key": "standard",
+          "question": "El estándar semanal pide más de una cosa. ¿Esta semana te quedas con una parte?"
+        }
+      ],
+      "actionCount": 1,
+      "incompatible": null,
+      "alternative": null,
+      "contextReviewInvitation": false,
+      "barrierCandidate": {
+        "kind": "PLANIFICACION_POR_ACLARAR",
+        "sourceRef": "formulario-v1:E-AUD-001!R26"
+      },
+      "barrierRecognized": "PULIR_ANTES_DE_MOSTRAR",
+      "urgency": null,
+      "load": {
+        "occasions": 1,
+        "minutesPerOccasion": 45,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "newWorkMinutes": 45,
+        "totalMinutes": 45,
+        "fits": true,
+        "adaptedReview": false
+      },
+      "indexUsed": false,
+      "criterionNote": null,
+      "suggestion": "ON",
+      "familyId": "MEN-EST",
+      "mode": "ESTABILIZACION",
+      "modeStatus": "PROPOSED",
+      "situation": "NONE",
+      "requiresAction": true
+    },
+    "help": {
+      "source": "SYSTEM_GENERATED",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "familyId": "MEN-EST",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "cycleResult": {
+        "text": "Tener un borrador legible que permita pedir comentarios.",
+        "from": "USER_GOAL"
+      },
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Tener un borrador legible que permita pedir comentarios.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Aprendizaje. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "La planificación que declaraste es baja. Es un candidato de preparación por aclarar, no una falta de ocasión ni de motivación.",
+          "refs": [
+            "formulario-v1:E-AUD-001!R26"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Reconociste una barrera para esta conducta. Aceptar el plan no habría bastado para afirmarla.",
+          "refs": [
+            "BARRIER"
+          ]
+        },
+        {
+          "text": "Hay una meta y faltan mínimos de preparación, ocasión o continuidad.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "barrier",
+          "question": "¿Reconoces que la preparación se dispersa, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        },
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        },
+        {
+          "key": "standard",
+          "question": "El estándar semanal pide más de una cosa. ¿Esta semana te quedas con una parte?"
+        }
+      ],
+      "mode": {
+        "value": "ESTABILIZACION",
+        "status": "PROPOSED",
+        "territory": "MENTALIDAD",
+        "pillar": "MENTE"
+      },
+      "links": [
+        {
+          "pillar": "CUERPO",
+          "territory": "MENTALIDAD",
+          "note": "La ocasión usa la capacidad declarada. No crea una segunda acción."
+        }
+      ],
+      "action": "Define qué necesita una versión legible y redáctala antes del diseño final. Compartirla queda para cuando tú lo elijas.",
+      "artifact": {
+        "kind": "DEFINICION_TERMINADO",
+        "fields": [
+          {
+            "key": "entregable",
+            "label": "Qué se puede revisar",
+            "value": "Tener un borrador legible que permita pedir comentarios.",
+            "pending": false,
+            "source": "DECLARED"
+          },
+          {
+            "key": "primera",
+            "label": "Primera parte",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          }
+        ]
+      },
+      "occasion": {
+        "occasions": 1,
+        "minutesPerOccasion": 45,
+        "weeklyMinutes": 45,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "fits": true,
+        "text": "1 ocasiones de 45 minutos. Revisión 0 minutos. El día es el que elegiste."
+      },
+      "doneWhen": "Hay un borrador que se puede leer sin el formato final.",
+      "minimumVersion": "Una página o un bloque, sin cerrar el trabajo completo.",
+      "alternative": {
+        "barrier": "PULIR_ANTES_DE_MOSTRAR",
+        "text": "Puedes dejar el borrador sin compartirlo. Compartir depende de tu elección y de que el contacto sea viable.",
+        "familyId": null,
+        "requiresApproval": false
+      },
+      "learning": {
+        "question": "¿La preparación hizo avanzar el entregable, o solo ordenó el entorno?",
+        "expectedEvidence": "La parte revisable, separada de si alguien ya la comentó."
+      },
+      "stopIf": [
+        "La carga no cabe en lo declarado"
+      ],
+      "futureEffect": "Confirmar escribe el paso en el futuro del plan. La historia y el índice no se reescriben.",
+      "forbids": [
+        "Inventar un horario",
+        "Exigir el trabajo completo"
+      ],
+      "urgency": null,
+      "adopted": true
+    },
+    "authorship": {
+      "proposal": "SYSTEM_GENERATED",
+      "goal": "USER_AUTHORED",
+      "weekSubstitute": "USER_AUTHORED",
+      "records": "SCRIPTED_SIMULATION"
+    },
+    "planId": "868358fb-c4b4-49f7-866b-8a0c22a3369d",
+    "actionId": "f8b9270b-7ef2-4b33-b467-fe84ae544614"
+  },
+  "MK-S10": {
+    "index": {
+      "name": "Índice de alineación MK",
+      "methodVersion": "ia-mk-cuest@0.1",
+      "kind": "INITIAL",
+      "general": 67.284,
+      "partial": null,
+      "pillars": {
+        "espiritu": 70.8333,
+        "mente": 71.2963,
+        "cuerpo": 59.7222
+      },
+      "coverage": {
+        "eligible": 20,
+        "required": 20
+      },
+      "pending": [],
+      "answeredAt": "2026-10-13T23:02:10.234Z",
+      "computedAt": "2026-10-13T23:02:21.458Z",
+      "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
+      "delta": null
+    },
+    "proposal": {
+      "engineVersion": "acompanamiento@0.1",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "territory": "MENTALIDAD",
+      "pillar": null,
+      "links": [],
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Revisar qué sigue vigente y elegir un paso compatible para esta semana.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Continuidad. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Declaraste que retomas. Se recupera el contexto desde hoy. Volver no es contención ni una pérdida de disciplina.",
+          "refs": [
+            "RETURN"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        },
+        {
+          "key": "goal",
+          "question": "¿Qué meta quieres retomar: entregar, enseñar, cuidar, ordenar, un vínculo u otra?"
+        }
+      ],
+      "actionCount": 1,
+      "incompatible": null,
+      "alternative": null,
+      "contextReviewInvitation": false,
+      "barrierCandidate": null,
+      "barrierRecognized": null,
+      "urgency": null,
+      "load": {
+        "occasions": 1,
+        "minutesPerOccasion": 30,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "newWorkMinutes": 30,
+        "totalMinutes": 30,
+        "fits": true,
+        "adaptedReview": false
+      },
+      "indexUsed": false,
+      "criterionNote": null,
+      "suggestion": "ON",
+      "familyId": "X-RETURN",
+      "mode": null,
+      "modeStatus": "UNDETERMINED",
+      "situation": "RETURN",
+      "requiresAction": true
+    },
+    "help": {
+      "source": "SYSTEM_GENERATED",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "familyId": "X-RETURN",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "cycleResult": {
+        "text": "Revisar qué sigue vigente y elegir un paso compatible para esta semana.",
+        "from": "USER_GOAL"
+      },
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Revisar qué sigue vigente y elegir un paso compatible para esta semana.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Continuidad. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Declaraste que retomas. Se recupera el contexto desde hoy. Volver no es contención ni una pérdida de disciplina.",
+          "refs": [
+            "RETURN"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        },
+        {
+          "key": "goal",
+          "question": "¿Qué meta quieres retomar: entregar, enseñar, cuidar, ordenar, un vínculo u otra?"
+        }
+      ],
+      "mode": {
+        "value": null,
+        "status": "UNDETERMINED",
+        "territory": "MENTALIDAD",
+        "pillar": null
+      },
+      "links": [],
+      "action": "Recupera la meta, la dirección y los límites, y elige qué conservar, cambiar o dejar en pausa desde hoy.",
+      "artifact": {
+        "kind": "NOTA",
+        "fields": [
+          {
+            "key": "vigente",
+            "label": "Qué sigue vigente",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          },
+          {
+            "key": "cambia",
+            "label": "Qué cambia desde hoy",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          },
+          {
+            "key": "pausa",
+            "label": "Qué queda en pausa",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          }
+        ]
+      },
+      "occasion": {
+        "occasions": 1,
+        "minutesPerOccasion": 30,
+        "weeklyMinutes": 30,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "fits": true,
+        "text": "1 ocasiones de 30 minutos. Revisión 0 minutos. El día es el que elegiste."
+      },
+      "doneWhen": "Confirmaste el ajuste del futuro. Los registros y la lectura anterior siguen en su fecha.",
+      "minimumVersion": "La elección de conservar, cambiar o pausar, aunque la meta siga por aclarar.",
+      "alternative": {
+        "barrier": null,
+        "text": "Si falta el contexto, se pregunta antes de proponer un modo. No se inventan incumplimientos.",
+        "familyId": null,
+        "requiresApproval": false
+      },
+      "learning": {
+        "question": "¿Qué del plan anterior sigue siendo compatible con la capacidad de ahora?",
+        "expectedEvidence": "La decisión de hoy. La lectura anterior no se presenta como una medición nueva."
+      },
+      "stopIf": [
+        "Falta la disponibilidad actual"
+      ],
+      "futureEffect": "Confirmar reorganiza solo el futuro, desde la fecha de la confirmación. Los días anteriores no se regeneran.",
+      "forbids": [
+        "Regenerar obligaciones pasadas",
+        "Aplicar un cierre atrasado",
+        "Pasar a contención por haber faltado"
+      ],
+      "urgency": null,
+      "adopted": true
+    },
+    "authorship": {
+      "proposal": "SYSTEM_GENERATED",
+      "goal": "USER_AUTHORED",
+      "weekSubstitute": "USER_AUTHORED",
+      "records": "SCRIPTED_SIMULATION"
+    },
+    "planId": "80d5fbf4-0747-475e-9626-5e42329d80aa",
+    "actionId": "979968eb-8c26-428d-9ae0-d4077d4efd52"
+  },
+  "MK-S11": {
+    "index": {
+      "name": "Índice de alineación MK",
+      "methodVersion": "ia-mk-cuest@0.1",
+      "kind": "INITIAL",
+      "general": 54.4753,
+      "partial": null,
+      "pillars": {
+        "espiritu": 80.5556,
+        "mente": 39.8148,
+        "cuerpo": 43.0556
+      },
+      "coverage": {
+        "eligible": 20,
+        "required": 20
+      },
+      "pending": [],
+      "answeredAt": "2026-10-13T23:02:22.353Z",
+      "computedAt": "2026-10-13T23:02:33.516Z",
+      "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
+      "delta": null
+    },
+    "proposal": {
+      "engineVersion": "acompanamiento@0.1",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "territory": "RELACIONES",
+      "pillar": "ESPIRITU",
+      "links": [
+        {
+          "pillar": "CUERPO",
+          "territory": "RELACIONES",
+          "note": "La ocasión usa la capacidad declarada. No crea una segunda acción."
+        }
+      ],
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Elegir una acción viable de presencia en el vínculo que él reconoce.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Presencia. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "La planificación que declaraste es baja. Es un candidato de preparación por aclarar, no una falta de ocasión ni de motivación.",
+          "refs": [
+            "formulario-v1:E-AUD-001!R26"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Hay una meta y faltan mínimos de preparación, ocasión o continuidad.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "barrier",
+          "question": "¿Reconoces que la preparación se dispersa, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        },
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "actionCount": 1,
+      "incompatible": null,
+      "alternative": null,
+      "contextReviewInvitation": false,
+      "barrierCandidate": {
+        "kind": "PLANIFICACION_POR_ACLARAR",
+        "sourceRef": "formulario-v1:E-AUD-001!R26"
+      },
+      "barrierRecognized": null,
+      "urgency": null,
+      "load": {
+        "occasions": 1,
+        "minutesPerOccasion": 30,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "newWorkMinutes": 30,
+        "totalMinutes": 30,
+        "fits": true,
+        "adaptedReview": false
+      },
+      "indexUsed": false,
+      "criterionNote": null,
+      "suggestion": "ON",
+      "familyId": "REL-EST",
+      "mode": "ESTABILIZACION",
+      "modeStatus": "PROPOSED",
+      "situation": "NONE",
+      "requiresAction": true
+    },
+    "help": {
+      "source": "SYSTEM_GENERATED",
+      "rulesVersion": "reglas-acompanamiento@0.1",
+      "catalogVersion": "catalogo-acompanamiento@0.1",
+      "familyId": "REL-EST",
+      "templateVersion": "catalogo-acompanamiento@0.1",
+      "cycleResult": {
+        "text": "Elegir una acción viable de presencia en el vínculo que él reconoce.",
+        "from": "USER_GOAL"
+      },
+      "reasons": [
+        {
+          "text": "La meta que escribiste: Elegir una acción viable de presencia en el vínculo que él reconoce.",
+          "refs": [
+            "USER_GOAL"
+          ]
+        },
+        {
+          "text": "El valor elegido es Presencia. Orienta la razón y no decide por ti.",
+          "refs": [
+            "VALOR"
+          ]
+        },
+        {
+          "text": "La planificación que declaraste es baja. Es un candidato de preparación por aclarar, no una falta de ocasión ni de motivación.",
+          "refs": [
+            "formulario-v1:E-AUD-001!R26"
+          ]
+        },
+        {
+          "text": "Declaraste que postergas esperando el momento perfecto. Es un candidato para esta meta, no un diagnóstico.",
+          "refs": [
+            "formulario-v1:E-PER-000!R134"
+          ]
+        },
+        {
+          "text": "Hay una meta y faltan mínimos de preparación, ocasión o continuidad.",
+          "refs": [
+            "MODE"
+          ]
+        }
+      ],
+      "missing": [
+        {
+          "key": "barrier",
+          "question": "¿Reconoces que la preparación se dispersa, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        },
+        {
+          "key": "postpone",
+          "question": "¿Esa espera está desplazando esta entrega, no la reconoces, es otra cosa, o todavía no lo sabes?"
+        }
+      ],
+      "mode": {
+        "value": "ESTABILIZACION",
+        "status": "PROPOSED",
+        "territory": "RELACIONES",
+        "pillar": "ESPIRITU"
+      },
+      "links": [
+        {
+          "pillar": "CUERPO",
+          "territory": "RELACIONES",
+          "note": "La ocasión usa la capacidad declarada. No crea una segunda acción."
+        }
+      ],
+      "action": "Escribe el pedido o el cuidado que sería viable para las dos partes, y decide si el contacto cabe ahora.",
+      "artifact": {
+        "kind": "GUION",
+        "fields": [
+          {
+            "key": "pedido",
+            "label": "Pedido o cuidado",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          },
+          {
+            "key": "viabilidad",
+            "label": "Viable, no viable o todavía no lo sé",
+            "value": null,
+            "pending": true,
+            "source": "PENDING"
+          }
+        ]
+      },
+      "occasion": {
+        "occasions": 1,
+        "minutesPerOccasion": 30,
+        "weeklyMinutes": 30,
+        "maintenanceMinutes": 0,
+        "reviewMinutes": 0,
+        "reviewIsEstimate": false,
+        "fits": true,
+        "text": "1 ocasiones de 30 minutos. Revisión 0 minutos. El día es el que elegiste."
+      },
+      "doneWhen": "Quedó la decisión de viabilidad. El mensaje no se envía si la decisión es no viable o todavía no lo sé.",
+      "minimumVersion": "La decisión escrita, sin enviar nada.",
+      "alternative": {
+        "barrier": null,
+        "text": "Un texto privado cumple el paso si el contacto no es viable.",
+        "familyId": null,
+        "requiresApproval": false
+      },
+      "learning": {
+        "question": "¿La viabilidad quedó decidida, o sigues sin el dato que la cambia?",
+        "expectedEvidence": "La decisión. No un acuerdo que la otra persona no haya dado."
+      },
+      "stopIf": [
+        "La conversación se declaró no segura"
+      ],
+      "futureEffect": "Confirmar escribe el paso en el futuro del plan. La historia y el índice no se reescriben.",
+      "forbids": [
+        "Empezar por confrontar",
+        "Contar el silencio como respuesta favorable"
+      ],
+      "urgency": null,
+      "adopted": true
+    },
+    "authorship": {
+      "proposal": "SYSTEM_GENERATED",
+      "goal": "USER_AUTHORED",
+      "weekSubstitute": "USER_AUTHORED",
+      "records": "SCRIPTED_SIMULATION"
+    },
+    "planId": "0ae98eed-f766-4fe7-ba5e-7229dfc9ffc0",
+    "actionId": "87e56f53-df06-42ef-ab87-38b9368d391a"
+  },
+  "MK-S12": {
+    "before": {
+      "name": "Índice de alineación MK",
+      "methodVersion": "ia-mk-cuest@0.1",
+      "kind": "INITIAL",
+      "general": null,
+      "partial": null,
+      "pillars": {
+        "espiritu": null,
+        "mente": null,
+        "cuerpo": null
+      },
+      "coverage": {
+        "eligible": 8,
+        "required": 20
+      },
+      "pending": [
+        "E62 ANCLAJES_OCULTOS",
+        "E63 ANCLAJES_OCULTOS",
+        "I73 OPCIONES_SIN_SIGNIFICADO",
+        "I74 OPCIONES_SIN_SIGNIFICADO",
+        "E60 ANCLAJES_OCULTOS",
+        "I77 OPCIONES_SIN_SIGNIFICADO",
+        "E8 ETIQUETAS_GENERICAS_CONTRADICTORIAS",
+        "E19 ETIQUETAS_GENERICAS_CONTRADICTORIAS",
+        "I80 OPCIONES_SIN_SIGNIFICADO",
+        "I76 OPCIONES_SIN_SIGNIFICADO",
+        "I86 OPCIONES_SIN_SIGNIFICADO",
+        "E57 ANCLAJES_OCULTOS"
+      ],
+      "answeredAt": "2026-10-13T23:02:34.237Z",
+      "computedAt": "2026-10-13T23:02:34.384Z",
+      "explanation": "Lectura inicial del cuestionario. Falta cobertura para el general. No es cero.",
+      "delta": null
+    },
+    "after": {
+      "name": "Índice de alineación MK",
+      "methodVersion": "ia-mk-cuest@0.1",
+      "kind": "RECONSTRUCTED",
+      "general": 54.4753,
+      "partial": null,
+      "pillars": {
+        "espiritu": 80.5556,
+        "mente": 39.8148,
+        "cuerpo": 43.0556
+      },
+      "coverage": {
+        "eligible": 20,
+        "required": 20
+      },
+      "pending": [],
+      "answeredAt": "2026-10-13T23:02:34.391Z",
+      "computedAt": "2026-10-13T23:02:34.438Z",
+      "explanation": "Reconstrucción de la captura. No se presenta como mejora frente a una captura que no era elegible.",
+      "delta": null
+    },
+    "authorship": {
+      "seed": "SCRIPTED_SIMULATION",
+      "reconfirm": "USER_AUTHORED",
+      "reading": "SYSTEM_GENERATED"
+    }
+  }
+}

@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { MemberAccessService } from './member-access';
 import { RolesGuard } from './roles.guard';
 import { SubscriptionGuard } from './subscription.guard';
 import { MailModule } from '../mail/mail.module';
@@ -20,12 +21,13 @@ import { MailModule } from '../mail/mail.module';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtAuthGuard, SubscriptionGuard, RolesGuard],
+  providers: [AuthService, JwtAuthGuard, SubscriptionGuard, RolesGuard, MemberAccessService],
   exports: [
     AuthService,
     JwtAuthGuard,
     SubscriptionGuard,
     RolesGuard,
+    MemberAccessService,
     JwtModule,
   ],
 })

@@ -12,9 +12,9 @@ import {
   MOTION_EASE,
   MOTION_SESSION,
 } from '@/components/motion/tokens';
-import { apiDiagnosticProgress, type DiagnosticProgressDto } from '@/lib/api';
+import { apiDiagnosticProgress, apiDiagnosticRestart, type DiagnosticProgressDto } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth-storage';
-import { isFounderAccessPhase } from '@/lib/product-phase';
+import { canUseMemberProduct } from '@/lib/member-access';
 
 const DIAGNOSTIC_IN_PROGRESS_STEPS = new Set([
   'TERMS_PENDING',
@@ -22,14 +22,15 @@ const DIAGNOSTIC_IN_PROGRESS_STEPS = new Set([
   'FASE1_EN_CURSO',
 ]);
 
-// Future auditorias — locked, pending client approval
-const FUTURE_AUDITORIAS = [
-  { id: 'aud-2', num: '02', name: 'Auditoría II', sub: 'Propósito e identidad avanzada' },
-  { id: 'aud-3', num: '03', name: 'Auditoría III', sub: 'Entorno y relaciones' },
-  { id: 'aud-4', num: '04', name: 'Auditoría IV', sub: 'Soberanía financiera' },
-];
-
 const UNLOCK_KEY = 'mk_ruta_unlock_seen';
+
+function fichaStatus(status: string): string {
+  if (status === 'COMPLETE') return 'Terminada';
+  if (status === 'IN_PROGRESS') return 'En progreso';
+  if (status === 'AVAILABLE') return 'Disponible';
+  if (status === 'LOCKED') return 'Bloqueada';
+  return 'Pendiente';
+}
 
 export function RutaContent() {
   const { status, user } = useAuthSession();
@@ -56,9 +57,12 @@ export function RutaContent() {
   }, [status, user]);
 
   const step = user?.onboardingStep ?? 'TERMS_PENDING';
-  const isInProgress = !isFounderAccessPhase() && DIAGNOSTIC_IN_PROGRESS_STEPS.has(step);
+  const canUseProduct = canUseMemberProduct(user);
+  const isInProgress = canUseProduct && DIAGNOSTIC_IN_PROGRESS_STEPS.has(step);
   const isComplete = step === 'PROFILE_COMPLETE' || step === 'BLUEPRINT_READY';
   const auditoria1Pct = progress?.completionPct ?? 0;
+  const hasStarted =
+    auditoria1Pct > 0 || (progress?.modules.some((m) => m.answeredQuestions > 0) ?? false);
 
   useEffect(() => {
     if (!isComplete || reduced) return;
@@ -73,7 +77,7 @@ export function RutaContent() {
     }
   }, [isComplete, reduced]);
 
-  if (isFounderAccessPhase() && !isComplete) {
+  if (!canUseProduct) {
     return (
       <div className="mk-dashboard">
         <AppReveal active={entrance}>
@@ -93,131 +97,55 @@ export function RutaContent() {
     );
   }
 
+  async function restart() {
+    const token = getAccessToken();
+    if (!token) return;
+    await apiDiagnosticRestart(token);
+    const next = await apiDiagnosticProgress(token);
+    setProgress(next);
+  }
+
   return (
     <div className="mk-dashboard">
       <AppReveal active={entrance}>
         <div>
-          <p className="mk-section-eyebrow">SISTEMA DE AUDITORÍAS</p>
-          <h2 style={{ fontFamily: 'var(--font-display,sans-serif)', fontSize: '1.75rem', fontWeight: 800, margin: '0.25rem 0 0.5rem', lineHeight: 1.1 }}>
-            Tu Ruta MK
-          </h2>
+          <p className="mk-section-eyebrow">RUTA MK</p>
+          <h2 className="mk-page-title">Fichas de esta cuenta</h2>
           <p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.45)', fontFamily: 'var(--font-hanken,system-ui)', lineHeight: 1.6, margin: 0 }}>
-            Cada auditoría revela una capa más del sistema. Completa en orden.
+            El orden lo marca el servidor. Una ficha bloqueada espera a la anterior.
           </p>
         </div>
       </AppReveal>
 
-      <div className="mk-ruta-ladder">
-        <motion.span
-          className="mk-ruta-ladder__line"
-          aria-hidden
-          initial={reduced || !entrance ? false : { scaleY: 0 }}
-          animate={{ scaleY: 1 }}
-          transition={{
-            type: 'tween',
-            duration: APP_MOTION.duration.reveal,
-            ease: MOTION_EASE.enter,
-            delay: entrance ? 0.08 : 0,
-          }}
-          style={{ transformOrigin: 'top center' }}
-        />
-
-        <AppReveal active={entrance} delay={APP_MOTION.stagger.base}>
-          <div
-            className={`mk-ruta-card${isComplete ? ' mk-ruta-card--done' : ''}${
-              unlockPulse ? ' mk-ruta-card--unlock' : ''
-            }`}
-          >
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+        {(progress?.modules ?? []).map((mod, index) => (
+          <div key={mod.slug} className={`mk-ruta-card${mod.status === 'COMPLETE' ? ' mk-ruta-card--done' : ''}${mod.status === 'LOCKED' ? ' mk-ruta-card--locked' : ''}`}>
             <div className="mk-ruta-card__header">
               <div>
-                <p className="mk-ruta-card__eyebrow">01</p>
-                <h3 className="mk-ruta-card__name">Auditoría Inicial</h3>
-                <p className="mk-ruta-card__sub">Mentalidad · Hábitos · Entorno · Finanzas · Relaciones</p>
+                <p className="mk-ruta-card__eyebrow">{String(index + 1).padStart(2, '0')}</p>
+                <h3 className="mk-ruta-card__name">{mod.titleEs}</h3>
               </div>
-              <div className={`mk-ruta-card__status-badge${isComplete ? ' mk-ruta-card__status-badge--done' : ''}`}>
-                {isComplete ? 'Completada' : isInProgress ? 'En progreso' : 'Disponible'}
-              </div>
-            </div>
-
-            {loaded && progress?.modules && progress.modules.length > 0 && (
-              <div className="mk-ruta-card__modules">
-                {progress.modules.map((mod) => {
-                  const modPct = mod.totalQuestions > 0
-                    ? Math.round((mod.answeredQuestions / mod.totalQuestions) * 100)
-                    : 0;
-                  return (
-                    <div key={mod.slug} className="mk-ruta-module-row">
-                      {mod.iconKey && (
-                        <AppIcon name={mod.iconKey as import('@/components/icons/registry').AppIconName} size={14} />
-                      )}
-                      <span className="mk-ruta-module-row__name">{mod.titleEs}</span>
-                      <span className={`mk-ruta-module-row__pct${mod.status === 'COMPLETE' ? ' mk-ruta-module-row__pct--done' : ''}`}>
-                        {mod.status === 'COMPLETE'
-                          ? '✓'
-                          : mod.status === 'LOCKED' || mod.status === 'AVAILABLE'
-                            ? '—'
-                            : `${modPct}%`}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-
-            <ProgressReveal
-              value={Math.min(100, auditoria1Pct)}
-              className="mk-ruta-card__track"
-              fillClassName="mk-ruta-card__fill"
-              startWhen="mount"
-            />
-
-            {isInProgress && (
-              <Link href="/diagnostico" className="mk-btn-primary" style={{ marginTop: '0.75rem', display: 'block', textAlign: 'center' }}>
-                Continuar auditoría →
-              </Link>
-            )}
-          </div>
-        </AppReveal>
-
-        <AppReveal active={entrance} delay={APP_MOTION.stagger.base * 2}>
-          <div>
-            <p className="mk-section-eyebrow" style={{ marginBottom: '0.75rem' }}>PRÓXIMAS AUDITORÍAS</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-              {FUTURE_AUDITORIAS.map((a) => (
-                <div key={a.id} className="mk-ruta-card mk-ruta-card--locked">
-                  <div className="mk-ruta-card__header">
-                    <div>
-                      <p className="mk-ruta-card__eyebrow">{a.num}</p>
-                      <h3 className="mk-ruta-card__name">{a.name}</h3>
-                      <p className="mk-ruta-card__sub">{a.sub}</p>
-                    </div>
-                    <div className="mk-ruta-card__status-badge mk-ruta-card__status-badge--locked">
-                      Bloqueada
-                    </div>
-                  </div>
-                  <div className="mk-ruta-card__lock-note">
-                    Pendiente aprobación
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </AppReveal>
-
-        <AppReveal active={entrance} delay={APP_MOTION.stagger.base * 3}>
-          <div className="mk-ruta-card mk-ruta-card--locked" style={{ borderColor: 'rgba(201,162,74,0.2)' }}>
-            <div className="mk-ruta-card__header">
-              <div>
-                <p className="mk-ruta-card__eyebrow" style={{ color: 'rgba(201,162,74,0.5)' }}>BLUEPRINT</p>
-                <h3 className="mk-ruta-card__name">Plan de 90 Días</h3>
-                <p className="mk-ruta-card__sub">Fortalezas · Cuello de botella · Prioridades</p>
-              </div>
-              <div className="mk-ruta-card__status-badge mk-ruta-card__status-badge--locked">
-                Próximamente
+              <div className={`mk-ruta-card__status-badge${mod.status === 'COMPLETE' ? ' mk-ruta-card__status-badge--done' : ''}${mod.status === 'LOCKED' ? ' mk-ruta-card__status-badge--locked' : ''}`}>
+                {fichaStatus(mod.status)}
               </div>
             </div>
+            {mod.status === 'LOCKED' ? (
+              <div className="mk-ruta-card__lock-note">La ficha anterior no está terminada.</div>
+            ) : null}
+            <p className="mk-ruta-card__sub">{mod.answeredQuestions} de {mod.totalQuestions}</p>
           </div>
-        </AppReveal>
+        ))}
+      </div>
+
+      <div className="mk-form__actions">
+        <Link href="/diagnostico" className="mk-btn-primary">
+          {hasStarted ? 'Continuar' : 'Comenzar'}
+        </Link>
+        {isComplete ? <Link href="/proposito" className="mk-btn-ghost">Hoja de ruta</Link> : null}
+        {isComplete ? <Link href="/planes" className="mk-btn-ghost">Plan vigente</Link> : null}
+        <button type="button" className="mk-btn-ghost" onClick={() => { void restart(); }}>
+          Empezar otra sesión
+        </button>
       </div>
     </div>
   );

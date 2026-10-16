@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
-import { redirect } from 'next/navigation';
-import { isEarlyAccessMode } from '@/lib/product-phase';
+import { DiagnosticAccessGate } from '@/components/diagnostico/DiagnosticAccessGate';
 import { buildPageMetadata } from '@/lib/seo';
+import '../ikigai/ikigai.css';
 
 export const metadata = buildPageMetadata({
   title: 'Diagnóstico',
@@ -12,10 +12,6 @@ export const metadata = buildPageMetadata({
 
 /** Full-screen cinematic shell — no public nav, no footer. */
 export default function DiagnosticoLayout({ children }: { children: ReactNode }) {
-  if (isEarlyAccessMode()) {
-    redirect('/panel');
-  }
-
   return (
     <div
       className="dk-shell"
@@ -29,7 +25,7 @@ export default function DiagnosticoLayout({ children }: { children: ReactNode })
         overflow: 'hidden',
       }}
     >
-      {children}
+      <DiagnosticAccessGate>{children}</DiagnosticAccessGate>
     </div>
   );
 }

@@ -18,6 +18,7 @@ import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
 import { BillingModule } from './billing/billing.module';
 import { DiagnosticModule } from './diagnostic/diagnostic.module';
+import { JourneyModule } from './journey/journey.module';
 import { LabModule } from './lab/lab.module';
 import { IkigaiModule } from './ikigai/ikigai.module';
 import { HealthController } from './health/health.controller';
@@ -36,7 +37,7 @@ import { PrismaModule } from './prisma/prisma.module';
       {
         name: 'default',
         ttl: 60_000,
-        limit: 100,
+        limit: Number(process.env.MK_THROTTLE_DEFAULT_LIMIT ?? 100) || 100,
       },
       {
         name: 'auth',
@@ -51,6 +52,7 @@ import { PrismaModule } from './prisma/prisma.module';
     AdminModule,
     BillingModule,
     DiagnosticModule,
+    JourneyModule,
     LabModule,
     IkigaiModule,
   ],

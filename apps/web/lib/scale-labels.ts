@@ -31,8 +31,9 @@ export function inferScaleLabel(
 export function resolveScaleLabel(
   opt: AnswerOptionDto,
   scaleType: 'BEHAVIORAL' | 'FREQUENCY' | null | undefined,
+  ends?: { low: string; high: string },
 ): string {
   if (!isBareScaleLabel(opt.textEs, opt.order)) return opt.textEs;
-  if (opt.order === 1 || opt.order === 5) return opt.textEs;
-  return inferScaleLabel(opt.order, scaleType);
+  // Bare numbers stay numbers. Invented middles contradicted descending anchors.
+  return String(opt.order);
 }

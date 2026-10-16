@@ -1,0 +1,1021 @@
+{
+  "version": "formulario-completo@5",
+  "answers": {
+    "formulario-v1:E-AUD-001!R6": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R7": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R8": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R9": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R10": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R16": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R17": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R18": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R19": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R20": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R26": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R27": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R28": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R29": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R30": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R37": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R38": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R39": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R40": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R46": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R47": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R48": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R49": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R56": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R57": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R59": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R60": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R62": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R63": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R65": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R66": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R67": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-AUD-001!R68": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-001!R6": {
+      "kind": "text",
+      "value": "1"
+    },
+    "formulario-v1:F-RAD-001!R7": {
+      "kind": "choice",
+      "value": "Mujer"
+    },
+    "formulario-v1:F-RAD-001!R8": {
+      "kind": "text",
+      "value": "120"
+    },
+    "formulario-v1:F-RAD-001!R9": {
+      "kind": "text",
+      "value": "35"
+    },
+    "formulario-v1:F-RAD-001!R10": {
+      "kind": "text",
+      "value": "0"
+    },
+    "formulario-v1:F-RAD-001!R11": {
+      "kind": "text",
+      "value": "40"
+    },
+    "formulario-v1:F-RAD-001!R12": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:F-RAD-001!R18": {
+      "kind": "choice",
+      "value": "Cardiovascular"
+    },
+    "formulario-v1:F-RAD-001!R19": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:F-RAD-001!R20": {
+      "kind": "choice",
+      "value": "Sí"
+    },
+    "formulario-v1:F-RAD-001!R21": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:F-RAD-001!R22": {
+      "kind": "choice",
+      "value": "Sí"
+    },
+    "formulario-v1:F-RAD-001!R23": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:F-RAD-001!R24": {
+      "kind": "choice",
+      "value": "Espalda"
+    },
+    "formulario-v1:F-RAD-001!R25": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:F-RAD-001!R26": {
+      "kind": "text",
+      "value": "0"
+    },
+    "formulario-v1:F-RAD-001!R27": {
+      "kind": "choice",
+      "value": "Sí"
+    },
+    "formulario-v1:F-RAD-001!R28": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:F-RAD-001!R34": {
+      "kind": "choice",
+      "value": "Regular"
+    },
+    "formulario-v1:F-RAD-001!R35": {
+      "kind": "text",
+      "value": "1"
+    },
+    "formulario-v1:F-RAD-001!R36": {
+      "kind": "choice",
+      "value": "Azúcar"
+    },
+    "formulario-v1:F-RAD-001!R37": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:F-RAD-001!R38": {
+      "kind": "choice",
+      "value": "Ansiedad"
+    },
+    "formulario-v1:F-RAD-001!R39": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:F-RAD-001!R40": {
+      "kind": "choice",
+      "value": "Sí"
+    },
+    "formulario-v1:F-RAD-001!R41": {
+      "kind": "choice",
+      "value": "Sí"
+    },
+    "formulario-v1:F-RAD-001!R42": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:F-RAD-001!R48": {
+      "kind": "choice",
+      "value": "Sí"
+    },
+    "formulario-v1:F-RAD-001!R49": {
+      "kind": "choice",
+      "value": "Cardio"
+    },
+    "formulario-v1:F-RAD-001!R50": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:F-RAD-001!R52": {
+      "kind": "choice",
+      "value": "2 x semana"
+    },
+    "formulario-v1:F-RAD-001!R53": {
+      "kind": "text",
+      "value": "10"
+    },
+    "formulario-v1:F-RAD-001!R54": {
+      "kind": "choice",
+      "value": "Sí"
+    },
+    "formulario-v1:F-RAD-001!R55": {
+      "kind": "choice",
+      "value": "Más o menos"
+    },
+    "formulario-v1:F-RAD-001!R61": {
+      "kind": "text",
+      "value": "8"
+    },
+    "formulario-v1:F-RAD-001!R62": {
+      "kind": "choice",
+      "value": "Media"
+    },
+    "formulario-v1:F-RAD-001!R63": {
+      "kind": "choice",
+      "value": "Usualmente"
+    },
+    "formulario-v1:F-RAD-001!R64": {
+      "kind": "choice",
+      "value": "Medio"
+    },
+    "formulario-v1:F-RAD-001!R65": {
+      "kind": "choice",
+      "value": "Dinero"
+    },
+    "formulario-v1:F-RAD-001!R68": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:F-RAD-001!R74": {
+      "kind": "choice",
+      "value": "Regular"
+    },
+    "formulario-v1:F-RAD-001!R75": {
+      "kind": "choice",
+      "value": "Más o menos"
+    },
+    "formulario-v1:F-RAD-001!R76": {
+      "kind": "choice",
+      "value": "Más o menos"
+    },
+    "formulario-v1:F-RAD-001!R77": {
+      "kind": "choice",
+      "value": "Más o menos"
+    },
+    "formulario-v1:F-RAD-001!R78": {
+      "kind": "choice",
+      "value": "Más o menos"
+    },
+    "formulario-v1:F-RAD-001!R79": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:F-RAD-001!R86": {
+      "kind": "choice",
+      "value": "Atlético"
+    },
+    "formulario-v1:F-RAD-001!R87": {
+      "kind": "choice",
+      "value": "Déficit Enfocado"
+    },
+    "formulario-v1:F-RAD-001!R89": {
+      "kind": "choice",
+      "value": "2 x semana"
+    },
+    "formulario-v1:F-RAD-001!R90": {
+      "kind": "choice",
+      "value": "Gimnasio básico"
+    },
+    "formulario-v1:F-RAD-001!R91": {
+      "kind": "choice",
+      "value": "Intermedio"
+    },
+    "formulario-v1:F-RAD-002!R6": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-002!R7": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-002!R8": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-002!R16": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-002!R17": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-002!R18": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-002!R25": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-002!R26": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-002!R27": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-002!R34": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-002!R35": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-002!R36": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-003!R7": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-003!R8": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-003!R9": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-003!R17": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-003!R18": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-003!R19": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-003!R26": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-003!R27": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-003!R28": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-003!R35": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-003!R36": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-003!R37": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:F-RAD-003!R46": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:F-RAD-003!R47": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:F-RAD-003!R48": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R7": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R8": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R9": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R10": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-PER-000!R12": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R13": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R14": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R15": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R17": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R18": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R19": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R20": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R22": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R23": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R28": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R29": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R30": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R31": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R32": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R33": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R34": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R40": {
+      "kind": "choice",
+      "value": "Claridad mental"
+    },
+    "formulario-v1:E-PER-000!R50": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R51": {
+      "kind": "choice",
+      "value": "Claridad mental"
+    },
+    "formulario-v1:E-PER-000!R54": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R60": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R61": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R62": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R73": {
+      "kind": "choice",
+      "value": "2"
+    },
+    "formulario-v1:E-PER-000!R74": {
+      "kind": "choice",
+      "value": "2"
+    },
+    "formulario-v1:E-PER-000!R76": {
+      "kind": "choice",
+      "value": "2"
+    },
+    "formulario-v1:E-PER-000!R77": {
+      "kind": "choice",
+      "value": "2"
+    },
+    "formulario-v1:E-PER-000!R79": {
+      "kind": "choice",
+      "value": "2"
+    },
+    "formulario-v1:E-PER-000!R80": {
+      "kind": "choice",
+      "value": "2"
+    },
+    "formulario-v1:E-PER-000!R82": {
+      "kind": "choice",
+      "value": "2"
+    },
+    "formulario-v1:E-PER-000!R83": {
+      "kind": "choice",
+      "value": "2"
+    },
+    "formulario-v1:E-PER-000!R85": {
+      "kind": "choice",
+      "value": "2"
+    },
+    "formulario-v1:E-PER-000!R86": {
+      "kind": "choice",
+      "value": "2"
+    },
+    "formulario-v1:E-PER-000!R94": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R95": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R96": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R98": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R99": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R100": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R102": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R103": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R104": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R107": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R108": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R109": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R111": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R112": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R113": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R115": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R116": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R117": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R120": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R121": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R122": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R124": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R125": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R126": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R128": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R129": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R130": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R133": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R134": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R135": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R137": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R138": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R139": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R141": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R142": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R143": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R146": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R147": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R148": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R150": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R151": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R152": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R154": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R155": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R156": {
+      "kind": "choice",
+      "value": "1"
+    },
+    "formulario-v1:E-PER-000!R187": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-PER-000!R188": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-PER-000!R189": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-PER-000!R191": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-PER-000!R192": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-PER-000!R193": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-PER-000!R195": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-PER-000!R196": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-PER-000!R197": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-PER-000!R199": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-PER-000!R200": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-PER-000!R201": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-PER-000!R203": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-PER-000!R204": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-PER-000!R205": {
+      "kind": "choice",
+      "value": "3"
+    },
+    "formulario-v1:E-PER-000!R220": {
+      "kind": "activity",
+      "field": "pasion",
+      "ambit": "Creación y Expresión",
+      "option": "Escribir: Diarios, ficción, ensayos técnicos, poesía o blogs.",
+      "answer": "Actividad de pasion"
+    },
+    "formulario-v1:E-PER-000!R221": {
+      "kind": "activity",
+      "field": "pasion",
+      "ambit": "Creación y Expresión",
+      "option": "Escribir: Diarios, ficción, ensayos técnicos, poesía o blogs.",
+      "answer": "Actividad de pasion"
+    },
+    "formulario-v1:E-PER-000!R222": {
+      "kind": "activity",
+      "field": "pasion",
+      "ambit": "Creación y Expresión",
+      "option": "Escribir: Diarios, ficción, ensayos técnicos, poesía o blogs.",
+      "answer": "Actividad de pasion"
+    },
+    "formulario-v1:E-PER-000!R223": {
+      "kind": "activity",
+      "field": "pasion",
+      "ambit": "Creación y Expresión",
+      "option": "Escribir: Diarios, ficción, ensayos técnicos, poesía o blogs.",
+      "answer": "Actividad de pasion"
+    },
+    "formulario-v1:E-PER-000!R224": {
+      "kind": "activity",
+      "field": "pasion",
+      "ambit": "Creación y Expresión",
+      "option": "Escribir: Diarios, ficción, ensayos técnicos, poesía o blogs.",
+      "answer": "Actividad de pasion"
+    },
+    "formulario-v1:E-PER-000!R227": {
+      "kind": "activity",
+      "field": "vocacion",
+      "ambit": "Solución de Problemas y Eficiencia (Carencia: Caos o Lentitud)",
+      "option": "Optimizar procesos: Hacer que algo que hoy es lento o difícil sea rápido y fluido.",
+      "answer": "Actividad de vocacion"
+    },
+    "formulario-v1:E-PER-000!R228": {
+      "kind": "activity",
+      "field": "vocacion",
+      "ambit": "Solución de Problemas y Eficiencia (Carencia: Caos o Lentitud)",
+      "option": "Optimizar procesos: Hacer que algo que hoy es lento o difícil sea rápido y fluido.",
+      "answer": "Actividad de vocacion"
+    },
+    "formulario-v1:E-PER-000!R229": {
+      "kind": "activity",
+      "field": "vocacion",
+      "ambit": "Solución de Problemas y Eficiencia (Carencia: Caos o Lentitud)",
+      "option": "Optimizar procesos: Hacer que algo que hoy es lento o difícil sea rápido y fluido.",
+      "answer": "Actividad de vocacion"
+    },
+    "formulario-v1:E-PER-000!R230": {
+      "kind": "activity",
+      "field": "vocacion",
+      "ambit": "Solución de Problemas y Eficiencia (Carencia: Caos o Lentitud)",
+      "option": "Optimizar procesos: Hacer que algo que hoy es lento o difícil sea rápido y fluido.",
+      "answer": "Actividad de vocacion"
+    },
+    "formulario-v1:E-PER-000!R231": {
+      "kind": "activity",
+      "field": "vocacion",
+      "ambit": "Solución de Problemas y Eficiencia (Carencia: Caos o Lentitud)",
+      "option": "Optimizar procesos: Hacer que algo que hoy es lento o difícil sea rápido y fluido.",
+      "answer": "Actividad de vocacion"
+    },
+    "formulario-v1:E-PER-000!R234": {
+      "kind": "activity",
+      "field": "mision",
+      "ambit": "Transmisión de Conocimiento y Sabiduría (Causa: Mejora de Capacidades)",
+      "option": "Preservar mejores prácticas: Asegurar que los métodos que funcionan (técnicos o culturales) no se pierdan.",
+      "answer": "Actividad de mision"
+    },
+    "formulario-v1:E-PER-000!R235": {
+      "kind": "activity",
+      "field": "mision",
+      "ambit": "Transmisión de Conocimiento y Sabiduría (Causa: Mejora de Capacidades)",
+      "option": "Preservar mejores prácticas: Asegurar que los métodos que funcionan (técnicos o culturales) no se pierdan.",
+      "answer": "Actividad de mision"
+    },
+    "formulario-v1:E-PER-000!R236": {
+      "kind": "activity",
+      "field": "mision",
+      "ambit": "Transmisión de Conocimiento y Sabiduría (Causa: Mejora de Capacidades)",
+      "option": "Preservar mejores prácticas: Asegurar que los métodos que funcionan (técnicos o culturales) no se pierdan.",
+      "answer": "Actividad de mision"
+    },
+    "formulario-v1:E-PER-000!R237": {
+      "kind": "activity",
+      "field": "mision",
+      "ambit": "Transmisión de Conocimiento y Sabiduría (Causa: Mejora de Capacidades)",
+      "option": "Preservar mejores prácticas: Asegurar que los métodos que funcionan (técnicos o culturales) no se pierdan.",
+      "answer": "Actividad de mision"
+    },
+    "formulario-v1:E-PER-000!R238": {
+      "kind": "activity",
+      "field": "mision",
+      "ambit": "Transmisión de Conocimiento y Sabiduría (Causa: Mejora de Capacidades)",
+      "option": "Preservar mejores prácticas: Asegurar que los métodos que funcionan (técnicos o culturales) no se pierdan.",
+      "answer": "Actividad de mision"
+    },
+    "formulario-v1:E-PER-000!R241": {
+      "kind": "activity",
+      "field": "profesion",
+      "ambit": "Consultoría y Asesoría Técnica (Habilidad: Saber qué hacer)",
+      "option": "Diagnóstico de problemas: Analizar situaciones complejas y detectar la raíz de un fallo o ineficiencia",
+      "answer": "Actividad de profesion"
+    },
+    "formulario-v1:E-PER-000!R242": {
+      "kind": "activity",
+      "field": "profesion",
+      "ambit": "Consultoría y Asesoría Técnica (Habilidad: Saber qué hacer)",
+      "option": "Diagnóstico de problemas: Analizar situaciones complejas y detectar la raíz de un fallo o ineficiencia",
+      "answer": "Actividad de profesion"
+    },
+    "formulario-v1:E-PER-000!R243": {
+      "kind": "activity",
+      "field": "profesion",
+      "ambit": "Consultoría y Asesoría Técnica (Habilidad: Saber qué hacer)",
+      "option": "Diagnóstico de problemas: Analizar situaciones complejas y detectar la raíz de un fallo o ineficiencia",
+      "answer": "Actividad de profesion"
+    },
+    "formulario-v1:E-PER-000!R244": {
+      "kind": "activity",
+      "field": "profesion",
+      "ambit": "Consultoría y Asesoría Técnica (Habilidad: Saber qué hacer)",
+      "option": "Diagnóstico de problemas: Analizar situaciones complejas y detectar la raíz de un fallo o ineficiencia",
+      "answer": "Actividad de profesion"
+    },
+    "formulario-v1:E-PER-000!R245": {
+      "kind": "activity",
+      "field": "profesion",
+      "ambit": "Consultoría y Asesoría Técnica (Habilidad: Saber qué hacer)",
+      "option": "Diagnóstico de problemas: Analizar situaciones complejas y detectar la raíz de un fallo o ineficiencia",
+      "answer": "Actividad de profesion"
+    },
+    "formulario-v1:E-PER-000!R266": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R267": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R268": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R270": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R271": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R272": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R274": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R275": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R276": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    },
+    "formulario-v1:E-PER-000!R277": {
+      "kind": "text",
+      "value": "Texto de recorrido."
+    }
+  }
+}

@@ -95,7 +95,7 @@ exports[`PHASE 1 casebook blindness > snapshots the stories and test intents 1`]
     "testIntent": "Relaciones claramente más comprometidas",
   },
   "R17": {
-    "story": "Lucas tiene el cuestionario completo. Incluye las preguntas de Finanzas.",
+    "story": "El cuestionario de Mateo está completo. Incluye las preguntas de Finanzas.",
     "testIntent": "Finanzas claramente más comprometidas",
   },
   "R18": {

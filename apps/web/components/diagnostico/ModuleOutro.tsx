@@ -1,152 +1,89 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
 import { useAuthSession } from '@/components/auth-session-provider';
-import { NumberCounter } from '@/components/motion';
-import {
-  apiDiagnosticOutroSeen,
-  apiDiagnosticState,
-  type DiagnosticState,
-} from '@/lib/api';
+import { apiDiagnosticState, type DiagnosticState } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth-storage';
-import {
-  clearOutroBootstrap,
-  readOutroBootstrap,
-} from '@/lib/diagnostic-outro-bootstrap';
-import { ProgressRail } from './ProgressRail';
-import {
-  outroBodyVariants,
-  outroStaggerContainer,
-  outroStaggerItem,
-} from './diagnostic-motion';
-
-function hasOutroContent(state: DiagnosticState | null): boolean {
-  return state?.nextStep.type === 'module_outro';
-}
+import { continuePastModule } from '@/lib/diagnostic-continue';
+import { questionnaireStageLabel, ProgressRail } from './ProgressRail';
+import { PlayerStage } from './PlayerStage';
 
 export function ModuleOutro() {
   const router = useRouter();
   const params = useParams<{ moduleSlug: string }>();
   const { status, refresh } = useAuthSession();
-  const reduced = useReducedMotion();
-  const [state, setState] = useState<DiagnosticState | null>(() => readOutroBootstrap());
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [pct, setPct] = useState(0);
+  const started = useRef(false);
 
-  useEffect(() => {
-    if (status !== 'authenticated') return;
-    const token = getAccessToken();
-    if (!token) return;
-
-    apiDiagnosticState(token)
-      .then((s) => {
-        setState(s);
-        clearOutroBootstrap();
-      })
-      .catch(() => {});
-  }, [status]);
+  async function goNext(state: DiagnosticState) {
+    if (state.nextStep.type === 'question' && state.sessionState.currentModuleSlug) {
+      router.replace(`/diagnostico/modulo/${state.sessionState.currentModuleSlug}/pregunta`);
+      return;
+    }
+    if (state.nextStep.type === 'diagnostic_complete') {
+      await refresh({ force: true });
+      router.replace('/diagnostico/resultado');
+      return;
+    }
+    throw new Error('unexpected_step');
+  }
 
   async function handleContinue() {
     const token = getAccessToken();
-    if (!token || !params.moduleSlug) return;
+    const slug = params.moduleSlug;
+    if (!token || !slug) return;
     setLoading(true);
+    setError(null);
     try {
-      await apiDiagnosticOutroSeen(token, params.moduleSlug);
-      const next = await apiDiagnosticState(token);
-      if (next.nextStep.type === 'question' && next.sessionState.currentModuleSlug) {
-        router.push(`/diagnostico/modulo/${next.sessionState.currentModuleSlug}/pregunta`);
-      } else if (next.nextStep.type === 'diagnostic_complete') {
-        await refresh({ force: true });
-        router.push('/diagnostico/resultado');
-      }
+      const next = await continuePastModule(token, slug);
+      setPct(next.sessionState.completionPct);
+      await goNext(next);
     } catch {
+      setError('No pudimos continuar. Revisa tu conexión e intenta de nuevo.');
       setLoading(false);
     }
   }
 
-  const outro =
-    state?.nextStep.type === 'module_outro' ? state.nextStep.data : null;
-  const ss = state?.sessionState;
-  const selfPct = ss?.selfKnowledgePct;
-  const showContent = hasOutroContent(state);
+  useEffect(() => {
+    if (status !== 'authenticated') return;
+    if (started.current) return;
+    started.current = true;
+    const token = getAccessToken();
+    if (token) {
+      apiDiagnosticState(token)
+        .then((s) => setPct(s.sessionState.completionPct))
+        .catch(() => {});
+    }
+    void handleContinue();
+  // The resume route only exists to mark the module seen and leave.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status, params.moduleSlug]);
 
   return (
-    <main className="dk-outro-shell">
-      <ProgressRail
-        pct={ss?.completionPct ?? 0}
-        moduleTitle={ss?.currentModuleTitle ?? outro?.titleEs}
-        variant="outro"
-      />
-
-      {showContent ? (
-        <motion.div
-          className="dk-outro-body"
-          variants={reduced ? undefined : outroBodyVariants}
-          initial={reduced ? false : 'initial'}
-          animate={reduced ? undefined : 'animate'}
-        >
-          <motion.div
-            variants={reduced ? undefined : outroStaggerContainer}
-            initial={reduced ? false : 'hidden'}
-            animate={reduced ? undefined : 'show'}
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'inherit', width: '100%' }}
-          >
-            <motion.p className="dk-outro-eyebrow" variants={reduced ? undefined : outroStaggerItem}>
-              MÓDULO COMPLETO
-            </motion.p>
-
-            {outro ? (
-              <>
-                <motion.h2 className="dk-outro-title" variants={reduced ? undefined : outroStaggerItem}>
-                  {outro.titleEs}
-                </motion.h2>
-                <motion.p className="dk-outro-text" variants={reduced ? undefined : outroStaggerItem}>
-                  {outro.outroText}
-                </motion.p>
-              </>
-            ) : (
-              <motion.h2 className="dk-outro-title" variants={reduced ? undefined : outroStaggerItem}>
-                Módulo completado.
-              </motion.h2>
-            )}
-
-            {selfPct !== undefined && (
-              <motion.div
-                className="dk-outro-metric dk-outro-metric--pulse"
-                variants={reduced ? undefined : outroStaggerItem}
-              >
-                <NumberCounter
-                  key={selfPct}
-                  to={selfPct}
-                  duration={0.85}
-                  suffix="%"
-                  className="dk-outro-metric-value"
-                  startWhen="mount"
-                />
-                <span className="dk-outro-metric-label">AUTOCONOCIMIENTO</span>
-              </motion.div>
-            )}
-
-            <motion.div variants={reduced ? undefined : outroStaggerItem}>
-              <button
-                type="button"
-                className="ag-btn-cta font-label-lg dk-outro-cta"
-                onClick={handleContinue}
-                disabled={loading}
-              >
-                {loading ? 'Cargando…' : 'Continuar'}
-              </button>
-            </motion.div>
-          </motion.div>
-        </motion.div>
+    <PlayerStage
+      header={(
+        <ProgressRail
+          pct={pct}
+          contextLabel={questionnaireStageLabel(params.moduleSlug)}
+          variant="outro"
+        />
+      )}
+      primary={{
+        label: loading ? 'Cargando…' : 'Continuar',
+        onClick: handleContinue,
+        disabled: loading,
+      }}
+    >
+      {error ? (
+        <p className="dk-player-error" role="alert">{error}</p>
       ) : (
-        <div className="dk-outro-body dk-outro-body--loading" aria-hidden>
-          <div className="dk-outro-skeleton dk-outro-skeleton--title" />
-          <div className="dk-outro-skeleton dk-outro-skeleton--text" />
-          <div className="dk-outro-skeleton dk-outro-skeleton--metric" />
+        <div className="auth-loading">
+          <span className="auth-spinner" aria-hidden />
         </div>
       )}
-    </main>
+    </PlayerStage>
   );
 }

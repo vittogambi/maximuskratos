@@ -1,5 +1,5 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { ensureDiagnosticCatalog } from '@mk/database';
+import { ensureDiagnosticCatalog, ensureFormulariosXPaso, ensureFormularioCompleto } from '@mk/database';
 import { PrismaService } from '../prisma/prisma.service';
 
 /**
@@ -24,7 +24,10 @@ export class DiagnosticCatalogService implements OnModuleInit {
 
   ensureReady(): Promise<void> {
     if (!this.ready) {
-      this.ready = ensureDiagnosticCatalog(this.prisma).catch((err) => {
+      this.ready = ensureDiagnosticCatalog(this.prisma)
+        .then(() => ensureFormulariosXPaso(this.prisma))
+        .then(() => ensureFormularioCompleto(this.prisma))
+        .catch((err) => {
         this.ready = null;
         throw err;
       });

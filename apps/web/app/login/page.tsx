@@ -20,7 +20,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (authStatus === 'authenticated' && user) {
-      router.replace(getPostAuthPath(user.role, user.onboardingStep));
+      router.replace(getPostAuthPath(user));
     }
   }, [authStatus, user, router]);
   const [email, setEmail] = useState('');
@@ -36,7 +36,7 @@ export default function LoginPage() {
       const data = await apiLogin(email, password);
       setAccessToken(data.accessToken);
       const [me] = await Promise.all([apiMe(data.accessToken), refresh({ force: true })]);
-      router.replace(getPostAuthPath(me.role, me.onboardingStep));
+      router.replace(getPostAuthPath(me));
       return;
     } catch (err) {
       const message =

@@ -85,7 +85,7 @@ type SystemReportProps = {
  * Lectura del perfil como sistema: índices de Alineación/Profundidad, resultado por
  * pilar y por ámbito, mapa de relación, y qué áreas están más o menos desarrolladas.
  * El arquetipo queda al final como referencia interpretativa secundaria.
- * Compartido entre PerfilContent y la página de resultado del diagnóstico.
+ * Lo usa PerfilContent. El cierre del cuestionario muestra la hoja de ruta.
  */
 export function SystemReport({ scores, indices, archetype, secondaryArchetype }: SystemReportProps) {
   const alineacion = Math.round(indices[PRESENTATION_INDICES.alineacion.sourceKey] ?? 0);
@@ -130,7 +130,7 @@ export function SystemReport({ scores, indices, archetype, secondaryArchetype }:
 
   return (
     <div className="sys-report">
-      {/* Encabezado: clasificación + índices de Alineación y Profundidad */}
+      {/* Encabezado: clasificación + promedios del cuestionario prototipo */}
       <AppReveal active={firstView}>
       <section className="sys-header">
         <div className="sys-header__top">
@@ -145,15 +145,19 @@ export function SystemReport({ scores, indices, archetype, secondaryArchetype }:
             <span className="sys-index__value">
               {firstView ? <MotionNumber to={alineacion} startWhen="mount" /> : alineacion}
             </span>
-            <span className="sys-index__label">Índice de Alineación</span>
+            <span className="sys-index__label">{PRESENTATION_INDICES.alineacion.label}</span>
           </div>
           <div className="sys-index">
             <span className="sys-index__value">
               {firstView ? <MotionNumber to={profundidad} startWhen="mount" /> : profundidad}
             </span>
-            <span className="sys-index__label">Índice de Profundidad</span>
+            <span className="sys-index__label">{PRESENTATION_INDICES.profundidad.label}</span>
           </div>
         </div>
+        <p className="sys-header__method">
+          Promedios de las dimensiones que respondiste en este cuestionario. Todavía no son los
+          índices de Alineación y Profundidad de MK.
+        </p>
         <div className="dk-indices-row">
           <div className="dk-index-item">
             <span className="dk-index-item__value" style={{ color: ejecucion >= 60 ? '#cc0000' : '#444' }}>

@@ -5,6 +5,7 @@ import { useAuthSession } from '@/components/auth-session-provider';
 import { AppReveal, useAppEntranceOnce } from '@/components/motion/app-reveal';
 import { MOTION_SESSION } from '@/components/motion/tokens';
 import { formatAdminDate } from '@/lib/admin-format';
+import { canUseMemberProduct, isMemberPreview } from '@/lib/member-access';
 import { isEarlyAccessMode } from '@/lib/product-phase';
 import { useTrialDays } from '@/lib/use-trial-days';
 
@@ -88,6 +89,12 @@ export function CuentaContent() {
               <span>{formatAdminDate(subscription.currentPeriodEnd)}</span>
             </div>
           ) : null}
+          {isMemberPreview(user) ? (
+            <div className="mk-cuenta-info-row">
+              <span>Acceso</span>
+              <span>Versión privada de revisión</span>
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -99,7 +106,7 @@ export function CuentaContent() {
             Ver planes y precios
             <span aria-hidden>›</span>
           </Link>
-          {!earlyAccess ? (
+          {canUseMemberProduct(user) ? (
             <Link href="/diagnostico/resultado" className="mk-cuenta-link">
               Ver resultado completo
               <span aria-hidden>›</span>

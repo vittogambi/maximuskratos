@@ -1,0 +1,3 @@
+ALTER TABLE "questions" ADD COLUMN IF NOT EXISTS "source_ref" TEXT;
+ALTER TABLE "questions" ADD COLUMN IF NOT EXISTS "instrument" TEXT;
+ALTER TABLE "questions" ADD COLUMN IF NOT EXISTS "polarity" TEXT;

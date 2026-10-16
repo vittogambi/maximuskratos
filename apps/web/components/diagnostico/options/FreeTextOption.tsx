@@ -14,7 +14,7 @@ export function FreeTextOption({ value, onChange, maxLength = 500 }: Props) {
         onChange={(e) => onChange(e.target.value)}
         maxLength={maxLength}
         rows={4}
-        placeholder="Escribe tu respuesta aquí…"
+        placeholder="Escribe tu respuesta."
         style={{
           background: 'var(--color-surface-1)',
           border: '1px solid var(--color-border)',
@@ -30,14 +30,14 @@ export function FreeTextOption({ value, onChange, maxLength = 500 }: Props) {
           boxSizing: 'border-box',
         }}
         onFocus={(e) => {
-          e.currentTarget.style.borderColor = 'var(--color-crimson)';
+          e.currentTarget.style.borderColor = 'var(--color-focus)';
         }}
         onBlur={(e) => {
           e.currentTarget.style.borderColor = 'var(--color-border)';
         }}
       />
-      <p className="font-label-sm" style={{ color: 'var(--color-text-muted)', textAlign: 'right' }}>
-        {value.length}/{maxLength}
+      <p className="dk-char-count">
+        {value.length} de {maxLength}
       </p>
     </div>
   );

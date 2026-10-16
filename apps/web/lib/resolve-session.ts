@@ -1,4 +1,4 @@
-import { apiMe, apiRefresh, type MeResponse } from '@/lib/api';
+import { apiMe, apiRefresh, HttpError, type MeResponse } from '@/lib/api';
 import {
   clearAccessToken,
   getAccessToken,
@@ -8,19 +8,27 @@ import {
 let inflight: Promise<MeResponse | null> | null = null;
 let resolveEpoch = 0;
 
+function isRejectedSession(err: unknown): boolean {
+  return err instanceof HttpError && (err.status === 401 || err.status === 403);
+}
+
 async function resolveSessionOnce(capturedEpoch: number): Promise<MeResponse | null> {
   try {
     let token = getAccessToken();
-    if (!token) {
-      const refreshed = await apiRefresh();
-      if (capturedEpoch !== resolveEpoch) return null;
-      token = refreshed.accessToken;
-      setAccessToken(token);
+    if (token) {
+      try {
+        return await apiMe(token);
+      } catch (err) {
+        if (!isRejectedSession(err)) throw err;
+      }
     }
+    const refreshed = await apiRefresh();
     if (capturedEpoch !== resolveEpoch) return null;
+    token = refreshed.accessToken;
+    setAccessToken(token);
     return await apiMe(token);
-  } catch {
-    if (capturedEpoch === resolveEpoch) {
+  } catch (err) {
+    if (capturedEpoch === resolveEpoch && isRejectedSession(err)) {
       clearAccessToken();
     }
     return null;

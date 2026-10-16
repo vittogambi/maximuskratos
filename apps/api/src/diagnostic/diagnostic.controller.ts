@@ -8,6 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { SkipThrottle } from '@nestjs/throttler';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import type { AuthenticatedRequest } from '../auth/jwt-auth.guard';
 import { DiagnosticOpenGuard } from './diagnostic-open.guard';
@@ -18,8 +19,18 @@ import { SubmitResponseDto } from './dto/submit-response.dto';
 @Controller('diagnostic')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
+// The 30/min "auth" limit is for credential endpoints; one diagnostic answer costs several
+// calls, so it tripped real use. The global default limit still applies.
+@SkipThrottle({ auth: true })
 export class DiagnosticController {
   constructor(private readonly diagnostic: DiagnosticService) {}
+
+  @Post('restart')
+  @UseGuards(DiagnosticOpenGuard)
+  @ApiOperation({ summary: 'Abandona la sesión activa incompleta y abre otra. No borra una sesión ya cerrada.' })
+  restart(@Request() req: AuthenticatedRequest) {
+    return this.diagnostic.restart(req.user.sub);
+  }
 
   @Post('start')
   @UseGuards(DiagnosticOpenGuard)

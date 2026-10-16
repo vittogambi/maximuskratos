@@ -1,4 +1,5 @@
 import type { AppIconName } from '@/components/icons/registry';
+import { PRODUCT_STAGES } from '@/lib/product-stages';
 
 export type MarcoCard = {
   num: string;
@@ -35,49 +36,8 @@ export type ActionStep = {
   body: string;
 };
 
-/** Cinco etapas del flujo: lectura → auditoría → interpretación → integración → ejecución. */
-export const MARCO_STAGES: ReadonlyArray<MarcoStage> = [
-  {
-    num: '01',
-    tag: 'Lectura inicial',
-    icon: 'scan-line',
-    title: 'Diagnóstico',
-    body: 'Construye una primera representación de tu estado actual y detecta dónde existe mayor alineación, tensión o desequilibrio.',
-    platform: 'Diagnóstico inicial',
-  },
-  {
-    num: '02',
-    tag: 'Auditoría profunda',
-    icon: 'columns',
-    title: 'Los nueve componentes',
-    body: 'Exploran las definiciones, principios, patrones y decisiones que sostienen tu forma de vivir.',
-    platform: 'Auditorías de la Ruta',
-  },
-  {
-    num: '03',
-    tag: 'Interpretación',
-    icon: 'shadow',
-    title: 'Arquetipo y sombra',
-    body: 'Muestran cómo expresas tus capacidades, dónde pierdes equilibrio y qué patrones pueden distorsionar tu desarrollo.',
-    platform: 'Perfil Maestro',
-  },
-  {
-    num: '04',
-    tag: 'Integración',
-    icon: 'map',
-    title: 'Hoja de Ruta de Propósito',
-    body: 'Reúne lo descubierto y lo convierte en una arquitectura personal: dirección, principios, prioridades y criterios de decisión.',
-    platform: 'HdRP',
-  },
-  {
-    num: '05',
-    tag: 'Ejecución',
-    icon: 'target',
-    title: 'Ruta MK',
-    body: 'Convierte el plano en acciones, misiones, indicadores y revisiones que mantienen vivo el proceso.',
-    platform: 'Ruta MK',
-  },
-];
+/** Mismas cinco piezas que la landing. Los nueve componentes siguen en su propia sección. */
+export const MARCO_STAGES: ReadonlyArray<MarcoStage> = PRODUCT_STAGES;
 
 /**
  * Orden canónico de los pilares del Marco Central (Espíritu).
@@ -123,7 +83,7 @@ export const MARCO_CARDS: ReadonlyArray<MarcoCard> = [
   {
     num: '05',
     title: 'Identidad',
-    icon: 'sword',
+    icon: 'rubik',
     question: '¿Quién debe existir para sostener esa visión?',
     apport: 'Coherencia',
     deep: 'Define los rasgos, responsabilidades y formas de actuar que deben convertirse en parte estable de quién eres. La identidad no describe solamente cómo te ves hoy. Establece desde qué lugar quieres aprender a decidir.',
@@ -166,7 +126,7 @@ export const MARCO_CARDS: ReadonlyArray<MarcoCard> = [
 export const HDRP_BLOCKS: ReadonlyArray<HdrpBlock> = [
   {
     title: 'Dirección',
-    icon: 'compass',
+    icon: 'helm',
     body: 'La vida y la identidad que estás construyendo.',
   },
   {

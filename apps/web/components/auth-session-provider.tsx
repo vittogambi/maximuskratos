@@ -12,7 +12,7 @@ import {
   type ReactNode,
 } from 'react';
 import { apiLogout, type MeResponse } from '@/lib/api';
-import { clearAccessToken } from '@/lib/auth-storage';
+import { clearAccessToken, getAccessToken } from '@/lib/auth-storage';
 import { resetResolveSession, resolveSession } from '@/lib/resolve-session';
 
 const LOGOUT_API_TIMEOUT_MS = 4_000;
@@ -46,7 +46,7 @@ type AuthStatus = 'loading' | 'guest' | 'authenticated';
 type AuthSessionContextValue = {
   status: AuthStatus;
   user: MeResponse | null;
-  refresh: (options?: { force?: boolean }) => Promise<void>;
+  refresh: (options?: { force?: boolean }) => Promise<boolean>;
   logout: () => Promise<void>;
 };
 
@@ -61,18 +61,39 @@ export function AuthSessionProvider({ children }: { children: ReactNode }) {
   const refresh = useCallback(async (options?: { force?: boolean }) => {
     const refreshId = ++refreshIdRef.current;
     const me = await resolveSession(options);
-    if (refreshId !== refreshIdRef.current) return;
+    if (refreshId !== refreshIdRef.current) return false;
     if (me) {
       setUser(me);
       setStatus('authenticated');
-    } else {
-      setUser(null);
-      setStatus('guest');
+      return true;
     }
+    if (getAccessToken()) {
+      setStatus((current) => (current === 'authenticated' ? current : 'loading'));
+      return false;
+    }
+    setUser(null);
+    setStatus('guest');
+    return false;
   }, []);
 
   useEffect(() => {
-    void refresh();
+    let cancelled = false;
+    let attempt = 0;
+    let timer = 0;
+    async function boot() {
+      const ok = await refresh();
+      if (cancelled || ok) return;
+      if (!getAccessToken() || attempt >= 5) return;
+      attempt += 1;
+      timer = window.setTimeout(() => {
+        void boot();
+      }, 1200);
+    }
+    void boot();
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
   }, [refresh]);
 
   const logout = useCallback(async () => {

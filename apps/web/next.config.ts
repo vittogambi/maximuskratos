@@ -6,6 +6,7 @@ const useLocalProxy =
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  devIndicators: false,
   async rewrites() {
     if (!useLocalProxy) return [];
     return [
