@@ -804,3 +804,28 @@ Fuera del denominador de cobertura: `e-aud-s6`, `e-per-*`, preguntas con `except
 | T3.4 en adelante | Pendiente | Propuestas por parte, borrador Diseña, horarios T3.7, dashboard T3.8, web F4 |
 
 `npm run test:domain -w @mk/api`: 208 passed (25 files). HTTP de activación sin cuestionario en `plan-activation.http.test.ts` (requiere Postgres migrado). Player y auth del working tree siguen fuera de estos commits.
+
+## F2 completo + F3/F4 API (continuación 21 oct)
+
+Rama `pilot/domain-f1-m1-gate`. Commits hasta `b4ff341`.
+
+| Bloque | Estado | Entregable |
+| --- | --- | --- |
+| M2 `action_schedules` | Migración + escritura en `insertAction` | `20261021210000_action_schedules_m2` |
+| M3 `plan_proposals` / `plan_evidence` | Migración + propuesta en acompañamiento accept | `20261021220000_plan_proposals_evidence_m3` |
+| M4 `action_records.revision` | Migración + `STALE_RECORD` / `OCCASION_FUTURE` | `20261021230000_action_record_revision_m4` |
+| T3.4 | Parcial | Acompañamiento crea `PREPARING`, `plan_proposals`; borradores `POST/PATCH .../draft`; dominio `plan-proposal-domain`, `criteria`, `goal-class` |
+| T3.5 | Parcial | Rechazos `INTERPRETATION` filtran `reasons` en `build` |
+| T3.6 | Dom + HTTP | `own-plan.ts`, `POST /journey/plans/own/preview` |
+| T3.7 | Parcial | Schedules al crear acción; revisión optimista en registros |
+| T3.8 | Dom + HTTP | `dashboard.ts`, `GET /journey/dashboard`, `GET /journey/territories/:territory` |
+| T3.9 | HTTP | `POST /journey/purpose/seed/preview` y `.../seed` |
+| F6.4 | HTTP | `POST /journey/return` + `return-panel.ts` |
+| F7.1 | HTTP | `GET /journey/memory` + `memory-reading.ts` |
+| T4.1 | Web | `auth-redirect.ts` siempre `/panel` para miembros; test actualizado |
+| T5.3 | Stub dom | `discover-synthesis.ts` (sin endpoint aún) |
+| Web | Stub | `lib/journey-api.ts` para dashboard/memoria |
+
+Pendiente en la rama (plan maestro): UI F4.0 a F4.7, F5 player, F6 revisión/logro/mantenimiento completos, F7.2 a F7.3, F8, F9; T3.4 activación con filas B-03; T3.7 calendario con `resolveSchedule`; evidencia HTTP T6.2.
+
+`npm run test:domain -w @mk/api`: **213/213** (28 archivos). Aplicar migraciones M1 a M4 antes de HTTP.
