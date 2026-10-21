@@ -40,12 +40,10 @@ describe('member access on the web', () => {
     expect(canUseMemberProduct({} as Who)).toBe(false);
   });
 
-  it('routes a new account to the diagnostic, and a finished one to the panel', () => {
-    expect(getPostAuthPath({ ...founder, access: { canUseMemberProduct: true, isMemberPreview: false } })).toBe(
-      '/diagnostico',
-    );
+  it('routes members to the panel and admins to admin', () => {
+    expect(getPostAuthPath({ ...founder, access: { canUseMemberProduct: true, isMemberPreview: false } })).toBe('/panel');
     expect(getPostAuthPath(founder)).toBe('/panel');
-    expect(getPostAuthPath(reviewer)).toBe('/diagnostico');
+    expect(getPostAuthPath(reviewer)).toBe('/panel');
     expect(getPostAuthPath({ ...reviewer, onboardingStep: 'PROFILE_COMPLETE' })).toBe('/panel');
     expect(getPostAuthPath({ ...reviewer, role: 'ADMIN' })).toBe('/admin');
   });

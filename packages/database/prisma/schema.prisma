@@ -35,6 +35,8 @@ model User {
   purposeRevisions    PurposeRevision[]
   personalPlans       PersonalPlan[]
   planTransitions     PlanTransition[]
+  planProposals       PlanProposal[]
+  planEvidence        PlanEvidence[]
   weekReviews         WeekReview[]
   guidanceRequests    GuidanceRequest[]
   clarifications      MemberClarification[]
@@ -1076,6 +1078,8 @@ model PersonalPlan {
   updatedAt    DateTime           @updatedAt @map("updated_at")
   actions      PlanAction[]
   transitions  PlanTransition[]
+  proposals    PlanProposal[]
+  evidence     PlanEvidence[]
 
   @@index([userId, status])
   @@map("personal_plans")
@@ -1135,9 +1139,77 @@ model PlanAction {
   createdAt    DateTime   @default(now()) @map("created_at")
   records      ActionRecord[]
   cancellations OccasionCancellation[]
+  schedules    ActionSchedule[]
 
   @@index([planId])
   @@map("plan_actions")
+}
+
+model ActionSchedule {
+  id               String     @id @default(uuid())
+  actionId         String     @map("action_id")
+  action           PlanAction @relation(fields: [actionId], references: [id], onDelete: Cascade)
+  effectiveFrom    DateTime   @map("effective_from") @db.Date
+  effectiveTo      DateTime?  @map("effective_to") @db.Date
+  kind             String
+  weekday          Int?
+  intervalDays     Int?       @map("interval_days")
+  anchorDay        DateTime?  @map("anchor_day") @db.Date
+  occasionsPerWeek Int?       @map("occasions_per_week")
+  source           String
+  commandKey       String?    @map("command_key")
+  createdAt        DateTime   @default(now()) @map("created_at")
+
+  @@index([actionId, effectiveFrom])
+  @@map("action_schedules")
+}
+
+model PlanProposal {
+  id             String        @id @default(uuid())
+  userId         String        @map("user_id")
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId         String?       @map("plan_id")
+  plan           PersonalPlan? @relation(fields: [planId], references: [id], onDelete: SetNull)
+  territory      String?
+  kind           String
+  payload        Json
+  reasons        Json?
+  basis          Json?
+  status         String        @default("PENDING")
+  editedPayload  Json?         @map("edited_payload")
+  decidedAt      DateTime?     @map("decided_at")
+  engineVersion  String?       @map("engine_version")
+  rulesVersion   String?       @map("rules_version")
+  templateRef    String?       @map("template_ref")
+  digest         String?
+  commandKey     String?       @map("command_key")
+  supersedesId   String?       @map("supersedes_id")
+  effect         Json?
+  createdAt      DateTime      @default(now()) @map("created_at")
+
+  @@unique([userId, commandKey])
+  @@index([planId, createdAt])
+  @@map("plan_proposals")
+}
+
+model PlanEvidence {
+  id                String       @id @default(uuid())
+  userId            String       @map("user_id")
+  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId            String       @map("plan_id")
+  plan              PersonalPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  criterionRevision Int          @map("criterion_revision")
+  observedOn        DateTime     @map("observed_on") @db.Date
+  kind              String
+  status            String
+  text              String?
+  actionRecordId    String?      @map("action_record_id")
+  source            String       @default("DECLARED_BY_MEMBER")
+  commandKey        String?      @map("command_key")
+  createdAt         DateTime     @default(now()) @map("created_at")
+
+  @@index([planId, observedOn])
+  @@map("plan_evidence")
 }
 
 model ActionRecord {
@@ -1151,6 +1223,7 @@ model ActionRecord {
   resultNote String?            @map("result_note")
   /// Null on older rows. A note alone is not an observed result.
   resultStatus String?          @map("result_status")
+  revision     Int              @default(0)
   updatedAt  DateTime           @updatedAt @map("updated_at")
 
   @@unique([actionId, day])

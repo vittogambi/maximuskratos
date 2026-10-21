@@ -36,6 +36,13 @@ import {
 import { canTransition, compatStatus, fromLegacy, type PlanStage } from './plan-lifecycle';
 import { assertPlanVersion, focusTargets, nextPlanVersion } from './plan-writes';
 import type { ActivatePlanDto, FocusPlanDto, TransitionPlanDto } from './dto/plan-stage.dto';
+import { answerLedger } from '../instrumentos/answer-ledger';
+import { buildDashboard, territoryDetail } from './dashboard';
+import { buildMemory } from './memory-reading';
+import { returnPanel } from './return-panel';
+import { readOwnPlan } from './own-plan';
+import { directionSeed } from './purpose-link';
+import { weekCounts } from './week-count';
 import { homeBoard, type HomePlan } from './home-board';
 import { nextStep } from './next-step';
 import { isIsoDate, isMonday, weekStartMonday } from './civil-date';
@@ -1162,16 +1169,33 @@ export class JourneyService {
       conversationOutcome?: string | null;
     },
   ) {
-    return this.prisma.planAction.create({
-      data: {
-        planId,
-        title: input.title.trim(),
-        doneWhen: input.doneWhen.trim(),
-        weekday: input.weekday ?? null,
-        domain: input.domain ?? null,
-        contentTags: input.contentTags ?? [],
-        conversationOutcome: input.conversationOutcome ?? null,
-      },
+    const today = this.civilToday();
+    return this.prisma.$transaction(async (tx) => {
+      const action = await tx.planAction.create({
+        data: {
+          planId,
+          title: input.title.trim(),
+          doneWhen: input.doneWhen.trim(),
+          weekday: input.weekday ?? null,
+          domain: input.domain ?? null,
+          contentTags: input.contentTags ?? [],
+          conversationOutcome: input.conversationOutcome ?? null,
+          effectiveFrom: today,
+        },
+      });
+      if (input.weekday != null) {
+        await tx.actionSchedule.create({
+          data: {
+            actionId: action.id,
+            effectiveFrom: new Date(`${today}T12:00:00.000Z`),
+            kind: 'FIXED',
+            weekday: input.weekday,
+            intervalDays: 7,
+            source: 'CREATE',
+          },
+        });
+      }
+      return action;
     });
   }
 
@@ -1386,7 +1410,15 @@ export class JourneyService {
 
   async upsertRecord(
     userId: string,
-    input: { actionId: string; day: string; status: 'PENDING' | 'DONE' | 'SKIPPED' | 'NOT_APPLICABLE'; note?: string; resultNote?: string; resultStatus?: 'OBSERVED' | 'NOT_YET_OBSERVED' | 'NOT_OBSERVED' | 'NO_INFORMATION' | null },
+    input: {
+      actionId: string;
+      day: string;
+      status: 'PENDING' | 'DONE' | 'SKIPPED' | 'NOT_APPLICABLE';
+      note?: string;
+      resultNote?: string;
+      resultStatus?: 'OBSERVED' | 'NOT_YET_OBSERVED' | 'NOT_OBSERVED' | 'NO_INFORMATION' | null;
+      expectedRevision?: number;
+    },
   ) {
     const action = await this.prisma.planAction.findUnique({
       where: { id: input.actionId },
@@ -1402,10 +1434,18 @@ export class JourneyService {
       where: { userId_weekStart: { userId, weekStart: week } },
     });
     if (closed) throw new ForbiddenException('Esa semana ya está cerrada.');
+    const today = this.civilToday();
+    if (input.day > today && input.status !== 'PENDING') {
+      throw new ConflictException({ message: 'Esa ocasión aún no llega.', code: 'OCCASION_FUTURE' });
+    }
+    if (prior && input.expectedRevision != null && prior.revision !== input.expectedRevision) {
+      throw new ConflictException({ message: 'El registro cambió en otra pestaña.', code: 'STALE_RECORD', revision: prior.revision });
+    }
     return this.prisma.actionRecord.upsert({
       where: { actionId_day: { actionId: input.actionId, day: input.day } },
       update: {
         status: input.status,
+        revision: { increment: 1 },
         ...(input.note !== undefined ? { note: input.note } : {}),
         ...(input.resultNote !== undefined ? { resultNote: input.resultNote } : {}),
         ...(input.resultStatus !== undefined ? { resultStatus: input.resultStatus } : {}),
@@ -1417,6 +1457,7 @@ export class JourneyService {
         note: input.note ?? null,
         resultNote: input.resultNote ?? null,
         resultStatus: input.resultStatus ?? null,
+        revision: 0,
       },
     });
   }
@@ -1703,6 +1744,215 @@ export class JourneyService {
     const iso = day ?? this.clock.today();
     if (!isIsoDate(iso)) throw new BadRequestException('Fecha inválida.');
     return weekStartMonday(iso);
+  }
+
+  async memberDashboard(userId: string) {
+    const version = await this.prisma.diagnosticVersion.findFirst({
+      where: { definitionRef: FORMULARIO_COMPLETO_REF },
+      orderBy: { createdAt: 'desc' },
+    });
+    const [ledger, plans, questions] = await Promise.all([
+      answerLedger(this.prisma, userId),
+      this.prisma.personalPlan.findMany({ where: { userId }, orderBy: { createdAt: 'desc' } }),
+      version
+        ? this.prisma.question.findMany({
+            where: { module: { versionId: version.id } },
+            select: { sourceRef: true },
+          })
+        : Promise.resolve([]),
+    ]);
+    const focusPlan = plans.find((plan) => plan.isFocus) ?? plans.find((plan) => plan.status === 'ACTIVE') ?? null;
+    let focusWeekCounts = null;
+    if (focusPlan) {
+      const weekStart = this.weekStart();
+      const actions = await this.prisma.planAction.findMany({ where: { planId: focusPlan.id, active: true } });
+      const records = await this.prisma.actionRecord.findMany({ where: { actionId: { in: actions.map((a) => a.id) } } });
+      const reviewed = Boolean(await this.prisma.weekReview.findUnique({ where: { userId_weekStart: { userId, weekStart } } }));
+      focusWeekCounts = weekCounts({
+        weekStart,
+        today: this.civilToday(),
+        weekReviewed: reviewed,
+        legacyWeek: false,
+        actions: actions.map((a) => ({ id: a.id, weekday: a.weekday, intervalDays: a.intervalDays, occasionsPerWeek: a.occasionsPerWeek, active: a.active })),
+        schedules: [],
+        records: records.map((r) => ({ actionId: r.actionId, day: r.day, status: r.status })),
+        cancellations: [],
+      });
+    }
+    return buildDashboard({
+      ledger,
+      catalogQuestions: questions.filter((q) => q.sourceRef).map((q) => ({ sourceRef: q.sourceRef as string })),
+      plans,
+      focusWeekCounts,
+      focusPlanId: focusPlan?.id ?? null,
+    });
+  }
+
+  async territoryView(userId: string, territory: string) {
+    const t = territory.toUpperCase();
+    if (!['MENTALIDAD', 'FINANZAS', 'RELACIONES', 'SALUD_FISICA'].includes(t)) {
+      throw new BadRequestException('Ámbito desconocido.');
+    }
+    const [ledger, questions] = await Promise.all([
+      answerLedger(this.prisma, userId),
+      this.prisma.question.findMany({
+        select: { sourceRef: true },
+        take: 800,
+      }),
+    ]);
+    return territoryDetail(t as 'MENTALIDAD' | 'FINANZAS' | 'RELACIONES' | 'SALUD_FISICA', ledger, questions.filter((q) => q.sourceRef).map((q) => ({ sourceRef: q.sourceRef as string })));
+  }
+
+  async memory(userId: string) {
+    const [purpose, plans] = await Promise.all([
+      this.prisma.purposeRevision.findMany({ where: { userId }, orderBy: { revision: 'desc' }, take: 5 }),
+      this.prisma.personalPlan.findMany({ where: { userId }, orderBy: { updatedAt: 'desc' } }),
+    ]);
+    const signed = purpose.find((row) => row.confirmedAt) ?? null;
+    const draft = purpose.find((row) => !row.confirmedAt) ?? null;
+    const readPurpose = (row: typeof signed) => {
+      if (!row) return null;
+      const content = row.content && typeof row.content === 'object' ? row.content as Record<string, unknown> : {};
+      return {
+        id: row.id,
+        revision: row.revision,
+        directionStatus: typeof content.directionStatus === 'string' ? content.directionStatus : null,
+        statement: typeof content.statement === 'string' ? content.statement : typeof content.edited === 'string' ? content.edited : null,
+        confirmedAt: row.confirmedAt?.toISOString() ?? null,
+        contractFrozen: Boolean(row.confirmedAt),
+      };
+    };
+    return buildMemory({
+      signed: readPurpose(signed),
+      draft: draft && draft.id !== signed?.id ? readPurpose(draft) : null,
+      plans: plans.map((plan) => ({
+        id: plan.id,
+        title: plan.title,
+        outcome: plan.outcome,
+        whyItMatters: plan.whyItMatters,
+        stage: plan.stage,
+        closedReason: plan.closedReason,
+        achievedAt: plan.achievedAt?.toISOString() ?? null,
+      })),
+    });
+  }
+
+  async returnReading(userId: string) {
+    const plan = await this.prisma.personalPlan.findFirst({
+      where: { userId, OR: [{ isFocus: true }, { status: 'ACTIVE' }] },
+      orderBy: [{ isFocus: 'desc' }, { updatedAt: 'desc' }],
+    });
+    const lastReview = await this.prisma.weekReview.findFirst({ where: { userId }, orderBy: { closedAt: 'desc' } });
+    const lastRecord = await this.prisma.actionRecord.findFirst({
+      where: { action: { plan: { userId } } },
+      orderBy: { day: 'desc' },
+    });
+    const today = this.civilToday();
+    const daysSince = lastRecord?.day
+      ? Math.max(0, Math.round((Date.parse(`${today}T12:00:00Z`) - Date.parse(`${lastRecord.day}T12:00:00Z`)) / 86400000))
+      : null;
+    return returnPanel({
+      planTitle: plan?.title ?? null,
+      planOutcome: plan?.outcome ?? null,
+      protectNote: plan?.protectNote ?? null,
+      lastReviewNote: lastReview?.note ?? null,
+      daysSinceLastActivity: daysSince,
+      pendingOccasionDays: daysSince != null && daysSince >= 21 ? 0 : 0,
+    });
+  }
+
+  async ownPlanPreview(userId: string, planId: string) {
+    const plan = await this.ownPlan(userId, planId);
+    const actions = await this.prisma.planAction.findMany({ where: { planId: plan.id, active: true } });
+    return readOwnPlan({
+      actions: actions.map((action) => ({
+        id: action.id,
+        title: action.title,
+        doneWhen: action.doneWhen,
+        weekday: action.weekday,
+        occasionsPerWeek: action.occasionsPerWeek,
+        minutesPerOccasion: action.minutesPerOccasion,
+      })),
+      reviewAt: plan.reviewAt?.toISOString().slice(0, 10) ?? null,
+      capacityMinutes: plan.capacityMinutes,
+    });
+  }
+
+  async previewPurposeSeed(userId: string) {
+    const purpose = await this.latestPurpose(userId);
+    const plan = await this.prisma.personalPlan.findFirst({
+      where: { userId, whyStatus: 'CONFIRMED' },
+      orderBy: { updatedAt: 'desc' },
+    });
+    const content = purpose?.content && typeof purpose.content === 'object' ? purpose.content as Record<string, unknown> : {};
+    const seed = directionSeed({
+      directionStatus: typeof content.directionStatus === 'string' ? content.directionStatus : null,
+      directionConfirmedAt: purpose?.confirmedAt?.toISOString() ?? null,
+      whyStatus: (plan?.whyStatus as 'PROPOSED' | 'CONFIRMED' | 'PROVISIONAL') ?? 'PROVISIONAL',
+      whyItMatters: plan?.whyItMatters ?? null,
+    });
+    return seed;
+  }
+
+  async confirmPurposeSeed(userId: string, input: { commandKey?: string; confirm?: boolean }) {
+    const preview = await this.previewPurposeSeed(userId);
+    if (!preview.offer || !preview.statement) {
+      throw new ConflictException({ message: 'No corresponde sembrar dirección ahora.', code: 'SEED_NOT_OFFERED', reason: preview.reason });
+    }
+    if (!input.confirm) throw new BadRequestException('Falta confirmación.');
+    if (input.commandKey) {
+      const existing = await this.prisma.purposeRevision.findFirst({
+        where: { userId, content: { path: ['seedCommandKey'], equals: input.commandKey } },
+      });
+      if (existing) return { purposeRevisionId: existing.id, repeated: true };
+    }
+    const saved = await this.savePurpose(userId, {
+      directionStatus: 'EXPLORANDO',
+      statement: preview.statement,
+      ...(input.commandKey ? { seedCommandKey: input.commandKey } : {}),
+    });
+    return { purposeRevisionId: saved.id, repeated: false };
+  }
+
+  async createPlanDraft(userId: string, input: { entry?: 'NO_DIRECTION' | 'GOAL' | 'OWN_PLAN'; territory?: string | null }) {
+    return this.prisma.personalPlan.create({
+      data: {
+        userId,
+        title: 'Borrador',
+        outcome: '',
+        status: 'DRAFT',
+        stage: 'PREPARING',
+        entry: input.entry ?? 'GOAL',
+        territory: input.territory ?? null,
+      },
+    });
+  }
+
+  async patchPlanDraft(
+    userId: string,
+    planId: string,
+    input: {
+      title?: string;
+      outcome?: string;
+      whyItMatters?: string | null;
+      whyStatus?: string | null;
+      territory?: string | null;
+      expectedVersion?: number;
+    },
+  ) {
+    const plan = await this.ownPlan(userId, planId);
+    this.guardPlanVersion(plan, input.expectedVersion);
+    return this.prisma.personalPlan.update({
+      where: { id: plan.id },
+      data: {
+        title: input.title?.trim(),
+        outcome: input.outcome?.trim(),
+        whyItMatters: input.whyItMatters !== undefined ? input.whyItMatters : undefined,
+        whyStatus: input.whyStatus ?? undefined,
+        territory: input.territory ?? undefined,
+        version: nextPlanVersion(plan.version),
+      },
+    });
   }
 }
 

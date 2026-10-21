@@ -21,6 +21,68 @@ export class JourneyController {
     return this.journey.state(req.user.sub);
   }
 
+  @Get('dashboard')
+  dashboard(@Request() req: AuthenticatedRequest) {
+    return this.journey.memberDashboard(req.user.sub);
+  }
+
+  @Get('territories/:territory')
+  territory(@Request() req: AuthenticatedRequest, @Param('territory') territory: string) {
+    return this.journey.territoryView(req.user.sub, territory);
+  }
+
+  @Get('memory')
+  memory(@Request() req: AuthenticatedRequest) {
+    return this.journey.memory(req.user.sub);
+  }
+
+  @Post('return')
+  returnPanel(@Request() req: AuthenticatedRequest) {
+    return this.journey.returnReading(req.user.sub);
+  }
+
+  @Post('plans/draft')
+  createPlanDraft(
+    @Request() req: AuthenticatedRequest,
+    @Body() body: { entry?: 'NO_DIRECTION' | 'GOAL' | 'OWN_PLAN'; territory?: string | null },
+  ) {
+    return this.journey.createPlanDraft(req.user.sub, body);
+  }
+
+  @Patch('plans/:planId/draft')
+  patchPlanDraft(
+    @Request() req: AuthenticatedRequest,
+    @Param('planId') planId: string,
+    @Body() body: {
+      title?: string;
+      outcome?: string;
+      whyItMatters?: string | null;
+      whyStatus?: string | null;
+      territory?: string | null;
+      expectedVersion?: number;
+    },
+  ) {
+    return this.journey.patchPlanDraft(req.user.sub, planId, body);
+  }
+
+  @Post('plans/own/preview')
+  ownPlanPreview(@Request() req: AuthenticatedRequest, @Body() body: { planId: string }) {
+    return this.journey.ownPlanPreview(req.user.sub, body.planId);
+  }
+
+  @Post('purpose/seed/preview')
+  previewPurposeSeed(@Request() req: AuthenticatedRequest) {
+    return this.journey.previewPurposeSeed(req.user.sub);
+  }
+
+  @Post('purpose/seed')
+  confirmPurposeSeed(
+    @Request() req: AuthenticatedRequest,
+    @Body() body: { commandKey?: string; confirm?: boolean },
+  ) {
+    return this.journey.confirmPurposeSeed(req.user.sub, body);
+  }
+
   @Get('purpose/contract')
   contract(@Request() req: AuthenticatedRequest) {
     return this.journey.contractDraft(req.user.sub);

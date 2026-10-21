@@ -15,6 +15,7 @@ import { familyById } from './accompaniment/families';
 import { draftAccompanimentHelp, type HelpDraftV2 } from './accompaniment/help';
 import { assessObservation, depthContrast, type ExperimentAspect, type ExperimentDecision, type ObservationStatus, type RecipientState } from './accompaniment/experiments';
 import { limitsForAction, proposeAccompaniment, type AccompanimentInput, type AccompanimentProposal } from './accompaniment/rules';
+import { withoutRejected, type RejectedInterpretation } from './accompaniment/personalization';
 import { BARRIERS, declarationToGoal, isGoalKind, RULES_VERSION, type BarrierChoice, type BarrierKind, type GoalKind, type Situation } from './accompaniment/vocab';
 
 export type AccompanimentBody = {
@@ -415,7 +416,20 @@ export class AccompanimentService {
       weekday: body.weekday ?? null,
       flexible: Boolean(body.flexible),
     };
+    const rejected: RejectedInterpretation[] = clarifications
+      .filter((row) => row.scope === 'INTERPRETATION' && row.outcome === 'REJECT')
+      .map((row) => ({
+        sourceRef: row.subjectRef ?? '',
+        responseRevision: Number.parseInt(row.detail ?? '0', 10) || 0,
+      }))
+      .filter((row) => row.sourceRef);
+    const ledgerEntries = await answerLedger(this.prisma, userId);
+    const revisionAt = (sourceRef: string) => ledgerEntries.find((entry) => entry.sourceRef === sourceRef)?.revision ?? 0;
     let proposal = proposeAccompaniment(input);
+    proposal = {
+      ...proposal,
+      reasons: withoutRejected({ reasons: proposal.reasons }, rejected, revisionAt).reasons,
+    };
     let help = draftAccompanimentHelp(proposal, { ...input, knownFields });
     if (body.adoptFamilyId && proposal.alternative?.familyId === body.adoptFamilyId) {
       const alt = familyById(body.adoptFamilyId);
@@ -567,10 +581,32 @@ export class AccompanimentService {
                 linkKind,
                 purposeRevisionId: built.purposeRevisionId,
                 sourceCombinationId: body.combinationId ?? null,
-                status: 'ACTIVE',
+                status: 'DRAFT',
+                stage: 'PREPARING',
+                territory: built.proposal.territory,
+                entry: 'GOAL',
               },
             });
             planId = created.id;
+            await tx.planProposal.create({
+              data: {
+                userId,
+                planId,
+                territory: built.proposal.territory,
+                kind: 'ACTION',
+                payload: {
+                  familyId: family.id,
+                  title: built.help.action,
+                  doneWhen: built.help.doneWhen,
+                },
+                reasons: built.proposal.reasons,
+                status: 'ACCEPTED',
+                rulesVersion: built.proposal.rulesVersion,
+                engineVersion: built.proposal.engineVersion,
+                commandKey: `${commandKey}:proposal:action`,
+                decidedAt: new Date(),
+              },
+            });
           }
           const scheduled = Boolean(body.flexible) || typeof body.weekday === 'number';
           const action = await tx.planAction.create({
