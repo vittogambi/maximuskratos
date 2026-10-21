@@ -1,4 +1,4 @@
-import { apiFetch } from '@/lib/api';
+import { apiBaseUrl } from '@/lib/api';
 
 export type MemberDashboard = {
   territories: { territory: string; label: string; state: string; required: number; settled: number }[];
@@ -7,10 +7,18 @@ export type MemberDashboard = {
   otherActivePlans: number;
 };
 
-export function fetchDashboard(token: string) {
-  return apiFetch<MemberDashboard>('/journey/dashboard', { token });
+async function journeyGet<T>(accessToken: string, path: string): Promise<T> {
+  const res = await fetch(`${apiBaseUrl()}/api/v1${path}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json() as Promise<T>;
 }
 
-export function fetchMemory(token: string) {
-  return apiFetch<{ plans: unknown[]; signedContract: unknown; draftPurpose: unknown }>('/journey/memory', { token });
+export function fetchDashboard(accessToken: string) {
+  return journeyGet<MemberDashboard>(accessToken, '/journey/dashboard');
+}
+
+export function fetchMemory(accessToken: string) {
+  return journeyGet<{ plans: unknown[]; signedContract: unknown; draftPurpose: unknown }>(accessToken, '/journey/memory');
 }
