@@ -790,3 +790,17 @@ Revisión de Rafa: conjuntos disjuntos probados en `territory-catalog.test.ts` p
 | Finanzas | 19 | `E-AUD-001!R37` a `R40` más todo `F-RAD-003` incluido `f-rad-003-proy` |
 
 Fuera del denominador de cobertura: `e-aud-s6`, `e-per-*`, preguntas con `exceptionOrigin = CONDITION`.
+
+## F2/F3 parcial: M1, puerta de activación, ledger y comandos de etapa
+
+21 oct 2026. Rama `pilot/domain-f1-m1-gate`. Commits `32c6846` (F1), `e465509` (M1 + T3.1), `7201e34` (T3.2 + T3.3).
+
+| Tarea | Estado | Notas |
+| --- | --- | --- |
+| F2 M1 | Hecho en rama | Migración `20261021200000_plan_lifecycle_m1`, columnas de etapa y `plan_transitions` |
+| T3.1 | Hecho | `createPlan` en `PREPARING`, `activationBlock`, tests HTTP con `activatePlanBody` |
+| T3.2 | Hecho | `answerLedger` + `ledger-account.ts`; acompañamiento deja de leer solo sesión `COMPLETED` |
+| T3.3 | Hecho (base) | `POST .../activate`, `transition`, `focus`; `plan-writes.ts`, `expectedVersion` → 409 `STALE_PLAN`; idempotencia de activación por `commandKey` en metadata |
+| T3.4 en adelante | Pendiente | Propuestas por parte, borrador Diseña, horarios T3.7, dashboard T3.8, web F4 |
+
+`npm run test:domain -w @mk/api`: 208 passed (25 files). HTTP de activación sin cuestionario en `plan-activation.http.test.ts` (requiere Postgres migrado). Player y auth del working tree siguen fuera de estos commits.
