@@ -8,7 +8,7 @@
     "start": "node dist/main.js",
     "start:prod": "node dist/main.js",
     "test": "vitest run",
-    "test:domain": "vitest run test/apply-week.test.ts test/purpose-synthesis.test.ts test/answer-rules.test.ts test/question-capture.test.ts test/instrumentos-score.test.ts test/instrumentos-isolation.test.ts test/plan-gate.test.ts test/hdrp-contract.test.ts test/iad-invariants.test.ts test/core-index.test.ts test/accompaniment-rules.test.ts test/execution.test.ts test/devolution.test.ts test/realistic-cases.test.ts test/home-board.test.ts",
+    "test:domain": "vitest run test/apply-week.test.ts test/purpose-synthesis.test.ts test/answer-rules.test.ts test/question-capture.test.ts test/instrumentos-score.test.ts test/instrumentos-isolation.test.ts test/plan-gate.test.ts test/hdrp-contract.test.ts test/iad-invariants.test.ts test/core-index.test.ts test/accompaniment-rules.test.ts test/execution.test.ts test/devolution.test.ts test/realistic-cases.test.ts test/home-board.test.ts test/territory-catalog.test.ts test/week-count.test.ts test/action-schedule.test.ts test/review-reading.test.ts test/answer-ledger.test.ts test/plan-lifecycle.test.ts test/personalization.test.ts test/purpose-link.test.ts",
     "test:http": "vitest run --config vitest.integration.config.ts"
   },
   "dependencies": {

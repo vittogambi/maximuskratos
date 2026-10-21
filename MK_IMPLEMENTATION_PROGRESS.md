@@ -753,3 +753,40 @@ El plan del Excel ("Producto MK desde el Excel original", cadena completa por en
 - Expo se prueba pronto contra esta misma API, sin esperar a que existan semanas y revisión.
 
 Siguiente entrega técnica viable, como propuesta: una prueba Expo mínima contra esta API. Login nativo con el refresh en SecureStore, una respuesta, reabrir la app y ver el mismo progreso, y leer el mismo perfil que en la web. MK-03 ya da el contrato y el costo es acotado. En paralelo, el diseño de historial de sesión y perfil (MK-02), que es requisito para activar cualquier catálogo nuevo, incluido el del Excel.
+
+## F0/F1: hilo del propósito en docs y dominio puro
+
+21 oct 2026. Rama de trabajo local `pilot/ikigai-lista`, commit `0e72f69`. Sin commit de esta entrega. No se tocaron migraciones, endpoints, pantallas ni archivos del player sin commitear.
+
+Documentos actualizados: `MK_PLAN_MAESTRO_IMPLEMENTACION.md` (hilo del propósito, D-PURP, T1.7, M1/M3 ampliados) y `MK_ESPECIFICACION_UI_UX.md` (S-01, S-06, S-08, S-10, S-12, S-14, S-15, copy, R-11 a R-13, B-19 a B-21, tabla 11.1).
+
+Dominio nuevo (solo archivos nuevos y `test:domain`):
+
+- `apps/api/src/instrumentos/territory-catalog.ts`, `answer-ledger.ts`
+- `apps/api/src/journey/week-count.ts`, `action-schedule.ts`, `review-reading.ts`, `plan-lifecycle.ts`, `purpose-link.ts`, `civil-week.ts`
+- `apps/api/src/journey/accompaniment/personalization.ts`
+- Pruebas homónimas en `apps/api/test/`
+
+### Línea base T0.1 (21 oct 2026, `0e72f69`)
+
+| Suite | Resultado | Notas |
+| --- | --- | --- |
+| `npm run test:domain -w @mk/api` | 196 passed (23 files) | Incluye 49 pruebas nuevas del bloque F1 |
+| `npm test -w @mk/api` | 345 passed, 26 skipped; fallos previos en auth/diagnostic/ikigai HTTP | No corregidos en esta entrega |
+| `npm test -w @mk/web` | 367 passed, 2 skipped; 2 failed en `journey-followup.test.tsx` | Fallos previos, no corregidos |
+| `npx tsc --noEmit -p apps/api/tsconfig.json` | Errores previos fuera de F1; sin errores en los módulos F1 tras ajuste de tipos en `answer-ledger.ts` | |
+
+Segunda corrida tras F1: mismos conteos de dominio (196/196 en verde). `execution.ts` no se modificó.
+
+### Refs por ámbito (`formulario-completo@6`, corte sección 8)
+
+Revisión de Rafa: conjuntos disjuntos probados en `territory-catalog.test.ts` para `@2` a `@6`.
+
+| Ámbito | Conteo | Referencias |
+| --- | --- | --- |
+| Mentalidad | 11 | `E-AUD-001!R6` a `R10`, `R19`, `R20`, `R26`, `R27`, `R29`, `R30` |
+| Salud física | 54 | `E-AUD-001!R16` a `R18` más todo `F-RAD-001` (`f-rad-001-s1` a `s7`) |
+| Relaciones | 17 | `E-AUD-001!R28`, `R46` a `R49` más todo `F-RAD-002` |
+| Finanzas | 19 | `E-AUD-001!R37` a `R40` más todo `F-RAD-003` incluido `f-rad-003-proy` |
+
+Fuera del denominador de cobertura: `e-aud-s6`, `e-per-*`, preguntas con `exceptionOrigin = CONDITION`.
