@@ -5,7 +5,9 @@ import { FORMULARIO_COMPLETO_REF } from '@mk/database';
 import { PrismaService } from '../prisma/prisma.service';
 import { TERRITORIES, type Territory } from '../instrumentos/glossary';
 import { decideAction, type ContentTag } from '../instrumentos/restrictions';
-import { healthFactFromAnswers, parseContentTags, parseConversation, parseHealthLimit, unfinishedHelp, type HealthLimitOutcome } from './plan-gate';
+import { answerLedger } from '../instrumentos/answer-ledger';
+import { accountTextsFromLedger, healthFactFromLedger } from '../instrumentos/ledger-account';
+import { parseContentTags, parseConversation, parseHealthLimit, unfinishedHelp, type HealthLimitOutcome } from './plan-gate';
 import { JourneyClock } from './journey-clock';
 import { canonicalHash } from './accompaniment/canon';
 import { devolutionOf, type AccountSources } from './accompaniment/devolution';
@@ -93,7 +95,7 @@ export class AccompanimentService {
 
   async devolution(userId: string) {
     const purpose = await this.prisma.purposeRevision.findFirst({ where: { userId }, orderBy: { revision: 'desc' } });
-    const texts = await this.accountTexts(userId);
+    const texts = await this.accountSources(userId);
     const direction = directionOf(purpose);
     const reading = devolutionOf({
       direction: direction === 'EXPLORANDO' || direction === 'PROVISIONAL' || direction === 'CONFIRMADO_POR_USUARIO' ? direction : null,
@@ -346,8 +348,9 @@ export class AccompanimentService {
       if (!outcome) throw new BadRequestException('Aclaración de límite desconocida.');
       return { subjectRef: row.subjectRef ?? null, outcome };
     });
-    const health = await this.health(userId);
-    const texts = await this.accountTexts(userId);
+    const ledger = await answerLedger(this.prisma, userId);
+    const health = healthFactFromLedger(ledger);
+    const texts = accountTextsFromLedger(ledger);
     const lastDay = records[0]?.day ?? null;
     const today = this.clock.today();
     const favorableDays = new Set(records.filter((row) => row.resultStatus === 'OBSERVED').map((row) => row.day));
@@ -498,44 +501,9 @@ export class AccompanimentService {
     }
   }
 
-  private async accountTexts(userId: string): Promise<Pick<AccountSources, 'visionDay' | 'visionPhrase' | 'valueDefended' | 'weeklyStandard' | 'postpone'>> {
-    const session = await this.prisma.diagnosticSession.findFirst({
-      where: { userId, status: 'COMPLETED', version: { definitionRef: FORMULARIO_COMPLETO_REF } },
-      orderBy: { completedAt: 'desc' },
-      include: { responses: { include: { question: true, selectedOptions: true } } },
-    });
-    const row = (ref: string) => session?.responses.find((item) => item.question.sourceRef === ref);
-    const text = (ref: string) => {
-      const found = row(ref);
-      if (!found || found.skipped || found.exceptionKind) return null;
-      return found.freeText?.trim() || null;
-    };
-    const postponeRow = row('formulario-v1:E-PER-000!R134');
-    const value = postponeRow ? [...postponeRow.selectedOptions].sort((a, b) => a.order - b.order)[0]?.value : null;
-    const postpone = postponeRow?.exceptionKind
-      ? 'UNKNOWN' as const
-      : value === '2' ? 'SI' as const : value === '1' ? 'PARCIAL' as const : value === '0' ? 'NO' as const : null;
-    return {
-      visionDay: text('formulario-v1:E-PER-000!R30'),
-      visionPhrase: text('formulario-v1:E-PER-000!R33'),
-      valueDefended: text('formulario-v1:E-PER-000!R50'),
-      weeklyStandard: text('formulario-v1:E-PER-000!R62'),
-      postpone,
-    };
-  }
-
-  private async health(userId: string) {
-    const session = await this.prisma.diagnosticSession.findFirst({
-      where: { userId, status: 'COMPLETED', version: { definitionRef: FORMULARIO_COMPLETO_REF } },
-      orderBy: { completedAt: 'desc' },
-      include: { responses: { include: { question: true, selectedOptions: true } } },
-    });
-    const textAt = (ref: string) => {
-      const row = session?.responses.find((item) => item.question.sourceRef === `formulario-v1:F-RAD-001!${ref}`);
-      if (!row || row.skipped) return null;
-      return row.freeText?.trim() || [...row.selectedOptions].sort((a, b) => a.order - b.order)[0]?.textEs?.trim() || null;
-    };
-    return healthFactFromAnswers(textAt);
+  private async accountSources(userId: string): Promise<Pick<AccountSources, 'visionDay' | 'visionPhrase' | 'valueDefended' | 'weeklyStandard' | 'postpone'>> {
+    const ledger = await answerLedger(this.prisma, userId);
+    return accountTextsFromLedger(ledger);
   }
 
   private async store(userId: string, body: AccompanimentBody, built: Built, status: 'ACCEPTED' | 'REJECTED', adoptFamilyId: string | null) {

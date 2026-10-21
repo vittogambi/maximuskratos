@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ledgerFrom, pickLedgerSession, type LedgerSession } from '../src/instrumentos/answer-ledger';
+import { answerAt, ledgerFrom, pickLedgerSession, type LedgerSession } from '../src/instrumentos/answer-ledger';
 
 function session(partial: Partial<LedgerSession> & Pick<LedgerSession, 'id' | 'status'>): LedgerSession {
   return {
@@ -51,6 +51,17 @@ describe('answer ledger', () => {
     ]);
     expect(entries[0].value).toBeNull();
     expect(entries[0].exceptionKind).toBe('UNKNOWN');
+  });
+
+  it('answerAt finds one sourceRef', () => {
+    const entries = ledgerFrom([
+      session({
+        id: 's',
+        status: 'ACTIVE',
+        responses: [{ sourceRef: 'formulario-v1:F-RAD-001!R26', revision: 1, answeredAt: new Date(), exceptionKind: null, freeText: 'Sí', selectedOptionIds: [], skipped: false }],
+      }),
+    ]);
+    expect(answerAt(entries, 'formulario-v1:F-RAD-001!R26')?.value).toBe('Sí');
   });
 
   it('keeps the highest revision for the same sourceRef', () => {

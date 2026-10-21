@@ -197,6 +197,40 @@ export class JourneyController {
     return this.journey.patchAction(req.user.sub, actionId, body);
   }
 
+  @Post('plans/:planId/activate')
+  activatePlan(
+    @Request() req: AuthenticatedRequest,
+    @Param('planId') planId: string,
+    @Body() body: {
+      confirmed?: boolean;
+      capacityMinutes?: number;
+      protectNote?: string | null;
+      explicitNoSchedule?: boolean;
+      expectedVersion?: number;
+      commandKey?: string;
+    },
+  ) {
+    return this.journey.activatePlan(req.user.sub, planId, body);
+  }
+
+  @Post('plans/:planId/transition')
+  transitionPlan(
+    @Request() req: AuthenticatedRequest,
+    @Param('planId') planId: string,
+    @Body() body: { toStage: 'PREPARING' | 'ACTIVE' | 'PAUSED' | 'MAINTENANCE' | 'CLOSED'; reason?: string | null; expectedVersion?: number },
+  ) {
+    return this.journey.transitionPlan(req.user.sub, planId, body);
+  }
+
+  @Post('plans/:planId/focus')
+  focusPlan(
+    @Request() req: AuthenticatedRequest,
+    @Param('planId') planId: string,
+    @Body() body: { enable: boolean; expectedVersion?: number },
+  ) {
+    return this.journey.setPlanFocus(req.user.sub, planId, body);
+  }
+
   @Patch('plans/:planId')
   patchPlan(
     @Request() req: AuthenticatedRequest,
@@ -211,6 +245,7 @@ export class JourneyController {
       capacityMinutes?: number;
       protectNote?: string | null;
       explicitNoSchedule?: boolean;
+      expectedVersion?: number;
     },
   ) {
     return this.journey.patchPlan(req.user.sub, planId, body);

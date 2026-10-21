@@ -3,7 +3,7 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    include: ['test/http-bind.test.ts', 'test/home-board.http.test.ts', 'test/journey-http.test.ts', 'test/journey-rate.test.ts', 'test/realistic-cases.http.test.ts', 'test/accompaniment-contract.http.test.ts', 'test/admin-journey.http.test.ts'],
+    include: ['test/http-bind.test.ts', 'test/home-board.http.test.ts', 'test/journey-http.test.ts', 'test/journey-rate.test.ts', 'test/realistic-cases.http.test.ts', 'test/accompaniment-contract.http.test.ts', 'test/admin-journey.http.test.ts', 'test/plan-activation.http.test.ts'],
     fileParallelism: false,
     isolate: true,
     testTimeout: 180_000,

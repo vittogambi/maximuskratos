@@ -34,6 +34,8 @@ import {
   type HealthLimitOutcome,
 } from './plan-gate';
 import { canTransition, compatStatus, fromLegacy, type PlanStage } from './plan-lifecycle';
+import { assertPlanVersion, focusTargets, nextPlanVersion } from './plan-writes';
+import type { ActivatePlanDto, FocusPlanDto, TransitionPlanDto } from './dto/plan-stage.dto';
 import { homeBoard, type HomePlan } from './home-board';
 import { nextStep } from './next-step';
 import { isIsoDate, isMonday, weekStartMonday } from './civil-date';
@@ -708,6 +710,18 @@ export class JourneyService {
     return (row.stage as PlanStage | null) ?? fromLegacy(row.status as 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'ARCHIVED');
   }
 
+  private guardPlanVersion(plan: { version: number }, expectedVersion?: number) {
+    try {
+      assertPlanVersion({ expectedVersion, currentVersion: plan.version });
+    } catch (err) {
+      if (err instanceof Error && err.message === 'STALE_PLAN') {
+        const currentVersion = (err as Error & { currentVersion: number }).currentVersion;
+        throw new ConflictException({ message: 'El plan cambió en otra pestaña.', code: 'STALE_PLAN', version: currentVersion });
+      }
+      throw err;
+    }
+  }
+
   private async restrictionsAnswered(userId: string): Promise<boolean> {
     const row = await this.prisma.memberClarification.findFirst({
       where: {
@@ -889,6 +903,162 @@ export class JourneyService {
     });
   }
 
+  async activatePlan(userId: string, planId: string, input: ActivatePlanDto) {
+    if (input.commandKey) {
+      const prior = await this.prisma.planTransition.findFirst({
+        where: { userId, planId, metadata: { path: ['commandKey'], equals: input.commandKey } },
+      });
+      if (prior) {
+        const plan = await this.prisma.personalPlan.findFirst({ where: { id: planId, userId } });
+        if (!plan) throw new NotFoundException('Plan no encontrado.');
+        return { plan, repeated: true };
+      }
+    }
+    const plan = await this.runPlanActivation(userId, planId, input, input.commandKey ?? null);
+    return { plan, repeated: false };
+  }
+
+  async transitionPlan(userId: string, planId: string, input: TransitionPlanDto) {
+    const plan = await this.prisma.personalPlan.findFirst({ where: { id: planId, userId } });
+    if (!plan) throw new NotFoundException('Plan no encontrado.');
+    this.guardPlanVersion(plan, input.expectedVersion);
+    const from = this.planStage(plan);
+    const to = input.toStage;
+    if (!canTransition(from, to)) {
+      throw new BadRequestException('Esa transición no está permitida.');
+    }
+    const status = compatStatus(to);
+    return this.prisma.$transaction(async (tx) => {
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${userId}))`;
+      const updated = await tx.personalPlan.update({
+        where: { id: plan.id },
+        data: {
+          stage: to,
+          status,
+          version: nextPlanVersion(plan.version),
+          ...(to === 'CLOSED' ? { closedReason: input.reason?.trim() || 'OTHER' } : {}),
+        },
+      });
+      await tx.planTransition.create({
+        data: {
+          userId,
+          planId: plan.id,
+          fromStage: from,
+          toStage: to,
+          reason: input.reason?.trim() || null,
+          effectiveFrom: new Date(this.civilToday()),
+        },
+      });
+      return updated;
+    });
+  }
+
+  async setPlanFocus(userId: string, planId: string, input: FocusPlanDto) {
+    const plan = await this.prisma.personalPlan.findFirst({ where: { id: planId, userId } });
+    if (!plan) throw new NotFoundException('Plan no encontrado.');
+    this.guardPlanVersion(plan, input.expectedVersion);
+    if (input.enable && this.planStage(plan) !== 'ACTIVE' && this.planStage(plan) !== 'MAINTENANCE') {
+      throw new BadRequestException('Solo un plan activo o en mantenimiento puede ser foco.');
+    }
+    const focused = await this.prisma.personalPlan.findFirst({ where: { userId, isFocus: true } });
+    const targets = focusTargets({
+      planId,
+      currentlyFocusedPlanId: focused?.id ?? null,
+      enable: input.enable,
+    });
+    const today = this.civilToday();
+    return this.prisma.$transaction(async (tx) => {
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${userId}))`;
+      for (const clearId of targets.clearPlanIds) {
+        await tx.personalPlan.update({
+          where: { id: clearId },
+          data: { isFocus: false, focusSince: null, version: { increment: 1 } },
+        });
+        await tx.planTransition.create({
+          data: { userId, planId: clearId, fromStage: 'FOCUS_ON', toStage: 'FOCUS_OFF', effectiveFrom: new Date(today) },
+        });
+      }
+      if (targets.setPlanId) {
+        const updated = await tx.personalPlan.update({
+          where: { id: targets.setPlanId },
+          data: { isFocus: true, focusSince: new Date(), version: nextPlanVersion(plan.version) },
+        });
+        await tx.planTransition.create({
+          data: { userId, planId: targets.setPlanId, fromStage: 'FOCUS_OFF', toStage: 'FOCUS_ON', effectiveFrom: new Date(today) },
+        });
+        return updated;
+      }
+      return tx.personalPlan.findFirstOrThrow({ where: { id: planId } });
+    });
+  }
+
+  private async runPlanActivation(
+    userId: string,
+    planId: string,
+    patch: ActivatePlanDto,
+    commandKey: string | null,
+  ) {
+    const plan = await this.prisma.personalPlan.findFirst({
+      where: { id: planId, userId },
+      include: { actions: { where: { active: true } } },
+    });
+    if (!plan) throw new NotFoundException('Plan no encontrado.');
+    this.guardPlanVersion(plan, patch.expectedVersion);
+    const currentStage = this.planStage(plan);
+    if (currentStage === 'ACTIVE' || currentStage === 'MAINTENANCE') return plan;
+    if (!canTransition(currentStage, 'ACTIVE')) {
+      throw new BadRequestException('Este plan no puede activarse desde su etapa actual.');
+    }
+    const restrictions = await this.restrictionsAnswered(userId);
+    const activation = planActivationInput({
+      plan: {
+        outcome: plan.outcome,
+        goalClass: plan.goalClass,
+        capacityMinutes: plan.capacityMinutes,
+        protectNote: plan.protectNote,
+      },
+      activeActionCount: plan.actions.length,
+      restrictionsAnswered: restrictions,
+      patch,
+    });
+    const missing = activationBlock(activation);
+    if (missing.length > 0) {
+      throw new UnprocessableEntityException({ message: 'Faltan datos para activar el plan.', code: 'ACTIVATION_INCOMPLETE', missing });
+    }
+    for (const action of plan.actions) {
+      const tags = parseContentTags(action.contentTags);
+      if (!tags) throw new BadRequestException('Marca de contenido desconocida.');
+      await this.assertContent(userId, tags, { conversation: action.conversationOutcome });
+    }
+    const capacityMinutes = patch.capacityMinutes ?? undefined;
+    const protectNote = patch.protectNote !== undefined ? patch.protectNote : undefined;
+    return this.prisma.$transaction(async (tx) => {
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${userId}))`;
+      const updated = await tx.personalPlan.update({
+        where: { id: plan.id },
+        data: {
+          status: compatStatus('ACTIVE'),
+          stage: 'ACTIVE',
+          activatedAt: new Date(),
+          version: nextPlanVersion(plan.version),
+          ...(capacityMinutes !== undefined ? { capacityMinutes } : {}),
+          ...(protectNote !== undefined ? { protectNote } : {}),
+        },
+      });
+      await tx.planTransition.create({
+        data: {
+          userId,
+          planId: plan.id,
+          fromStage: currentStage,
+          toStage: 'ACTIVE',
+          effectiveFrom: new Date(this.civilToday()),
+          metadata: commandKey ? { commandKey } : undefined,
+        },
+      });
+      return updated;
+    });
+  }
+
   async patchPlan(
     userId: string,
     planId: string,
@@ -902,84 +1072,58 @@ export class JourneyService {
       capacityMinutes?: number;
       protectNote?: string | null;
       explicitNoSchedule?: boolean;
+      expectedVersion?: number;
     },
   ) {
-    const plan = await this.prisma.personalPlan.findFirst({
-      where: { id: planId, userId },
-      include: { actions: { where: { active: true } } },
-    });
+    if (input.status === 'ACTIVE') {
+      const { plan } = await this.activatePlan(userId, planId, input);
+      if (input.title?.trim() || input.outcome?.trim() || input.valueRef !== undefined || input.linkKind) {
+        return this.patchPlanFields(userId, planId, input, plan.version);
+      }
+      return plan;
+    }
+    return this.patchPlanFields(userId, planId, input);
+  }
+
+  private async patchPlanFields(
+    userId: string,
+    planId: string,
+    input: {
+      title?: string;
+      outcome?: string;
+      status?: 'DRAFT' | 'ACTIVE' | 'ARCHIVED';
+      valueRef?: string | null;
+      linkKind?: string | null;
+      capacityMinutes?: number;
+      protectNote?: string | null;
+      expectedVersion?: number;
+    },
+    skipVersion?: number,
+  ) {
+    const plan = await this.prisma.personalPlan.findFirst({ where: { id: planId, userId } });
     if (!plan) throw new NotFoundException('Plan no encontrado.');
+    this.guardPlanVersion(plan, input.expectedVersion);
     if (input.linkKind != null && input.linkKind !== '' && !PLAN_LINKS.includes(input.linkKind)) {
       throw new BadRequestException('Vínculo desconocido.');
     }
-    const currentStage = this.planStage(plan);
-    const nextOutcome = input.outcome?.trim() ?? plan.outcome;
-    const activating = input.status === 'ACTIVE' && currentStage !== 'ACTIVE' && currentStage !== 'MAINTENANCE';
-    if (activating) {
-      if (!canTransition(currentStage, 'ACTIVE')) {
-        throw new BadRequestException('Este plan no puede activarse desde su etapa actual.');
-      }
-      const restrictions = await this.restrictionsAnswered(userId);
-      const activation = planActivationInput({
-        plan: {
-          outcome: nextOutcome,
-          goalClass: plan.goalClass,
-          capacityMinutes: plan.capacityMinutes,
-          protectNote: plan.protectNote,
-        },
-        activeActionCount: plan.actions.length,
-        restrictionsAnswered: restrictions,
-        patch: {
-          confirmed: input.confirmed,
-          capacityMinutes: input.capacityMinutes,
-          protectNote: input.protectNote,
-          explicitNoSchedule: input.explicitNoSchedule,
-        },
-      });
-      const missing = activationBlock(activation);
-      if (missing.length > 0) {
-        throw new UnprocessableEntityException({ message: 'Faltan datos para activar el plan.', code: 'ACTIVATION_INCOMPLETE', missing });
-      }
-      for (const action of plan.actions) {
-        const tags = parseContentTags(action.contentTags);
-        if (!tags) throw new BadRequestException('Marca de contenido desconocida.');
-        await this.assertContent(userId, tags, { conversation: action.conversationOutcome });
-      }
-    }
-    const capacityMinutes = input.capacityMinutes ?? undefined;
-    const protectNote = input.protectNote !== undefined ? input.protectNote : undefined;
     const data: Prisma.PersonalPlanUpdateInput = {
       title: input.title?.trim(),
       outcome: input.outcome?.trim(),
       ...(input.valueRef !== undefined ? { valueRef: input.valueRef?.trim() || null } : {}),
       ...(input.linkKind ? { linkKind: input.linkKind } : {}),
-      ...(capacityMinutes !== undefined ? { capacityMinutes } : {}),
-      ...(protectNote !== undefined ? { protectNote } : {}),
+      ...(input.capacityMinutes !== undefined ? { capacityMinutes: input.capacityMinutes } : {}),
+      ...(input.protectNote !== undefined ? { protectNote: input.protectNote } : {}),
+      version: nextPlanVersion(skipVersion ?? plan.version),
     };
-    if (activating) {
-      data.status = compatStatus('ACTIVE');
-      data.stage = 'ACTIVE';
-      data.activatedAt = new Date();
-    } else if (input.status) {
-      data.status = input.status;
-      if (input.status === 'DRAFT') data.stage = 'PREPARING';
-      if (input.status === 'ARCHIVED') data.stage = 'CLOSED';
+    if (input.status === 'DRAFT') {
+      data.status = 'DRAFT';
+      data.stage = 'PREPARING';
     }
-    return this.prisma.$transaction(async (tx) => {
-      const updated = await tx.personalPlan.update({ where: { id: plan.id }, data });
-      if (activating) {
-        await tx.planTransition.create({
-          data: {
-            userId,
-            planId: plan.id,
-            fromStage: currentStage,
-            toStage: 'ACTIVE',
-            effectiveFrom: new Date(this.civilToday()),
-          },
-        });
-      }
-      return updated;
-    });
+    if (input.status === 'ARCHIVED') {
+      data.status = 'ARCHIVED';
+      data.stage = 'CLOSED';
+    }
+    return this.prisma.personalPlan.update({ where: { id: plan.id }, data });
   }
 
   async addAction(

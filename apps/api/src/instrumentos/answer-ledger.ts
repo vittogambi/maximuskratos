@@ -7,6 +7,8 @@ export type LedgerResponseRow = {
   exceptionKind: string | null;
   freeText: string | null;
   selectedOptionIds: string[];
+  /** First selected option value or label, when loaded from the database. */
+  selectedOptionValues?: string[];
   skipped: boolean;
 };
 
@@ -33,8 +35,19 @@ function responseValue(row: LedgerResponseRow): string | null {
   if (row.skipped) return null;
   const text = row.freeText?.trim();
   if (text) return text;
+  if (row.selectedOptionValues?.length) return row.selectedOptionValues[0] ?? null;
   if (row.selectedOptionIds.length) return row.selectedOptionIds.join(',');
   return null;
+}
+
+export function answerAt(entries: LedgerEntry[], sourceRef: string): LedgerEntry | null {
+  return entries.find((entry) => entry.sourceRef === sourceRef) ?? null;
+}
+
+export function ledgerText(entries: LedgerEntry[], sourceRef: string): string | null {
+  const row = answerAt(entries, sourceRef);
+  if (!row || row.exceptionKind) return null;
+  return row.value?.trim() || null;
 }
 
 export function pickLedgerSession(sessions: LedgerSession[]): LedgerSession | null {
@@ -77,6 +90,7 @@ export async function answerLedger(db: AnswerLedgerDb, userId: string): Promise<
       responses: {
         include: {
           question: { select: { sourceRef: true } },
+          selectedOptions: { select: { value: true, textEs: true, order: true } },
         },
       },
       version: { select: { version: true } },
@@ -97,6 +111,10 @@ export async function answerLedger(db: AnswerLedgerDb, userId: string): Promise<
         freeText: response.freeText,
         skipped: response.skipped,
         selectedOptionIds: response.selectedOptionIds,
+        selectedOptionValues: [...response.selectedOptions]
+          .sort((a, b) => a.order - b.order)
+          .map((option) => option.value?.trim() || option.textEs?.trim() || '')
+          .filter((value) => value.length > 0),
       })),
   }));
   return ledgerFrom(mapped);
