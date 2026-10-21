@@ -34,6 +34,7 @@ model User {
   masterProfiles      MasterProfile[]
   purposeRevisions    PurposeRevision[]
   personalPlans       PersonalPlan[]
+  planTransitions     PlanTransition[]
   weekReviews         WeekReview[]
   guidanceRequests    GuidanceRequest[]
   clarifications      MemberClarification[]
@@ -1048,12 +1049,54 @@ model PersonalPlan {
   /// IKIGAI combination this plan is testing, when it came from the cross.
   sourceCombinationId String?     @map("source_combination_id")
   status       PersonalPlanStatus @default(DRAFT)
+  /// PREPARING, ACTIVE, PAUSED, MAINTENANCE, CLOSED. Null rows use status via fromLegacy.
+  stage        String?            @map("stage")
+  goalClass    String?            @map("goal_class")
+  entry        String?            @map("entry")
+  territory    String?            @map("territory")
+  whyItMatters String?            @map("why_it_matters")
+  whyStatus    String?            @map("why_status")
+  whyRefs      Json?              @map("why_refs")
+  linkStatus   String?            @map("link_status")
+  baseline     String?            @map("baseline")
+  criterionText String?           @map("criterion_text")
+  criterionStatus String?          @map("criterion_status")
+  criterionRevision Int?          @map("criterion_revision")
+  reviewAt     DateTime?          @map("review_at") @db.Date
+  expectedSignal String?          @map("expected_signal")
+  capacityMinutes Int?            @map("capacity_minutes")
+  protectNote  String?            @map("protect_note")
+  activatedAt  DateTime?          @map("activated_at")
+  achievedAt   DateTime?          @map("achieved_at")
+  closedReason String?            @map("closed_reason")
+  isFocus      Boolean            @default(false) @map("is_focus")
+  focusSince   DateTime?          @map("focus_since")
+  version      Int                @default(1) @map("version")
   createdAt    DateTime           @default(now()) @map("created_at")
   updatedAt    DateTime           @updatedAt @map("updated_at")
   actions      PlanAction[]
+  transitions  PlanTransition[]
 
   @@index([userId, status])
   @@map("personal_plans")
+}
+
+model PlanTransition {
+  id            String       @id @default(uuid())
+  userId        String       @map("user_id")
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId        String       @map("plan_id")
+  plan          PersonalPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  fromStage     String?      @map("from_stage")
+  toStage       String       @map("to_stage")
+  reason        String?      @map("reason")
+  effectiveFrom DateTime?    @map("effective_from") @db.Date
+  metadata      Json?
+  createdAt     DateTime     @default(now()) @map("created_at")
+
+  @@index([planId, createdAt])
+  @@index([userId, createdAt])
+  @@map("plan_transitions")
 }
 
 model PlanAction {

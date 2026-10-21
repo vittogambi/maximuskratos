@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { bootApi } from './journey-http-app';
+import { activatePlanBody } from './plan-activation-body';
 
 process.env.MK_CLOCK_DAY = '2026-10-12';
 process.env.MK_TRACE_HTTP = '1';
@@ -12,7 +13,7 @@ let app: INestApplication;
 
 function server() { return app.getHttpServer(); }
 
-async function call(token: string | null, method: 'get' | 'post', path: string, body?: unknown) {
+async function call(token: string | null, method: 'get' | 'post' | 'patch', path: string, body?: unknown) {
   const req = request(server())[method](`/api/v1${path}`).set('Connection', 'close').set('Authorization', token ? `Bearer ${token}` : '');
   return body === undefined ? req : req.send(body);
 }
@@ -345,6 +346,7 @@ describe('recorrido desde la devolución', () => {
       weekday: 1,
     });
     expect(action.status).toBeLessThan(400);
+    expect((await call(own.token, 'patch', `/journey/plans/${plan.body.id}`, activatePlanBody())).status).toBeLessThan(400);
     expect((await call(own.token, 'post', '/journey/records', {
       actionId: action.body.id, day: '2026-10-12', status: 'DONE', resultStatus: 'OBSERVED',
     })).status).toBeLessThan(400);

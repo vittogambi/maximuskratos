@@ -7,6 +7,7 @@ import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { resetWeekHookForTests } from '../dist/journey/journey-clock.js';
 import { bootApi } from './journey-http-app';
+import { activatePlanBody } from './plan-activation-body';
 
 type Spec = { kind: 'activity'; field: string; ambit: string; option: string; answer: string } | { kind: 'choice'; value: string } | { kind: 'text'; value: string };
 type Question = {
@@ -289,6 +290,8 @@ describe('recorrido HTTP A', () => {
       weekday: 1,
     });
     expect(action.status, JSON.stringify(action.body)).toBeLessThan(400);
+    const activated = await call(token, 'patch', `/journey/plans/${plan.body.id}`, activatePlanBody());
+    expect(activated.status, JSON.stringify(activated.body)).toBeLessThan(400);
 
     const firstOccasions = await call(token, 'get', '/journey/calendar');
     const secondOccasions = await call(token, 'get', '/journey/calendar');
@@ -416,6 +419,7 @@ describe('recorrido HTTP B', () => {
       weekday: 1,
     });
     expect(action.status).toBeLessThan(400);
+    expect((await call(account.token, 'patch', `/journey/plans/${plan.body.id}`, activatePlanBody())).status).toBeLessThan(400);
     await call(account.token, 'post', '/journey/records', {
       actionId: action.body.id,
       day: '2026-10-12',

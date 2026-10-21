@@ -5,6 +5,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { CORE_SIGNALS } from '../src/instrumentos/core-definition';
 import { scoreAlignment } from '../src/instrumentos/core-index';
 import { bootApi } from './journey-http-app';
+import { activatePlanBody } from './plan-activation-body';
 
 process.env.MK_CLOCK_DAY = '2026-10-12';
 const clock = { today() { return process.env.MK_CLOCK_DAY ?? '2026-10-12'; } };
@@ -92,6 +93,7 @@ describe('tablero desde el recorrido', () => {
     expect(plan.status).toBeLessThan(400);
     const action = await call(own.token, 'post', `/journey/plans/${plan.body.id}/actions`, { title: 'Escribir a mi modo', doneWhen: 'Hay un párrafo.', weekday: 1 });
     expect(action.status).toBeLessThan(400);
+    expect((await call(own.token, 'patch', `/journey/plans/${plan.body.id}`, activatePlanBody())).status).toBeLessThan(400);
     const ownState = await call(own.token, 'get', '/journey/state');
     expect(ownState.body.board.situation).toBe('OWN');
     expect(ownState.body.board.plan).toMatchObject({ title: 'Escribir a mi modo', outcome: 'Hay un párrafo.', priorityNote: 'Lo hago el lunes.' });
@@ -171,6 +173,7 @@ describe('tablero desde el recorrido', () => {
     expect(compared.body.indexes.alignment.general).toBe(high.general);
     const plan = await call(series.token, 'post', '/journey/plans', { title: 'Medir', outcome: 'Quedó el número.', priorityNote: 'Hoy.', linkKind: 'DIRECT' });
     const action = await call(series.token, 'post', `/journey/plans/${plan.body.id}/actions`, { title: 'Medir', doneWhen: 'Quedó el número.', weekday: 1 });
+    expect((await call(series.token, 'patch', `/journey/plans/${plan.body.id}`, activatePlanBody())).status).toBeLessThan(400);
     expect((await call(series.token, 'post', '/journey/records', { actionId: action.body.id, day: '2026-10-12', status: 'DONE', resultStatus: 'OBSERVED' })).status).toBeLessThan(400);
     expect((await call(series.token, 'post', '/journey/weeks/close', { weekStart: '2026-10-12', decisions: { [action.body.id]: 'KEEP' } })).status).toBeLessThan(400);
     const after = await call(series.token, 'get', '/journey/state');

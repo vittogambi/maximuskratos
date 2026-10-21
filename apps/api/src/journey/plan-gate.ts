@@ -1,4 +1,10 @@
 import type { ContentTag, HealthFact } from '../instrumentos/restrictions';
+export {
+  activationBlock,
+  planActivationInput,
+  type ActivationInput,
+  type ActivationMissing,
+} from './plan-lifecycle';
 
 /** Directions that let a member write plans. Exploring counts; a missing direction does not. */
 export const WORKING_DIRECTIONS: readonly string[] = ['EXPLORANDO', 'PROVISIONAL', 'CONFIRMADO_POR_USUARIO'];
@@ -19,6 +25,7 @@ export function isWorkingDirection(status: string | null): boolean {
  * Shared server rule for every writer that creates or activates plans and actions.
  * `formularioCompleted` must come from a persisted reading of a completed formulario completo session.
  */
+/** @deprecated Legacy gate. New writers use activation at confirm time; see plan-lifecycle activationBlock. */
 export function writerBlock(input: { formularioCompleted: boolean; directionStatus: string | null }): WriterBlock | null {
   if (!input.formularioCompleted) {
     return {

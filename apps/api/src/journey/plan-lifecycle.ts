@@ -65,3 +65,34 @@ export function activationBlock(input: ActivationInput): ActivationMissing[] {
   if (!input.confirmed) missing.push('CONFIRMATION');
   return missing;
 }
+
+export function planActivationInput(params: {
+  plan: {
+    outcome: string;
+    goalClass?: string | null;
+    capacityMinutes?: number | null;
+    protectNote?: string | null;
+    explicitNoSchedule?: boolean | null;
+  };
+  activeActionCount: number;
+  restrictionsAnswered: boolean;
+  patch: {
+    confirmed?: boolean;
+    capacityMinutes?: number;
+    protectNote?: string | null;
+    explicitNoSchedule?: boolean;
+  };
+}): ActivationInput {
+  const capacityMinutes = params.patch.capacityMinutes ?? params.plan.capacityMinutes ?? null;
+  const protectNote = params.patch.protectNote !== undefined ? params.patch.protectNote : params.plan.protectNote ?? null;
+  const explicitNoSchedule = params.patch.explicitNoSchedule ?? Boolean(params.plan.explicitNoSchedule);
+  const restrictionsAnswered =
+    params.restrictionsAnswered || protectNote != null || params.patch.protectNote !== undefined;
+  return {
+    hasGoalOrExperimentQuestion: Boolean(params.plan.outcome?.trim()),
+    timeDeclared: capacityMinutes != null && capacityMinutes >= 0,
+    restrictionsAnswered,
+    hasActionOrExplicitNoSchedule: params.activeActionCount > 0 || explicitNoSchedule,
+    confirmed: params.patch.confirmed === true,
+  };
+}

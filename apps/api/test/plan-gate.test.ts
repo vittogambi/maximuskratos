@@ -8,6 +8,8 @@ import {
   planLink,
   unfinishedHelp,
   valueHelpTemplate,
+  activationBlock,
+  planActivationInput,
   writerBlock,
 } from '../src/journey/plan-gate';
 
@@ -16,6 +18,32 @@ describe('unfinished help', () => {
     expect(unfinishedHelp('Ayudo a [persona] a lograr [resultado].', null)).toContain('huecos');
     expect(unfinishedHelp(valueHelpTemplate('Claridad mental'), 'Claridad mental')).toContain('qué cambia');
     expect(unfinishedHelp('Esta semana escribo un párrafo porque quiero claridad mental.', 'Claridad mental')).toBeNull();
+  });
+});
+
+describe('activationBlock via planActivationInput', () => {
+  it('lists missing activation fields without questionnaire or direction', () => {
+    const missing = activationBlock(
+      planActivationInput({
+        plan: { outcome: '' },
+        activeActionCount: 0,
+        restrictionsAnswered: false,
+        patch: {},
+      }),
+    );
+    expect(missing).toEqual(['GOAL', 'TIME', 'RESTRICTIONS', 'ACTION', 'CONFIRMATION']);
+  });
+
+  it('passes when preparation data and confirmation are present', () => {
+    const missing = activationBlock(
+      planActivationInput({
+        plan: { outcome: 'Hay un párrafo.' },
+        activeActionCount: 1,
+        restrictionsAnswered: false,
+        patch: { confirmed: true, capacityMinutes: 60, protectNote: 'Nada.' },
+      }),
+    );
+    expect(missing).toEqual([]);
   });
 });
 

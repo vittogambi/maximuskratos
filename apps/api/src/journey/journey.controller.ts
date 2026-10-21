@@ -201,7 +201,17 @@ export class JourneyController {
   patchPlan(
     @Request() req: AuthenticatedRequest,
     @Param('planId') planId: string,
-    @Body() body: { title?: string; outcome?: string; status?: 'DRAFT' | 'ACTIVE' | 'ARCHIVED'; valueRef?: string | null; linkKind?: string | null },
+    @Body() body: {
+      title?: string;
+      outcome?: string;
+      status?: 'DRAFT' | 'ACTIVE' | 'ARCHIVED';
+      valueRef?: string | null;
+      linkKind?: string | null;
+      confirmed?: boolean;
+      capacityMinutes?: number;
+      protectNote?: string | null;
+      explicitNoSchedule?: boolean;
+    },
   ) {
     return this.journey.patchPlan(req.user.sub, planId, body);
   }

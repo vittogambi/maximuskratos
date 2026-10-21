@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { FORMULARIO_COMPLETO_REF } from '@mk/database';
 import { PrismaService } from '../prisma/prisma.service';
@@ -27,11 +27,13 @@ import {
   parseConversation,
   parseHealthLimit,
   PLAN_LINKS,
+  activationBlock,
+  planActivationInput,
   resolvePlanLink,
   unfinishedHelp,
-  writerBlock,
   type HealthLimitOutcome,
 } from './plan-gate';
+import { canTransition, compatStatus, fromLegacy, type PlanStage } from './plan-lifecycle';
 import { homeBoard, type HomePlan } from './home-board';
 import { nextStep } from './next-step';
 import { isIsoDate, isMonday, weekStartMonday } from './civil-date';
@@ -702,11 +704,22 @@ export class JourneyService {
     });
   }
 
-  /** Every writer that creates or activates plans or actions passes through this gate. */
-  private async assertWriter(userId: string) {
-    const [formulario, purpose] = await Promise.all([this.formularioReading(userId), this.latestPurpose(userId)]);
-    const block = writerBlock({ formularioCompleted: Boolean(formulario), directionStatus: directionOf(purpose) });
-    if (block) throw new ForbiddenException(block);
+  private planStage(row: { stage: string | null; status: string }): PlanStage {
+    return (row.stage as PlanStage | null) ?? fromLegacy(row.status as 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'ARCHIVED');
+  }
+
+  private async restrictionsAnswered(userId: string): Promise<boolean> {
+    const row = await this.prisma.memberClarification.findFirst({
+      where: {
+        userId,
+        OR: [
+          { scope: 'CURRENT_SITUATION' },
+          { scope: 'HEALTH', outcome: { in: ['NO_CURRENT_LIMIT', 'CURRENT_LIMIT'] } },
+        ],
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+    return Boolean(row);
   }
 
   async createPlan(userId: string, input: {
@@ -718,36 +731,32 @@ export class JourneyService {
     purposeRevisionId?: string | null;
     sourceCombinationId?: string | null;
   }) {
-    await this.assertWriter(userId);
     const pendingHelp = unfinishedHelp(input.priorityNote, input.valueRef);
     if (pendingHelp) throw new BadRequestException(pendingHelp);
+    const purpose = await this.latestPurpose(userId);
     const linkKind = resolvePlanLink(input);
-    if (!linkKind) {
+    if (isWorkingDirection(directionOf(purpose)) && !linkKind) {
       throw new BadRequestException('Elige cómo se vincula el plan con tu dirección.');
     }
-    const purpose = await this.latestPurpose(userId);
     let purposeRevisionId = input.purposeRevisionId?.trim() || purpose?.id || null;
     if (purposeRevisionId) {
       const owned = await this.prisma.purposeRevision.findFirst({ where: { id: purposeRevisionId, userId } });
       if (!owned) throw new BadRequestException('Esa revisión de propósito no es de esta cuenta.');
       purposeRevisionId = owned.id;
     }
-    return this.prisma.$transaction(async (tx) => {
-      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${userId}))`;
-      await tx.personalPlan.updateMany({ where: { userId, status: 'ACTIVE' }, data: { status: 'PAUSED' } });
-      return tx.personalPlan.create({
-        data: {
-          userId,
-          title: input.title.trim(),
-          outcome: input.outcome.trim(),
-          priorityNote: input.priorityNote?.trim() || null,
-          linkKind,
-          valueRef: input.valueRef?.trim() || null,
-          purposeRevisionId,
-          sourceCombinationId: input.sourceCombinationId?.trim() || null,
-          status: 'ACTIVE',
-        },
-      });
+    return this.prisma.personalPlan.create({
+      data: {
+        userId,
+        title: input.title.trim(),
+        outcome: input.outcome.trim(),
+        priorityNote: input.priorityNote?.trim() || null,
+        linkKind,
+        valueRef: input.valueRef?.trim() || null,
+        purposeRevisionId,
+        sourceCombinationId: input.sourceCombinationId?.trim() || null,
+        status: 'DRAFT',
+        stage: 'PREPARING',
+      },
     });
   }
 
@@ -883,30 +892,93 @@ export class JourneyService {
   async patchPlan(
     userId: string,
     planId: string,
-    input: { title?: string; outcome?: string; status?: 'DRAFT' | 'ACTIVE' | 'ARCHIVED'; valueRef?: string | null; linkKind?: string | null },
+    input: {
+      title?: string;
+      outcome?: string;
+      status?: 'DRAFT' | 'ACTIVE' | 'ARCHIVED';
+      valueRef?: string | null;
+      linkKind?: string | null;
+      confirmed?: boolean;
+      capacityMinutes?: number;
+      protectNote?: string | null;
+      explicitNoSchedule?: boolean;
+    },
   ) {
-    const plan = await this.ownPlan(userId, planId);
+    const plan = await this.prisma.personalPlan.findFirst({
+      where: { id: planId, userId },
+      include: { actions: { where: { active: true } } },
+    });
+    if (!plan) throw new NotFoundException('Plan no encontrado.');
     if (input.linkKind != null && input.linkKind !== '' && !PLAN_LINKS.includes(input.linkKind)) {
       throw new BadRequestException('Vínculo desconocido.');
     }
-    if (input.status === 'ACTIVE') {
-      await this.assertWriter(userId);
-      const actions = await this.prisma.planAction.findMany({ where: { planId: plan.id, active: true } });
-      for (const action of actions) {
+    const currentStage = this.planStage(plan);
+    const nextOutcome = input.outcome?.trim() ?? plan.outcome;
+    const activating = input.status === 'ACTIVE' && currentStage !== 'ACTIVE' && currentStage !== 'MAINTENANCE';
+    if (activating) {
+      if (!canTransition(currentStage, 'ACTIVE')) {
+        throw new BadRequestException('Este plan no puede activarse desde su etapa actual.');
+      }
+      const restrictions = await this.restrictionsAnswered(userId);
+      const activation = planActivationInput({
+        plan: {
+          outcome: nextOutcome,
+          goalClass: plan.goalClass,
+          capacityMinutes: plan.capacityMinutes,
+          protectNote: plan.protectNote,
+        },
+        activeActionCount: plan.actions.length,
+        restrictionsAnswered: restrictions,
+        patch: {
+          confirmed: input.confirmed,
+          capacityMinutes: input.capacityMinutes,
+          protectNote: input.protectNote,
+          explicitNoSchedule: input.explicitNoSchedule,
+        },
+      });
+      const missing = activationBlock(activation);
+      if (missing.length > 0) {
+        throw new UnprocessableEntityException({ message: 'Faltan datos para activar el plan.', code: 'ACTIVATION_INCOMPLETE', missing });
+      }
+      for (const action of plan.actions) {
         const tags = parseContentTags(action.contentTags);
         if (!tags) throw new BadRequestException('Marca de contenido desconocida.');
         await this.assertContent(userId, tags, { conversation: action.conversationOutcome });
       }
     }
-    return this.prisma.personalPlan.update({
-      where: { id: plan.id },
-      data: {
-        title: input.title?.trim(),
-        outcome: input.outcome?.trim(),
-        status: input.status,
-        ...(input.valueRef !== undefined ? { valueRef: input.valueRef?.trim() || null } : {}),
-        ...(input.linkKind ? { linkKind: input.linkKind } : {}),
-      },
+    const capacityMinutes = input.capacityMinutes ?? undefined;
+    const protectNote = input.protectNote !== undefined ? input.protectNote : undefined;
+    const data: Prisma.PersonalPlanUpdateInput = {
+      title: input.title?.trim(),
+      outcome: input.outcome?.trim(),
+      ...(input.valueRef !== undefined ? { valueRef: input.valueRef?.trim() || null } : {}),
+      ...(input.linkKind ? { linkKind: input.linkKind } : {}),
+      ...(capacityMinutes !== undefined ? { capacityMinutes } : {}),
+      ...(protectNote !== undefined ? { protectNote } : {}),
+    };
+    if (activating) {
+      data.status = compatStatus('ACTIVE');
+      data.stage = 'ACTIVE';
+      data.activatedAt = new Date();
+    } else if (input.status) {
+      data.status = input.status;
+      if (input.status === 'DRAFT') data.stage = 'PREPARING';
+      if (input.status === 'ARCHIVED') data.stage = 'CLOSED';
+    }
+    return this.prisma.$transaction(async (tx) => {
+      const updated = await tx.personalPlan.update({ where: { id: plan.id }, data });
+      if (activating) {
+        await tx.planTransition.create({
+          data: {
+            userId,
+            planId: plan.id,
+            fromStage: currentStage,
+            toStage: 'ACTIVE',
+            effectiveFrom: new Date(this.civilToday()),
+          },
+        });
+      }
+      return updated;
     });
   }
 
@@ -927,7 +999,6 @@ export class JourneyService {
     const tags = parseContentTags(input.contentTags);
     if (!tags) throw new BadRequestException('Marca de contenido desconocida.');
     const plan = await this.ownPlan(userId, planId);
-    await this.assertWriter(userId);
     await this.assertGuide(userId, input.guideId);
     const conversationOutcome = await this.assertContent(userId, tags, {
       healthLimit: input.healthLimit,
@@ -1094,7 +1165,6 @@ export class JourneyService {
     const title = input.title?.trim() ?? '';
     const doneWhen = input.doneWhen?.trim() ?? '';
     if (!title || !doneWhen) throw new BadRequestException('La tarea y el criterio son obligatorios.');
-    await this.assertWriter(userId);
     const plan = await this.prisma.personalPlan.findFirst({
       where: { userId, status: 'ACTIVE' },
       orderBy: { createdAt: 'asc' },
@@ -1125,7 +1195,6 @@ export class JourneyService {
     const template = Array.isArray(action.templateTags) ? action.templateTags.filter((tag): tag is string => typeof tag === 'string') : [];
     const tags = parseContentTags([...new Set([...template, ...incoming])]);
     if (!tags) throw new BadRequestException('Marca de contenido desconocida.');
-    await this.assertWriter(userId);
     const conversationOutcome = await this.assertContent(userId, tags, {
       healthLimit: input.healthLimit,
       conversation: input.conversation === undefined ? action.conversationOutcome : input.conversation,

@@ -5,7 +5,7 @@ import { FORMULARIO_COMPLETO_REF } from '@mk/database';
 import { PrismaService } from '../prisma/prisma.service';
 import { TERRITORIES, type Territory } from '../instrumentos/glossary';
 import { decideAction, type ContentTag } from '../instrumentos/restrictions';
-import { healthFactFromAnswers, parseContentTags, parseConversation, parseHealthLimit, unfinishedHelp, writerBlock, type HealthLimitOutcome } from './plan-gate';
+import { healthFactFromAnswers, parseContentTags, parseConversation, parseHealthLimit, unfinishedHelp, type HealthLimitOutcome } from './plan-gate';
 import { JourneyClock } from './journey-clock';
 import { canonicalHash } from './accompaniment/canon';
 import { devolutionOf, type AccountSources } from './accompaniment/devolution';
@@ -539,10 +539,6 @@ export class AccompanimentService {
   }
 
   private async store(userId: string, body: AccompanimentBody, built: Built, status: 'ACCEPTED' | 'REJECTED', adoptFamilyId: string | null) {
-    if (status === 'ACCEPTED') {
-      const block = writerBlock({ formularioCompleted: built.formularioCompleted, directionStatus: built.directionStatus });
-      if (block) throw new ForbiddenException({ message: block.message, code: block.code, nextHref: block.nextHref });
-    }
     const pending = unfinishedHelp(Object.values(body.edits ?? {}).join(' '), null);
     if (pending) throw new BadRequestException(pending);
     if (status === 'ACCEPTED' && built.proposal.incompatible && !adoptFamilyId) {
