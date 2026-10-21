@@ -7,15 +7,11 @@ import { Logo } from '@/components/logo';
 
 const LINKS = [
   { href: '/panel', label: 'Inicio', icon: 'layout-dashboard' },
-  { href: '/espiritu', label: 'Espíritu', icon: 'flame' },
-  { href: '/mente', label: 'Mente', icon: 'brain' },
-  { href: '/cuerpo', label: 'Cuerpo', icon: 'dumbbell' },
-  { href: '/ruta', label: 'Ruta', icon: 'compass' },
-  { href: '/calendario', label: 'Calendario', icon: 'calendar' },
+  { href: '/semana', label: 'Semana', icon: 'calendar' },
+  { href: '/disenar', label: 'Diseñar', icon: 'map' },
   { href: '/planes', label: 'Planes', icon: 'map' },
   { href: '/proposito', label: 'Propósito', icon: 'target' },
-  { href: '/perfil', label: 'Perfil', icon: 'fingerprint' },
-  { href: '/asesores', label: 'Asesores', icon: 'handshake' },
+  { href: '/memoria', label: 'Memoria', icon: 'fingerprint' },
   { href: '/cuenta', label: 'Cuenta', icon: 'user-check' },
 ] as const;
 
@@ -26,8 +22,10 @@ export function MemberSideNav() {
       <Logo href="/panel" size="sm" mark="brand" markOnly />
       <nav aria-label="Secciones">
         {LINKS.map((link) => {
-          const active = pathname === link.href
-            || (link.href === '/perfil' && pathname.startsWith('/diagnostico/resultado'));
+          const active =
+            pathname === link.href
+            || (link.href === '/memoria' && (pathname.startsWith('/memoria') || pathname.startsWith('/diagnostico/resultado')))
+            || (link.href === '/panel' && pathname.startsWith('/ambito/'));
           return (
             <Link key={link.href} href={link.href} className={active ? 'is-active' : undefined} aria-current={active ? 'page' : undefined}>
               <AppIcon name={link.icon} size={16} />

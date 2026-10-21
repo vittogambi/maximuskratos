@@ -29,6 +29,26 @@ import type {
   QuestionDto,
   SessionStateDto,
 } from './types/diagnostic.types';
+import {
+  areaGroupPrefix,
+  areaSectionsFor,
+  buildAuditClose,
+  previousModuleSlug,
+  questionNavMeta,
+  modulesInArea,
+  resolveNavigationQuestion,
+  savedAnswerFromResponse,
+  visibleModuleQuestions,
+  visibleQuestionTrail,
+} from './player-navigation';
+import {
+  moduleMatchesTerritory,
+  parseTerritoryParam,
+  questionMatchesTerritory,
+  readFocusTerritory,
+  withFocusTerritory,
+} from './diagnostic-territory';
+import type { Territory } from '../instrumentos/glossary';
 
 const DIMENSIONS = [
   'mentality',
@@ -178,12 +198,66 @@ export class DiagnosticService {
     return this.buildState(session.id, userId);
   }
 
-  async getState(userId: string): Promise<{ sessionState: SessionStateDto; nextStep: NextStep }> {
+  async startOrResumeForTerritory(userId: string, territoryParam: string) {
+    let territory: Territory;
+    try {
+      territory = parseTerritoryParam(territoryParam);
+    } catch {
+      throw new BadRequestException('Ámbito desconocido.');
+    }
+    await this.startOrResume(userId);
+    const session = await this.findActiveSession(userId);
+    if (!session) throw new NotFoundException('No diagnostic session found');
+    const version = await this.prisma.diagnosticVersion.findUnique({
+      where: { id: session.versionId },
+      include: { modules: { include: { questions: { select: { sourceRef: true } } } } },
+    });
+    if (!version) throw new NotFoundException('No active diagnostic version found');
+    const moduleIds = version.modules
+      .filter((mod) => moduleMatchesTerritory(mod.questions, territory))
+      .map((mod) => mod.id);
+    if (moduleIds.length > 0) {
+      await this.prisma.userModuleProgress.updateMany({
+        where: { sessionId: session.id, moduleId: { in: moduleIds }, status: 'LOCKED' },
+        data: { status: 'AVAILABLE' },
+      });
+    }
+    await this.prisma.diagnosticSession.update({
+      where: { id: session.id },
+      data: { metadata: JSON.parse(JSON.stringify(withFocusTerritory(session.metadata, territory))) },
+    });
+    return this.buildState(session.id, userId, undefined, { territory: territoryParam });
+  }
+
+  async getQuestionBySourceRef(userId: string, sourceRef: string) {
+    if (!sourceRef?.trim()) throw new BadRequestException('Falta sourceRef.');
+    const session = await this.findActiveSession(userId);
+    if (!session) throw new NotFoundException('No diagnostic session found');
+    const question = await this.prisma.question.findFirst({
+      where: { sourceRef: sourceRef.trim(), module: { versionId: session.versionId } },
+      include: { options: { orderBy: { order: 'asc' } }, module: true },
+    });
+    if (!question) throw new NotFoundException('Pregunta no encontrada.');
+    const existing = await this.prisma.response.findFirst({
+      where: { sessionId: session.id, questionId: question.id },
+    });
+    return {
+      sourceRef: question.sourceRef,
+      reason: 'Pregunta puntual del ámbito.',
+      question: this.toQuestionDto(question),
+      saved: existing ? savedAnswerFromResponse(existing) : null,
+    };
+  }
+
+  async getState(
+    userId: string,
+    nav?: { atQuestionId?: string; afterQuestionId?: string; introModule?: string; territory?: string },
+  ): Promise<{ sessionState: SessionStateDto; nextStep: NextStep }> {
     const session = await this.findActiveSession(userId);
     if (!session) {
       throw new NotFoundException('No diagnostic session found');
     }
-    return this.buildState(session.id, userId);
+    return this.buildState(session.id, userId, undefined, nav);
   }
 
   async getProfile(userId: string) {
@@ -462,9 +536,12 @@ export class DiagnosticService {
     if (!progress) throw new NotFoundException('Module progress not found');
 
     if (!progress.outroSeen) {
-      const nextModule = await this.prisma.diagnosticModule.findFirst({
-        where: { versionId: session.versionId, order: module.order + 1 },
-      });
+      const focusTerritory = readFocusTerritory(session.metadata);
+      const nextModule = focusTerritory
+        ? null
+        : await this.prisma.diagnosticModule.findFirst({
+            where: { versionId: session.versionId, order: module.order + 1 },
+          });
 
       // One transaction: a concurrent GET /state must never see this outro seen
       // while the next module is still LOCKED (it would finalise the diagnostic).
@@ -475,7 +552,21 @@ export class DiagnosticService {
         });
         if (marked.count === 0) return;
 
-        if (nextModule) {
+        if (focusTerritory) {
+          const version = await tx.diagnosticVersion.findUnique({
+            where: { id: session.versionId },
+            include: { modules: { orderBy: { order: 'asc' }, include: { questions: { select: { sourceRef: true } } } } },
+          });
+          const ordered = version?.modules.filter((item) => moduleMatchesTerritory(item.questions, focusTerritory)) ?? [];
+          const index = ordered.findIndex((item) => item.id === module.id);
+          const unlock = index >= 0 ? ordered[index + 1] : null;
+          if (unlock) {
+            await tx.userModuleProgress.updateMany({
+              where: { sessionId: session.id, moduleId: unlock.id, status: 'LOCKED' },
+              data: { status: 'AVAILABLE' },
+            });
+          }
+        } else if (nextModule) {
           await tx.userModuleProgress.updateMany({
             where: { sessionId: session.id, moduleId: nextModule.id, status: 'LOCKED' },
             data: { status: 'AVAILABLE' },
@@ -513,6 +604,7 @@ export class DiagnosticService {
     sessionId: string,
     userId: string,
     completionPct?: number,
+    nav?: { atQuestionId?: string; afterQuestionId?: string; introModule?: string; territory?: string },
   ): Promise<{ sessionState: SessionStateDto; nextStep: NextStep }> {
     const session = await this.prisma.diagnosticSession.findUnique({
       where: { id: sessionId },
@@ -541,6 +633,18 @@ export class DiagnosticService {
 
     if (!session) throw new NotFoundException('Session not found');
 
+    let focusTerritory: Territory | null = readFocusTerritory(session.metadata);
+    if (!focusTerritory && nav?.territory) {
+      try {
+        focusTerritory = parseTerritoryParam(nav.territory);
+      } catch {
+        focusTerritory = null;
+      }
+    }
+    const scopedProgress = focusTerritory
+      ? session.moduleProgress.filter((entry) => moduleMatchesTerritory(entry.module.questions, focusTerritory!))
+      : session.moduleProgress;
+
     const activeForFollow =
       session.moduleProgress.find(
         (p) => p.status === 'AVAILABLE' || p.status === 'IN_PROGRESS',
@@ -557,6 +661,32 @@ export class DiagnosticService {
     const settledIds = new Set(
       session.responses.filter((response) => isSettled(response)).map((response) => response.questionId),
     );
+    const responseByQuestion = new Map(session.responses.map((response) => [response.questionId, response]));
+    const trail = visibleQuestionTrail(session.moduleProgress, responseByQuestion);
+    const navModes = [nav?.atQuestionId, nav?.afterQuestionId, nav?.introModule].filter(Boolean).length;
+    if (navModes > 1) {
+      throw new BadRequestException('Usa solo uno de at, after o introModule.');
+    }
+    if (nav?.introModule) {
+      return this.buildIntroModuleState(
+        session,
+        completionPct,
+        settledIds,
+        trail,
+        responseByQuestion,
+        nav.introModule,
+      );
+    }
+    if (nav?.atQuestionId || nav?.afterQuestionId) {
+      return this.buildNavigationState(
+        session,
+        completionPct,
+        settledIds,
+        trail,
+        responseByQuestion,
+        nav,
+      );
+    }
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { onboardingStep: true },
@@ -569,14 +699,44 @@ export class DiagnosticService {
     // hasn't been seen yet (the module was just finished but the next module is
     // still LOCKED — we should show the outro, not claim the diagnostic is done).
     const activeProgress =
-      session.moduleProgress.find(
+      scopedProgress.find(
         (p) => p.status === 'AVAILABLE' || p.status === 'IN_PROGRESS',
       ) ??
-      session.moduleProgress.find(
+      scopedProgress.find(
         (p) => p.status === 'COMPLETE' && !p.outroSeen,
       );
 
     if (!activeProgress) {
+      if (focusTerritory) {
+        const scopeDone =
+          scopedProgress.length > 0
+          && scopedProgress.every((p) => p.status === 'COMPLETE' && p.outroSeen);
+        if (scopeDone) {
+          return {
+            sessionState: {
+              phase: session.currentPhase,
+              completionPct: 0,
+              currentModuleSlug: null,
+              currentModuleTitle: null,
+              currentModuleIntro: null,
+              currentModuleIcon: null,
+              moduleProgress: 1,
+              selfKnowledgePct: 0,
+              isModuleStart: false,
+              currentQuestionIndex: null,
+              moduleQuestionCount: null,
+              showWelcomeScreen: false,
+              currentModuleOrder: null,
+              totalModules: scopedProgress.length,
+              currentModuleEstimatedMinutes: null,
+            },
+            nextStep: { type: 'territory_complete', data: { territory: focusTerritory } },
+          };
+        }
+        throw new ConflictException(
+          'El ámbito se está actualizando. Intenta de nuevo en unos segundos.',
+        );
+      }
       const allModulesClosed =
         session.moduleProgress.length > 0 &&
         session.moduleProgress.every((p) => p.status === 'COMPLETE' && p.outroSeen);
@@ -624,8 +784,11 @@ export class DiagnosticService {
     }
 
     const currentModule = activeProgress.module;
-    const totalQuestions = currentModule.questions.length;
-    const answeredInModule = currentModule.questions.filter((question) => settledIds.has(question.id)).length;
+    const moduleQuestions = focusTerritory
+      ? currentModule.questions.filter((question) => questionMatchesTerritory(question.sourceRef, focusTerritory))
+      : currentModule.questions;
+    const totalQuestions = moduleQuestions.length;
+    const answeredInModule = moduleQuestions.filter((question) => settledIds.has(question.id)).length;
 
     // Check if module needs outro
     if (answeredInModule === totalQuestions && totalQuestions > 0 && !activeProgress.outroSeen) {
@@ -643,23 +806,30 @@ export class DiagnosticService {
       const pct = completionPct ?? lastSnapshot?.completionPct ?? 0;
 
       return {
-        sessionState: {
-          phase: session.currentPhase,
-          completionPct: Math.round(pct * 100) / 100,
-          currentModuleSlug: currentModule.slug,
-          currentModuleTitle: currentModule.titleEs,
-          currentModuleIntro: currentModule.introEs,
-          currentModuleIcon: currentModule.iconKey,
-          moduleProgress: 1,
-          selfKnowledgePct: this.calcSelfKnowledgePct(pct / 100),
-          isModuleStart: false,
-          currentQuestionIndex: null,
-          moduleQuestionCount: null,
-          showWelcomeScreen,
-          currentModuleOrder: currentModule.order,
-          totalModules,
-          currentModuleEstimatedMinutes: currentModule.estimatedMinutes,
-        },
+        sessionState: this.withPlayerChrome(
+          {
+            phase: session.currentPhase,
+            completionPct: Math.round(pct * 100) / 100,
+            currentModuleSlug: currentModule.slug,
+            currentModuleTitle: currentModule.titleEs,
+            currentModuleIntro: currentModule.introEs,
+            currentModuleIcon: currentModule.iconKey,
+            moduleProgress: 1,
+            selfKnowledgePct: this.calcSelfKnowledgePct(pct / 100),
+            isModuleStart: false,
+            currentQuestionIndex: null,
+            moduleQuestionCount: null,
+            showWelcomeScreen,
+            currentModuleOrder: currentModule.order,
+            totalModules,
+            currentModuleEstimatedMinutes: currentModule.estimatedMinutes,
+          },
+          session,
+          currentModule.slug,
+          responseByQuestion,
+          trail,
+          false,
+        ),
         nextStep: {
           type: 'module_outro',
           data: {
@@ -667,14 +837,48 @@ export class DiagnosticService {
             titleEs: currentModule.titleEs,
             outroText: this.outroSentence(currentModule.slug, activeProgress.outroText ?? currentModule.outroTemplateEs),
             readings: this.moduleReadings(currentModule, session.responses),
+            ...(currentModule.slug === 'e-aud-s6'
+              ? { auditClose: buildAuditClose(session.moduleProgress, session.responses) }
+              : {}),
           },
         },
       };
     }
 
     // Find next unanswered question
-    const nextQuestion = currentModule.questions.find((question) => !settledIds.has(question.id));
-
+    let nextQuestion = moduleQuestions.find((question) => !settledIds.has(question.id));
+    if (!nextQuestion && focusTerritory) {
+      return {
+        sessionState: this.withPlayerChrome(
+          {
+            phase: session.currentPhase,
+            completionPct: 0,
+            currentModuleSlug: currentModule.slug,
+            currentModuleTitle: currentModule.titleEs,
+            currentModuleIntro: currentModule.introEs,
+            currentModuleIcon: currentModule.iconKey,
+            moduleProgress: 1,
+            selfKnowledgePct: 0,
+            isModuleStart: false,
+            currentQuestionIndex: null,
+            moduleQuestionCount: null,
+            showWelcomeScreen: false,
+            currentModuleOrder: currentModule.order,
+            totalModules: scopedProgress.length,
+            currentModuleEstimatedMinutes: currentModule.estimatedMinutes,
+          },
+          session,
+          currentModule.slug,
+          responseByQuestion,
+          trail,
+          false,
+        ),
+        nextStep: {
+          type: 'territory_pause',
+          data: { territory: focusTerritory, moduleSlug: currentModule.slug },
+        },
+      };
+    }
     if (!nextQuestion) {
       throw new BadRequestException('Unexpected state: no next question found');
     }
@@ -714,28 +918,319 @@ export class DiagnosticService {
       question.filledActivities = notes.map((note) => note.sourceRef);
     }
 
+    const navMeta = questionNavMeta(trail, nextQuestion.id);
+    question.previousQuestionId = navMeta.previousQuestionId;
+    question.isFirstInModule = navMeta.isFirstInModule;
+
     return {
-      sessionState: {
-        phase: session.currentPhase,
-        completionPct: Math.round(pct * 100) / 100,
-        currentModuleSlug: currentModule.slug,
-        currentModuleTitle: currentModule.titleEs,
-        currentModuleIntro: currentModule.introEs,
-        currentModuleIcon: currentModule.iconKey,
-        moduleProgress: moduleProgressRatio,
-        selfKnowledgePct: this.calcSelfKnowledgePct(pct / 100),
-        isModuleStart,
-        currentQuestionIndex,
+      sessionState: this.withPlayerChrome(
+        {
+          phase: session.currentPhase,
+          completionPct: Math.round(pct * 100) / 100,
+          currentModuleSlug: currentModule.slug,
+          currentModuleTitle: currentModule.titleEs,
+          currentModuleIntro: currentModule.introEs,
+          currentModuleIcon: currentModule.iconKey,
+          moduleProgress: moduleProgressRatio,
+          selfKnowledgePct: this.calcSelfKnowledgePct(pct / 100),
+          isModuleStart,
+          currentQuestionIndex,
           moduleQuestionCount: visibleCount,
-        showWelcomeScreen,
-        currentModuleOrder: currentModule.order,
-        totalModules,
-        currentModuleEstimatedMinutes: currentModule.estimatedMinutes,
-      },
+          showWelcomeScreen,
+          currentModuleOrder: currentModule.order,
+          totalModules,
+          currentModuleEstimatedMinutes: currentModule.estimatedMinutes,
+        },
+        session,
+        currentModule.slug,
+        responseByQuestion,
+        trail,
+        isModuleStart,
+      ),
       nextStep: {
         type: 'question',
         data: question,
       },
+    };
+  }
+
+  private withPlayerChrome(
+    sessionState: SessionStateDto,
+    session: {
+      moduleProgress: {
+        module: { slug: string; order: number; titleEs: string; questions: { id: string; order: number; sourceRef: string | null }[] };
+      }[];
+    },
+    currentModuleSlug: string | null,
+    responseByQuestion: Map<string, { questionId: string; skipped: boolean; exceptionOrigin: string | null; selectedOptionIds: string[]; freeText: string | null; exceptionKind: string | null; rankingOrder: string[]; revision: number }>,
+    trail: ReturnType<typeof visibleQuestionTrail>,
+    isModuleStart: boolean,
+  ): SessionStateDto {
+    if (!currentModuleSlug) return sessionState;
+    const prefix = areaGroupPrefix(currentModuleSlug);
+    const areaMods = modulesInArea(session.moduleProgress, prefix);
+    const areaSections = areaSectionsFor(areaMods, responseByQuestion, currentModuleSlug);
+    const backIntroModuleSlug = isModuleStart
+      ? previousModuleSlug(session.moduleProgress, currentModuleSlug)
+      : null;
+    return { ...sessionState, areaSections, backIntroModuleSlug };
+  }
+
+  private async buildIntroModuleState(
+    session: {
+      id: string;
+      currentPhase: string;
+      moduleProgress: {
+        status: string;
+        module: {
+          slug: string;
+          order: number;
+          titleEs: string;
+          introEs: string | null;
+          iconKey: string | null;
+          estimatedMinutes: number;
+          questions: {
+            id: string;
+            order: number;
+            sourceRef: string | null;
+            type: string;
+            textEs: string;
+            contextEs: string | null;
+            maxSelections: number | null;
+            scaleType: string | null;
+            reasonPromptEs: string | null;
+            reasonThreshold: number | null;
+            allowedExceptions: string[];
+            options: { id: string; order: number; textEs: string; value: string }[];
+          }[];
+        };
+      }[];
+      responses: {
+        questionId: string;
+        skipped: boolean;
+        exceptionOrigin: string | null;
+        selectedOptionIds: string[];
+        freeText: string | null;
+        exceptionKind: string | null;
+        rankingOrder: string[];
+        revision: number;
+      }[];
+    },
+    completionPct: number | undefined,
+    settledIds: Set<string>,
+    trail: ReturnType<typeof visibleQuestionTrail>,
+    responseByQuestion: Map<string, { questionId: string; skipped: boolean; exceptionOrigin: string | null; selectedOptionIds: string[]; freeText: string | null; exceptionKind: string | null; rankingOrder: string[]; revision: number }>,
+    moduleSlug: string,
+  ): Promise<{ sessionState: SessionStateDto; nextStep: NextStep }> {
+    const progressEntry = session.moduleProgress.find((entry) => entry.module.slug === moduleSlug);
+    if (!progressEntry) {
+      throw new NotFoundException('Módulo no encontrado.');
+    }
+    if (progressEntry.status === 'LOCKED') {
+      throw new BadRequestException('Ese módulo aún no está disponible.');
+    }
+    const currentModule = progressEntry.module;
+    const visible = visibleModuleQuestions(currentModule.questions, responseByQuestion);
+    const anchor = visible[0];
+    if (!anchor) {
+      throw new BadRequestException('Este módulo no tiene preguntas visibles.');
+    }
+    const targetQuestion = currentModule.questions.find((question) => question.id === anchor.id);
+    if (!targetQuestion) {
+      throw new NotFoundException('Pregunta no encontrada.');
+    }
+
+    const totalModules = session.moduleProgress.length;
+    const lastSnapshot = await this.prisma.scoreSnapshot.findFirst({
+      where: { sessionId: session.id },
+      orderBy: { createdAt: 'desc' },
+    });
+    const pct = completionPct ?? lastSnapshot?.completionPct ?? 0;
+
+    const answeredInModule = currentModule.questions.filter((question) => settledIds.has(question.id)).length;
+    const moduleProgressRatio =
+      currentModule.questions.length > 0 ? answeredInModule / currentModule.questions.length : 0;
+
+    const response = responseByQuestion.get(targetQuestion.id);
+    const question = this.toQuestionDto(
+      {
+        ...(targetQuestion as typeof targetQuestion & { scaleType: string | null; reasonPromptEs: string | null; reasonThreshold: number | null; allowedExceptions: string[]; options: { id: string; order: number; textEs: string; value: string }[] }),
+        options: this.subsetOptions(targetQuestion, currentModule.questions, session.responses),
+      },
+      response?.revision ?? 0,
+    );
+    question.savedAnswer = savedAnswerFromResponse(response);
+    const navMeta = questionNavMeta(trail, targetQuestion.id);
+    question.previousQuestionId = navMeta.previousQuestionId;
+    question.isFirstInModule = navMeta.isFirstInModule;
+
+    if (currentModule.slug === 'e-per-dificultades' || currentModule.slug === 'e-per-personalidad') {
+      question.savedChoices = this.shadowSavedChoices(currentModule.questions, session.responses);
+    }
+    if (currentModule.slug === 'e-per-ikigai') {
+      const notes = this.activityNotes(currentModule.questions, session.responses);
+      question.activityNotes = notes;
+      question.filledActivities = notes.map((note) => note.sourceRef);
+    }
+
+    return {
+      sessionState: this.withPlayerChrome(
+        {
+          phase: session.currentPhase,
+          completionPct: Math.round(pct * 100) / 100,
+          currentModuleSlug: currentModule.slug,
+          currentModuleTitle: currentModule.titleEs,
+          currentModuleIntro: currentModule.introEs,
+          currentModuleIcon: currentModule.iconKey,
+          moduleProgress: moduleProgressRatio,
+          selfKnowledgePct: this.calcSelfKnowledgePct(pct / 100),
+          isModuleStart: true,
+          currentQuestionIndex: 1,
+          moduleQuestionCount: visible.length,
+          showWelcomeScreen: false,
+          currentModuleOrder: currentModule.order,
+          totalModules,
+          currentModuleEstimatedMinutes: currentModule.estimatedMinutes,
+        },
+        session,
+        currentModule.slug,
+        responseByQuestion,
+        trail,
+        true,
+      ),
+      nextStep: { type: 'question', data: question },
+    };
+  }
+
+  private async buildNavigationState(
+    session: {
+      id: string;
+      currentPhase: string;
+      moduleProgress: {
+        module: {
+          slug: string;
+          order: number;
+          titleEs: string;
+          introEs: string | null;
+          iconKey: string | null;
+          estimatedMinutes: number;
+          questions: {
+            id: string;
+            order: number;
+            sourceRef: string | null;
+            type: string;
+            textEs: string;
+            contextEs: string | null;
+            maxSelections: number | null;
+            scaleType: string | null;
+            reasonPromptEs: string | null;
+            reasonThreshold: number | null;
+            allowedExceptions: string[];
+            options: { id: string; order: number; textEs: string; value: string }[];
+          }[];
+        };
+      }[];
+      responses: {
+        questionId: string;
+        skipped: boolean;
+        exceptionOrigin: string | null;
+        selectedOptionIds: string[];
+        freeText: string | null;
+        exceptionKind: string | null;
+        rankingOrder: string[];
+        revision: number;
+      }[];
+    },
+    completionPct: number | undefined,
+    settledIds: Set<string>,
+    trail: ReturnType<typeof visibleQuestionTrail>,
+    responseByQuestion: Map<string, { questionId: string; skipped: boolean; exceptionOrigin: string | null; selectedOptionIds: string[]; freeText: string | null; exceptionKind: string | null; rankingOrder: string[]; revision: number }>,
+    nav: { atQuestionId?: string; afterQuestionId?: string },
+  ): Promise<{ sessionState: SessionStateDto; nextStep: NextStep }> {
+    const target = resolveNavigationQuestion(trail, nav);
+    if (!target) {
+      throw new NotFoundException('Pregunta no encontrada en este recorrido.');
+    }
+    if (nav.atQuestionId && !settledIds.has(target.id)) {
+      throw new BadRequestException('Esa pregunta aún no tiene respuesta guardada.');
+    }
+    const progressEntry = session.moduleProgress.find((entry) =>
+      entry.module.questions.some((question) => question.id === target.id),
+    );
+    if (!progressEntry) {
+      throw new NotFoundException('Módulo no encontrado para esa pregunta.');
+    }
+    const currentModule = progressEntry.module;
+    const targetQuestion = currentModule.questions.find((question) => question.id === target.id);
+    if (!targetQuestion) {
+      throw new NotFoundException('Pregunta no encontrada.');
+    }
+
+    const totalModules = session.moduleProgress.length;
+    const lastSnapshot = await this.prisma.scoreSnapshot.findFirst({
+      where: { sessionId: session.id },
+      orderBy: { createdAt: 'desc' },
+    });
+    const pct = completionPct ?? lastSnapshot?.completionPct ?? 0;
+
+    const skippedIds = new Set(
+      session.responses.filter((response) => response.skipped).map((response) => response.questionId),
+    );
+    const visibleQuestions = currentModule.questions.filter((question) => !skippedIds.has(question.id));
+    const visibleIndex = visibleQuestions.findIndex((question) => question.id === target.id);
+    const answeredInModule = currentModule.questions.filter((question) => settledIds.has(question.id)).length;
+    const moduleProgressRatio =
+      currentModule.questions.length > 0 ? answeredInModule / currentModule.questions.length : 0;
+
+    const response = responseByQuestion.get(target.id);
+    const question = this.toQuestionDto(
+      {
+        ...(targetQuestion as typeof targetQuestion & { scaleType: string | null; reasonPromptEs: string | null; reasonThreshold: number | null; allowedExceptions: string[]; options: { id: string; order: number; textEs: string; value: string }[] }),
+        options: this.subsetOptions(targetQuestion, currentModule.questions, session.responses),
+      },
+      response?.revision ?? 0,
+    );
+    question.savedAnswer = savedAnswerFromResponse(response);
+    const navMeta = questionNavMeta(trail, target.id);
+    question.previousQuestionId = navMeta.previousQuestionId;
+    question.isFirstInModule = navMeta.isFirstInModule;
+    const enteringFreshModule = Boolean(nav.afterQuestionId && navMeta.isFirstInModule && !question.savedAnswer);
+
+    if (currentModule.slug === 'e-per-dificultades' || currentModule.slug === 'e-per-personalidad') {
+      question.savedChoices = this.shadowSavedChoices(currentModule.questions, session.responses);
+    }
+    if (currentModule.slug === 'e-per-ikigai') {
+      const notes = this.activityNotes(currentModule.questions, session.responses);
+      question.activityNotes = notes;
+      question.filledActivities = notes.map((note) => note.sourceRef);
+    }
+
+    return {
+      sessionState: this.withPlayerChrome(
+        {
+          phase: session.currentPhase,
+          completionPct: Math.round(pct * 100) / 100,
+          currentModuleSlug: currentModule.slug,
+          currentModuleTitle: currentModule.titleEs,
+          currentModuleIntro: currentModule.introEs,
+          currentModuleIcon: currentModule.iconKey,
+          moduleProgress: moduleProgressRatio,
+          selfKnowledgePct: this.calcSelfKnowledgePct(pct / 100),
+          isModuleStart: enteringFreshModule,
+          currentQuestionIndex: visibleIndex >= 0 ? visibleIndex + 1 : null,
+          moduleQuestionCount: visibleQuestions.length,
+          showWelcomeScreen: false,
+          currentModuleOrder: currentModule.order,
+          totalModules,
+          currentModuleEstimatedMinutes: currentModule.estimatedMinutes,
+        },
+        session,
+        currentModule.slug,
+        responseByQuestion,
+        trail,
+        enteringFreshModule,
+      ),
+      nextStep: { type: 'question', data: question },
     };
   }
 

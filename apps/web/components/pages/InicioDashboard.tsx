@@ -8,7 +8,7 @@ import { useAuthSession } from '@/components/auth-session-provider';
 import { AppReveal, useAppEntranceOnce } from '@/components/motion/app-reveal';
 import { APP_MOTION } from '@/components/motion/tokens';
 import { ReviewVersionNote } from '@/components/app-shell/ReviewVersionNote';
-import { AmbitStage } from '@/components/journey/AmbitStage';
+import { StartDashboard } from '@/components/member/StartDashboard';
 import { apiDiagnosticProfile, type DiagnosticProgressDto, type MasterProfileDto } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth-storage';
 import { canUseMemberProduct } from '@/lib/member-access';
@@ -316,5 +316,5 @@ export function InicioDashboard() {
     return <FounderAccessDashboard email={user?.email ?? ''} entrance={entrance} />;
   }
 
-  return <AmbitStage />;
+  return <StartDashboard />;
 }

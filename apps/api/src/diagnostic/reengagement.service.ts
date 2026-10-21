@@ -53,6 +53,10 @@ export class ReengagementService {
       });
 
       for (const session of sessions) {
+        const meta = session.metadata;
+        if (meta && typeof meta === 'object' && (meta as Record<string, unknown>).focusTerritory) {
+          continue;
+        }
         const selfKnowledgePct = Math.round(
           Math.min(1, (session.snapshots[0]?.completionPct ?? 0) / 100) * 100,
         );

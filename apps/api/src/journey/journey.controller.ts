@@ -36,6 +36,11 @@ export class JourneyController {
     return this.journey.memory(req.user.sub);
   }
 
+  @Get('return')
+  returnReading(@Request() req: AuthenticatedRequest) {
+    return this.journey.returnReading(req.user.sub);
+  }
+
   @Post('return')
   returnPanel(@Request() req: AuthenticatedRequest) {
     return this.journey.returnReading(req.user.sub);
@@ -47,6 +52,21 @@ export class JourneyController {
     @Body() body: { entry?: 'NO_DIRECTION' | 'GOAL' | 'OWN_PLAN'; territory?: string | null },
   ) {
     return this.journey.createPlanDraft(req.user.sub, body);
+  }
+
+  @Post('plans/:planId/proposals/:proposalId/decision')
+  decidePlanProposal(
+    @Request() req: AuthenticatedRequest,
+    @Param('planId') planId: string,
+    @Param('proposalId') proposalId: string,
+    @Body() body: {
+      decision: 'ACCEPT' | 'EDIT' | 'REJECT';
+      editedPayload?: Record<string, unknown>;
+      commandKey?: string;
+      expectedVersion?: number;
+    },
+  ) {
+    return this.journey.decidePlanProposal(req.user.sub, planId, proposalId, body);
   }
 
   @Patch('plans/:planId/draft')
@@ -293,6 +313,50 @@ export class JourneyController {
     return this.journey.setPlanFocus(req.user.sub, planId, body);
   }
 
+  @Post('plans/:planId/evidence')
+  planEvidence(
+    @Request() req: AuthenticatedRequest,
+    @Param('planId') planId: string,
+    @Body() body: {
+      kind: string;
+      status: string;
+      text?: string | null;
+      observedOn?: string;
+      actionRecordId?: string | null;
+      commandKey?: string;
+    },
+  ) {
+    return this.journey.addPlanEvidence(req.user.sub, planId, body);
+  }
+
+  @Get('plans/:planId/territory/proposal')
+  planTerritoryProposal(@Request() req: AuthenticatedRequest, @Param('planId') planId: string) {
+    return this.journey.planTerritoryProposal(req.user.sub, planId);
+  }
+
+  @Post('plans/:planId/territory')
+  confirmPlanTerritory(
+    @Request() req: AuthenticatedRequest,
+    @Param('planId') planId: string,
+    @Body() body: { territory: string; expectedVersion?: number },
+  ) {
+    return this.journey.confirmPlanTerritory(req.user.sub, planId, body);
+  }
+
+  @Get('plans/:planId/maintenance/preview')
+  maintenancePreview(@Request() req: AuthenticatedRequest, @Param('planId') planId: string) {
+    return this.journey.proposeMaintenance(req.user.sub, planId);
+  }
+
+  @Post('plans/:planId/achievement')
+  planAchievement(
+    @Request() req: AuthenticatedRequest,
+    @Param('planId') planId: string,
+    @Body() body: { confirm: boolean; expectedVersion?: number; commandKey?: string },
+  ) {
+    return this.journey.declareAchievement(req.user.sub, planId, body);
+  }
+
   @Patch('plans/:planId')
   patchPlan(
     @Request() req: AuthenticatedRequest,
@@ -321,7 +385,15 @@ export class JourneyController {
   @Post('records')
   record(
     @Request() req: AuthenticatedRequest,
-    @Body() body: { actionId: string; day: string; status: 'PENDING' | 'DONE' | 'SKIPPED' | 'NOT_APPLICABLE'; note?: string; resultNote?: string; resultStatus?: 'OBSERVED' | 'NOT_YET_OBSERVED' | 'NOT_OBSERVED' | 'NO_INFORMATION' | null },
+    @Body() body: {
+      actionId: string;
+      day: string;
+      status: 'PENDING' | 'DONE' | 'SKIPPED' | 'NOT_APPLICABLE';
+      note?: string;
+      resultNote?: string;
+      resultStatus?: 'OBSERVED' | 'NOT_YET_OBSERVED' | 'NOT_OBSERVED' | 'NO_INFORMATION' | null;
+      expectedRevision?: number;
+    },
   ) {
     return this.journey.upsertRecord(req.user.sub, body);
   }

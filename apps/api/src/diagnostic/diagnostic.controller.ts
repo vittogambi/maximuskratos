@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -39,11 +40,31 @@ export class DiagnosticController {
     return this.diagnostic.startOrResume(req.user.sub);
   }
 
+  @Post('territory/:territory/start')
+  @UseGuards(DiagnosticOpenGuard)
+  @ApiOperation({ summary: 'Start or resume diagnostic focusing on one territory' })
+  startTerritory(@Request() req: AuthenticatedRequest, @Param('territory') territory: string) {
+    return this.diagnostic.startOrResumeForTerritory(req.user.sub, territory);
+  }
+
+  @Get('question')
+  @UseGuards(DiagnosticOpenGuard)
+  @ApiOperation({ summary: 'Load a single question by sourceRef' })
+  question(@Request() req: AuthenticatedRequest, @Query('sourceRef') sourceRef: string) {
+    return this.diagnostic.getQuestionBySourceRef(req.user.sub, sourceRef);
+  }
+
   @Get('state')
   @UseGuards(DiagnosticOpenGuard)
   @ApiOperation({ summary: 'Get current diagnostic state and next question' })
-  state(@Request() req: AuthenticatedRequest) {
-    return this.diagnostic.getState(req.user.sub);
+  state(
+    @Request() req: AuthenticatedRequest,
+    @Query('at') atQuestionId?: string,
+    @Query('after') afterQuestionId?: string,
+    @Query('introModule') introModule?: string,
+    @Query('territory') territory?: string,
+  ) {
+    return this.diagnostic.getState(req.user.sub, { atQuestionId, afterQuestionId, introModule, territory });
   }
 
   @Post('response')

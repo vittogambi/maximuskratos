@@ -829,3 +829,26 @@ Rama `pilot/domain-f1-m1-gate`. Commits hasta `b4ff341`.
 Pendiente en la rama (plan maestro): UI F4.0 a F4.7, F5 player, F6 revisión/logro/mantenimiento completos, F7.2 a F7.3, F8, F9; T3.4 activación con filas B-03; T3.7 calendario con `resolveSchedule`; evidencia HTTP T6.2.
 
 `npm run test:domain -w @mk/api`: **213/213** (28 archivos). Aplicar migraciones M1 a M4 antes de HTTP.
+
+## T3.7 + F4 base + F6.2 (21 oct noche, sin commit aún)
+
+| Bloque | Estado | Notas |
+| --- | --- | --- |
+| T3.7 | Avanzado | `action-schedules.db.ts`, calendario con `resolveSchedule`, `NOT_AN_OCCASION` en registros, `appendScheduleVersion` en cierre de semana |
+| T6.2 | API | `POST .../evidence`, `POST .../achievement` con `CRITERION_NOT_CONFIRMED` |
+| F4 | Base | `components/member/*`, `.mk-m-` en `globals.css`, `StartDashboard`, `/semana`, `/memoria`, `/ambito/[territory]`, `/disenar`, redirects legacy |
+| Web | Restaurado | `journey-api.ts` completo desde `pilot/ikigai-lista` + dashboard/memoria/territorio/return |
+| Nav | Actualizado | `MemberSideNav`, `BottomTabBar` (Inicio, Semana, Memoria) |
+
+Pendiente: T3.4 activación con propuestas, F4 patrones completos y e2e, F5 player por ámbito, pantallas logro/mantenimiento, F7.3 fixture `@4`, F8/F9. Player/auth del working tree siguen sin commitear.
+
+## T3.4 propuestas + F4 patrones (21 oct, continuación)
+
+| Bloque | Estado | Notas |
+| --- | --- | --- |
+| T3.4 | Avanzado | `plan-proposal-apply.ts`, `POST .../proposals/:id/decision`, activación aplica propuestas ACCEPTED/EDITED |
+| Dashboard foco | Fix | `weekCounts` con schedules reales |
+| Territorio | API + UI | planes del ámbito; pestañas Descubre/Diseña/Actúa |
+| F4 | Patrones | `ChoiceCard`, `MemberTabs`, e2e `dashboard-ambitos.spec.ts` reescrito |
+
+`test/plan-proposal-apply.test.ts` añadido. Domain suite sigue en 213+1 al correr el archivo suelto.

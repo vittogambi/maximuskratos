@@ -494,6 +494,39 @@ export type QuestionDto = {
   /** Activity questions in this module that already have ámbito, idea y respuesta. */
   filledActivities?: string[];
   activityNotes?: { sourceRef: string; text: string }[];
+  savedAnswer?: {
+    selectedOptionIds: string[];
+    freeText: string | null;
+    exceptionKind: string | null;
+    rankingOrder: string[];
+  } | null;
+  previousQuestionId?: string | null;
+  isFirstInModule?: boolean;
+};
+
+export type AreaSectionDto = {
+  slug: string;
+  titleEs: string;
+  answered: number;
+  total: number;
+  current: boolean;
+};
+
+export type AuditCloseDto = {
+  diagnostic: string | null;
+  total: number | null;
+  totalMax: number;
+  sections: {
+    slug: string;
+    titleEs: string;
+    sum: number;
+    max: number;
+    status: 'review' | 'ok';
+    markLabel: string;
+  }[];
+  revisitQuestionId: string | null;
+  senseNote: string;
+  incompleteNote: string | null;
 };
 
 export type SessionStateDto = {
@@ -512,6 +545,8 @@ export type SessionStateDto = {
   currentModuleOrder: number | null;
   totalModules: number;
   currentModuleEstimatedMinutes: number | null;
+  areaSections?: AreaSectionDto[];
+  backIntroModuleSlug?: string | null;
 };
 
 export type ModuleProgressDto = {
@@ -547,7 +582,7 @@ export type MasterProfileDto = {
 
 export type NextStep =
   | { type: 'question'; data: QuestionDto }
-  | { type: 'module_outro'; data: { moduleSlug: string; titleEs: string; outroText: string; readings?: { label: string; detail: string }[] } }
+  | { type: 'module_outro'; data: { moduleSlug: string; titleEs: string; outroText: string; readings?: { label: string; detail: string }[]; auditClose?: AuditCloseDto } }
   | { type: 'phase_end'; data: { phase: string; completionPct: number; selfKnowledgePct: number } }
   | { type: 'diagnostic_complete'; data: { archetypePrimary: string; selfKnowledgePct: number } };
 
@@ -589,8 +624,33 @@ export async function apiDiagnosticStart(accessToken: string): Promise<Diagnosti
   return res.json();
 }
 
-export async function apiDiagnosticState(accessToken: string): Promise<DiagnosticState> {
-  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/state`, {
+export async function apiDiagnosticStartTerritory(accessToken: string, territory: string): Promise<DiagnosticState> {
+  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/territory/${encodeURIComponent(territory)}/start`, {
+    method: 'POST',
+    headers: { ...authHeaders(accessToken), 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({}),
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+
+export type DiagnosticStateQuery = {
+  at?: string;
+  after?: string;
+  introModule?: string;
+};
+
+export async function apiDiagnosticState(
+  accessToken: string,
+  query?: DiagnosticStateQuery,
+): Promise<DiagnosticState> {
+  const params = new URLSearchParams();
+  if (query?.at) params.set('at', query.at);
+  if (query?.after) params.set('after', query.after);
+  if (query?.introModule) params.set('introModule', query.introModule);
+  const suffix = params.toString() ? `?${params.toString()}` : '';
+  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/state${suffix}`, {
     headers: authHeaders(accessToken),
     credentials: 'include',
   });

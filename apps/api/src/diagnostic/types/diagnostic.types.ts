@@ -1,4 +1,11 @@
 import type { QuestionCapture } from '../question-capture';
+import type {
+  AreaSectionDto,
+  AuditCloseDto,
+  SavedAnswerDto,
+} from '../player-navigation';
+
+export type { AreaSectionDto, AuditCloseDto, SavedAnswerDto };
 
 export type DimensionScores = Record<string, number>;
 
@@ -17,6 +24,9 @@ export type QuestionDto = {
   heading: string | null;
   allowedExceptions: string[];
   answerRevision: number;
+  savedAnswer?: SavedAnswerDto | null;
+  previousQuestionId?: string | null;
+  isFirstInModule?: boolean;
   savedChoices?: Record<string, string>;
   filledActivities?: string[];
   activityNotes?: { sourceRef: string; text: string }[];
@@ -34,6 +44,7 @@ export type OutroDto = {
   titleEs: string;
   outroText: string;
   readings: { label: string; detail: string }[];
+  auditClose?: AuditCloseDto;
 };
 
 export type PhaseResultsDto = {
@@ -66,6 +77,9 @@ export type SessionStateDto = {
   currentModuleOrder: number | null;
   totalModules: number;
   currentModuleEstimatedMinutes: number | null;
+  areaSections?: AreaSectionDto[];
+  /** Desde la intro del módulo: slug del módulo anterior para mostrar su intro. */
+  backIntroModuleSlug?: string | null;
 };
 
 export type ModuleProgressDto = {
@@ -88,7 +102,9 @@ export type NextStep =
   | { type: 'question'; data: QuestionDto }
   | { type: 'module_outro'; data: OutroDto }
   | { type: 'phase_end'; data: PhaseResultsDto }
-  | { type: 'diagnostic_complete'; data: ProfileRevealDto };
+  | { type: 'diagnostic_complete'; data: ProfileRevealDto }
+  | { type: 'territory_complete'; data: { territory: string } }
+  | { type: 'territory_pause'; data: { territory: string; moduleSlug: string } };
 
 export type DiagnosticResponsePayload = {
   sessionState: SessionStateDto;

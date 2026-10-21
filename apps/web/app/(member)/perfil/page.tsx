@@ -1,11 +1,5 @@
-import type { Metadata } from 'next';
-import { PerfilContent } from '@/components/pages/PerfilContent';
+import { redirect } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: 'Mi Perfil',
-  robots: { index: false, follow: false },
-};
-
-export default function PerfilPage() {
-  return <PerfilContent />;
+export default function PerfilRedirectPage() {
+  redirect('/memoria?vista=documentos');
 }

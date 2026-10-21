@@ -43,6 +43,11 @@ import { returnPanel } from './return-panel';
 import { readOwnPlan } from './own-plan';
 import { directionSeed } from './purpose-link';
 import { weekCounts } from './week-count';
+import { fixedDaysInWeek, resolveSchedule } from './action-schedule';
+import { appendScheduleVersion, loadActionSchedules } from './action-schedules.db';
+import { planPatchFromProposals } from './plan-proposal-apply';
+import { inferPlanTerritory } from './plan-territory-assignment';
+import { reviewReading } from './review-reading';
 import { homeBoard, type HomePlan } from './home-board';
 import { nextStep } from './next-step';
 import { isIsoDate, isMonday, weekStartMonday } from './civil-date';
@@ -73,6 +78,10 @@ function readLines(text: string | null): Record<string, string> {
 
 function asJson(value: unknown): Prisma.InputJsonValue {
   return JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue;
+}
+
+function asRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === 'object' && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
 }
 
 function directionOf(purpose: { content: unknown } | null): string | null {
@@ -1039,6 +1048,16 @@ export class JourneyService {
     }
     const capacityMinutes = patch.capacityMinutes ?? undefined;
     const protectNote = patch.protectNote !== undefined ? patch.protectNote : undefined;
+    const proposalRows = await this.prisma.planProposal.findMany({ where: { planId: plan.id, userId } });
+    const proposalPatch = planPatchFromProposals(
+      proposalRows.map((row) => ({
+        kind: row.kind,
+        decision: row.status as 'ACCEPTED' | 'EDITED' | 'REJECTED',
+        payload: asRecord(row.payload),
+        editedPayload: row.editedPayload ? asRecord(row.editedPayload) : null,
+      })),
+      { outcome: plan.outcome, criterionRevision: plan.criterionRevision },
+    );
     return this.prisma.$transaction(async (tx) => {
       await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${userId}))`;
       const updated = await tx.personalPlan.update({
@@ -1050,6 +1069,13 @@ export class JourneyService {
           version: nextPlanVersion(plan.version),
           ...(capacityMinutes !== undefined ? { capacityMinutes } : {}),
           ...(protectNote !== undefined ? { protectNote } : {}),
+          ...(proposalPatch.title ? { title: proposalPatch.title } : {}),
+          ...(proposalPatch.outcome ? { outcome: proposalPatch.outcome } : {}),
+          ...(proposalPatch.whyItMatters !== undefined ? { whyItMatters: proposalPatch.whyItMatters } : {}),
+          ...(proposalPatch.whyStatus ? { whyStatus: proposalPatch.whyStatus } : {}),
+          ...(proposalPatch.criterionText ? { criterionText: proposalPatch.criterionText } : {}),
+          ...(proposalPatch.criterionStatus ? { criterionStatus: proposalPatch.criterionStatus } : {}),
+          ...(proposalPatch.criterionRevision != null ? { criterionRevision: proposalPatch.criterionRevision } : {}),
         },
       });
       await tx.planTransition.create({
@@ -1397,15 +1423,44 @@ export class JourneyService {
       orderBy: { createdAt: 'desc' },
     });
     const actionIds = plans.flatMap((plan) => plan.actions.map((action) => action.id));
-    const records = actionIds.length
-      ? await this.prisma.actionRecord.findMany({ where: { actionId: { in: actionIds } } })
-      : [];
+    const [records, schedules] = await Promise.all([
+      actionIds.length ? this.prisma.actionRecord.findMany({ where: { actionId: { in: actionIds } } }) : Promise.resolve([]),
+      loadActionSchedules(this.prisma, actionIds),
+    ]);
     const today = this.clock.today();
-    const occasions = plans.flatMap((plan) => plan.actions.filter((action) => action.active && !action.pausedAt && action.weekday != null).map((action) => ({
-      actionId: action.id,
-      days: futureOccasions(today, action.weekday as number, action.intervalDays ?? 7),
-    })));
-    return { timezone: ZONE, weekStart: this.weekStart(), today, plans, records, occasions };
+    const occasions = plans.flatMap((plan) =>
+      plan.actions
+        .filter((action) => action.active && !action.pausedAt)
+        .map((action) => {
+          const legacy = {
+            id: action.id,
+            weekday: action.weekday,
+            intervalDays: action.intervalDays,
+            occasionsPerWeek: action.occasionsPerWeek,
+            active: action.active,
+          };
+          const resolved = resolveSchedule(legacy, schedules, today);
+          if (resolved.kind === 'PAUSED' || resolved.kind === 'NONE') {
+            return { actionId: action.id, days: [] as string[], scheduleSource: resolved.source };
+          }
+          if (resolved.kind === 'FIXED' && resolved.weekday != null) {
+            return {
+              actionId: action.id,
+              days: futureOccasions(today, resolved.weekday, resolved.intervalDays ?? 7),
+              scheduleSource: resolved.source,
+            };
+          }
+          if (action.weekday != null) {
+            return {
+              actionId: action.id,
+              days: futureOccasions(today, action.weekday, action.intervalDays ?? 7),
+              scheduleSource: resolved.source,
+            };
+          }
+          return { actionId: action.id, days: [] as string[], scheduleSource: resolved.source };
+        }),
+    );
+    return { timezone: ZONE, weekStart: this.weekStart(), today, plans, records, occasions, schedules };
   }
 
   async upsertRecord(
@@ -1441,6 +1496,22 @@ export class JourneyService {
     if (prior && input.expectedRevision != null && prior.revision !== input.expectedRevision) {
       throw new ConflictException({ message: 'El registro cambió en otra pestaña.', code: 'STALE_RECORD', revision: prior.revision });
     }
+    if (input.status !== 'PENDING') {
+      const schedules = await loadActionSchedules(this.prisma, [input.actionId]);
+      const legacy = {
+        id: action.id,
+        weekday: action.weekday,
+        intervalDays: action.intervalDays,
+        occasionsPerWeek: action.occasionsPerWeek,
+        active: action.active,
+      };
+      const weekEnd = this.addDays(week, 6);
+      const allowed = fixedDaysInWeek(legacy, schedules, week, weekEnd);
+      const flexAllowed = resolveSchedule(legacy, schedules, input.day).kind === 'FLEXIBLE';
+      if (!flexAllowed && !allowed.includes(input.day)) {
+        throw new ConflictException({ message: 'Ese día no era una ocasión de esta acción.', code: 'NOT_AN_OCCASION' });
+      }
+    }
     return this.prisma.actionRecord.upsert({
       where: { actionId_day: { actionId: input.actionId, day: input.day } },
       update: {
@@ -1473,11 +1544,61 @@ export class JourneyService {
     const effects = await this.weekEffects(userId, weekStart, decisions, revisions);
     const plans = await this.planOutcomeChanges(userId, outcomes);
     const guidance = await this.occasionGuidance(userId, weekStart, Boolean(review?.directionChanged));
+    const focusPlan = await this.prisma.personalPlan.findFirst({ where: { userId, isFocus: true } });
+    let horizonReading = null;
+    if (focusPlan?.reviewAt) {
+      const applicable = review?.applicable ?? 1;
+      const done = review?.done ?? 0;
+      horizonReading = reviewReading({
+        today: this.civilToday(),
+        reviewAt: focusPlan.reviewAt.toISOString().slice(0, 10),
+        executionRatio: applicable > 0 ? done / applicable : 0,
+        evidenceStatus: null,
+        hasNewRestriction: false,
+        goalStillMatters: true,
+        purposeServed: 'UNKNOWN',
+        whyStatus: focusPlan.whyStatus as 'PROVISIONAL' | 'CONFIRMED' | 'PROPOSED' | null,
+        missingRegistrations: applicable > 0 && done === 0,
+      });
+    }
     return {
       weekStart,
       effects: effects.map((effect) => ({ actionId: effect.actionId, decision: effect.decision, summary: effect.summary })),
       plans,
       guidance,
+      horizonReading,
+    };
+  }
+
+  async planTerritoryProposal(userId: string, planId: string) {
+    const plan = await this.prisma.personalPlan.findFirst({ where: { id: planId, userId } });
+    if (!plan) throw new NotFoundException('Plan no encontrado.');
+    if (plan.territory) return { proposal: null, reason: 'ALREADY_SET', territory: plan.territory };
+    const actions = await this.prisma.planAction.findMany({ where: { planId, active: true } });
+    const inferred = inferPlanTerritory(actions);
+    return { proposal: inferred.confidence === 'SINGLE' ? inferred.territory : null, ...inferred };
+  }
+
+  async confirmPlanTerritory(userId: string, planId: string, input: { territory: string; expectedVersion?: number }) {
+    const plan = await this.prisma.personalPlan.findFirst({ where: { id: planId, userId } });
+    if (!plan) throw new NotFoundException('Plan no encontrado.');
+    this.guardPlanVersion(plan, input.expectedVersion);
+    return this.prisma.personalPlan.update({
+      where: { id: plan.id },
+      data: { territory: input.territory, version: nextPlanVersion(plan.version) },
+    });
+  }
+
+  async proposeMaintenance(userId: string, planId: string) {
+    const plan = await this.prisma.personalPlan.findFirst({ where: { id: planId, userId } });
+    if (!plan) throw new NotFoundException('Plan no encontrado.');
+    const actions = await this.prisma.planAction.findMany({ where: { planId, active: true }, take: 1 });
+    const sample = actions[0];
+    return {
+      minimumAction: sample
+        ? { title: sample.title, doneWhen: sample.doneWhen, weekday: sample.weekday, intervalDays: sample.intervalDays ?? 7 }
+        : null,
+      reviewSignal: 'Revisar si el mínimo sigue teniendo sentido en cuatro semanas.',
     };
   }
 
@@ -1565,6 +1686,7 @@ export class JourneyService {
       await this.weekApply.beforeActionWrite();
       let wrote = false;
       for (const effect of effects) {
+        const previous = active.flatMap((plan) => plan.actions).find((item) => item.id === effect.actionId);
         await tx.planAction.update({
           where: { id: effect.actionId },
           data: {
@@ -1578,6 +1700,22 @@ export class JourneyService {
               : { pausedAt: null }),
           },
         });
+        const scheduleFrom = this.addDays(weekStart, 7);
+        if (
+          previous
+          && (effect.next.weekday !== previous.weekday || effect.next.intervalDays !== previous.intervalDays || effect.decision === 'PAUSE')
+        ) {
+          await appendScheduleVersion(tx, {
+            actionId: effect.actionId,
+            effectiveFrom: scheduleFrom,
+            kind: effect.next.paused ? 'PAUSED' : effect.next.weekday == null ? 'NONE' : 'FIXED',
+            weekday: effect.next.weekday ?? null,
+            intervalDays: effect.next.intervalDays ?? 7,
+            occasionsPerWeek: previous.occasionsPerWeek,
+            source: 'REVIEW',
+            commandKey: `${commandDigest}:${effect.actionId}`,
+          });
+        }
         if (!wrote) {
           wrote = true;
           await this.weekApply.afterActionWrite();
@@ -1766,7 +1904,11 @@ export class JourneyService {
     if (focusPlan) {
       const weekStart = this.weekStart();
       const actions = await this.prisma.planAction.findMany({ where: { planId: focusPlan.id, active: true } });
-      const records = await this.prisma.actionRecord.findMany({ where: { actionId: { in: actions.map((a) => a.id) } } });
+      const actionIds = actions.map((a) => a.id);
+      const [records, schedules] = await Promise.all([
+        actionIds.length ? this.prisma.actionRecord.findMany({ where: { actionId: { in: actionIds } } }) : Promise.resolve([]),
+        loadActionSchedules(this.prisma, actionIds),
+      ]);
       const reviewed = Boolean(await this.prisma.weekReview.findUnique({ where: { userId_weekStart: { userId, weekStart } } }));
       focusWeekCounts = weekCounts({
         weekStart,
@@ -1774,7 +1916,7 @@ export class JourneyService {
         weekReviewed: reviewed,
         legacyWeek: false,
         actions: actions.map((a) => ({ id: a.id, weekday: a.weekday, intervalDays: a.intervalDays, occasionsPerWeek: a.occasionsPerWeek, active: a.active })),
-        schedules: [],
+        schedules,
         records: records.map((r) => ({ actionId: r.actionId, day: r.day, status: r.status })),
         cancellations: [],
       });
@@ -1800,7 +1942,113 @@ export class JourneyService {
         take: 800,
       }),
     ]);
-    return territoryDetail(t as 'MENTALIDAD' | 'FINANZAS' | 'RELACIONES' | 'SALUD_FISICA', ledger, questions.filter((q) => q.sourceRef).map((q) => ({ sourceRef: q.sourceRef as string })));
+    const detail = territoryDetail(t as 'MENTALIDAD' | 'FINANZAS' | 'RELACIONES' | 'SALUD_FISICA', ledger, questions.filter((q) => q.sourceRef).map((q) => ({ sourceRef: q.sourceRef as string })));
+    const plans = await this.prisma.personalPlan.findMany({
+      where: { userId, territory: t },
+      orderBy: { updatedAt: 'desc' },
+      take: 8,
+    });
+    return {
+      ...detail,
+      synthesis: [] as { text: string; sourceRef: string | null; partial: boolean }[],
+      plans: plans.map((plan) => ({
+        id: plan.id,
+        title: plan.title,
+        stage: plan.stage ?? fromLegacy(plan.status as 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'ARCHIVED'),
+        isFocus: plan.isFocus,
+      })),
+    };
+  }
+
+  async addPlanEvidence(
+    userId: string,
+    planId: string,
+    input: {
+      kind: string;
+      status: string;
+      text?: string | null;
+      observedOn?: string;
+      actionRecordId?: string | null;
+      commandKey?: string;
+    },
+  ) {
+    if (input.commandKey) {
+      const prior = await this.prisma.planEvidence.findFirst({
+        where: { userId, commandKey: input.commandKey },
+      });
+      if (prior) return { evidence: prior, repeated: true };
+    }
+    const plan = await this.prisma.personalPlan.findFirst({ where: { id: planId, userId } });
+    if (!plan) throw new NotFoundException('Plan no encontrado.');
+    const revision = plan.criterionRevision ?? 1;
+    const observedOn = input.observedOn ?? this.civilToday();
+    const evidence = await this.prisma.planEvidence.create({
+      data: {
+        userId,
+        planId: plan.id,
+        criterionRevision: revision,
+        observedOn: new Date(`${observedOn}T12:00:00.000Z`),
+        kind: input.kind,
+        status: input.status,
+        text: input.text?.trim() || null,
+        actionRecordId: input.actionRecordId ?? null,
+        commandKey: input.commandKey ?? null,
+      },
+    });
+    return { evidence, repeated: false };
+  }
+
+  async declareAchievement(
+    userId: string,
+    planId: string,
+    input: { confirm: boolean; expectedVersion?: number; commandKey?: string },
+  ) {
+    if (!input.confirm) throw new BadRequestException('Hay que confirmar el logro.');
+    if (input.commandKey) {
+      const prior = await this.prisma.planTransition.findFirst({
+        where: { userId, planId, metadata: { path: ['commandKey'], equals: input.commandKey } },
+      });
+      if (prior) {
+        const plan = await this.prisma.personalPlan.findFirst({ where: { id: planId, userId } });
+        if (!plan) throw new NotFoundException('Plan no encontrado.');
+        return { plan, repeated: true };
+      }
+    }
+    const plan = await this.prisma.personalPlan.findFirst({ where: { id: planId, userId } });
+    if (!plan) throw new NotFoundException('Plan no encontrado.');
+    this.guardPlanVersion(plan, input.expectedVersion);
+    const criterionOk = plan.criterionStatus === 'CONFIRMED' || (plan.outcome?.trim().length ?? 0) > 0;
+    if (!criterionOk) {
+      throw new ConflictException({ message: 'El criterio del plan no está confirmado.', code: 'CRITERION_NOT_CONFIRMED' });
+    }
+    const from = this.planStage(plan);
+    if (!canTransition(from, 'CLOSED')) {
+      throw new BadRequestException('Este plan no puede cerrarse por logro desde su etapa actual.');
+    }
+    return this.prisma.$transaction(async (tx) => {
+      const updated = await tx.personalPlan.update({
+        where: { id: plan.id },
+        data: {
+          achievedAt: new Date(),
+          stage: 'CLOSED',
+          status: compatStatus('CLOSED'),
+          closedReason: 'ACHIEVED',
+          version: nextPlanVersion(plan.version),
+        },
+      });
+      await tx.planTransition.create({
+        data: {
+          userId,
+          planId: plan.id,
+          fromStage: from,
+          toStage: 'CLOSED',
+          reason: 'ACHIEVED',
+          effectiveFrom: new Date(this.civilToday()),
+          metadata: input.commandKey ? { commandKey: input.commandKey } : undefined,
+        },
+      });
+      return { plan: updated, repeated: false };
+    });
   }
 
   async memory(userId: string) {
@@ -1953,6 +2201,46 @@ export class JourneyService {
         version: nextPlanVersion(plan.version),
       },
     });
+  }
+
+  async decidePlanProposal(
+    userId: string,
+    planId: string,
+    proposalId: string,
+    input: {
+      decision: 'ACCEPT' | 'EDIT' | 'REJECT';
+      editedPayload?: Record<string, unknown>;
+      commandKey?: string;
+      expectedVersion?: number;
+    },
+  ) {
+    if (input.commandKey) {
+      const prior = await this.prisma.planProposal.findUnique({
+        where: { userId_commandKey: { userId, commandKey: input.commandKey } },
+      });
+      if (prior) return { proposal: prior, repeated: true };
+    }
+    const plan = await this.prisma.personalPlan.findFirst({ where: { id: planId, userId } });
+    if (!plan) throw new NotFoundException('Plan no encontrado.');
+    this.guardPlanVersion(plan, input.expectedVersion);
+    const proposal = await this.prisma.planProposal.findFirst({ where: { id: proposalId, userId, planId } });
+    if (!proposal) throw new NotFoundException('Propuesta no encontrada.');
+    const status =
+      input.decision === 'REJECT' ? 'REJECTED' : input.decision === 'EDIT' ? 'EDITED' : 'ACCEPTED';
+    const updated = await this.prisma.planProposal.update({
+      where: { id: proposal.id },
+      data: {
+        status,
+        decidedAt: new Date(),
+        ...(input.decision === 'EDIT' && input.editedPayload ? { editedPayload: asJson(input.editedPayload) } : {}),
+        ...(input.commandKey ? { commandKey: input.commandKey } : {}),
+      },
+    });
+    await this.prisma.personalPlan.update({
+      where: { id: plan.id },
+      data: { version: nextPlanVersion(plan.version) },
+    });
+    return { proposal: updated, repeated: false };
   }
 }
 
