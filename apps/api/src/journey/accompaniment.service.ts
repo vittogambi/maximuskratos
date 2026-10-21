@@ -15,7 +15,7 @@ import { familyById } from './accompaniment/families';
 import { draftAccompanimentHelp, type HelpDraftV2 } from './accompaniment/help';
 import { assessObservation, depthContrast, type ExperimentAspect, type ExperimentDecision, type ObservationStatus, type RecipientState } from './accompaniment/experiments';
 import { limitsForAction, proposeAccompaniment, type AccompanimentInput, type AccompanimentProposal } from './accompaniment/rules';
-import { withoutRejected, type RejectedInterpretation } from './accompaniment/personalization';
+import type { RejectedInterpretation } from './accompaniment/personalization';
 import { BARRIERS, declarationToGoal, isGoalKind, RULES_VERSION, type BarrierChoice, type BarrierKind, type GoalKind, type Situation } from './accompaniment/vocab';
 
 export type AccompanimentBody = {
@@ -426,10 +426,15 @@ export class AccompanimentService {
     const ledgerEntries = await answerLedger(this.prisma, userId);
     const revisionAt = (sourceRef: string) => ledgerEntries.find((entry) => entry.sourceRef === sourceRef)?.revision ?? 0;
     let proposal = proposeAccompaniment(input);
-    proposal = {
-      ...proposal,
-      reasons: withoutRejected({ reasons: proposal.reasons }, rejected, revisionAt).reasons,
-    };
+    if (rejected.length) {
+      const blocked = new Set(
+        rejected.filter((row) => revisionAt(row.sourceRef) === row.responseRevision).map((row) => row.sourceRef),
+      );
+      proposal = {
+        ...proposal,
+        reasons: proposal.reasons.filter((reason) => !reason.refs.some((ref) => blocked.has(ref))),
+      };
+    }
     let help = draftAccompanimentHelp(proposal, { ...input, knownFields });
     if (body.adoptFamilyId && proposal.alternative?.familyId === body.adoptFamilyId) {
       const alt = familyById(body.adoptFamilyId);
