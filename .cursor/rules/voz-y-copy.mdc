@@ -1,0 +1,24 @@
+---
+description: Voz de respuestas y docs internos, y puntuación del copy en español. No reescribe preguntas metodológicas ni bloquea el copy de producto cuando el encargo lo pide.
+alwaysApply: true
+---
+
+# Voz y copy
+
+## Respuestas y documentos internos
+
+En respuestas de trabajo y en docs internos, escribe español natural, directo y preciso. Frases completas. No repitas la misma idea. No expliques qué es MK. No uses tono de coach ni slogans.
+
+Separa hechos, propuestas y decisiones pendientes. No conviertas una ambigüedad en una dicotomía artificial. Si faltan datos, di qué se sabe, qué se infiere y qué falta preguntar.
+
+Esta voz no impide escribir copy de producto cuando el encargo es ese copy.
+
+## Copy visible y prosa de producto
+
+En copy en español que ve la persona (UI, CTA, badges, FAQ, descripciones de metadata) y en la prosa de producto de meetings, no uses `-`, `–` ni `—` como puntuación. No uses `·` para separar frases. Prefiere coma, punto, dos puntos o reformular.
+
+No aplica a código, identificadores, rutas, URLs, CSS ni sintaxis Markdown. Tampoco a IDs de producto, al glifo `—` de una celda vacía, ni a una ceja de marca que ya usa punto medio (`MK · SECCIÓN`), salvo que el encargo sea cambiar ese patrón.
+
+Las preguntas, escalas y textos de ítem del cuestionario no son copy de interfaz. No los reescribas con esta regla.
+
+En `docs/phase-2/meetings/`, el léxico de esos documentos es `docs/phase-2/LENGUAJE.md`. Ese léxico no manda en el ciclo de miembros. Ahí se dice Mentalidad, Finanzas, Relaciones y Salud física, y Descubre, Diseña y Actúa.

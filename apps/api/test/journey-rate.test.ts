@@ -1,5 +1,6 @@
 import type { INestApplication } from '@nestjs/common';
 import request from 'supertest';
+import { loadCompiled } from './journey-http-app';
 import { afterAll, describe, expect, it } from 'vitest';
 
 const databaseUrl = process.env.DATABASE_URL ?? '';
@@ -17,7 +18,7 @@ describe('default rate limit', () => {
   it('rejects the 101st request on the real guard', async () => {
     process.env.MK_THROTTLE_DEFAULT_LIMIT = '100';
     const { Test } = await import('@nestjs/testing');
-    const { AppModule } = await import('../dist/app.module.js');
+    const { AppModule } = await loadCompiled<{ AppModule: unknown }>('app.module.js');
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();
     app = moduleRef.createNestApplication();
     await app.init();

@@ -45,7 +45,7 @@ describe('LAB-025 simulate other answers e2e', () => {
 
       await page.goto(`${web}/admin/lab/runs/${created.run.id}`);
       await page.waitForSelector('.lab-casehead__title', { timeout: 25000 });
-      await expect(page.locator('body')).toContainText('Estás en una simulación de');
+      expect(await page.locator('body').innerText()).toContain('Estás en una simulación de');
 
       const save = await page.request.post(`${api}/api/v1/admin/lab/runs/${created.run.id}/responses/batch`, {
         headers,
@@ -88,8 +88,9 @@ describe('LAB-025 simulate other answers e2e', () => {
       await page.goto(`${web}/admin/lab/runs/${created.run.id}`);
       await page.waitForSelector('.lab-casehead__title', { timeout: 25000 });
       await page.getByRole('button', { name: /Comparar con R04/ }).click();
-      await expect(page.locator('body')).toContainText('Seguridad');
-      await expect(page.locator('body')).toContainText('Cuerpo');
+      const compared = await page.locator('body').innerText();
+      expect(compared).toContain('Seguridad');
+      expect(compared).toContain('Cuerpo');
 
       await browser.close();
     },

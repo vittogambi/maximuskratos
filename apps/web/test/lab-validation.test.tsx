@@ -49,6 +49,7 @@ const emptyDraft = {
   expected_purpose_stage: 'UNSURE',
   confidence: 'MEDIA',
   notes: '',
+  expected_alerts: [],
 };
 
 const emptyReview = {

@@ -25,6 +25,7 @@ const purposeMock = vi.hoisted(() => vi.fn());
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: pushMock, replace: vi.fn() }),
+  useSearchParams: () => new URLSearchParams(),
 }));
 
 vi.mock('next/link', () => ({
@@ -69,6 +70,7 @@ vi.mock('@/lib/journey-api', async () => {
 import { DiagnosticPlayer } from '@/components/diagnostico/DiagnosticPlayer';
 import { AmbitStage } from '@/components/journey/AmbitStage';
 import { CalendarScreen } from '@/components/journey/CalendarScreen';
+import { WeekReviewScreen } from '@/components/journey/WeekReviewScreen';
 import { IkigaiCross } from '@/components/journey/IkigaiCross';
 import { PlansScreen } from '@/components/journey/PlansScreen';
 import { PurposeScreen } from '@/components/journey/PurposeScreen';
@@ -250,7 +252,7 @@ describe('player without a browser', () => {
     stateMock.mockResolvedValue(session(scaleQuestion, true));
     render(<DiagnosticPlayer />);
     expect(await screen.findByRole('heading', { name: 'Mentalidad e identidad' })).toBeTruthy();
-    expect(screen.getByText('El objetivo aquí es medir la brecha entre el yo ideal y el yo real.')).toBeTruthy();
+    expect(screen.getByText('Medir la brecha entre el yo ideal y el yo real.')).toBeTruthy();
     expect(screen.queryByText(NOTE)).toBeNull();
     await user.click(screen.getByRole('button', { name: 'Comenzar' }));
     expect(await screen.findByRole('heading', { name: scaleQuestion.textEs })).toBeTruthy();
@@ -387,12 +389,12 @@ describe('player without a browser', () => {
     await user.click(await screen.findByRole('radio', { name: '3. Puedo sostenerla' }));
     submitMock.mockRejectedValueOnce(Object.assign(new Error('down'), { status: 500 }));
     await user.click(screen.getByRole('button', { name: 'Continuar' }));
-    expect(await screen.findByRole('alert')).toHaveProperty('textContent', 'No se pudo guardar. El texto sigue aquí. Puedes reintentar.');
+    expect(await screen.findByRole('alert')).toHaveProperty('textContent', 'No pudimos guardar tu respuesta. El texto sigue aquí. Puedes intentarlo de nuevo.');
     expect(screen.getByRole('radio', { name: '3. Puedo sostenerla' }).getAttribute('aria-checked')).toBe('true');
 
     submitMock.mockRejectedValueOnce(Object.assign(new Error('stale'), { status: 409 }));
     await user.click(screen.getByRole('button', { name: 'Continuar' }));
-    expect((await screen.findByRole('alert')).textContent).toContain('Otra sesión escribió después');
+    expect((await screen.findByRole('alert')).textContent).toContain('Otra sesión guardó cambios después');
     expect(screen.getByRole('radio', { name: '3. Puedo sostenerla' }).getAttribute('aria-checked')).toBe('true');
   });
 
@@ -449,21 +451,34 @@ describe('player without a browser', () => {
     expect(pushMock).toHaveBeenCalledWith('/panel');
   });
 
-  it('saves a previous answer again with the revision produced by the last write', async () => {
+  it('saves a previous answer again after navigating back to it', async () => {
     const user = userEvent.setup();
     stateMock.mockResolvedValue(session(scaleQuestion, false));
     render(<DiagnosticPlayer />);
     await user.click(await screen.findByRole('radio', { name: '3. Puedo sostenerla' }));
-    submitMock.mockResolvedValueOnce(session({ ...scaleQuestion, id: 'q-next', textEs: 'Siguiente frase', answerRevision: 0 }, false));
+    const nextState = session(
+      {
+        ...scaleQuestion,
+        id: 'q-next',
+        textEs: 'Siguiente frase',
+        answerRevision: 0,
+        previousQuestionId: 'q-scale',
+        isFirstInModule: false,
+      },
+      false,
+    );
+    nextState.sessionState = { ...nextState.sessionState, currentQuestionIndex: 2 };
+    submitMock.mockResolvedValueOnce(nextState);
     await user.click(screen.getByRole('button', { name: 'Continuar' }));
     expect(await screen.findByRole('heading', { name: 'Siguiente frase' })).toBeTruthy();
+    stateMock.mockResolvedValueOnce(session(scaleQuestion, false));
     await user.click(screen.getByRole('button', { name: 'Anterior' }));
     expect(await screen.findByRole('heading', { name: scaleQuestion.textEs })).toBeTruthy();
     submitMock.mockResolvedValueOnce(session({ ...scaleQuestion, id: 'q-next', textEs: 'Siguiente frase' }, false));
     await user.click(screen.getByRole('button', { name: 'Continuar' }));
     expect(submitMock).toHaveBeenLastCalledWith('token-test', expect.objectContaining({
       questionId: 'q-scale',
-      expectedRevision: 5,
+      expectedRevision: scaleQuestion.answerRevision,
     }));
   });
 });
@@ -598,12 +613,12 @@ describe('cross, plan and review without a browser', () => {
     calendarMock.mockResolvedValue(openCalendar(true));
     previewMock.mockResolvedValue({ effects: [{ summary: 'El criterio sigue. Cada 14 días, el miércoles.' }] });
     closeMock.mockRejectedValueOnce(Object.assign(new Error('conflict'), { status: 409, message: 'Otra sesión cerró esta semana.' }));
-    render(<CalendarScreen />);
+    render(<WeekReviewScreen />);
     await screen.findByLabelText('Decisión para Caminar diez minutos');
     expect((screen.getByRole('button', { name: 'Aplicar' }) as HTMLButtonElement).disabled).toBe(true);
     await user.selectOptions(screen.getByLabelText('Qué pasó con el resultado'), 'STUCK');
     expect(screen.getByText(/Varias acciones quedaron hechas y el resultado que observas no se movió/)).toBeTruthy();
-    expect(screen.getByText(/Nada de esto se aplica solo/)).toBeTruthy();
+    expect(screen.getByText(/Puedes elegir:/)).toBeTruthy();
     expect(previewMock).not.toHaveBeenCalled();
     await user.selectOptions(screen.getByLabelText('Decisión para Caminar diez minutos'), 'REDUCE');
     await user.selectOptions(screen.getByLabelText('Frecuencia futura de Caminar diez minutos'), '14');
@@ -659,7 +674,7 @@ describe('cross, plan and review without a browser', () => {
     }] : []));
     previewMock.mockResolvedValue({ effects: [{ summary: 'La ocasión futura usa la estrategia nueva.' }], plans: [{ planId: 'plan-1', summary: 'El resultado observable pasa a: Un párrafo que se puede usar.' }] });
     closeMock.mockImplementation(async () => { closed = true; return { id: 'week-1' }; });
-    render(<CalendarScreen />);
+    render(<WeekReviewScreen />);
     await screen.findByLabelText('Decisión para Caminar diez minutos');
     await user.type(screen.getByLabelText('Resultado futuro de Un ensayo'), 'Un párrafo que se puede usar.');
     await user.selectOptions(screen.getByLabelText('Decisión para Caminar diez minutos'), 'SUBSTITUTE');
@@ -667,6 +682,8 @@ describe('cross, plan and review without a browser', () => {
     await user.click(screen.getByRole('button', { name: 'Ver efecto' }));
     await screen.findByText('La ocasión futura usa la estrategia nueva.');
     await user.click(screen.getByRole('button', { name: 'Aplicar' }));
+    cleanup();
+    render(<CalendarScreen />);
     expect(await screen.findByText('Esta semana conserva el criterio con el que se cerró.')).toBeTruthy();
     expect(screen.getByText('Resultado de esa semana: Hay un párrafo.')).toBeTruthy();
     expect(screen.getByText(/Resultado: El ánimo no cambió/)).toBeTruthy();
@@ -703,10 +720,8 @@ describe('alignment card without a browser', () => {
     cleanup();
 
     render(<CalendarScreen />);
-    expect(await screen.findByText(/Alineación declarada: 50/)).toBeTruthy();
-    expect(screen.getByText(/Cobertura 9 de 9/)).toBeTruthy();
-    expect(screen.getByText(/12 oct 2026/)).toBeTruthy();
-    expect(screen.getByText(/Revisión 2/)).toBeTruthy();
+    expect(await screen.findByText(/Todavía no hay un plan con ocasiones/)).toBeTruthy();
+    expect(screen.queryByText(/Alineación declarada/)).toBeNull();
   });
 
   it('shows a partial card without a total, and an error apart from an empty card', async () => {
@@ -740,9 +755,9 @@ describe('alignment card without a browser', () => {
     expect(screen.queryByText('Sin ficha guardada.')).toBeNull();
     cleanup();
 
-    journeyStateMock.mockRejectedValueOnce(new Error('down'));
     render(<CalendarScreen />);
-    expect(await screen.findByText('No se pudo leer la ficha.')).toBeTruthy();
+    expect(await screen.findByText(/Todavía no hay un plan con ocasiones/)).toBeTruthy();
+    expect(screen.queryByText('No se pudo leer la ficha.')).toBeNull();
     expect(screen.queryByText('Sin ficha guardada.')).toBeNull();
   });
 
@@ -750,13 +765,11 @@ describe('alignment card without a browser', () => {
     const user = userEvent.setup();
     calendarMock.mockResolvedValue(openCalendar(false));
     render(<CalendarScreen />);
-    expect(await screen.findByText(/Alineación declarada: 50/)).toBeTruthy();
-    const before = screen.getByText(/Alineación declarada: 50/).textContent;
-    await user.click(screen.getByRole('button', { name: 'Hecho' }));
+    expect(await screen.findByRole('button', { name: 'Marcar como hecha' })).toBeTruthy();
+    await user.click(screen.getByRole('button', { name: 'Marcar como hecha' }));
     await waitFor(() => expect(recordMock).toHaveBeenCalled());
     expect(recordMock.mock.calls[0][1]).toEqual(expect.objectContaining({ actionId: 'act-1', status: 'DONE' }));
     expect(recordMock.mock.calls[0][1].alignment).toBeUndefined();
-    expect(screen.getByText(/Alineación declarada: 50/).textContent).toBe(before);
-    expect(screen.getByText(/Revisión 2/)).toBeTruthy();
+    expect(screen.queryByText(/Alineación declarada/)).toBeNull();
   });
 });

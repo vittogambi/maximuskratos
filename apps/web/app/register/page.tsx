@@ -15,9 +15,8 @@ import { setAccessToken } from '@/lib/auth-storage';
 function RegisterDescription() {
   return (
     <>
-      Crea tu cuenta sin tarjeta. Acceso a tu panel desde hoy, con identificación de fundador
-      y prioridad en las primeras versiones. El diagnóstico y la plataforma completa se
-      activan en el lanzamiento.
+      Crea tu cuenta sin tarjeta. Acceso a tu panel desde hoy. Si entras como fundador, conservas
+      identificación y prioridad en las primeras versiones.
     </>
   );
 }
@@ -58,14 +57,14 @@ export default function RegisterPage() {
 
   if (status === 'authenticated' && user) {
     return (
-      <AuthShell title="Cuenta lista" description="Entrando a tu panel de fundador.">
+      <AuthShell title="Cuenta lista" description="Entrando a tu panel.">
         <div className="auth-loading">
           <div className="auth-success-mark" aria-hidden>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/brand/mk-mark.svg" alt="" width={40} height={40} />
             <span className="auth-success-mark__line" />
           </div>
-          <p>Preparando tu sesión</p>
+          <p>Preparando tu espacio</p>
         </div>
       </AuthShell>
     );
@@ -75,7 +74,7 @@ export default function RegisterPage() {
     <AuthShell
       showNav
       atmosphere="register"
-      title="Crea tu cuenta de fundador"
+      title="Crea tu cuenta"
       description={<RegisterDescription />}
       footer={
         <AuthFooterLink
@@ -114,7 +113,7 @@ export default function RegisterPage() {
             <AuthFormError message={error} context="register" />
           </div>
           <AuthSubmitButton loading={loading} loadingLabel="Creando cuenta…">
-            Crear cuenta de fundador
+            Crear cuenta
           </AuthSubmitButton>
         </div>
       </form>

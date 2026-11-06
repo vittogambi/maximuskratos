@@ -135,7 +135,7 @@
     },
     "formulario-v1:F-RAD-001!R6": {
       "kind": "text",
-      "value": "1"
+      "value": "1990-05-15"
     },
     "formulario-v1:F-RAD-001!R7": {
       "kind": "choice",
@@ -337,6 +337,10 @@
       "kind": "choice",
       "value": "Intermedio"
     },
+    "mk:f-rad-002-pareja-puerta": {
+      "kind": "choice",
+      "value": "Tengo pareja ahora"
+    },
     "formulario-v1:F-RAD-002!R6": {
       "kind": "choice",
       "value": "3"
@@ -530,16 +534,16 @@
       "value": "Texto de recorrido."
     },
     "formulario-v1:E-PER-000!R40": {
-      "kind": "choice",
-      "value": "Claridad mental"
+      "kind": "multi",
+      "values": ["Claridad mental", "Coherencia", "Disciplina", "Honestidad"]
     },
     "formulario-v1:E-PER-000!R50": {
       "kind": "text",
       "value": "Texto de recorrido."
     },
     "formulario-v1:E-PER-000!R51": {
-      "kind": "choice",
-      "value": "Claridad mental"
+      "kind": "multi",
+      "values": ["Claridad mental", "Coherencia", "Disciplina"]
     },
     "formulario-v1:E-PER-000!R54": {
       "kind": "text",

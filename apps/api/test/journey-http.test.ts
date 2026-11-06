@@ -5,11 +5,14 @@ import type { INestApplication } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { resetWeekHookForTests } from '../dist/journey/journey-clock.js';
-import { bootApi } from './journey-http-app';
+import { bootApi, loadCompiled } from './journey-http-app';
 import { activatePlanBody } from './plan-activation-body';
 
-type Spec = { kind: 'activity'; field: string; ambit: string; option: string; answer: string } | { kind: 'choice'; value: string } | { kind: 'text'; value: string };
+type Spec =
+  | { kind: 'activity'; field: string; ambit: string; option: string; answer: string }
+  | { kind: 'choice'; value: string }
+  | { kind: 'multi'; values: string[] }
+  | { kind: 'text'; value: string };
 type Question = {
   id: string;
   sourceRef?: string | null;
@@ -140,6 +143,14 @@ function payloadFor(question: Question, exceptions: Record<string, string>) {
     const option = question.options.find((item) => item.value === spec.value);
     if (!option) throw new Error(`${ref} no tiene la opción ${spec.value}`);
     return { selectedOptionIds: [option.id] };
+  }
+  if (spec.kind === 'multi') {
+    const ids = spec.values.map((value) => {
+      const option = question.options.find((item) => item.value === value);
+      if (!option) throw new Error(`${ref} no tiene la opción ${value}`);
+      return option.id;
+    });
+    return { selectedOptionIds: ids };
   }
   return { freeText: spec.value };
 }
@@ -376,7 +387,6 @@ describe('recorrido HTTP B', () => {
       'formulario-v1:E-AUD-001!R6': 'UNKNOWN',
       'formulario-v1:F-RAD-001!R20': 'UNKNOWN',
       'formulario-v1:E-PER-000!R221': 'NOT_APPLICABLE',
-      'formulario-v1:E-PER-000!R241': 'DECLINED',
     };
     await walk(account.token, exceptions);
     const state = await call(account.token, 'get', '/journey/state');
@@ -396,7 +406,7 @@ describe('recorrido HTTP B', () => {
     const synthesis = await call(account.token, 'get', '/journey/synthesis');
     const activities = (synthesis.body.activities as { sourceRef: string; field: string }[]).filter((item) => item.field === 'pasion');
     expect(activities.length).toBeGreaterThan(0);
-    expect((synthesis.body.activities as { field: string }[]).some((item) => item.field === 'profesion' && item.sourceRef.endsWith('R241'))).toBe(false);
+    expect((synthesis.body.activities as { field: string }[]).some((item) => item.field === 'profesion' && item.sourceRef.endsWith('R241'))).toBe(true);
     const saved = await call(account.token, 'post', '/journey/synthesis', {
       activities: synthesis.body.activities,
       combinations: [{ id: 'h1', reason: 'Hipótesis', valuation: 'INSUFFICIENT', valuationReason: 'Falta información', experiment: 'Caminar diez minutos' }],
@@ -510,7 +520,7 @@ describe('concurrency and guards', () => {
     expect(unchanged?.pausedAt).toBeNull();
     expect(await prisma.weekReview.count({ where: { userId: owner.userId, weekStart: '2026-11-02' } })).toBe(0);
     delete process.env.MK_WEEK_HOOK;
-    resetWeekHookForTests();
+    (await loadCompiled<{ resetWeekHookForTests: () => void }>('journey/journey-clock.js')).resetWeekHookForTests();
     process.env.MK_WEEK_HOOK = 'race';
     const [firstClose, secondClose] = await Promise.all([
       call(owner.token, 'post', '/journey/weeks/close', { weekStart: '2026-11-02', decisions: { [shared.actionId as string]: 'KEEP' } }),

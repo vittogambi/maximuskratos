@@ -108,7 +108,7 @@ export function CuentaContent() {
           </Link>
           {canUseMemberProduct(user) ? (
             <Link href="/diagnostico/resultado" className="mk-cuenta-link">
-              Ver resultado completo
+              Qué quedó guardado del cuestionario
               <span aria-hidden>›</span>
             </Link>
           ) : null}

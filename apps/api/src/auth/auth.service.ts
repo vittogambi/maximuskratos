@@ -20,8 +20,9 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import {
   ACCESS_TOKEN_TTL,
+  REFRESH_COOKIE_MAX_AGE_MS,
   REFRESH_COOKIE_NAME,
-  REFRESH_TOKEN_TTL_DAYS,
+  REFRESH_TOKEN_UNTIL,
 } from './auth.constants';
 import type { ClientKind } from './client-kind';
 import { MemberAccessService } from './member-access';
@@ -141,7 +142,7 @@ export class AuthService {
     return { success: true };
   }
 
-  /** Revokes every refresh token of the account. Access JWTs already issued stay valid until they expire. */
+  /** Revokes every refresh token of the account. Access JWTs already issued stay valid. */
   async logoutAll(userId: string, client: ClientKind, res: Response) {
     const { count } = await this.prisma.refreshToken.updateMany({
       where: { userId, revokedAt: null },
@@ -260,7 +261,7 @@ export class AuthService {
       data: {
         userId,
         tokenHash: this.hashToken(refreshToken),
-        expiresAt: this.refreshExpiry(),
+        expiresAt: REFRESH_TOKEN_UNTIL,
       },
     });
     return { accessToken, refreshToken };
@@ -272,7 +273,7 @@ export class AuthService {
       include: { user: { select: { id: true, email: true, role: true } } },
     });
     const now = new Date();
-    if (!stored || stored.revokedAt || stored.expiresAt <= now) {
+    if (!stored || stored.revokedAt) {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
@@ -282,7 +283,7 @@ export class AuthService {
 
     const rotated = await this.prisma.$transaction(async (tx) => {
       const consumed = await tx.refreshToken.updateMany({
-        where: { id: stored.id, revokedAt: null, expiresAt: { gt: now } },
+        where: { id: stored.id, revokedAt: null },
         data: { revokedAt: now },
       });
       // Zero rows: a concurrent rotation consumed this token first.
@@ -291,7 +292,7 @@ export class AuthService {
         data: {
           userId: stored.userId,
           tokenHash: this.hashToken(refreshToken),
-          expiresAt: this.refreshExpiry(),
+          expiresAt: REFRESH_TOKEN_UNTIL,
         },
       });
       return true;
@@ -315,12 +316,6 @@ export class AuthService {
     return randomBytes(48).toString('hex');
   }
 
-  private refreshExpiry(): Date {
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + REFRESH_TOKEN_TTL_DAYS);
-    return expiresAt;
-  }
-
   private hashToken(token: string): string {
     return createHash('sha256').update(token).digest('hex');
   }
@@ -332,7 +327,7 @@ export class AuthService {
       secure: isProd,
       sameSite: isProd ? 'none' : 'lax',
       path: '/',
-      maxAge: REFRESH_TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000,
+      maxAge: REFRESH_COOKIE_MAX_AGE_MS,
     });
   }
 

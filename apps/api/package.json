@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "build": "nest build",
+    "build:test": "nest build -c nest-cli.test.json",
+    "dev:audit": "nest start --watch -c nest-cli.audit.json",
     "dev": "sh ../../scripts/free-api-port.sh && nest start --watch",
     "start": "node dist/main.js",
     "start:prod": "node dist/main.js",
     "test": "vitest run",
-    "test:domain": "vitest run test/apply-week.test.ts test/purpose-synthesis.test.ts test/answer-rules.test.ts test/question-capture.test.ts test/instrumentos-score.test.ts test/instrumentos-isolation.test.ts test/plan-gate.test.ts test/hdrp-contract.test.ts test/iad-invariants.test.ts test/core-index.test.ts test/accompaniment-rules.test.ts test/execution.test.ts test/devolution.test.ts test/realistic-cases.test.ts test/home-board.test.ts test/territory-catalog.test.ts test/week-count.test.ts test/action-schedule.test.ts test/review-reading.test.ts test/answer-ledger.test.ts test/plan-lifecycle.test.ts test/personalization.test.ts test/purpose-link.test.ts test/plan-writes.test.ts test/ledger-account.test.ts test/own-plan.test.ts test/dashboard.test.ts test/goal-class.test.ts",
+    "test:domain": "vitest run test/apply-week.test.ts test/purpose-synthesis.test.ts test/answer-rules.test.ts test/question-capture.test.ts test/instrumentos-score.test.ts test/instrumentos-isolation.test.ts test/plan-gate.test.ts test/hdrp-contract.test.ts test/iad-invariants.test.ts test/core-index.test.ts test/accompaniment-rules.test.ts test/execution.test.ts test/devolution.test.ts test/realistic-cases.test.ts test/home-board.test.ts test/territory-catalog.test.ts test/week-count.test.ts test/action-schedule.test.ts test/review-reading.test.ts test/answer-ledger.test.ts test/plan-lifecycle.test.ts test/personalization.test.ts test/purpose-link.test.ts test/plan-writes.test.ts test/ledger-account.test.ts test/own-plan.test.ts test/dashboard.test.ts test/goal-class.test.ts test/plan-proposal-apply.test.ts test/plan-proposal-domain.test.ts test/plan-territory-assignment.test.ts test/diagnostic-territory.test.ts test/intervention-mentalidad.test.ts test/intervention-territories.test.ts test/plan-design.test.ts test/action-review.test.ts test/direction-exploration.test.ts test/purpose-evidence.test.ts test/member-direction.test.ts",
     "test:http": "vitest run --config vitest.integration.config.ts"
   },
   "dependencies": {

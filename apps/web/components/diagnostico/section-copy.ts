@@ -41,6 +41,32 @@ export function shadowHeading(heading: string | null | undefined): { family: str
 }
 
 const MODULE_INTRO: Record<string, string[]> = {
+  'e-aud-s1': [
+    'Cómo piensas de ti y de lo que dices que quieres ser.',
+    'Medir la brecha entre el yo ideal y el yo real.',
+  ],
+  'e-aud-s2': [
+    'Lo que haces con el cuerpo, el sueño y la disciplina diaria.',
+    'Evaluar la infraestructura biológica y operativa.',
+  ],
+  'e-aud-s3': [
+    'Cómo organizas la semana y quién te rodea.',
+    'Medir el diseño de vida y la capacidad de corrección.',
+  ],
+  'e-aud-s4': [
+    'Deuda, ahorro, plan e ingresos.',
+    'Medir la estabilidad y la capacidad de provisión.',
+  ],
+  'e-aud-s5': [
+    'Pareja, familia, amistades y trabajo.',
+    'Medir el entorno de apoyo y el liderazgo en las relaciones.',
+  ],
+  'e-aud-s6': [
+    'Estas respuestas se leen aparte del resultado de la auditoría.',
+  ],
+  'f-rad-001-s1': [
+    'Aquí empieza la Radiografía. Es otra área, no una sección más de la auditoría.',
+  ],
   'e-per-vision': [
     'Lo que me gustaría llegar a ser',
     'Tu visión es la imagen de la persona que deseas llegar a ser: el yo ideal. Defina su dirección vital y el tipo de hombre que quiere encarnar en el futuro.',

@@ -1,99 +1,99 @@
 'use client';
 
+import { useState } from 'react';
+
 const LABELS = {
-  DONE: 'Hecho',
-  SKIPPED: 'Omitido',
+  DONE: 'Hecha',
+  SKIPPED: 'No hecha',
   NOT_APPLICABLE: 'No aplica',
-  PENDING: 'Pendiente',
+  PENDING: 'Sin registrar',
 } as const;
 
 type Status = keyof typeof LABELS;
 
 export function statusLabel(status: string | null | undefined): string {
-  if (status && status in LABELS) return LABELS[status as Status];
-  return 'Sin registro';
+  if (status === 'DONE') return 'Hecha';
+  if (status === 'SKIPPED') return 'No hecha';
+  if (status === 'NOT_APPLICABLE') return 'No aplica';
+  if (status === 'PENDING') return 'Sin registrar';
+  return 'Sin registrar';
 }
 
 export function TaskRow({
   title,
   detail,
+  cue,
+  minimum,
+  context,
   pillar,
   status,
-  resultNote,
-  resultStatus,
   disabled,
   disabledReason,
   onStatus,
-  onResult,
-  onResultStatus,
 }: {
   title: string;
   detail?: string;
+  cue?: string;
+  minimum?: string;
+  context?: string;
   pillar?: string | null;
   status: string | null;
-  resultNote?: string | null;
-  resultStatus?: string | null;
-  onResultStatus?: (status: 'OBSERVED' | 'NOT_YET_OBSERVED' | 'NOT_OBSERVED' | 'NO_INFORMATION') => void;
   disabled?: boolean;
   disabledReason?: string;
   onStatus: (status: Status) => void;
-  onResult?: (text: string) => void;
 }) {
+  const eyebrow = context ?? pillar ?? undefined;
+  const [menuOpen, setMenuOpen] = useState(false);
   const done = status === 'DONE';
+
   return (
-    <article className="mk-task">
-      <div className="mk-task__main">
-        <h2 className="mk-task__title">{title}</h2>
-        {pillar ? <p className="mk-task__pillar">{pillar}</p> : null}
-        {detail ? <p className="mk-task__detail">{detail}</p> : null}
-        <p className="mk-task__state">Actividad: {statusLabel(status)}. Hecho no acredita el resultado.</p>
-        {onResultStatus && !disabled ? (
-          <label>
-            Estado del resultado
-            <select aria-label={`Estado del resultado de ${title}`} value={resultStatus ?? ''} onChange={(event) => onResultStatus(event.target.value as 'OBSERVED' | 'NOT_YET_OBSERVED' | 'NOT_OBSERVED' | 'NO_INFORMATION')}>
-              <option value="">Sin información</option>
-              <option value="NOT_YET_OBSERVED">Todavía no observado</option>
-              <option value="NOT_OBSERVED">No observado</option>
-              <option value="OBSERVED">Observado</option>
-              <option value="NO_INFORMATION">Sin dato</option>
-            </select>
-          </label>
-        ) : null}
-        {onResult && !disabled ? (
-          <label>
-            Resultado observado
-            <input aria-label={`Resultado de ${title}`} defaultValue={resultNote ?? ''} onBlur={(event) => onResult(event.target.value)} />
-          </label>
-        ) : <p>{resultNote ? `Resultado: ${resultNote}` : 'Resultado: sin información.'}</p>}
-      </div>
+    <article className="mk-week-task">
+      {eyebrow ? <p className="mk-week-task__context">{eyebrow}</p> : null}
+      <h2 className="mk-week-task__title">{title}</h2>
+      {detail ? (
+        <p className="mk-week-task__criterion">
+          <span className="mk-week-task__criterion-label">Se considera hecha cuando </span>
+          {detail}
+        </p>
+      ) : null}
+      {cue ? <p className="mk-week-task__criterion"><span className="mk-week-task__criterion-label">Cuándo: </span>{cue}</p> : null}
+      {minimum ? <p className="mk-week-task__criterion"><span className="mk-week-task__criterion-label">Si el día se complica: </span>{minimum}</p> : null}
+      <p className="mk-week-task__state">{statusLabel(status)}</p>
       {disabled ? (
-        <p className="mk-task__note">{disabledReason}</p>
+        <p className="mk-week-task__note">{disabledReason}</p>
       ) : (
-        <div className="mk-task__actions">
+        <div className="mk-week-task__actions">
           <button
             type="button"
-            className={done ? 'mk-member-btn is-selected' : 'mk-member-btn'}
+            className={done ? 'mk-mx__action is-selected' : 'mk-mx__action mk-mx__action--primary'}
             aria-pressed={done}
             onClick={() => onStatus('DONE')}
           >
-            Hecho
+            {done ? 'Hecha' : 'Marcar como hecha'}
           </button>
-          <details className="mk-task__more">
-            <summary>Otros estados</summary>
-            <div>
-              {(['PENDING', 'SKIPPED', 'NOT_APPLICABLE'] as const).map((item) => (
-                <button
-                  key={item}
-                  type="button"
-                  aria-pressed={status === item}
-                  className={status === item ? 'is-selected' : undefined}
-                  onClick={() => onStatus(item)}
-                >
-                  {LABELS[item]}
-                </button>
-              ))}
-            </div>
-          </details>
+          <div className="mk-week-task__more">
+            <button type="button" className="mk-mx__action" aria-expanded={menuOpen} onClick={() => setMenuOpen((v) => !v)}>
+              Cambiar estado
+            </button>
+            {menuOpen ? (
+              <div className="mk-week-task__menu" role="group" aria-label="Otros estados">
+                {(['PENDING', 'SKIPPED', 'NOT_APPLICABLE'] as const).map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    className="mk-mx__action"
+                    aria-pressed={status === item}
+                    onClick={() => {
+                      onStatus(item);
+                      setMenuOpen(false);
+                    }}
+                  >
+                    {LABELS[item]}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </div>
       )}
     </article>

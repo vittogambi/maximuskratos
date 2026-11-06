@@ -3,32 +3,9 @@
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useAuthSession } from '@/components/auth-session-provider';
-import { apiDiagnosticStart, type DiagnosticState } from '@/lib/api';
+import { apiDiagnosticStart } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth-storage';
-import { settleModuleOutro } from '@/lib/diagnostic-continue';
-
-function routeFromState(state: DiagnosticState, router: ReturnType<typeof useRouter>) {
-  if (state.sessionState.showWelcomeScreen) {
-    router.replace('/diagnostico/bienvenida');
-    return;
-  }
-
-  const { nextStep, sessionState } = state;
-
-  if (nextStep.type === 'question' && sessionState.currentModuleSlug) {
-    router.replace(`/diagnostico/modulo/${sessionState.currentModuleSlug}/pregunta`);
-    return;
-  }
-  if (nextStep.type === 'module_outro') {
-    router.replace(`/diagnostico/outro/${nextStep.data.moduleSlug}`);
-    return;
-  }
-  if (nextStep.type === 'diagnostic_complete') {
-    router.replace('/diagnostico/resultado');
-    return;
-  }
-  router.replace('/diagnostico/bienvenida');
-}
+import { routeDiagnosticFromState, settleModuleOutro } from '@/lib/diagnostic-continue';
 
 /**
  * Entry point: starts or resumes the diagnostic session and redirects
@@ -55,7 +32,8 @@ export function DiagnosticEntry() {
 
     let cancelled = false;
 
-    apiDiagnosticStart(token)
+    const general = new URLSearchParams(window.location.search).get('alcance') === 'general';
+    apiDiagnosticStart(token, { general })
       .then(async (state) => {
         if (cancelled) return;
         let settled = state;
@@ -65,7 +43,7 @@ export function DiagnosticEntry() {
           settled = state;
         }
         if (cancelled) return;
-        routeFromState(settled, router);
+        routeDiagnosticFromState(settled, router, 'replace');
       })
       .catch(() => {
         if (cancelled) return;

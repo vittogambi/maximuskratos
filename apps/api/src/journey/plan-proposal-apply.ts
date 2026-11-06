@@ -74,3 +74,46 @@ export function planPatchFromProposals(
   }
   return patch;
 }
+
+export type ActionFieldPatch = {
+  title?: string;
+  doneWhen?: string;
+  weekday?: number | null;
+  occasionsPerWeek?: number | null;
+  minimumVersion?: string | null;
+};
+
+/** Applies accepted ACTION proposals onto active plan actions (single action or explicit actionId). */
+export function actionPatchesFromProposals(
+  rows: ProposalRowInput[],
+  activeActions: { id: string }[],
+): Map<string, ActionFieldPatch> {
+  const patches = new Map<string, ActionFieldPatch>();
+  if (activeActions.length === 0) return patches;
+
+  for (const row of proposalsForActivation(rows)) {
+    if (row.kind !== 'ACTION') continue;
+    const payload = storedPayload(row);
+    const explicitId = typeof payload.actionId === 'string' ? payload.actionId : null;
+    const targetId =
+      explicitId && activeActions.some((action) => action.id === explicitId)
+        ? explicitId
+        : activeActions.length === 1
+          ? activeActions[0].id
+          : null;
+    if (!targetId) continue;
+
+    const patch: ActionFieldPatch = { ...(patches.get(targetId) ?? {}) };
+    if (typeof payload.title === 'string' && payload.title.trim()) patch.title = payload.title.trim().slice(0, 180);
+    if (typeof payload.doneWhen === 'string' && payload.doneWhen.trim()) patch.doneWhen = payload.doneWhen.trim();
+    if (payload.weekday === null) patch.weekday = null;
+    else if (typeof payload.weekday === 'number') patch.weekday = payload.weekday;
+    if (payload.occasionsPerWeek === null) patch.occasionsPerWeek = null;
+    else if (typeof payload.occasionsPerWeek === 'number') patch.occasionsPerWeek = payload.occasionsPerWeek;
+    if (typeof payload.minimumVersion === 'string' && payload.minimumVersion.trim()) {
+      patch.minimumVersion = payload.minimumVersion.trim();
+    }
+    if (Object.keys(patch).length > 0) patches.set(targetId, patch);
+  }
+  return patches;
+}

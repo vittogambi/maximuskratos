@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildTerritorySourcesFromCatalog,
   territoryCoverage,
+  territoryExceptionRows,
   territoryForSourceRef,
 } from '../src/instrumentos/territory-catalog';
 
@@ -64,5 +65,21 @@ describe('territory catalog @2..@6', () => {
     expect(row?.settled).toBe(1);
     expect(row?.pending).toBe(1);
     expect(row?.exceptions.UNKNOWN).toBe(1);
+  });
+
+  it('lists only saved exceptions of that territory, without the answer text', () => {
+    const questions = [
+      { sourceRef: 'formulario-v1:E-AUD-001!R16', textEs: '¿Qué tan seguido realizas entrenamiento físico?' },
+      { sourceRef: 'formulario-v1:E-AUD-001!R19', textEs: 'Pregunta de mentalidad' },
+    ];
+    const rows = territoryExceptionRows('SALUD_FISICA', questions, {
+      'formulario-v1:E-AUD-001!R16': { exceptionKind: 'NOT_APPLICABLE', freeText: 'dato sensible' },
+      'formulario-v1:E-AUD-001!R19': { exceptionKind: 'DECLINED' },
+    });
+    expect(rows).toEqual([{
+      sourceRef: 'formulario-v1:E-AUD-001!R16',
+      prompt: '¿Qué tan seguido realizas entrenamiento físico?',
+      kind: 'NOT_APPLICABLE',
+    }]);
   });
 });

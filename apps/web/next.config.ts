@@ -5,6 +5,8 @@ const useLocalProxy =
   apiOrigin.includes('localhost:') || apiOrigin.includes('127.0.0.1:');
 
 const nextConfig: NextConfig = {
+  // A second dev server (audit, Playwright) needs its own build folder. Two servers on one `.next` break each other.
+  distDir: process.env.NEXT_DIST_DIR || '.next',
   output: 'standalone',
   devIndicators: false,
   async rewrites() {
@@ -66,6 +68,14 @@ const nextConfig: NextConfig = {
         destination: '/marco-central',
         permanent: true,
       },
+      // Server redirect() in these member pages crashed the client router on a direct load.
+      { source: '/mente', destination: '/panel', permanent: false },
+      { source: '/cuerpo', destination: '/panel', permanent: false },
+      { source: '/espiritu', destination: '/panel', permanent: false },
+      { source: '/asesores', destination: '/panel', permanent: false },
+      { source: '/ruta', destination: '/panel', permanent: false },
+      { source: '/calendario', destination: '/semana', permanent: false },
+      { source: '/perfil', destination: '/memoria', permanent: false },
     ];
   },
   images: {

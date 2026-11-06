@@ -26,6 +26,23 @@
 - Recorrido completo en navegador 320–1440 con capturas (T8.4).
 - Player WIP local sin commitear (auth, `DiagnosticPlayer`, etc.).
 
+## Auditoría 21 oct (post revisión)
+
+Correcciones aplicadas en working tree:
+
+- `decidePlanProposal`: EDIT exige `editedPayload`.
+- `storedPayload` / activación: propuestas con texto editado aunque el status en DB sea ACCEPTED.
+- `upsertRecord`: validación NOT_AN_OCCASION con intervalo de horario resuelto.
+- `declareAchievement`: criterio CONFIRMED o PROVISIONAL con texto; al cerrar quita foco y desactiva acciones.
+- Web: enlaces a `/planes/[id]`, errores al abrir cuestionario por ámbito, nav activa en planes/semana/diseñar, player enruta `territory_complete` / `territory_pause` al ámbito.
+- Tests de dominio: `plan-proposal-domain`, `plan-territory-assignment`, `diagnostic-territory`, `plan-proposal-apply` en `test:domain` (219 tests).
+
+Ajuste producto (21 oct tarde): logro solo con criterio `CONFIRMED` (`canDeclareAchievement`); `isOccasionRegistrationDay` unificado; activación aplica parches ACTION; propuestas ACCEPT limpian `editedPayload`; rutas ámbito con `?cuestionario=completo|pausa`.
+
+Hecho en pasada producto (21 oct noche): `futureOccasions` ISO, `flexOccasionCapReached`, síntesis Descubre en territorio (`discoverSynthesis`), Diseña 4 pasos (`DesignPlanFlow`), S-12 logro por pasos + evidencia obligatoria, mantenimiento con transición, `GET .../proposals`, test HTTP `plan-achievement.http.test.ts`.
+
+Siguen abiertos: P3A plantillas por ámbito, reconocimientos B-04, preview activación B-05 en UI, HTTP e2e (requiere `DATABASE_URL=.../mk_journey_it`), T8.4 capturas, F8–F10, fixture `@4` completo. Mantenimiento tras logro: plan queda `CLOSED`; la ruta `/mantener` avisa si ya cerró.
+
 ## Verificación recomendada antes de merge
 
 ```bash

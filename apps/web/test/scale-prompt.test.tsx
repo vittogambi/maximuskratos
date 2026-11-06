@@ -250,7 +250,7 @@ describe('anclas trazadas al reactivo', () => {
     expect(document.activeElement).toBe(screen.getByRole('radio', { name: '4' }));
   });
 
-  it('control de deuda, ahorro, planificación e ingresos muestran la definición del comentario', () => {
+  it('control de deuda, ahorro, planificación e ingresos muestran el nombre corto por nivel', () => {
     const cells = ['R37', 'R38', 'R39', 'R40'] as const;
     for (const cell of cells) {
       const sourceRef = `formulario-v1:E-AUD-001!${cell}`;
@@ -301,7 +301,8 @@ describe('anclas trazadas al reactivo', () => {
       answerRevision: 0,
     } as QuestionDto;
     render(<QuestionCard question={question} selection={buildInitialSelection(question)} onChange={() => undefined} />);
-    expect(screen.getByRole('radio', { name: /1\. Sobreendeudado \/ Asfixiado\. No puedo cubrir regularmente/ })).toBeTruthy();
+    expect(screen.getByRole('radio', { name: /1\. Sobreendeudado \/ Asfixiado/ })).toBeTruthy();
+    expect(screen.queryByText(/No puedo cubrir regularmente las cuotas/)).toBeNull();
     expect(screen.getByText('Deuda controlada')).toBeTruthy();
     expect(screen.queryByText('Más de 50% o incumplimientos')).toBeNull();
     expect(question.options.map((option) => option.value)).toEqual(['1', '2', '3', '4', '5']);
@@ -341,139 +342,99 @@ describe('anclas trazadas al reactivo', () => {
     expect(screen.queryByText('Indica tu fecha de nacimiento para continuar.')).toBeNull();
   });
 
-  it('la altura se elige en centímetros', () => {
-    const question = {
-      id: 'q-height',
+  function numberQuestion(sourceRef: string, textEs: string, capture: QuestionDto['capture'], allowedExceptions: string[]) {
+    return {
+      id: sourceRef,
       type: 'FREE_TEXT',
-      sourceRef: 'formulario-v1:F-RAD-001!R8',
-      textEs: 'Altura',
+      sourceRef,
+      textEs,
       contextEs: null,
       maxSelections: null,
       scaleType: null,
       reasonPromptEs: null,
       reasonThreshold: null,
       options: [],
-      capture: { kind: 'number', unit: 'cm', min: 120, max: 230 },
-      allowedExceptions: ['UNKNOWN', 'DECLINED'],
+      capture,
+      allowedExceptions,
       answerRevision: 0,
     } as QuestionDto;
+  }
+
+  function renderEditable(question: QuestionDto) {
     function Harness() {
       const [selection, setSelection] = useState(buildInitialSelection(question));
       return <QuestionCard question={question} selection={selection} onChange={setSelection} />;
     }
     render(<Harness />);
-    const picker = screen.getByRole('combobox', { name: 'Altura en cm' }) as HTMLSelectElement;
-    expect(picker.value).toBe('');
-    expect(screen.queryByRole('option', { name: '149 cm' })).toBeNull();
-    expect(screen.getByRole('option', { name: '150 cm' })).toBeTruthy();
-    expect(screen.getByRole('option', { name: '210 cm' })).toBeTruthy();
-    expect(screen.queryByRole('option', { name: '211 cm' })).toBeNull();
+  }
+
+  it('la altura se escribe en centímetros dentro de los límites del catálogo y no se puede saltar', () => {
+    const question = numberQuestion('formulario-v1:F-RAD-001!R8', 'Altura', { kind: 'number', unit: 'cm', min: 120, max: 230 }, ['UNKNOWN', 'DECLINED']);
+    renderEditable(question);
+    const field = screen.getByRole('spinbutton', { name: 'Altura en cm' }) as HTMLInputElement;
+    expect(field.value).toBe('');
+    expect(field.min).toBe('120');
+    expect(field.max).toBe('230');
+    expect(screen.getByText('Altura en cm. Entre 120 y 230 cm.')).toBeTruthy();
     expect(screen.getByText('Elige la altura en cm para continuar.')).toBeTruthy();
     expect(screen.queryByText('No puedo responder ahora')).toBeNull();
-    fireEvent.change(picker, { target: { value: '178' } });
-    expect(picker.value).toBe('178');
-    expect(screen.queryByText('Elige la altura en cm para continuar.')).toBeNull();
+    fireEvent.change(field, { target: { value: '178' } });
+    expect(field.value).toBe('178');
     expect(isSelectionValid(question, { type: 'text', value: '178' })).toBe(true);
+    expect(isSelectionValid(question, { type: 'text', value: '119' })).toBe(false);
+    expect(isSelectionValid(question, { type: 'text', value: '231' })).toBe(false);
     expect(isSelectionValid(question, { type: 'text', value: '' })).toBe(false);
     expect(isSelectionValid(question, { type: 'exception', kind: 'UNKNOWN' })).toBe(false);
   });
 
-  it('el peso se elige en kilogramos y se puede saltar', () => {
-    const question = {
-      id: 'q-weight',
-      type: 'FREE_TEXT',
-      sourceRef: 'formulario-v1:F-RAD-001!R9',
-      textEs: 'Peso actual',
-      contextEs: null,
-      maxSelections: null,
-      scaleType: null,
-      reasonPromptEs: null,
-      reasonThreshold: null,
-      options: [],
-      capture: { kind: 'number', unit: 'kg', min: 35, max: 250 },
-      allowedExceptions: ['UNKNOWN', 'DECLINED'],
-      answerRevision: 0,
-    } as QuestionDto;
-    function Harness() {
-      const [selection, setSelection] = useState(buildInitialSelection(question));
-      return <QuestionCard question={question} selection={selection} onChange={setSelection} />;
-    }
-    render(<Harness />);
-    const picker = screen.getByRole('combobox', { name: 'Peso en kg' }) as HTMLSelectElement;
-    expect(picker.value).toBe('');
-    expect(screen.queryByRole('option', { name: '44 kg' })).toBeNull();
-    expect(screen.getByRole('option', { name: '45 kg' })).toBeTruthy();
-    expect(screen.getByRole('option', { name: '150 kg' })).toBeTruthy();
-    expect(screen.queryByRole('option', { name: '151 kg' })).toBeNull();
+  it('el peso se escribe en kilogramos y se puede saltar', () => {
+    const question = numberQuestion('formulario-v1:F-RAD-001!R9', 'Peso actual', { kind: 'number', unit: 'kg', min: 35, max: 250 }, ['UNKNOWN', 'DECLINED']);
+    renderEditable(question);
+    const field = screen.getByRole('spinbutton', { name: 'Peso en kg' }) as HTMLInputElement;
+    expect(field.value).toBe('');
+    expect(field.min).toBe('35');
+    expect(field.max).toBe('250');
     expect(screen.getByText('Elige el peso en kg para continuar.')).toBeTruthy();
     expect(screen.getByText('No puedo responder ahora')).toBeTruthy();
-    fireEvent.change(picker, { target: { value: '82' } });
-    expect(picker.value).toBe('82');
-    expect(isSelectionValid(question, { type: 'text', value: '82' })).toBe(true);
+    fireEvent.change(field, { target: { value: '82.5' } });
+    expect(field.value).toBe('82.5');
+    expect(isSelectionValid(question, { type: 'text', value: '82.5' })).toBe(true);
+    expect(isSelectionValid(question, { type: 'text', value: '34' })).toBe(false);
     expect(isSelectionValid(question, { type: 'exception', kind: 'DECLINED' })).toBe(true);
   });
 
-  it('la grasa corporal se elige en un rango y se puede saltar', () => {
-    const question = {
-      id: 'q-fat',
-      type: 'FREE_TEXT',
-      sourceRef: 'formulario-v1:F-RAD-001!R10',
-      textEs: 'Grasa corporal, si la conoces',
-      contextEs: null,
-      maxSelections: null,
-      scaleType: null,
-      reasonPromptEs: null,
-      reasonThreshold: null,
-      options: [],
-      capture: { kind: 'number', unit: '%', min: 0, max: 100 },
-      allowedExceptions: ['UNKNOWN', 'DECLINED'],
-      answerRevision: 0,
-    } as QuestionDto;
-    function Harness() {
-      const [selection, setSelection] = useState(buildInitialSelection(question));
-      return <QuestionCard question={question} selection={selection} onChange={setSelection} />;
-    }
-    render(<Harness />);
-    const picker = screen.getByRole('combobox', { name: 'Grasa corporal en porcentaje' }) as HTMLSelectElement;
-    expect(screen.queryByRole('option', { name: '4 %' })).toBeNull();
-    expect(screen.getByRole('option', { name: '5 %' })).toBeTruthy();
-    expect(screen.getByRole('option', { name: '50 %' })).toBeTruthy();
-    expect(screen.queryByRole('option', { name: '51 %' })).toBeNull();
+  it('la grasa corporal acepta todo el rango del catálogo, incluido el cero, y se puede saltar', () => {
+    const question = numberQuestion('formulario-v1:F-RAD-001!R10', 'Grasa corporal, si la conoces', { kind: 'number', unit: '%', min: 0, max: 100 }, ['UNKNOWN', 'DECLINED']);
+    renderEditable(question);
+    const field = screen.getByRole('spinbutton', { name: 'Grasa corporal en porcentaje' }) as HTMLInputElement;
+    expect(field.min).toBe('0');
+    expect(field.max).toBe('100');
     expect(screen.getByText('No puedo responder ahora')).toBeTruthy();
     expect(isSelectionValid(question, { type: 'exception', kind: 'UNKNOWN' })).toBe(true);
     expect(isSelectionValid(question, { type: 'text', value: '' })).toBe(false);
-    fireEvent.change(picker, { target: { value: '18' } });
-    expect(picker.value).toBe('18');
+    expect(isSelectionValid(question, { type: 'text', value: '0' })).toBe(true);
+    expect(isSelectionValid(question, { type: 'text', value: '101' })).toBe(false);
+    fireEvent.change(field, { target: { value: '18' } });
+    expect(field.value).toBe('18');
   });
 
-  it('la cintura, el dolor, las comidas, los minutos y el sueño usan selector', () => {
+  it('la cintura, el dolor, las comidas, los minutos y el sueño usan un campo numérico con los límites del catálogo', () => {
     const cases = [
-      { sourceRef: 'formulario-v1:F-RAD-001!R11', textEs: 'Circunferencia de cintura, si quieres registrarla', capture: { kind: 'number', unit: 'cm', min: 40, max: 200 }, name: 'Cintura en cm', present: '80 cm', absent: '40 cm' },
-      { sourceRef: 'formulario-v1:F-RAD-001!R26', textEs: 'Si hay dolor, indica el nivel', capture: { kind: 'number', unit: 'nivel', min: 0, max: 10 }, name: 'Nivel de dolor', present: '0', absent: '11' },
-      { sourceRef: 'formulario-v1:F-RAD-001!R35', textEs: 'Número aproximado de comidas al día:', capture: { kind: 'number', unit: 'comidas', min: 1, max: 10 }, name: 'Comidas al día', present: '3', absent: '9' },
-      { sourceRef: 'formulario-v1:F-RAD-001!R53', textEs: 'Tiempo promedio por sesión', capture: { kind: 'number', unit: 'minutos', min: 10, max: 240 }, name: 'Minutos por sesión', present: '45 min', absent: '10 min' },
-      { sourceRef: 'formulario-v1:F-RAD-001!R61', textEs: 'Horas promedio de sueño por noche:', capture: { kind: 'hours', min: 0, max: 14 }, name: 'Horas de sueño', present: '7 horas', absent: '3 horas' },
+      { sourceRef: 'formulario-v1:F-RAD-001!R11', textEs: 'Circunferencia de cintura, si quieres registrarla', capture: { kind: 'number', unit: 'cm', min: 35, max: 200 }, name: 'Cintura en cm', label: 'Cintura en cm. Entre 35 y 200 cm.', inside: '56', outside: '34' },
+      { sourceRef: 'formulario-v1:F-RAD-001!R26', textEs: 'Si hay dolor, indica el nivel', capture: { kind: 'number', unit: 'nivel', min: 0, max: 10 }, name: 'Nivel de dolor', label: 'Nivel de dolor. Entre 0 y 10.', inside: '0', outside: '11' },
+      { sourceRef: 'formulario-v1:F-RAD-001!R35', textEs: 'Número aproximado de comidas al día:', capture: { kind: 'number', unit: 'comidas', min: 1, max: 10 }, name: 'Comidas al día', label: 'Comidas al día. Entre 1 y 10.', inside: '3', outside: '11' },
+      { sourceRef: 'formulario-v1:F-RAD-001!R53', textEs: 'Tiempo promedio por sesión', capture: { kind: 'number', unit: 'minutos', min: 10, max: 240 }, name: 'Minutos por sesión', label: 'Minutos por sesión. Entre 10 y 240 min.', inside: '45', outside: '9' },
+      { sourceRef: 'formulario-v1:F-RAD-001!R61', textEs: 'Horas promedio de sueño por noche:', capture: { kind: 'hours', min: 0, max: 14 }, name: 'Horas de sueño', label: 'Horas de sueño. Entre 0 y 14 horas.', inside: '7', outside: '15' },
     ] as const;
     for (const item of cases) {
-      const question = {
-        id: item.sourceRef,
-        type: 'FREE_TEXT',
-        sourceRef: item.sourceRef,
-        textEs: item.textEs,
-        contextEs: null,
-        maxSelections: null,
-        scaleType: null,
-        reasonPromptEs: null,
-        reasonThreshold: null,
-        options: [],
-        capture: item.capture,
-        allowedExceptions: ['UNKNOWN', 'DECLINED'],
-        answerRevision: 0,
-      } as QuestionDto;
+      const question = numberQuestion(item.sourceRef, item.textEs, item.capture as QuestionDto['capture'], ['UNKNOWN', 'DECLINED']);
       const view = render(<QuestionCard question={question} selection={buildInitialSelection(question)} onChange={() => undefined} />);
-      expect(screen.getByRole('combobox', { name: item.name })).toBeTruthy();
-      expect(screen.getByRole('option', { name: item.present })).toBeTruthy();
-      expect(screen.queryByRole('option', { name: item.absent })).toBeNull();
+      const field = screen.getByRole('spinbutton', { name: item.name }) as HTMLInputElement;
+      expect(field.min).toBe(String(item.capture.min));
+      expect(field.max).toBe(String(item.capture.max));
+      expect(screen.getByText(item.label)).toBeTruthy();
+      expect(isSelectionValid(question, { type: 'text', value: item.inside })).toBe(true);
+      expect(isSelectionValid(question, { type: 'text', value: item.outside })).toBe(false);
       expect(screen.getByText('No puedo responder ahora')).toBeTruthy();
       view.unmount();
     }

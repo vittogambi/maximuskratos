@@ -1,0 +1,21 @@
+---
+description: App de miembros. Inicio es el cruce de cuatro ámbitos y tres fases, no la escena de estatua ni el cuestionario.
+globs: "apps/web/app/(member)/**/*.{tsx,css},apps/web/components/member/**/*.{tsx,css},apps/web/components/app-shell/**/*.{tsx,css},apps/web/components/journey/**/*.{tsx,css},apps/web/components/pages/InicioDashboard.tsx,apps/web/components/pages/CuentaContent.tsx,apps/api/src/journey/**/*.ts,apps/api/src/instrumentos/**/*.ts"
+alwaysApply: false
+---
+
+# Miembros
+
+Lee `DESIGN.md`. El shell es `AppShell` (`.mk-app-shell`). No montes `PublicNav`, `PublicFooter` ni `IkigaiShell`.
+
+Escritorio: Inicio, Semana, Diseñar, Planes, Propósito, Memoria y Cuenta. Móvil: barra inferior con Inicio, Semana y Planes, y Más para el resto, con safe area. Ninguna de esas rutas desaparece en móvil.
+
+Inicio, para quien usa el producto, es la tarjeta de siguiente paso y después el cruce de cuatro ámbitos por Descubre, Diseña y Actúa. En móvil el cruce se desplaza en horizontal dentro de la matriz: los nombres quedan visibles, y la cabecera se mueve con las filas. En escritorio se muestra completo cuando entra. No lo sustituyas por tarjetas sueltas ni por acordeones. El cumplimiento que ya muestra Actúa es ejecución de la semana, no otra fase ni un índice. No reintroduzcas estatua, geometría de pilares ni un índice de Mente, Espíritu y Cuerpo.
+
+En `apps/api/src/journey` y `apps/api/src/instrumentos` manda el contrato funcional de esta regla: cuatro ámbitos, cobertura que no es un índice, estados de la semana y guardado de la revisión. El shell y la navegación son de la interfaz.
+
+`PerfilContent`, `RutaContent` y `AmbitStage` no son el inicio vigente.
+
+Títulos según el rol editorial de `DESIGN.md`. Controles y lectura en `--font-body`. En Semana, siete días equivalentes: elegir cambia apariencia, no el tamaño. Conserva Pendiente, Hecho, Omitido y No aplica, las notas y el guardado de la revisión semanal.
+
+No inserts fotos, glass ni scroll cinematográfico para cumplir marca.

@@ -11,15 +11,15 @@ Orden para resolver conflictos:
 3. Tokens y componentes compartidos que implementan el contrato.
 4. CSS y componentes heredados, como evidencia de la implementación actual.
 
-Cuando la implementación no cumpla el contrato, corregirla en el componente compartido. Actualizar documentación y referencias en el mismo cambio. Un screenshot nuevo no se convierte automáticamente en referencia aprobada.
+Cuando la implementación no cumpla el contrato, corregirla en el componente compartido y en los consumidores afectados. Un arreglo visual local no obliga a actualizar documentación. Si cambia este contrato, actualizarlo en el mismo cambio. Un screenshot nuevo no se convierte automáticamente en referencia aprobada.
 
 El CSS no decide metodología, permisos, cálculos ni persistencia. Una regla visual tampoco puede eliminar una capacidad del producto.
 
 ## Identidad
 
-MK combina fondo negro, blanco legible, rojo contenido, geometría fina y recursos clásicos usados con intención. En Inicio de miembros, la referencia es la escena integrada de estatua, geometría y tres métricas. En las páginas operativas, la identidad debe ayudar a leer y actuar.
+MK combina fondo negro, blanco legible, rojo contenido, geometría fina y recursos clásicos usados con intención. En las páginas operativas, la identidad debe ayudar a leer y actuar. El inicio de miembros no tiene como contrato la escena de estatua ni tres métricas de pilar.
 
-Las capturas originales de Inicio, diagnóstico y Ruta son referencias visuales. Están en el repositorio como material de revisión, no como imágenes aplanadas de la interfaz. Los números que contienen son ejemplos.
+Las capturas antiguas de Inicio, diagnóstico y Ruta están en el repositorio como material de revisión, no como la interfaz vigente. Los números que contienen son ejemplos. No reponen el inicio de miembros.
 
 Usar el componente `Logo` y los assets originales. Conservar proporciones. No reemplazar el escudo por texto MK ni por un icono genérico.
 
@@ -28,9 +28,9 @@ Usar el componente `Logo` y los assets originales. Conservar proporciones. No re
 | Superficie | Shell | Navegación | Densidad y movimiento |
 | --- | --- | --- | --- |
 | Marketing público | `PublicLayout` en `apps/web/app/(public)/layout.tsx` | `PublicNav` y `PublicFooter` | Lectura editorial. Motion de landing solo aquí. |
-| Player IKIGAI y otras sesiones inmersivas | `IkigaiShell` (`apps/web/components/ikigai/shell.tsx`), scope `.ik-app` | Logo, salida, progreso y acciones de sesión | Una tarea principal. Transiciones breves. Sin nav ni footer de marketing dentro de la sesión. |
+| IKIGAI independiente | `IkigaiShell` (`apps/web/components/ikigai/shell.tsx`), scope `.ik-app` | Logo, salida, progreso y acciones de sesión | Una tarea principal. Transiciones breves. Sin nav ni footer de marketing dentro de la sesión. |
 | App de miembros | `AppShell` (`apps/web/components/app-shell/AppShell.tsx`), clase `.mk-app-shell` | Sidebar en escritorio. En móvil, barra inferior y panel Más | Orientación, datos y acciones. Motion funcional. |
-| Diagnóstico en sesión | `.dk-shell` en `apps/web/app/diagnostico/layout.tsx` | Salida y progreso del recorrido | Una tarea principal. No es marketing aunque la URL no esté bajo `(member)`. |
+| Cuestionario | `.dk-shell` en `apps/web/app/diagnostico/layout.tsx`, escenario `PlayerStage` | Salida y progreso del cuestionario | Una tarea principal. No es la sesión IKIGAI ni marketing, aunque la URL no esté bajo `(member)`. |
 | Admin y Lab | `AdminShell` (`apps/web/components/admin-shell.tsx`) | Navegación administrativa | Densidad de trabajo. Sin escenografía de landing. |
 
 Una URL pública no implica que la pantalla sea marketing. Clasificar por la tarea del usuario. Cada superficie tiene un único shell compartido. Corregirlo cuando falle en vez de copiarlo.
@@ -39,7 +39,7 @@ No añadir IntroGate, scroll cinematográfico o footer comercial a sesiones y p�
 
 ## Tokens
 
-Una sola fuente de tokens: `apps/web/app/globals.css`, bloque `@theme`. El player puede ajustar alcance en `apps/web/app/ikigai/ikigai.css`, usando los mismos roles. No añadir una paleta local por módulo.
+Una sola fuente de tokens: `apps/web/app/globals.css`, bloque `@theme`. Cuestionario e IKIGAI pueden ajustar alcance en `apps/web/app/ikigai/ikigai.css`, usando los mismos roles. No añadir una paleta local por módulo.
 
 | Rol semántico | Token | Valor | Uso |
 | --- | --- | --- | --- |
@@ -54,7 +54,7 @@ Una sola fuente de tokens: `apps/web/app/globals.css`, bloque `@theme`. El playe
 | Acción hover | `--color-action-hover` | `#a50000` | Hover del primario. |
 | Foco | `--color-focus` | `#f5f5f5` | Contorno visible, separado del componente. |
 
-`--color-crimson` (`#ff0000`) queda como alias de marketing mientras sus consumidores no migren. No es el botón del player ni el de miembros. Blanco sobre `#ff0000` no cumple contraste de texto normal.
+`--color-crimson` (`#ff0000`) queda como alias de marketing mientras sus consumidores no migren. No es el botón del cuestionario, de IKIGAI ni de miembros. Blanco sobre `#ff0000` no cumple contraste de texto normal.
 
 Estas propuestas se validan en contexto. Un borde decorativo tenue no puede ser el único modo de identificar un input. Un rojo adecuado como fondo con texto blanco puede fallar como texto pequeño sobre negro.
 
@@ -85,7 +85,7 @@ En móvil:
 
 - Una columna principal y orden de lectura coherente con el DOM.
 - Gutter base de 16 px, ajustable hasta 20 px si el contenido lo permite. El selector de siete días puede usar menos gutter para caber.
-- Controles frecuentes con área táctil de al menos 44 × 44 px. Primarios del player conservan min-height de 52 px.
+- Controles frecuentes con área táctil de al menos 44 × 44 px. El primario del cuestionario y el de IKIGAI conservan min-height de 52 px.
 - Barra inferior con safe area. El contenido scrollea encima de esa barra, sin un segundo hueco del mismo alto.
 - Acciones sticky que no tapen el contenido, el foco o los campos al abrir el teclado.
 - Navegación secundaria en el panel Más. En escritorio esas rutas están en el sidebar. Ninguna ruta desaparece por estar en móvil.
@@ -100,25 +100,27 @@ En escritorio, el área operativa de miembros puede alcanzar unos 1120 px. La le
 
 ## Inicio de miembros
 
-Objetivo: entender el estado personal y encontrar la siguiente acción.
+Objetivo: ver el estado del recorrido y la siguiente acción.
 
-La escena central integra estatua, círculo, cuadrado, triángulo y líneas en un sistema de coordenadas (`viewBox` 0 0 100 100). Los tres indicadores se mantienen dentro del encuadre en escritorio. En móvil, si el texto superpuesto no se lee, los tres valores y nombres pasan debajo de la escena y las líneas de anclaje no apuntan al vacío. La estatua es `apps/web/public/images/landing/statue-standing.png` (RGBA, sin caja opaca). `statue-aligned.jpg` y `statue-clean.jpg` son bustos, no esta figura.
+Quien puede usar el producto ve primero una tarjeta de siguiente paso y después el cruce. Filas: Mentalidad, Finanzas, Relaciones y Salud física. Columnas: Descubre, Diseña y Actúa. No hace falta cerrar los cuatro ámbitos ni el cuestionario para tener un plan. El cruce no es un índice y no diagnostica.
 
-La referencia de composición es `apps/web/public/images/landing/dashboard-alineacion-desktop.png`. Los porcentajes de esa imagen son ejemplos. No pintarlos.
+En móvil, la matriz se desplaza en horizontal dentro de su propio contenedor. Los nombres de los ámbitos permanecen visibles. La cabecera y las filas se desplazan juntas. En escritorio se muestra el cruce completo cuando hay espacio. La página conserva su scroll vertical. No sustituyas el cruce por tarjetas independientes ni por acordeones.
 
-La acción depende del estado real de `GET /journey/state`: empezar, continuar, revisar resultado o seguir la ruta. No inventar progreso, histórico ni recomendaciones.
+El cumplimiento que ya aparece en Actúa es ejecución de la semana. No lo conviertas en otra fase ni en un índice. No vuelvas a una escena de estatua, a Mente, Espíritu y Cuerpo, ni a un índice de alineación.
 
-No convertir null en 0 o 100. Mientras la API no entrega un índice de Mente, Espíritu o Cuerpo: «Por completar» si el paso siguiente es el diagnóstico, «No disponible» si ya no lo es, «Cargando» y «Error» en esos estados. La placa y los tres círculos usan la misma lectura. No mostrar el porcentaje de tareas de la semana como índice de alineación.
+La acción de la tarjeta sale del estado real del recorrido. No inventes progreso ni recomendaciones. No pintes los porcentajes de las referencias viejas.
 
-## Calendario y tareas
+La navegación de escritorio es Inicio, Semana, Diseñar, Planes, Propósito, Memoria y Cuenta. En móvil, la barra inferior es Inicio, Semana y Planes. Diseñar, Propósito, Memoria y Cuenta están en Más. Ninguna de esas rutas desaparece en móvil.
 
-Objetivo: elegir un día, entender sus tareas, cambiar un estado y revisar la semana.
+## Semana
+
+Objetivo de `/semana`: elegir un día, entender sus acciones, cambiar un estado y revisar la semana. No es el inicio.
 
 El selector semanal usa siete celdas de ancho equivalente (`grid-template-columns: repeat(7, minmax(0, 1fr))`). Seleccionar cambia color, no dimensiones. En 320 px se reducen gap y padding del bloque. El texto ampliado puede requerir otra presentación accesible sin perder los siete días.
 
 Las fechas son civiles (`YYYY-MM-DD` de la API). Se formatean en UTC para que la zona del navegador no las corra un día. La zona del producto que devuelve la API se muestra en la pantalla. En copy, rangos como 28 sep a 4 oct.
 
-Una tarea muestra título, pilar si aporta contexto, estado y acción principal. Las alternativas viven en «Otros estados». Conservar Pendiente, Hecho, Omitido y No aplica. El estado seleccionado se lee en texto, no solo por color.
+Una acción muestra título, ámbito si aporta contexto, estado y acción principal. Las alternativas viven en «Otros estados». Conservar Pendiente, Hecho, Omitido y No aplica. El estado seleccionado se lee en texto, no solo por color.
 
 Notas, historial y edición tienen una vía clara. La revisión semanal queda aparte de cada fila. Conservar las decisiones y endpoints existentes.
 
@@ -130,19 +132,19 @@ Agregar tarea usa un botón proporcionado. El estado vacío puede darle mayor pr
 
 Corregir o extender los componentes compartidos antes de crear copias. Se permiten componentes nuevos para capacidades o patrones que no existen. Deben usar tokens y documentar su alcance. Reutilizar no obliga a mantener defectos.
 
-Cada pantalla identifica su tarea, su acción principal y sus destinos. Los botones tienen variantes claras: principal (`.mk-member-btn` o `.ik-app .ag-btn-primary`), secundaria, discreta y destructiva. No dar el mismo peso a cuatro acciones distintas.
+Cada pantalla identifica su tarea, su acción principal y sus destinos. Los botones tienen variantes claras: principal (`.mk-member-btn`, `.dk-shell .ag-btn-cta` o `.ik-app .ag-btn-primary`), secundaria, discreta y destructiva. No dar el mismo peso a cuatro acciones distintas.
 
 Estados mínimos de operaciones asíncronas: disponible, en curso, completada y error. Los formularios conservan lo escrito al fallar. Los controles deshabilitados explican el motivo. Tras cerrar un diálogo, devolver foco al control que lo abrió. Guardar y salir conserva su garantía de persistencia.
 
 Las métricas y estados informativos no se estilizan como botones. Los elementos interactivos deben parecer interactivos. No usar texto técnico de enums, IDs o timestamps como explicación al usuario.
 
-Mantener copy de producto en español natural. Aplicar el léxico vigente. La restricción de guiones en copy sigue vigente. No aplica a IDs, nombres de clases ni código.
+Mantener copy de producto en español natural. La puntuación y el léxico siguen `.cursor/rules/voz-y-copy.mdc`. Las preguntas del cuestionario no se tratan como copy de interfaz.
 
 ## Motion
 
 Marketing puede usar `PublicMotionProvider`, `ScrollReveal` y los patrones de `apps/web/components/motion/` donde pertenezcan a esa superficie.
 
-Miembros, player y admin usan motion funcional breve, normalmente 150 a 220 ms. El contenido útil no espera un intro ni un reveal al hacer scroll. No ocultar formularios mientras una animación termina. Con `prefers-reduced-motion`, la información y las acciones siguen disponibles de inmediato.
+Miembros, cuestionario, IKIGAI y admin usan motion funcional breve, normalmente 150 a 220 ms. El contenido útil no espera un intro ni un reveal al hacer scroll. No ocultar formularios mientras una animación termina. Con `prefers-reduced-motion`, la información y las acciones siguen disponibles de inmediato.
 
 No añadir librerías de animación duplicadas. No introducir 3D para resolver una composición estática.
 
@@ -156,22 +158,20 @@ Revisar texto al 200% y reflow a 320 CSS px. No declarar accesibilidad completa 
 
 ## Criterio de terminado
 
-Una pantalla se considera terminada cuando:
+Una pantalla tocada queda lista cuando el recorrido afectado se puede completar, sin acciones tapadas ni overflow inesperado, y la composición sigue esta referencia. La verificación concreta está en `AGENTS.md`: móvil primero, tamaños según el componente, más cobertura si cambia el shell. Tests de componente no cierran la verificación visual.
 
-1. Se recorrió en navegador a los tamaños indicados, con sus estados reales.
-2. No tiene acciones ocultas por barras, recortes esenciales ni overflow inesperado.
-3. El contenido móvil tiene jerarquía y permite completar la tarea.
-4. Cumple la referencia de su superficie en composición, tipografía y densidad.
-5. Sus interacciones, errores y persistencia funcionan.
-6. Las comprobaciones técnicas afectadas pasan o las limitaciones previas están identificadas.
-7. Hay capturas revisadas y registro de evidencia.
+## Inventario de rutas
 
-Build y tests funcionales no certifican calidad visual. Los snapshots ayudan a detectar regresiones respecto de una referencia revisada. No determinan por sí solos si el diseño es bueno.
+Marketing: `apps/web/app/(public)/`.
 
-## Inventario comprobado en esta base
+Miembros: `apps/web/app/(member)/`, con panel, semana, semana/revision, disenar, planes, proposito, memoria, cuenta y ambito. El inicio de quien usa el producto es `StartDashboard`, montado desde `InicioDashboard`. `PerfilContent`, `RutaContent` y `AmbitStage` no son esa pantalla.
 
-Rutas de miembros en `apps/web/app/(member)/`: panel, ruta, perfil, cuenta, calendario, planes, proposito, asesores, mente, espiritu, cuerpo, diagnostico/resultado. El player del diagnóstico vive en `apps/web/app/diagnostico/`, fuera de ese grupo.
+Cuestionario: `apps/web/app/diagnostico/`, shell `.dk-shell`.
 
-Referencias de revisión, no de producción: `apps/web/public/images/landing/dashboard-alineacion-desktop.png`, `dashboard-diagnostico-desktop.png`, `dashboard-ruta-desktop.png`, `dashboard-panel-desktop.png`, `dashboard-proposito-desktop.png`.
+IKIGAI independiente: `apps/web/app/ikigai/`. La página pública está en `(public)/ikigai`.
 
-El export antiguo con `name: Aethelgard High-Performance System` y `primary: #ffb4a8` está en `docs/design-history/DESIGN-aethelgard.md`. No es el contrato activo.
+Admin: `apps/web/app/admin/`, incluido Lab.
+
+Las imágenes `apps/web/public/images/landing/dashboard-*.png` son material de revisión. No reponen la escena de estatua ni un índice en el inicio vigente.
+
+El export antiguo con `name: Aethelgard High-Performance System` y `primary: #ffb4a8` está en `docs/design-history/DESIGN-aethelgard.md`. Las reglas de `docs/design-history/rules/` no se cargan. No son el contrato activo.

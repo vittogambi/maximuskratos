@@ -45,7 +45,7 @@ export function decideAction(tags: ContentTag[], health: HealthFact): Restrictio
   if (tags.includes('CONFRONTATION') && health.conversationUnsafe == null) {
     return refuse(
       'Falta aclarar si esta conversación es viable.',
-      ['Puedo hacerla', 'Preparar el paso sin confrontación'],
+      ['Puedo tener esta conversación de forma segura', 'Preparar el paso sin confrontación'],
       'CONVERSATION',
     );
   }

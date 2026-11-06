@@ -36,8 +36,8 @@ export class DiagnosticController {
   @Post('start')
   @UseGuards(DiagnosticOpenGuard)
   @ApiOperation({ summary: 'Start or resume the diagnostic session' })
-  start(@Request() req: AuthenticatedRequest) {
-    return this.diagnostic.startOrResume(req.user.sub);
+  start(@Request() req: AuthenticatedRequest, @Body() body?: { scope?: 'general' }) {
+    return this.diagnostic.startOrResume(req.user.sub, { general: body?.scope === 'general' });
   }
 
   @Post('territory/:territory/start')

@@ -12,6 +12,7 @@ export type ActivatePlanDto = {
 export type TransitionPlanDto = {
   toStage: PlanStage;
   reason?: string | null;
+  learningNote?: string | null;
   expectedVersion?: number;
 };
 

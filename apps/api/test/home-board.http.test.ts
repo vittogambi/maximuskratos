@@ -105,6 +105,9 @@ describe('tablero desde el recorrido', () => {
       ...teach, goalText: 'Explicar una tarea.', helpPreference: 'GUIADA', path: 'PREPARAR', digest: preview.body.digest, headVersion: preview.body.headVersion, commandKey: `home-guia-${guided.userId}`,
     });
     expect(confirmed.status, JSON.stringify(confirmed.body)).toBeLessThan(400);
+    const guidedPlanId = confirmed.body.effect?.planId as string | undefined;
+    expect(guidedPlanId).toBeTruthy();
+    expect((await call(guided.token, 'patch', `/journey/plans/${guidedPlanId}`, activatePlanBody())).status).toBeLessThan(400);
     const guidedState = await call(guided.token, 'get', '/journey/state');
     expect(guidedState.body.board.situation).toBe('GUIDED');
     expect(guidedState.body.board.occasion.criterion.length).toBeGreaterThan(0);

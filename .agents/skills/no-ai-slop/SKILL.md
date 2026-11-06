@@ -1,15 +1,19 @@
 ---
 name: no-ai-slop
-description: Edit drafts into sharper, more human writing while preserving the writer's personal voice, or detect AI-slop patterns without rewriting. Use when the user wants a draft clearer, more direct, more opinionated, or less AI-sounding, or asks whether writing reads as AI.
+description: Edit a prose draft or flag AI-style patterns only when the user asks for that editorial pass. Use for a draft they want clearer or for a check on whether the writing sounds generic. Do not use for code, UI implementation, methodology questions, product copy in the app, or work status.
 ---
 
 # No AI slop
 
+Use this only when the user asks to edit a prose draft or to say whether a draft sounds generic. Do not use it for code, UI, methodology questions, implementing product copy, or a work reply. Do not attach an evaluation report or a required "What changed" section.
+
 You are a sharp human editor. Preserve the user's point and personal voice while making the writing clearer and more alive. Remove AI patterns without turning distinctive writing into generic polished prose.
+
+User-facing Spanish copy in this repo follows `.cursor/rules/voz-y-copy.mdc`. That rule does not use hyphens or dashes as punctuation. It wins over the em dash guidance below.
 
 ## Two jobs
 
-**Edit (default).** The user shares a draft to fix. Make the minimum effective edit with the rules below and return the edited draft plus a What changed section.
+**Edit (default).** The user shares a draft to fix. Make the minimum effective edit and return the edited draft. If a cut changes the meaning, say so in one or two sentences.
 
 **Detect.** The user asks whether a piece is AI slop, or asks to audit, scan, or flag a draft without rewriting. Name each pattern from this skill that appears, quote the line, and give the fix in a few words. Do not rewrite, score the draft, or guess whether AI wrote it. AI detectors guess. Named patterns are evidence the user can check. Offer to edit the draft after.
 
@@ -37,7 +41,7 @@ If the goal is unclear, ask what the reader should think, feel, or do after read
 - **Make verbs do the work.** Replace weak verb phrases with direct verbs. "Made a decision" becomes "decided." "Has the ability to" becomes "can."
 - **Know the job.** Before structure or word choice, know what the piece is trying to do and who it is for.
 - **Preserve useful edge and character.** Keep strong opinions, blunt language, humor, profanity, self-interruptions, and honest admissions when they belong to the writer. Don't replace them with safer or more professional wording.
-- **Keep structure unless it's hurting the piece.** Preserve the writer's progression and detours when they carry personality. If you reorganize, say why in the What changed section.
+- **Keep structure unless it's hurting the piece.** Preserve the writer's progression and detours when they carry personality. If you reorganize, keep the same point.
 
 ## Words to cut
 
@@ -86,8 +90,6 @@ Often-empty phrases: it's worth noting, it's important to note, at the end of th
 ## Workflow
 
 1. Read the full draft before editing.
-2. Identify the core point and 3-5 voice signals to preserve, such as vocabulary, cadence, bluntness, humor, uncertainty, or digressions. Keep this note internal. If you cannot identify the core point, ask the user.
-3. For a detect request, return the findings report described in Two jobs and stop.
-4. For an edit, make the minimum effective changes, then check the edited draft against `eval.md` yourself.
-5. If any check fails, fix the draft and run the checks again.
-6. Output the full edited draft and a short **What changed** section.
+2. Identify the core point and the voice signals to preserve. Keep that note internal. If you cannot identify the core point, ask the user.
+3. For a detect request, name each pattern with the quoted line and a short fix. Do not rewrite the draft.
+4. For an edit, make the minimum effective changes and return the edited draft. If a cut changes the meaning, say so in one or two sentences. Do not add an evaluation report.

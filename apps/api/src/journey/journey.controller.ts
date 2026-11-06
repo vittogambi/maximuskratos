@@ -1,10 +1,12 @@
-import { BadRequestException, Body, Controller, Get, Param, Patch, Post, Request, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Patch, Post, Put, Request, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SkipThrottle } from '@nestjs/throttler';
 import { JwtAuthGuard, type AuthenticatedRequest } from '../auth/jwt-auth.guard';
 import { DiagnosticOpenGuard } from '../diagnostic/diagnostic-open.guard';
 import { IAD_IDS, scoreIad, type IadAnswer, type IadId } from '../instrumentos/iad';
 import { JourneyService } from './journey.service';
+import type { DirectionMode } from './member-direction';
+import type { DirectionExplorationDraft } from './direction-exploration';
 
 type PriorityDirection = 'EXPLORANDO' | 'PROVISIONAL' | 'CONFIRMADO_POR_USUARIO' | null;
 
@@ -69,6 +71,11 @@ export class JourneyController {
     return this.journey.decidePlanProposal(req.user.sub, planId, proposalId, body);
   }
 
+  @Get('plans/:planId/proposals')
+  listPlanProposals(@Request() req: AuthenticatedRequest, @Param('planId') planId: string) {
+    return this.journey.listPlanProposals(req.user.sub, planId);
+  }
+
   @Patch('plans/:planId/draft')
   patchPlanDraft(
     @Request() req: AuthenticatedRequest,
@@ -79,6 +86,10 @@ export class JourneyController {
       whyItMatters?: string | null;
       whyStatus?: string | null;
       territory?: string | null;
+      capacityMinutes?: number;
+      protectNote?: string | null;
+      criterionText?: string | null;
+      criterionStatus?: string | null;
       expectedVersion?: number;
     },
   ) {
@@ -106,6 +117,73 @@ export class JourneyController {
   @Get('purpose/contract')
   contract(@Request() req: AuthenticatedRequest) {
     return this.journey.contractDraft(req.user.sub);
+  }
+
+  @Get('direction')
+  direction(@Request() req: AuthenticatedRequest) {
+    return this.journey.memberDirection(req.user.sub);
+  }
+
+  @Post('direction')
+  saveDirection(
+    @Request() req: AuthenticatedRequest,
+    @Body() body: {
+      mode?: DirectionMode;
+      statement?: string | null;
+      desiredChange?: string | null;
+      commandKey?: string | null;
+      sourceIds?: string[];
+    },
+  ) {
+    if (!body.mode) throw new BadRequestException('Falta el modo de dirección.');
+    return this.journey.saveMemberDirection(req.user.sub, {
+      mode: body.mode,
+      statement: body.statement,
+      desiredChange: body.desiredChange,
+      commandKey: body.commandKey,
+      sourceIds: body.sourceIds,
+    });
+  }
+
+  @Get('direction/overview')
+  directionOverview(@Request() req: AuthenticatedRequest) {
+    return this.journey.directionOverview(req.user.sub);
+  }
+
+  @Get('direction/exploration')
+  directionExploration(@Request() req: AuthenticatedRequest) {
+    return this.journey.getDirectionExploration(req.user.sub);
+  }
+
+  @Put('direction/exploration')
+  saveDirectionExploration(
+    @Request() req: AuthenticatedRequest,
+    @Body() body: { draft?: Record<string, unknown> },
+  ) {
+    if (!body.draft || typeof body.draft !== 'object') {
+      throw new BadRequestException('Falta el borrador de exploración.');
+    }
+    return this.journey.saveDirectionExplorationDraft(req.user.sub, body.draft as Partial<DirectionExplorationDraft>);
+  }
+
+  @Post('direction/exploration/confirm')
+  confirmDirectionExploration(
+    @Request() req: AuthenticatedRequest,
+    @Body() body: {
+      statement?: string;
+      desiredChange?: string | null;
+      commandKey?: string | null;
+      keepExploring?: boolean;
+      draft?: Record<string, unknown>;
+    },
+  ) {
+    return this.journey.confirmDirectionExploration(req.user.sub, {
+      statement: body.statement ?? '',
+      desiredChange: body.desiredChange,
+      commandKey: body.commandKey,
+      keepExploring: body.keepExploring,
+      draft: body.draft as Partial<DirectionExplorationDraft> | undefined,
+    });
   }
 
   @Get('purpose')
@@ -186,10 +264,15 @@ export class JourneyController {
     return this.journey.listPlans(req.user.sub);
   }
 
+  @Get('plans/:planId/summary')
+  planSummary(@Request() req: AuthenticatedRequest, @Param('planId') planId: string) {
+    return this.journey.planSummary(req.user.sub, planId);
+  }
+
   @Post('plans')
   createPlan(
     @Request() req: AuthenticatedRequest,
-    @Body() body: { title: string; outcome: string; priorityNote?: string; linkKind?: string; valueRef?: string; purposeRevisionId?: string; sourceCombinationId?: string },
+    @Body() body: { title: string; outcome: string; priorityNote?: string; linkKind?: string; valueRef?: string; purposeRevisionId?: string; sourceCombinationId?: string; territory?: string },
   ) {
     return this.journey.createPlan(req.user.sub, body);
   }
@@ -265,7 +348,7 @@ export class JourneyController {
   addAction(
     @Request() req: AuthenticatedRequest,
     @Param('planId') planId: string,
-    @Body() body: { title: string; doneWhen: string; weekday?: number; guideId?: string; contentTags?: string[]; healthLimit?: string; conversation?: string },
+    @Body() body: { title: string; doneWhen: string; weekday?: number; guideId?: string; contentTags?: string[]; healthLimit?: string; conversation?: string; occasionsPerWeek?: number; minutesPerOccasion?: number; templateRef?: string; minimumVersion?: string },
   ) {
     return this.journey.addAction(req.user.sub, planId, body);
   }
@@ -299,7 +382,7 @@ export class JourneyController {
   transitionPlan(
     @Request() req: AuthenticatedRequest,
     @Param('planId') planId: string,
-    @Body() body: { toStage: 'PREPARING' | 'ACTIVE' | 'PAUSED' | 'MAINTENANCE' | 'CLOSED'; reason?: string | null; expectedVersion?: number },
+    @Body() body: { toStage: 'PREPARING' | 'ACTIVE' | 'PAUSED' | 'MAINTENANCE' | 'CLOSED'; reason?: string | null; learningNote?: string | null; expectedVersion?: number },
   ) {
     return this.journey.transitionPlan(req.user.sub, planId, body);
   }
@@ -352,7 +435,7 @@ export class JourneyController {
   planAchievement(
     @Request() req: AuthenticatedRequest,
     @Param('planId') planId: string,
-    @Body() body: { confirm: boolean; expectedVersion?: number; commandKey?: string },
+    @Body() body: { confirm: boolean; expectedVersion?: number; commandKey?: string; learningNote?: string | null },
   ) {
     return this.journey.declareAchievement(req.user.sub, planId, body);
   }

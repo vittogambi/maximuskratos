@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { applyWeekDecisions, futureOccasions, nextPlanOutcome, previewWeek } from '../src/journey/apply-week';
+import { isoWeekdayFromDay } from '../src/journey/civil-week';
 
 const actions = [
   { id: 'a', title: 'Escribir', doneWhen: 'Hay borrador', active: true },
@@ -7,10 +8,14 @@ const actions = [
 ];
 
 describe('applyWeekDecisions', () => {
-  it('retires an action and rewrites another', () => {
-    const next = applyWeekDecisions(actions, { a: 'MODIFY', b: 'RETIRE' }, { a: { doneWhen: 'Borrador sin diseño' } });
-    expect(next.find((action) => action.id === 'b')?.active).toBe(false);
-    expect(next.find((action) => action.id === 'a')?.doneWhen).toBe('Borrador sin diseño');
+  it('retires an action and leaves the modified one for the past', () => {
+    const effects = previewWeek(actions, { a: 'MODIFY', b: 'RETIRE' }, { a: { doneWhen: 'Borrador sin diseño' } });
+    expect(effects.find((effect) => effect.actionId === 'b')?.next.active).toBe(false);
+    const modified = effects.find((effect) => effect.actionId === 'a');
+    expect(modified?.next.doneWhen).toBe('Hay borrador');
+    expect(modified?.next.active).toBe(false);
+    expect(modified?.successor?.doneWhen).toBe('Borrador sin diseño');
+    expect(modified?.successor?.replacesActionId).toBe('a');
   });
 
   it('refuses modify without a concrete change', () => {
@@ -24,6 +29,19 @@ describe('previewWeek', () => {
   it('rejects an empty reduction and a substitution without a new strategy', () => {
     expect(() => previewWeek([action], { a: 'REDUCE' }, {})).toThrow('REDUCE_REQUIRES_CHANGE');
     expect(() => previewWeek([action], { a: 'SUBSTITUTE' }, { a: { title: 'Escribir' } })).toThrow('SUBSTITUTE_REQUIRES_CHANGE');
+  });
+
+  it('keeps the previous load when fewer occasions start next week', () => {
+    const reduced = previewWeek(
+      [{ ...action, occasionsPerWeek: 2, minutesPerOccasion: 20 }],
+      { a: 'REDUCE' },
+      { a: { occasionsPerWeek: 1, minutesPerOccasion: 20 } },
+    );
+    expect(reduced[0]?.next.occasionsPerWeek).toBe(2);
+    expect(reduced[0]?.next.active).toBe(false);
+    expect(reduced[0]?.next.doneWhen).toBe('Hay borrador');
+    expect(reduced[0]?.successor?.occasionsPerWeek).toBe(1);
+    expect(reduced[0]?.successor?.doneWhen).toBe('Hay borrador');
   });
 
   it('reduces frequency without rewriting the criterion and substitutes without a second obligation', () => {
@@ -42,6 +60,12 @@ describe('previewWeek', () => {
     expect(resumed[0]?.next.paused).toBe(false);
     expect(resumed[0]?.next.doneWhen).toBe('Hay borrador');
     expect(resumed[0]?.next.id).toBe('a');
+  });
+
+  it('futureOccasions uses ISO weekday including Sunday as 7', () => {
+    const days = futureOccasions('2026-10-12', 7, 7, 21);
+    expect(days.length).toBeGreaterThan(0);
+    expect(days.every((day) => isoWeekdayFromDay(day) === 7)).toBe(true);
   });
 
   it('lists fewer occasions when the interval grows', () => {

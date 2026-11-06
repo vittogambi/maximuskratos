@@ -1,5 +1,6 @@
 import { addIsoDays } from './civil-date';
 import { datesForWeekday } from './civil-week';
+import { futureOccasions } from './apply-week';
 
 export type ScheduleKind = 'FIXED' | 'FLEXIBLE' | 'PAUSED' | 'NONE';
 export type ScheduleSource = 'CREATE' | 'REVIEW' | 'PAUSE' | 'RESUME' | 'MAINTENANCE' | 'LEGACY_CURRENT';
@@ -124,6 +125,45 @@ export function applyScheduleChange(
   });
   next.push({ ...change, effectiveTo: null });
   return next;
+}
+
+/** Whether a member may register execution on this civil day for the action's resolved schedule. */
+export function isOccasionRegistrationDay(
+  action: LegacyActionFields,
+  schedules: ActionScheduleRow[],
+  weekStart: string,
+  weekEnd: string,
+  day: string,
+): boolean {
+  if (day < weekStart || day > weekEnd) return false;
+  const resolved = resolveSchedule(action, schedules, day);
+  if (resolved.kind === 'PAUSED' || resolved.kind === 'NONE') return false;
+  if (resolved.kind === 'FLEXIBLE') return day >= weekStart && day <= weekEnd;
+  if (resolved.kind === 'FIXED' && resolved.weekday != null) {
+    const interval = resolved.intervalDays ?? action.intervalDays ?? 7;
+    const allowed = futureOccasions(weekStart, resolved.weekday, interval, 21).filter(
+      (candidate) => candidate >= weekStart && candidate <= weekEnd,
+    );
+    return allowed.includes(day);
+  }
+  return fixedDaysInWeek(action, schedules, weekStart, weekEnd).includes(day);
+}
+
+export function flexOccasionCapReached(
+  action: LegacyActionFields,
+  schedules: ActionScheduleRow[],
+  weekStart: string,
+  weekEnd: string,
+  day: string,
+  registrationsInWeek: number,
+  updatingExistingDay: boolean,
+): boolean {
+  const resolved = resolveSchedule(action, schedules, day);
+  if (resolved.kind !== 'FLEXIBLE') return false;
+  const cap = Math.max(0, resolved.occasionsPerWeek ?? action.occasionsPerWeek ?? 0);
+  if (cap === 0) return false;
+  if (updatingExistingDay) return false;
+  return registrationsInWeek >= cap;
 }
 
 export function fixedDaysInWeek(

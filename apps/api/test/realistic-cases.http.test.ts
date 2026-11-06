@@ -6,8 +6,13 @@ import { PrismaClient } from '@prisma/client';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { bootApi } from './journey-http-app';
+import { activatePlanBody } from './plan-activation-body';
 
-type Spec = { kind: 'activity'; field: string; ambit: string; option: string; answer: string } | { kind: 'choice'; value: string } | { kind: 'text'; value: string };
+type Spec =
+  | { kind: 'activity'; field: string; ambit: string; option: string; answer: string }
+  | { kind: 'choice'; value: string }
+  | { kind: 'multi'; values: string[] }
+  | { kind: 'text'; value: string };
 type Question = {
   id: string;
   sourceRef?: string | null;
@@ -194,6 +199,14 @@ function payloadFor(question: Question, item: CaseFile['cases'][number]) {
     const option = question.options.find((row) => row.value === spec.value);
     if (!option) throw new Error(`${ref} no tiene la opción ${spec.value}`);
     return { selectedOptionIds: [option.id] };
+  }
+  if (spec.kind === 'multi') {
+    const ids = spec.values.map((value) => {
+      const option = question.options.find((row) => row.value === value);
+      if (!option) throw new Error(`${ref} no tiene la opción ${value}`);
+      return option.id;
+    });
+    return { selectedOptionIds: ids };
   }
   return { freeText: spec.value };
 }
@@ -390,6 +403,7 @@ describe('casos realistas por HTTP', () => {
       if (preview.body.proposal.requiresAction && help.action) {
         expect(planId).toBeTruthy();
         expect(actionId).toBeTruthy();
+        expect((await call(token, 'patch', `/journey/plans/${planId}`, activatePlanBody())).status).toBeLessThan(400);
         if (item.context.health_limit === 'CURRENT_RESTRICTION') {
           const blocked = await call(token, 'post', `/journey/plans/${planId}/actions`, {
             title: 'Entrenar con carga',

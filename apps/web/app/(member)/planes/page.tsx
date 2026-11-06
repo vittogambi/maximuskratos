@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
-import { ComingSoon } from '@/components/journey/ComingSoon';
+import { Suspense } from 'react';
+import { PlansIndex } from '@/components/member/PlansIndex';
 
-export const metadata: Metadata = { title: 'Planes', robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: 'Tus planes', robots: { index: false, follow: false } };
 
 export default function PlansPage() {
   return (
-    <ComingSoon
-      title="Planes"
-      body="Aquí encontrarás el plan vigente, el resultado que buscas, las acciones y el vínculo con la hoja de ruta."
-    />
+    <Suspense fallback={<div className="mk-plans-wrap"><div className="mk-mx-skeleton" aria-hidden><span /><span /></div></div>}>
+      <PlansIndex />
+    </Suspense>
   );
 }

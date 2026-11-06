@@ -1,3 +1,5 @@
+import { weekStartForDay } from './civil-week';
+
 export type PlanStage = 'PREPARING' | 'ACTIVE' | 'PAUSED' | 'MAINTENANCE' | 'CLOSED';
 export type LegacyPlanStatus = 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'ARCHIVED';
 export type CloseReason = 'ACHIEVED' | 'LEARNED' | 'NO_LONGER_MATTERS' | 'REPLACED' | 'OTHER' | 'DISCARDED';
@@ -23,6 +25,27 @@ const TRANSITIONS: Record<PlanStage, Partial<Record<PlanStage, CloseReason | 'RE
 
 export function canTransition(from: PlanStage, to: PlanStage): boolean {
   return TRANSITIONS[from][to] !== undefined;
+}
+
+/** Weeks that start after the pause week, and before a later resume, are not owed. */
+export function weekFallsInPause(
+  weekStart: string,
+  transitions: { toStage: string; effectiveFrom: Date | null }[],
+): boolean {
+  const ordered = [...transitions].sort((a, b) => (a.effectiveFrom?.toISOString() ?? '').localeCompare(b.effectiveFrom?.toISOString() ?? ''));
+  const ranges: { fromWeek: string; untilWeek: string | null }[] = [];
+  let open: string | null = null;
+  for (const row of ordered) {
+    if (!row.effectiveFrom) continue;
+    const week = weekStartForDay(row.effectiveFrom.toISOString().slice(0, 10));
+    if (row.toStage === 'PAUSED') open = week;
+    else if (open && (row.toStage === 'ACTIVE' || row.toStage === 'MAINTENANCE' || row.toStage === 'CLOSED')) {
+      ranges.push({ fromWeek: open, untilWeek: week });
+      open = null;
+    }
+  }
+  if (open) ranges.push({ fromWeek: open, untilWeek: null });
+  return ranges.some((range) => weekStart > range.fromWeek && (range.untilWeek == null || weekStart < range.untilWeek));
 }
 
 export function compatStatus(stage: PlanStage): LegacyPlanStatus {
@@ -54,6 +77,24 @@ export function fromLegacy(status: LegacyPlanStatus): PlanStage {
     default:
       return 'PREPARING';
   }
+}
+
+export type PlanAchievementGate = {
+  criterionText: string | null;
+  criterionStatus: string | null;
+  stage?: PlanStage;
+};
+
+/** Product S-08 / B: logro solo con criterio confirmado y texto observable. */
+export function canDeclareAchievement(plan: PlanAchievementGate): boolean {
+  if (plan.stage && plan.stage !== 'ACTIVE' && plan.stage !== 'MAINTENANCE') return false;
+  return plan.criterionStatus === 'CONFIRMED' && Boolean(plan.criterionText?.trim());
+}
+
+export type AchievementEvidenceRow = { status: string; text: string | null };
+
+export function achievementEvidenceReady(evidence: AchievementEvidenceRow | null | undefined): boolean {
+  return evidence?.status === 'OBSERVED' && Boolean(evidence?.text?.trim());
 }
 
 export function activationBlock(input: ActivationInput): ActivationMissing[] {

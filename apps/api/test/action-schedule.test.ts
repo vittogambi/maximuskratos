@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   applyScheduleChange,
   fixedDaysInWeek,
+  flexOccasionCapReached,
+  isOccasionRegistrationDay,
   occasionsBetween,
   resolveSchedule,
   type ActionScheduleRow,
@@ -59,6 +61,22 @@ describe('action-schedule', () => {
     const resolved = resolveSchedule(baseAction, [], '2026-10-12');
     expect(resolved.kind).toBe('FIXED');
     expect(resolved.weekday).toBe(5);
+  });
+
+  it('flexOccasionCapReached blocks extra flex days in the same week', () => {
+    const flex = { id: 'f1', weekday: null, intervalDays: null, occasionsPerWeek: 2, active: true };
+    const weekStart = '2026-10-12';
+    const weekEnd = '2026-10-18';
+    expect(flexOccasionCapReached(flex, [], weekStart, weekEnd, '2026-10-14', 2, false)).toBe(true);
+    expect(flexOccasionCapReached(flex, [], weekStart, weekEnd, '2026-10-14', 1, false)).toBe(false);
+  });
+
+  it('isOccasionRegistrationDay honors biweekly fixed schedule', () => {
+    const biweekly = { id: 'b1', weekday: 1, intervalDays: 14, occasionsPerWeek: null, active: true };
+    const weekStart = '2026-10-12';
+    const weekEnd = '2026-10-18';
+    expect(isOccasionRegistrationDay(biweekly, [], weekStart, weekEnd, '2026-10-12')).toBe(true);
+    expect(isOccasionRegistrationDay(biweekly, [], weekStart, weekEnd, '2026-10-13')).toBe(false);
   });
 
   it('fixedDaysInWeek respects schedule change mid-week', () => {

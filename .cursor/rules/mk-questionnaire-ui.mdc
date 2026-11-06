@@ -1,0 +1,15 @@
+---
+description: Cuestionario de diagnóstico. Shell .dk-shell. No es la sesión IKIGAI ni una página de marketing.
+globs: "apps/web/app/diagnostico/**/*.{tsx,css},apps/web/components/diagnostico/**/*.{tsx,css}"
+alwaysApply: false
+---
+
+# Cuestionario
+
+Lee `DESIGN.md`. El shell es `.dk-shell` en `apps/web/app/diagnostico/layout.tsx`, con `PlayerStage` y `DiagnosticPlayer`. No uses `IkigaiShell`, `AppShell`, `PublicNav` ni `PublicFooter`.
+
+Una tarea principal por paso. El primario usa `--color-action`, texto blanco y min-height 52 px. Si está deshabilitado, se entiende por qué. El teclado no tapa el campo ni la acción.
+
+El layout importa `apps/web/app/ikigai/ikigai.css` para estilos compartidos. Eso no convierte el cuestionario en la sesión IKIGAI. Las clases `.dk-shell` y `.dk-stage` se quedan en este contrato.
+
+Guardar una respuesta no crea un plan ni un índice. No reescribas preguntas, escalas ni el significado de una excepción para ajustar la interfaz.

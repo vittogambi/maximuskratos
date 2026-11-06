@@ -1,3 +1,4 @@
+import { setAccessToken } from './auth-storage';
 import { toAuthUserMessage, type AuthErrorContext } from './auth-errors';
 
 /** Absolute API origin (Swagger, server-side). */
@@ -134,6 +135,41 @@ export async function apiRefresh(): Promise<{ accessToken: string }> {
   });
   if (!res.ok) throw new HttpError(await parseError(res), res.status);
   return res.json();
+}
+
+let refreshInflight: Promise<string | null> | null = null;
+
+/** One refresh for concurrent 401s. A failed refresh does not retry. */
+export function refreshAccessOnce(): Promise<string | null> {
+  if (!refreshInflight) {
+    refreshInflight = apiRefresh()
+      .then((body) => {
+        setAccessToken(body.accessToken);
+        return body.accessToken;
+      })
+      .catch(() => null)
+      .finally(() => {
+        refreshInflight = null;
+      });
+  }
+  return refreshInflight;
+}
+
+/** Retries a 401 once with the refresh cookie. A second 401 is returned as-is. */
+export async function fetchAuthed(token: string, path: string, init?: RequestInit): Promise<Response> {
+  const run = (bearer: string) => fetch(`${apiBaseUrl()}${path}`, {
+    ...init,
+    headers: {
+      ...(init?.headers ?? {}),
+      Authorization: `Bearer ${bearer}`,
+    },
+    credentials: 'include',
+  });
+  const first = await run(token);
+  if (first.status !== 401) return first;
+  const next = await refreshAccessOnce();
+  if (!next || next === token) return first;
+  return run(next);
 }
 
 export async function apiLogout(): Promise<void> {
@@ -584,7 +620,9 @@ export type NextStep =
   | { type: 'question'; data: QuestionDto }
   | { type: 'module_outro'; data: { moduleSlug: string; titleEs: string; outroText: string; readings?: { label: string; detail: string }[]; auditClose?: AuditCloseDto } }
   | { type: 'phase_end'; data: { phase: string; completionPct: number; selfKnowledgePct: number } }
-  | { type: 'diagnostic_complete'; data: { archetypePrimary: string; selfKnowledgePct: number } };
+  | { type: 'diagnostic_complete'; data: { archetypePrimary: string; selfKnowledgePct: number } }
+  | { type: 'territory_complete'; data: { territory: string } }
+  | { type: 'territory_pause'; data: { territory: string; moduleSlug: string } };
 
 export type DiagnosticState = {
   sessionState: SessionStateDto;
@@ -603,32 +641,29 @@ export type SubmitResponsePayload = {
 };
 
 export async function apiDiagnosticRestart(accessToken: string): Promise<DiagnosticState> {
-  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/restart`, {
+  const res = await fetchAuthed(accessToken, '/api/v1/diagnostic/restart', {
     method: 'POST',
-    headers: { ...authHeaders(accessToken), 'Content-Type': 'application/json' },
-    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({}),
   });
   if (!res.ok) throw new Error(await parseError(res));
   return res.json();
 }
 
-export async function apiDiagnosticStart(accessToken: string): Promise<DiagnosticState> {
-  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/start`, {
+export async function apiDiagnosticStart(accessToken: string, options: { general?: boolean } = {}): Promise<DiagnosticState> {
+  const res = await fetchAuthed(accessToken, '/api/v1/diagnostic/start', {
     method: 'POST',
-    headers: { ...authHeaders(accessToken), 'Content-Type': 'application/json' },
-    credentials: 'include',
-    body: JSON.stringify({}),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(options.general ? { scope: 'general' } : {}),
   });
   if (!res.ok) throw new Error(await parseError(res));
   return res.json();
 }
 
 export async function apiDiagnosticStartTerritory(accessToken: string, territory: string): Promise<DiagnosticState> {
-  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/territory/${encodeURIComponent(territory)}/start`, {
+  const res = await fetchAuthed(accessToken, `/api/v1/diagnostic/territory/${encodeURIComponent(territory)}/start`, {
     method: 'POST',
-    headers: { ...authHeaders(accessToken), 'Content-Type': 'application/json' },
-    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({}),
   });
   if (!res.ok) throw new Error(await parseError(res));
@@ -650,10 +685,7 @@ export async function apiDiagnosticState(
   if (query?.after) params.set('after', query.after);
   if (query?.introModule) params.set('introModule', query.introModule);
   const suffix = params.toString() ? `?${params.toString()}` : '';
-  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/state${suffix}`, {
-    headers: authHeaders(accessToken),
-    credentials: 'include',
-  });
+  const res = await fetchAuthed(accessToken, `/api/v1/diagnostic/state${suffix}`);
   if (!res.ok) throw new Error(await parseError(res));
   return res.json();
 }
@@ -662,10 +694,9 @@ export async function apiDiagnosticSubmitResponse(
   accessToken: string,
   payload: SubmitResponsePayload,
 ): Promise<DiagnosticState> {
-  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/response`, {
+  const res = await fetchAuthed(accessToken, '/api/v1/diagnostic/response', {
     method: 'POST',
-    headers: { ...authHeaders(accessToken), 'Content-Type': 'application/json' },
-    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
   if (!res.ok) {
@@ -677,10 +708,7 @@ export async function apiDiagnosticSubmitResponse(
 }
 
 export async function apiDiagnosticProfile(accessToken: string): Promise<MasterProfileDto> {
-  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/profile`, {
-    headers: authHeaders(accessToken),
-    credentials: 'include',
-  });
+  const res = await fetchAuthed(accessToken, '/api/v1/diagnostic/profile');
   if (!res.ok) throw new Error(await parseError(res));
   // NestJS returns an empty body for null — res.json() would throw
   const text = await res.text();
@@ -689,10 +717,7 @@ export async function apiDiagnosticProfile(accessToken: string): Promise<MasterP
 }
 
 export async function apiDiagnosticProgress(accessToken: string): Promise<DiagnosticProgressDto> {
-  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/progress`, {
-    headers: authHeaders(accessToken),
-    credentials: 'include',
-  });
+  const res = await fetchAuthed(accessToken, '/api/v1/diagnostic/progress');
   if (!res.ok) throw new Error(await parseError(res));
   return res.json();
 }
@@ -700,10 +725,9 @@ export async function apiDiagnosticProgress(accessToken: string): Promise<Diagno
 export async function apiDiagnosticWelcomeSeen(
   accessToken: string,
 ): Promise<{ success: boolean }> {
-  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/welcome-seen`, {
+  const res = await fetchAuthed(accessToken, '/api/v1/diagnostic/welcome-seen', {
     method: 'POST',
-    headers: { ...authHeaders(accessToken), 'Content-Type': 'application/json' },
-    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({}),
   });
   if (!res.ok) throw new Error(await parseError(res));
@@ -714,10 +738,9 @@ export async function apiDiagnosticOutroSeen(
   accessToken: string,
   moduleSlug: string,
 ): Promise<{ success: boolean }> {
-  const res = await fetch(`${apiBaseUrl()}/api/v1/diagnostic/outro-seen/${moduleSlug}`, {
+  const res = await fetchAuthed(accessToken, `/api/v1/diagnostic/outro-seen/${moduleSlug}`, {
     method: 'POST',
-    headers: { ...authHeaders(accessToken), 'Content-Type': 'application/json' },
-    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({}),
   });
   if (!res.ok) throw new Error(await parseError(res));

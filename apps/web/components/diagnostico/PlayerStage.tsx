@@ -13,6 +13,8 @@ type Props = {
   header: ReactNode;
   children: ReactNode;
   primary: Action;
+  /** Section progress row above the primary button. */
+  sectionsRail?: ReactNode;
   /** Id of the help that explains a blocked primary action. */
   describedBy?: string;
   /** One line under the button. The same slot exists on every screen. */
@@ -21,7 +23,7 @@ type Props = {
 };
 
 /** Header, scrolling body, stable bottom bar. Screens do not place their own button. */
-export function PlayerStage({ header, children, primary, describedBy, note, bodyRef }: Props) {
+export function PlayerStage({ header, children, primary, sectionsRail, describedBy, note, bodyRef }: Props) {
   return (
     <main className="dk-stage">
       <div className="dk-stage__header">{header}</div>
@@ -29,6 +31,7 @@ export function PlayerStage({ header, children, primary, describedBy, note, body
         {children}
       </div>
       <div className="dk-stage__nav">
+        {sectionsRail}
         <button
           type="button"
           className="ag-btn-cta"

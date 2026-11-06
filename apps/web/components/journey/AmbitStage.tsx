@@ -88,7 +88,7 @@ function cardTitle(phase: Phase, state: JourneyState | null): string {
   if (phase === 'error') return 'Vuelve a intentar';
   if (phase === 'loading') return 'Cargando';
   const href = state?.nextAction.href ?? '';
-  if (href === '/proposito') return 'Sigue con la hoja de ruta';
+  if (href === '/proposito') return 'Definir tu dirección';
   if (href === '/planes') return state?.nextAction.label === 'Crear el plan' ? 'Falta un plan vigente' : 'Sigue con el plan';
   if (href === '/calendario') return 'Sigue en el calendario';
   return 'Siguiente paso';

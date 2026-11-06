@@ -11,8 +11,11 @@ const PAGE_TITLES: Record<string, string> = {
   '/ruta':   'Ruta MK',
   '/cuenta': 'Cuenta',
   '/calendario': 'Calendario',
+  '/semana': 'Tu semana',
   '/planes': 'Planes',
-  '/proposito': 'Hoja de ruta',
+  '/disenar': 'Diseñar',
+  '/proposito': 'Tu dirección',
+  '/memoria': 'Memoria',
   '/asesores': 'Asesores',
   '/mente': 'Mente',
   '/espiritu': 'Espíritu',
@@ -20,7 +23,10 @@ const PAGE_TITLES: Record<string, string> = {
 };
 
 function resolvePageTitle(pathname: string): string {
-  if (pathname.startsWith('/diagnostico/resultado')) return 'Mi Perfil';
+  if (pathname.startsWith('/diagnostico/resultado')) return 'Cuestionario';
+  if (pathname.startsWith('/semana')) return 'Tu semana';
+  if (pathname.startsWith('/disenar')) return 'Diseñar';
+  if (pathname.startsWith('/ambito/')) return 'Ámbito';
   return PAGE_TITLES[pathname] ?? 'Maximus Kratos';
 }
 

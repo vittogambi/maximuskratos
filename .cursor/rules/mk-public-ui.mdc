@@ -1,0 +1,17 @@
+---
+description: Marketing público. No aplica a miembros, cuestionario, IKIGAI independiente, admin ni acceso.
+globs: "apps/web/app/(public)/**/*.{tsx,css},apps/web/components/landing/**/*.{tsx,css},apps/web/components/public-*.tsx,apps/web/components/precios/**/*.{tsx,css},apps/web/components/pages/manifiesto-content.tsx,apps/web/components/pages/section-intro.tsx,apps/web/components/pages/precios-content.tsx,apps/web/components/pages/contacto-content.tsx,apps/web/components/pages/eventos-content.tsx,apps/web/components/pages/sistema-content.tsx,apps/web/components/pages/ikigai-content.tsx,apps/web/components/pages/marco-central-content.tsx,apps/web/components/pages/legal-document-content.tsx,apps/web/components/pages/public-faq-section.tsx,apps/web/components/pages/faq-accordion-item.tsx,apps/web/components/pages/subpage-cta.tsx,apps/web/components/pages/mk-cycle-hub.tsx,apps/web/components/pages/mk-pillars-domains-matrix.tsx,apps/web/components/motion/intro-gate.tsx,apps/web/components/motion/public-motion-provider.tsx,apps/web/components/motion/scroll-reveal.tsx,apps/web/components/motion/hero-reveal.tsx,apps/web/components/motion/text-reveal.tsx,apps/web/components/motion/stagger.tsx,apps/web/components/motion/animated-divider.tsx,apps/web/lib/landing-copy.ts,apps/web/lib/landing-faq.ts,apps/web/lib/legal-content.ts,apps/web/lib/*faq*.ts"
+alwaysApply: false
+---
+
+# Marketing
+
+Lee `DESIGN.md`. Esta superficie usa `PublicLayout`, `PublicNav`, `PublicFooter` y `Logo`.
+
+Reutiliza `ag-landing`, `ag-container`, `SectionIntro` y las variantes de CTA que ya existen. Si uno de esos componentes falla en móvil o en accesibilidad, corrígelo y revisa quién lo usa.
+
+Los headers editoriales van centrados. El texto de lectura sigue la alineación de la referencia de marketing.
+
+El motion de landing vive en `apps/web/components/motion/` y respeta reduced motion. El contenido y la navegación siguen disponibles. No lo lleves a miembros, cuestionario, IKIGAI, admin ni a las pantallas de acceso.
+
+`InicioDashboard` y `CuentaContent` no son marketing. Si un componente se comparte, manda el contrato de quien lo consume.

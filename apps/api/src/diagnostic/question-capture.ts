@@ -179,10 +179,18 @@ export function isRequiredActivity(sourceRef: string | null | undefined): boolea
     || sourceRef === 'formulario-v1:E-PER-000!R241';
 }
 
+const WAIST_SOURCE = 'formulario-v1:F-RAD-001!R11';
+
 export function readQuestionContext(sourceRef: string | null | undefined, context: string | null | undefined) {
   const parsed = parseQuestionContext(context);
   if (sourceRef === ARCHETYPE_ORIGIN_SOURCE) {
     return { ...parsed, capture: { kind: 'archetype' as const } };
+  }
+  if (sourceRef === WAIST_SOURCE && parsed.capture?.kind === 'number') {
+    return {
+      ...parsed,
+      capture: { ...parsed.capture, min: 35 },
+    };
   }
   if (sourceRef !== BIRTHDATE_SOURCE) return parsed;
   const capture = parsed.capture?.kind === 'birthdate'

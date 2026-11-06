@@ -6,7 +6,7 @@ import { withoutInternalAlerts } from '../admin/public-reading';
 import { alignmentReading, type IadAnswer, type IadId, type IadResults } from '../instrumentos/iad';
 import { decideAction, type ContentTag } from '../instrumentos/restrictions';
 import { futureOccasions, nextPlanOutcome, previewWeek, type WeekDecision, type WeekEffect, type WeekRevision } from './apply-week';
-import { JourneyClock, WeekApplyHook } from './journey-clock';
+import { JourneyClock, WeekApplyHook, journeyNow } from './journey-clock';
 import { ACTION_DOMAINS, executionReading, type ActionDomainName } from './execution';
 import { buildHdrpContract, contractText, hdrpGaps, withChosenPurpose, type HdrpArticle, type HdrpFacts, type HdrpGap } from './hdrp-contract';
 import { ambitsOf, fieldFromContext, fieldFromSource } from '../instrumentos/ikigai-lists';
@@ -33,24 +33,59 @@ import {
   unfinishedHelp,
   type HealthLimitOutcome,
 } from './plan-gate';
-import { canTransition, compatStatus, fromLegacy, type PlanStage } from './plan-lifecycle';
+import {
+  buildDirectionSources,
+  buildMemberDirectionView,
+  mergeDirectionContent,
+  readDirectionFields,
+  snapshotSources,
+  type DirectionMode,
+  type MemberDirectionView,
+  type SaveMemberDirectionInput,
+} from './member-direction';
+import {
+  buildConfirmableSources,
+  buildExplorationSynthesis,
+  directionSourcesFromDraft,
+  proposeLearning,
+  defaultExplorationDraft,
+  mergeExplorationDraft,
+  readExplorationDraft,
+  type DirectionExplorationDraft,
+} from './direction-exploration';
+import { buildPurposeEvidence, EVIDENCE_MODULES } from './purpose-evidence';
+import {
+  achievementEvidenceReady,
+  canDeclareAchievement,
+  canTransition,
+  compatStatus,
+  fromLegacy,
+  type PlanStage,
+} from './plan-lifecycle';
 import { assertPlanVersion, focusTargets, nextPlanVersion } from './plan-writes';
 import type { ActivatePlanDto, FocusPlanDto, TransitionPlanDto } from './dto/plan-stage.dto';
 import { answerLedger } from '../instrumentos/answer-ledger';
-import { buildDashboard, territoryDetail } from './dashboard';
+import { accountTextsFromLedger } from '../instrumentos/ledger-account';
+import { discoverSynthesis } from './discover-synthesis';
+import { territoryExceptionRows } from '../instrumentos/territory-catalog';
+import { buildDashboard, nextPlanOccasion, selectContextualPlan, territoryDetail, type PlanFact } from './dashboard';
+import { templateById as interventionTemplate } from './intervention/registry';
 import { buildMemory } from './memory-reading';
+import { contractFromPlanRow, outcomeContractMeta } from './plan-outcome-contract';
 import { returnPanel } from './return-panel';
 import { readOwnPlan } from './own-plan';
 import { directionSeed } from './purpose-link';
 import { weekCounts } from './week-count';
-import { fixedDaysInWeek, resolveSchedule } from './action-schedule';
+import { flexOccasionCapReached, isOccasionRegistrationDay, resolveSchedule } from './action-schedule';
 import { appendScheduleVersion, loadActionSchedules } from './action-schedules.db';
-import { planPatchFromProposals } from './plan-proposal-apply';
+import { actionPatchesFromProposals, planPatchFromProposals } from './plan-proposal-apply';
 import { inferPlanTerritory } from './plan-territory-assignment';
 import { reviewReading } from './review-reading';
 import { homeBoard, type HomePlan } from './home-board';
 import { nextStep } from './next-step';
 import { isIsoDate, isMonday, weekStartMonday } from './civil-date';
+import { actionCountsInWeek, type WindowedAction } from './action-window';
+import { reviewAppliesFrom } from './civil-week';
 import { alignmentViews, depthView, closeMeasurement, openMeasurement, saveMeasurementAnswer, materializeInitialAlignment } from '../instrumentos/core-reading';
 import { draftHelp, normalizeInterest, proposePriority, type PriorityInput } from './priority';
 import { createHash } from 'node:crypto';
@@ -82,6 +117,33 @@ function asJson(value: unknown): Prisma.InputJsonValue {
 
 function asRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === 'object' && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
+}
+
+/** Review changes that are not a decision on an existing action. Applied in the same close. */
+export type WeekExtras = {
+  additions?: {
+    planId: string;
+    title: string;
+    doneWhen: string;
+    cue?: string | null;
+    minimumVersion?: string | null;
+    occasionsPerWeek?: number | null;
+    minutesPerOccasion: number;
+    onceWeekStart?: string | null;
+    contentTags?: string[];
+    conversationOutcome?: string | null;
+    position: number;
+  }[];
+  endReasons?: Record<string, string>;
+};
+
+function actionVisibleForWeek(
+  action: WindowedAction & { pausedAt: Date | null },
+  siblings: WindowedAction[],
+  weekStart: string,
+  weekEnd: string,
+): boolean {
+  return actionCountsInWeek(action, siblings, weekStart, weekEnd) && !action.pausedAt;
 }
 
 function directionOf(purpose: { content: unknown } | null): string | null {
@@ -263,6 +325,13 @@ function formularioFacts(rows: FactRow[]): HdrpFacts | null {
     finance: moduleNumbers(rows, ['f-rad-003-s1', 'f-rad-003-s2', 'f-rad-003-s3', 'f-rad-003-s4']),
     partner: partnerOf(rows),
   };
+}
+
+function crossPossibilityText(content: unknown): string | null {
+  if (!content || typeof content !== 'object' || Array.isArray(content)) return null;
+  const purpose = (content as { synthesis?: { purpose?: { edited?: string | null; generated?: string | null } } }).synthesis?.purpose;
+  const text = purpose?.edited?.trim() || purpose?.generated?.trim() || '';
+  return text || null;
 }
 
 @Injectable()
@@ -732,7 +801,7 @@ export class JourneyService {
     } catch (err) {
       if (err instanceof Error && err.message === 'STALE_PLAN') {
         const currentVersion = (err as Error & { currentVersion: number }).currentVersion;
-        throw new ConflictException({ message: 'El plan cambió en otra pestaña.', code: 'STALE_PLAN', version: currentVersion });
+        throw new ConflictException({ message: 'Este plan tiene cambios más recientes. Revísalos antes de continuar.', code: 'STALE_PLAN', version: currentVersion });
       }
       throw err;
     }
@@ -760,6 +829,7 @@ export class JourneyService {
     valueRef?: string | null;
     purposeRevisionId?: string | null;
     sourceCombinationId?: string | null;
+    territory?: string | null;
   }) {
     const pendingHelp = unfinishedHelp(input.priorityNote, input.valueRef);
     if (pendingHelp) throw new BadRequestException(pendingHelp);
@@ -786,6 +856,7 @@ export class JourneyService {
         sourceCombinationId: input.sourceCombinationId?.trim() || null,
         status: 'DRAFT',
         stage: 'PREPARING',
+        territory: input.territory?.trim() || null,
       },
     });
   }
@@ -837,7 +908,7 @@ export class JourneyService {
     const preview = await this.previewPriority(userId, input);
     if (input.digest && input.digest !== preview.digest) {
       throw new ConflictException({
-        message: 'La propuesta cambió desde la vista previa. No se guardó la decisión.',
+        message: 'La propuesta cambió mientras la revisabas. No guardamos tu decisión. Revisa la información actualizada e inténtalo nuevamente.',
         code: 'STALE_PREVIEW',
         proposal: preview.proposal,
         help: preview.help,
@@ -941,7 +1012,7 @@ export class JourneyService {
     const from = this.planStage(plan);
     const to = input.toStage;
     if (!canTransition(from, to)) {
-      throw new BadRequestException('Esa transición no está permitida.');
+      throw new BadRequestException('No puedes realizar esta acción en el estado actual del plan.');
     }
     const status = compatStatus(to);
     return this.prisma.$transaction(async (tx) => {
@@ -965,6 +1036,21 @@ export class JourneyService {
           effectiveFrom: new Date(this.civilToday()),
         },
       });
+      const learning = input.learningNote?.trim();
+      if (learning && (to === 'CLOSED' || to === 'MAINTENANCE')) {
+        await tx.planEvidence.create({
+          data: {
+            userId,
+            planId: plan.id,
+            criterionRevision: plan.criterionRevision ?? 1,
+            observedOn: new Date(`${this.civilToday()}T12:00:00.000Z`),
+            kind: 'NOTE',
+            status: 'LEARNING',
+            text: learning.slice(0, 1000),
+            source: 'DECLARED_BY_MEMBER',
+          },
+        });
+      }
       return updated;
     });
   }
@@ -974,7 +1060,7 @@ export class JourneyService {
     if (!plan) throw new NotFoundException('Plan no encontrado.');
     this.guardPlanVersion(plan, input.expectedVersion);
     if (input.enable && this.planStage(plan) !== 'ACTIVE' && this.planStage(plan) !== 'MAINTENANCE') {
-      throw new BadRequestException('Solo un plan activo o en mantenimiento puede ser foco.');
+      throw new BadRequestException('Solo puedes elegir como plan principal uno que esté activo o en mantenimiento.');
     }
     const focused = await this.prisma.personalPlan.findFirst({ where: { userId, isFocus: true } });
     const targets = focusTargets({
@@ -1039,7 +1125,7 @@ export class JourneyService {
     });
     const missing = activationBlock(activation);
     if (missing.length > 0) {
-      throw new UnprocessableEntityException({ message: 'Faltan datos para activar el plan.', code: 'ACTIVATION_INCOMPLETE', missing });
+      throw new UnprocessableEntityException({ message: 'Todavía falta completar información antes de activar tu plan.', code: 'ACTIVATION_INCOMPLETE', missing });
     }
     for (const action of plan.actions) {
       const tags = parseContentTags(action.contentTags);
@@ -1048,24 +1134,29 @@ export class JourneyService {
     }
     const capacityMinutes = patch.capacityMinutes ?? undefined;
     const protectNote = patch.protectNote !== undefined ? patch.protectNote : undefined;
-    const proposalRows = await this.prisma.planProposal.findMany({ where: { planId: plan.id, userId } });
-    const proposalPatch = planPatchFromProposals(
-      proposalRows.map((row) => ({
+    return this.prisma.$transaction(async (tx) => {
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${userId}))`;
+      const proposalRows = await tx.planProposal.findMany({ where: { planId: plan.id, userId } });
+      const proposalInputs = proposalRows.map((row) => ({
         kind: row.kind,
         decision: row.status as 'ACCEPTED' | 'EDITED' | 'REJECTED',
         payload: asRecord(row.payload),
         editedPayload: row.editedPayload ? asRecord(row.editedPayload) : null,
-      })),
-      { outcome: plan.outcome, criterionRevision: plan.criterionRevision },
-    );
-    return this.prisma.$transaction(async (tx) => {
-      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${userId}))`;
+      }));
+      const proposalPatch = planPatchFromProposals(proposalInputs, {
+        outcome: plan.outcome,
+        criterionRevision: plan.criterionRevision,
+      });
+      const actionPatchMap = actionPatchesFromProposals(
+        proposalInputs,
+        plan.actions.map((row) => ({ id: row.id })),
+      );
       const updated = await tx.personalPlan.update({
         where: { id: plan.id },
         data: {
           status: compatStatus('ACTIVE'),
           stage: 'ACTIVE',
-          activatedAt: new Date(),
+          activatedAt: journeyNow(this.clock),
           version: nextPlanVersion(plan.version),
           ...(capacityMinutes !== undefined ? { capacityMinutes } : {}),
           ...(protectNote !== undefined ? { protectNote } : {}),
@@ -1078,6 +1169,18 @@ export class JourneyService {
           ...(proposalPatch.criterionRevision != null ? { criterionRevision: proposalPatch.criterionRevision } : {}),
         },
       });
+      for (const [actionId, patch] of actionPatchMap) {
+        await tx.planAction.update({
+          where: { id: actionId },
+          data: {
+            ...(patch.title ? { title: patch.title } : {}),
+            ...(patch.doneWhen ? { doneWhen: patch.doneWhen } : {}),
+            ...(patch.weekday !== undefined ? { weekday: patch.weekday } : {}),
+            ...(patch.occasionsPerWeek !== undefined ? { occasionsPerWeek: patch.occasionsPerWeek } : {}),
+            ...(patch.minimumVersion ? { minimumVersion: patch.minimumVersion, preparation: patch.minimumVersion } : {}),
+          },
+        });
+      }
       await tx.planTransition.create({
         data: {
           userId,
@@ -1171,17 +1274,40 @@ export class JourneyService {
       contentTags?: unknown;
       healthLimit?: unknown;
       conversation?: unknown;
+      occasionsPerWeek?: number;
+      minutesPerOccasion?: number;
+      templateRef?: string;
+      minimumVersion?: string;
     },
   ) {
     const tags = parseContentTags(input.contentTags);
     if (!tags) throw new BadRequestException('Marca de contenido desconocida.');
+    const template = input.templateRef ? interventionTemplate(input.templateRef) : null;
+    if (input.templateRef && !template) throw new BadRequestException('Plantilla desconocida.');
+    if (template?.schedule.kind === 'TRIGGER' && input.occasionsPerWeek !== undefined) {
+      throw new BadRequestException('Esta acción depende de un disparador; no lleva frecuencia semanal.');
+    }
+    if (input.occasionsPerWeek !== undefined && (!Number.isInteger(input.occasionsPerWeek) || input.occasionsPerWeek < 1 || input.occasionsPerWeek > 21)) {
+      throw new BadRequestException('Ingresa un número entero entre 1 y 21 veces por semana.');
+    }
+    if (input.minutesPerOccasion !== undefined && (!Number.isInteger(input.minutesPerOccasion) || input.minutesPerOccasion < 1 || input.minutesPerOccasion > 600)) {
+      throw new BadRequestException('Ingresa una duración de 1 a 600 minutos por vez, sin decimales.');
+    }
+    if (input.occasionsPerWeek !== undefined && input.weekday != null) {
+      throw new BadRequestException('Una acción con día fijo no lleva frecuencia flexible.');
+    }
     const plan = await this.ownPlan(userId, planId);
     await this.assertGuide(userId, input.guideId);
     const conversationOutcome = await this.assertContent(userId, tags, {
       healthLimit: input.healthLimit,
       conversation: input.conversation,
     });
-    return this.insertAction(plan.id, { ...input, contentTags: tags, conversationOutcome });
+    return this.insertAction(plan.id, {
+      ...input,
+      contentTags: tags,
+      conversationOutcome,
+      ...(template ? { origin: 'SYSTEM_TEMPLATE', familyId: template.id, templateVersion: template.version } : {}),
+    });
   }
 
   private insertAction(
@@ -1193,6 +1319,12 @@ export class JourneyService {
       domain?: ActionDomainName | null;
       contentTags?: string[];
       conversationOutcome?: string | null;
+      occasionsPerWeek?: number;
+      minutesPerOccasion?: number;
+      origin?: string;
+      familyId?: string;
+      templateVersion?: string;
+      minimumVersion?: string;
     },
   ) {
     const today = this.civilToday();
@@ -1203,6 +1335,11 @@ export class JourneyService {
           title: input.title.trim(),
           doneWhen: input.doneWhen.trim(),
           weekday: input.weekday ?? null,
+          occasionsPerWeek: input.occasionsPerWeek ?? null,
+          minutesPerOccasion: input.minutesPerOccasion ?? null,
+          ...(input.origin ? { origin: input.origin } : {}),
+          ...(input.familyId ? { familyId: input.familyId, templateVersion: input.templateVersion ?? null } : {}),
+          ...(input.minimumVersion?.trim() ? { minimumVersion: input.minimumVersion.trim().slice(0, 500) } : {}),
           domain: input.domain ?? null,
           contentTags: input.contentTags ?? [],
           conversationOutcome: input.conversationOutcome ?? null,
@@ -1238,6 +1375,10 @@ export class JourneyService {
    * A health or conversation answer is stored beside the original questionnaire text.
    * Returns the conversation outcome to keep on the action, or null when that mark is absent.
    */
+  async assertMemberContentTags(userId: string, tags: ContentTag[], extra?: { healthLimit?: unknown; conversation?: unknown }) {
+    return this.assertContent(userId, tags, extra);
+  }
+
   private async assertContent(
     userId: string,
     tags: ContentTag[],
@@ -1407,7 +1548,7 @@ export class JourneyService {
   parseDomain(value: string): ActionDomainName {
     const domain = value.toUpperCase();
     if (!ACTION_DOMAINS.includes(domain as ActionDomainName)) {
-      throw new BadRequestException('Ámbito desconocido.');
+      throw new BadRequestException('No encontramos ese ámbito. Vuelve a Inicio y elige uno.');
     }
     return domain as ActionDomainName;
   }
@@ -1419,7 +1560,7 @@ export class JourneyService {
   async calendar(userId: string) {
     const plans = await this.prisma.personalPlan.findMany({
       where: { userId },
-      include: { actions: { orderBy: { createdAt: 'asc' } } },
+      include: { actions: { orderBy: [{ position: 'asc' }, { createdAt: 'asc' }] } },
       orderBy: { createdAt: 'desc' },
     });
     const actionIds = plans.flatMap((plan) => plan.actions.map((action) => action.id));
@@ -1428,9 +1569,13 @@ export class JourneyService {
       loadActionSchedules(this.prisma, actionIds),
     ]);
     const today = this.clock.today();
-    const occasions = plans.flatMap((plan) =>
-      plan.actions
-        .filter((action) => action.active && !action.pausedAt)
+    const occasions = plans.flatMap((plan) => {
+      const stage = plan.stage ?? fromLegacy(plan.status as 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'ARCHIVED');
+      if (stage === 'PAUSED' || stage === 'CLOSED') {
+        return plan.actions.map((action) => ({ actionId: action.id, days: [] as string[], scheduleSource: 'PAUSE' as const }));
+      }
+      return plan.actions
+        .filter((action) => actionVisibleForWeek(action, plan.actions, this.weekStart(), this.addDays(this.weekStart(), 6)))
         .map((action) => {
           const legacy = {
             id: action.id,
@@ -1458,8 +1603,8 @@ export class JourneyService {
             };
           }
           return { actionId: action.id, days: [] as string[], scheduleSource: resolved.source };
-        }),
-    );
+        });
+    });
     return { timezone: ZONE, weekStart: this.weekStart(), today, plans, records, occasions, schedules };
   }
 
@@ -1491,25 +1636,53 @@ export class JourneyService {
     if (closed) throw new ForbiddenException('Esa semana ya está cerrada.');
     const today = this.civilToday();
     if (input.day > today && input.status !== 'PENDING') {
-      throw new ConflictException({ message: 'Esa ocasión aún no llega.', code: 'OCCASION_FUTURE' });
+      throw new ConflictException({ message: 'Esta acción está prevista para más adelante. Todavía no puedes registrarla.', code: 'OCCASION_FUTURE' });
+    }
+    const starts = action.effectiveFrom?.slice(0, 10);
+    const ends = action.effectiveTo?.slice(0, 10);
+    if (starts && action.replacesActionId && input.day < starts) {
+      throw new ConflictException({ message: 'Esa acción todavía no empieza. El registro de esta semana queda en la acción anterior.', code: 'ACTION_NOT_STARTED' });
+    }
+    if (ends && input.day > ends) {
+      const successor = await this.prisma.planAction.findFirst({
+        where: { planId: action.planId, replacesActionId: action.id },
+        select: { id: true },
+      });
+      const message = successor
+        ? 'Esta acción terminó después de una revisión. Si quieres registrar una actividad nueva, utiliza la acción que la reemplazó.'
+        : 'Esta acción ya no está vigente para ese día.';
+      throw new ConflictException({ message, code: 'ACTION_ENDED' });
     }
     if (prior && input.expectedRevision != null && prior.revision !== input.expectedRevision) {
-      throw new ConflictException({ message: 'El registro cambió en otra pestaña.', code: 'STALE_RECORD', revision: prior.revision });
+      throw new ConflictException({ message: 'El registro cambió desde que lo abriste. Revisa la información actual antes de guardar.', code: 'STALE_RECORD', revision: prior.revision });
     }
     if (input.status !== 'PENDING') {
       const schedules = await loadActionSchedules(this.prisma, [input.actionId]);
+      const inForce = (!starts || input.day >= starts) && (!ends || input.day <= ends);
       const legacy = {
         id: action.id,
         weekday: action.weekday,
         intervalDays: action.intervalDays,
         occasionsPerWeek: action.occasionsPerWeek,
-        active: action.active,
+        active: action.active || inForce,
       };
       const weekEnd = this.addDays(week, 6);
-      const allowed = fixedDaysInWeek(legacy, schedules, week, weekEnd);
-      const flexAllowed = resolveSchedule(legacy, schedules, input.day).kind === 'FLEXIBLE';
-      if (!flexAllowed && !allowed.includes(input.day)) {
-        throw new ConflictException({ message: 'Ese día no era una ocasión de esta acción.', code: 'NOT_AN_OCCASION' });
+      if (!isOccasionRegistrationDay(legacy, schedules, week, weekEnd, input.day)) {
+        throw new ConflictException({ message: 'Esta acción no estaba prevista para ese día.', code: 'NOT_AN_OCCASION' });
+      }
+      const weekRecords = await this.prisma.actionRecord.findMany({
+        where: {
+          actionId: input.actionId,
+          day: { gte: week, lte: weekEnd },
+          status: { not: 'PENDING' },
+        },
+      });
+      const treatAsUpdate = Boolean(prior && prior.day === input.day);
+      if (flexOccasionCapReached(legacy, schedules, week, weekEnd, input.day, weekRecords.length, treatAsUpdate)) {
+        throw new ConflictException({
+          message: 'Ya completaste todos los registros previstos para esta semana.',
+          code: 'FLEX_WEEK_CAP',
+        });
       }
     }
     return this.prisma.actionRecord.upsert({
@@ -1609,6 +1782,244 @@ export class JourneyService {
     });
   }
 
+  async memberDirection(userId: string): Promise<MemberDirectionView> {
+    const [purpose, facts] = await Promise.all([
+      this.latestPurpose(userId),
+      this.hdrpFacts(userId),
+    ]);
+    let plansOnOlderRevision = 0;
+    if (purpose?.id) {
+      plansOnOlderRevision = await this.prisma.personalPlan.count({
+        where: {
+          userId,
+          purposeRevisionId: { not: null, notIn: [purpose.id] },
+          stage: { in: ['PREPARING', 'ACTIVE', 'MAINTENANCE', 'PAUSED'] },
+        },
+      });
+    }
+    return buildMemberDirectionView({
+      purpose: purpose
+        ? { id: purpose.id, revision: purpose.revision, content: purpose.content, createdAt: purpose.createdAt }
+        : null,
+      facts,
+      plansOnOlderRevision,
+    });
+  }
+
+  /** Saved history of the direction, plans linked to each version, and the literal answers Propósito can consult. */
+  async directionOverview(userId: string) {
+    const [revisions, plans, evidence] = await Promise.all([
+      this.prisma.purposeRevision.findMany({
+        where: { userId },
+        orderBy: { revision: 'desc' },
+        select: { id: true, revision: true, content: true, createdAt: true },
+      }),
+      this.prisma.personalPlan.findMany({
+        where: { userId, purposeRevisionId: { not: null } },
+        orderBy: { createdAt: 'desc' },
+        select: { id: true, title: true, territory: true, stage: true, purposeRevisionId: true, linkKind: true },
+      }),
+      this.directionEvidence(userId),
+    ]);
+    const latestId = revisions[0]?.id ?? null;
+    const numberOf = new Map(revisions.map((row) => [row.id, row.revision]));
+    const statementOf = new Map(revisions.map((row) => [row.id, readDirectionFields(row.content).statement]));
+    const history: {
+      purposeRevisionId: string;
+      revision: number;
+      statement: string;
+      mode: DirectionMode | null;
+      savedAt: string;
+      current: boolean;
+    }[] = [];
+    for (const row of revisions) {
+      const fields = readDirectionFields(row.content);
+      if (!fields.statement) continue;
+      const previous = history[history.length - 1];
+      if (previous && previous.statement === fields.statement && previous.mode === fields.mode) continue;
+      const content = row.content as Record<string, unknown> | null;
+      const savedAt = typeof content?.directionSavedAt === 'string' ? content.directionSavedAt : row.createdAt.toISOString();
+      history.push({
+        purposeRevisionId: row.id,
+        revision: row.revision,
+        statement: fields.statement,
+        mode: fields.mode,
+        savedAt,
+        current: row.id === latestId,
+      });
+    }
+    return {
+      history: history.slice(0, 8),
+      linkedPlans: plans.map((plan) => ({
+        id: plan.id,
+        title: plan.title,
+        territory: plan.territory,
+        stage: plan.stage,
+        linkKind: plan.linkKind,
+        revision: plan.purposeRevisionId ? numberOf.get(plan.purposeRevisionId) ?? null : null,
+        directionStatement: plan.purposeRevisionId ? statementOf.get(plan.purposeRevisionId) ?? null : null,
+        current: plan.purposeRevisionId === latestId,
+      })),
+      evidence,
+    };
+  }
+
+  /** Visión, Valores and IKIGAI as the person answered them, plus whether the questionnaire lets them get there now. */
+  async directionEvidence(userId: string) {
+    const slugs = Object.values(EVIDENCE_MODULES);
+    const sessions = await this.prisma.diagnosticSession.findMany({
+      where: { userId, version: { definitionRef: FORMULARIO_COMPLETO_REF } },
+      orderBy: { lastActivityAt: 'desc' },
+      include: {
+        moduleProgress: { include: { module: { select: { slug: true } } } },
+        responses: {
+          where: { question: { module: { slug: { in: slugs } } } },
+          include: { question: { select: { sourceRef: true, module: { select: { slug: true } } } }, selectedOptions: true },
+        },
+      },
+    });
+    const session = sessions.find((row) => row.status === 'COMPLETED') ?? sessions.find((row) => row.status === 'ACTIVE') ?? sessions[0];
+    const versionId = session?.versionId
+      ?? (await this.prisma.diagnosticVersion.findFirst({ where: { isActive: true }, select: { id: true } }))?.id
+      ?? null;
+    const questions = versionId
+      ? await this.prisma.question.findMany({
+        where: { module: { versionId, slug: { in: slugs } } },
+        select: { order: true, sourceRef: true, textEs: true, module: { select: { slug: true } } },
+      })
+      : [];
+    const activities = session ? await this.ikigaiActivities(userId) : [];
+    return buildPurposeEvidence({
+      sessionStatus: session?.status ?? null,
+      moduleStatus: Object.fromEntries((session?.moduleProgress ?? []).map((row) => [row.module.slug, row.status])),
+      questions: questions.map((row) => ({ moduleSlug: row.module.slug, order: row.order, sourceRef: row.sourceRef, textEs: row.textEs })),
+      responses: (session?.responses ?? []).map((row) => ({
+        sourceRef: row.question.sourceRef,
+        moduleSlug: row.question.module.slug,
+        freeText: row.freeText,
+        options: row.selectedOptions.map((option) => ({ order: option.order, textEs: option.textEs })),
+        exceptionKind: row.exceptionKind,
+        skipped: row.skipped,
+      })),
+      activities,
+    });
+  }
+
+  async saveMemberDirection(userId: string, input: SaveMemberDirectionInput & { sourceIds?: unknown }) {
+    const mode = input.mode;
+    if (mode !== 'CLEAR' && mode !== 'EXPLORE' && mode !== 'UNKNOWN') {
+      throw new BadRequestException('No pudimos reconocer la opción elegida. Selecciona una y vuelve a intentarlo.');
+    }
+    const statement = input.statement?.trim() ?? '';
+    const desiredChange = input.desiredChange?.trim() ?? '';
+    if (mode === 'CLEAR' && !statement) {
+      throw new BadRequestException('Escribe tu dirección en una frase.');
+    }
+    if (mode === 'UNKNOWN' && !statement && !desiredChange) {
+      throw new BadRequestException('Escribe qué quieres cuidar o explorar en este ciclo.');
+    }
+    const commandKey = input.commandKey?.trim() || null;
+    if (commandKey) {
+      const repeated = await this.prisma.purposeRevision.findFirst({
+        where: { userId, content: { path: ['directionCommandKey'], equals: commandKey } },
+      });
+      if (repeated) {
+        return { purposeRevisionId: repeated.id, revision: repeated.revision, repeated: true };
+      }
+    }
+    const latest = await this.latestPurpose(userId);
+    const previous = latest && typeof latest.content === 'object' && latest.content && !Array.isArray(latest.content)
+      ? latest.content as Record<string, unknown>
+      : {};
+    const sources = input.sources
+      ?? (input.sourceIds ? snapshotSources(buildDirectionSources(await this.hdrpFacts(userId), latest?.content ?? null), input.sourceIds) : []);
+    const content = mergeDirectionContent(previous, { mode, statement, desiredChange, commandKey, sources });
+    const saved = await this.prisma.purposeRevision.create({
+      data: {
+        userId,
+        revision: (latest?.revision ?? 0) + 1,
+        content: asJson(content),
+      },
+    });
+    return { purposeRevisionId: saved.id, revision: saved.revision, repeated: false };
+  }
+
+  async getDirectionExploration(userId: string) {
+    const [purpose, facts] = await Promise.all([
+      this.latestPurpose(userId),
+      this.hdrpFacts(userId),
+    ]);
+    const content = purpose?.content ?? null;
+    const draft = readExplorationDraft(content) ?? defaultExplorationDraft();
+    const sources = buildConfirmableSources(facts, content);
+    const synthesis = buildExplorationSynthesis(draft, sources);
+    return { draft, sources, synthesis, learning: proposeLearning(draft) };
+  }
+
+  async saveDirectionExplorationDraft(userId: string, patch: Partial<DirectionExplorationDraft>) {
+    const latest = await this.latestPurpose(userId);
+    const previous = latest && typeof latest.content === 'object' && latest.content && !Array.isArray(latest.content)
+      ? latest.content as Record<string, unknown>
+      : {};
+    const current = readExplorationDraft(previous) ?? defaultExplorationDraft();
+    const draft = mergeExplorationDraft(current, patch);
+    const merged = { ...previous, directionExplorationDraft: draft };
+    if (latest) {
+      await this.prisma.purposeRevision.update({
+        where: { id: latest.id },
+        data: { content: asJson(merged) },
+      });
+    } else {
+      await this.prisma.purposeRevision.create({
+        data: { userId, revision: 1, content: asJson(merged) },
+      });
+    }
+    const facts = await this.hdrpFacts(userId);
+    const sources = buildConfirmableSources(facts, merged);
+    return { draft, sources, synthesis: buildExplorationSynthesis(draft, sources), learning: proposeLearning(draft) };
+  }
+
+  async confirmDirectionExploration(
+    userId: string,
+    input: {
+      statement: string;
+      desiredChange?: string | null;
+      commandKey?: string | null;
+      keepExploring?: boolean;
+      draft?: Partial<DirectionExplorationDraft>;
+    },
+  ) {
+    const statement = input.statement?.trim() ?? '';
+    if (!statement && !input.keepExploring) {
+      throw new BadRequestException('Escribe la dirección que quieres explorar.');
+    }
+    if (input.keepExploring) {
+      return this.saveDirectionExplorationDraft(userId, {
+        ...(input.draft ?? {}),
+        step: 'experience',
+        synthesisChoice: 'continue',
+      });
+    }
+    const [latest, facts] = await Promise.all([this.latestPurpose(userId), this.hdrpFacts(userId)]);
+    const draft = mergeExplorationDraft(readExplorationDraft(latest?.content ?? null), input.draft ?? {});
+    const saved = await this.saveMemberDirection(userId, {
+      mode: 'UNKNOWN',
+      statement,
+      desiredChange: input.desiredChange?.trim() || null,
+      commandKey: input.commandKey,
+      sources: directionSourcesFromDraft(draft, buildConfirmableSources(facts, latest?.content ?? null)),
+    });
+    if (saved.repeated) return saved;
+    await this.saveDirectionExplorationDraft(userId, {
+      ...(input.draft ?? {}),
+      step: 'done',
+      provisionalDirection: statement,
+      directionPublished: true,
+      synthesisChoice: draft.recognition === 'represents' ? 'accept' : 'edit',
+    });
+    return saved;
+  }
+
   async closeWeek(
     userId: string,
     weekStart: string,
@@ -1616,6 +2027,7 @@ export class JourneyService {
     decisions?: Record<string, WeekDecision>,
     revisions?: Record<string, WeekRevision>,
     outcomes?: Record<string, string>,
+    extras?: WeekExtras,
   ) {
     const commandDigest = createHash('sha256').update(canonicalHash({
       weekStart,
@@ -1623,6 +2035,7 @@ export class JourneyService {
       decisions: decisions ?? {},
       revisions: revisions ?? {},
       outcomes: outcomes ?? {},
+      ...(extras?.additions?.length || extras?.endReasons ? { extras } : {}),
     })).digest('hex');
     const existing = await this.prisma.weekReview.findUnique({
       where: { userId_weekStart: { userId, weekStart } },
@@ -1636,7 +2049,7 @@ export class JourneyService {
         });
       }
       if (existing.commandDigest === commandDigest) return existing;
-      throw new ConflictException({ message: 'Esa semana ya se cerró con otro comando.', code: 'STALE_REVIEW', id: existing.id });
+      throw new ConflictException({ message: 'Esta semana ya fue cerrada. Puedes consultar sus registros, pero no volver a aplicar el mismo cierre.', code: 'STALE_REVIEW', id: existing.id });
     }
     const later = await this.prisma.weekReview.findFirst({ where: { userId, weekStart: { gt: weekStart } } });
     if (later && decisions && Object.keys(decisions).length > 0) {
@@ -1656,9 +2069,30 @@ export class JourneyService {
       return next ? [{ id: plan.id, next }] : [];
     });
     await this.assertFutureContent(userId, effects, active.flatMap((plan) => plan.actions));
+    const additions = historical ? [] : extras?.additions ?? [];
+    for (const addition of additions) {
+      if (!active.some((plan) => plan.id === addition.planId)) throw new ForbiddenException('Ese plan no está activo.');
+      const tags = parseContentTags(addition.contentTags);
+      if (!tags) throw new BadRequestException('Marca de contenido desconocida.');
+      if (tags.length) await this.assertContent(userId, tags, { conversation: addition.conversationOutcome ?? undefined });
+    }
+    const appliesFrom = reviewAppliesFrom(this.civilToday(), weekStart);
+    if (!historical) {
+      const staleTitle = effects.find((effect) => effect.successor?.onceWeekStart && effect.successor.onceWeekStart < appliesFrom)?.successor?.title
+        ?? additions.find((row) => row.onceWeekStart && row.onceWeekStart < appliesFrom)?.title;
+      if (staleTitle) {
+        throw new ConflictException({
+          message: `La semana elegida para «${staleTitle}» ya empezó. Vuelve a guardar la decisión.`,
+          code: 'STALE_REVIEW',
+        });
+      }
+    }
     const snapshot = {
       decisions: decisions ?? {},
       revisions: revisions ?? {},
+      ...(additions.length ? { additions } : {}),
+      ...(extras?.endReasons ? { endReasons: extras.endReasons } : {}),
+      appliesFrom,
       applied: !historical,
       effects: effects.map((effect) => ({ actionId: effect.actionId, decision: effect.decision, summary: effect.summary })),
       outcomeChanges: planChanges,
@@ -1666,7 +2100,7 @@ export class JourneyService {
         id: plan.id,
         title: plan.title,
         outcome: plan.outcome,
-        actions: plan.actions.filter((action) => action.active && !action.pausedAt).map((action) => ({
+        actions: plan.actions.filter((action) => actionVisibleForWeek(action, plan.actions, weekStart, this.addDays(weekStart, 6))).map((action) => ({
           id: action.id,
           title: action.title,
           doneWhen: action.doneWhen,
@@ -1681,9 +2115,10 @@ export class JourneyService {
       const again = await tx.weekReview.findUnique({ where: { userId_weekStart: { userId, weekStart } } });
       if (again) {
         if (again.commandDigest === commandDigest) return again;
-        throw new ConflictException({ message: 'Esa semana ya se cerró con otro comando.', code: 'STALE_REVIEW', id: again.id });
+        throw new ConflictException({ message: 'Esta semana ya fue cerrada. Puedes consultar sus registros, pero no volver a aplicar el mismo cierre.', code: 'STALE_REVIEW', id: again.id });
       }
       await this.weekApply.beforeActionWrite();
+      const scheduleFromWeek = appliesFrom;
       let wrote = false;
       for (const effect of effects) {
         const previous = active.flatMap((plan) => plan.actions).find((item) => item.id === effect.actionId);
@@ -1695,12 +2130,19 @@ export class JourneyService {
             doneWhen: effect.next.doneWhen,
             weekday: effect.next.weekday ?? null,
             intervalDays: effect.next.intervalDays ?? 7,
+            ...(effect.next.occasionsPerWeek !== undefined ? { occasionsPerWeek: effect.next.occasionsPerWeek } : {}),
+            ...(effect.next.minutesPerOccasion !== undefined ? { minutesPerOccasion: effect.next.minutesPerOccasion } : {}),
+            ...(effect.next.cue !== undefined ? { cue: effect.next.cue } : {}),
+            ...(effect.next.minimumVersion !== undefined ? { minimumVersion: effect.next.minimumVersion } : {}),
             ...(effect.next.paused
               ? (effect.decision === 'PAUSE' ? { pausedAt: new Date() } : {})
               : { pausedAt: null }),
+            ...(!effect.next.active && !previous?.effectiveTo
+              ? { effectiveTo: this.addDays(appliesFrom, -1), endedReason: extras?.endReasons?.[effect.actionId] ?? null }
+              : {}),
           },
         });
-        const scheduleFrom = this.addDays(weekStart, 7);
+        const scheduleFrom = appliesFrom;
         if (
           previous
           && (effect.next.weekday !== previous.weekday || effect.next.intervalDays !== previous.intervalDays || effect.decision === 'PAUSE')
@@ -1722,7 +2164,8 @@ export class JourneyService {
         }
         if (effect.successor) {
           const previous = active.flatMap((plan) => plan.actions).find((action) => action.id === effect.actionId);
-          await tx.planAction.create({
+          const once = effect.successor.onceWeekStart ?? null;
+          const created = await tx.planAction.create({
             data: {
               planId: previous?.planId ?? active[0].id,
               title: effect.successor.title,
@@ -1732,11 +2175,46 @@ export class JourneyService {
               replacesActionId: effect.successor.replacesActionId,
               preparation: effect.successor.preparation ?? previous?.preparation ?? null,
               domain: previous?.domain ?? null,
-              contentTags: previous?.contentTags ?? [],
+              contentTags: [...new Set([...(previous?.contentTags ?? []), ...(effect.successor.contentTags ?? [])])],
+              templateTags: previous?.templateTags ?? [],
+              conversationOutcome: previous?.conversationOutcome ?? null,
+              origin: previous?.origin ?? null,
+              familyId: previous?.familyId ?? null,
+              templateVersion: previous?.templateVersion ?? null,
+              position: previous?.position ?? 0,
+              cue: effect.successor.cue !== undefined ? effect.successor.cue : previous?.cue ?? null,
+              minimumVersion: effect.successor.minimumVersion !== undefined ? effect.successor.minimumVersion : previous?.minimumVersion ?? null,
+              occasionsPerWeek: effect.successor.onceWeekStart !== undefined
+                ? effect.successor.occasionsPerWeek ?? null
+                : effect.successor.occasionsPerWeek ?? previous?.occasionsPerWeek ?? null,
+              minutesPerOccasion: effect.successor.minutesPerOccasion ?? previous?.minutesPerOccasion ?? null,
+              effectiveFrom: once && once > scheduleFrom ? once : scheduleFrom,
               active: true,
             },
           });
+          if (once) await this.createOnceWindow(tx, created.id, once);
         }
+      }
+      for (const addition of additions) {
+        const once = addition.onceWeekStart ?? null;
+        const created = await tx.planAction.create({
+          data: {
+            planId: addition.planId,
+            title: addition.title,
+            doneWhen: addition.doneWhen,
+            cue: addition.cue ?? null,
+            minimumVersion: addition.minimumVersion ?? null,
+            occasionsPerWeek: once ? null : addition.occasionsPerWeek ?? null,
+            minutesPerOccasion: addition.minutesPerOccasion,
+            position: addition.position,
+            origin: 'MEMBER',
+            contentTags: addition.contentTags ?? [],
+            conversationOutcome: addition.conversationOutcome ?? null,
+            effectiveFrom: once && once > scheduleFromWeek ? once : scheduleFromWeek,
+            active: true,
+          },
+        });
+        if (once) await this.createOnceWindow(tx, created.id, once);
       }
       for (const change of planChanges) {
         await tx.personalPlan.update({ where: { id: change.id }, data: { outcome: change.next } });
@@ -1749,10 +2227,24 @@ export class JourneyService {
       if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002') {
         const won = await this.prisma.weekReview.findUnique({ where: { userId_weekStart: { userId, weekStart } } });
         if (won?.commandDigest === commandDigest) return won;
-        if (won) throw new ConflictException({ message: 'Esa semana ya se cerró con otro comando.', code: 'STALE_REVIEW', id: won.id });
+        if (won) throw new ConflictException({ message: 'Esta semana ya fue cerrada. Puedes consultar sus registros, pero no volver a aplicar el mismo cierre.', code: 'STALE_REVIEW', id: won.id });
       }
       throw err;
     }
+  }
+
+  /** One occasion, only inside the civil week that starts on `weekStart`. */
+  private async createOnceWindow(tx: Prisma.TransactionClient, actionId: string, weekStart: string) {
+    await tx.actionSchedule.create({
+      data: {
+        actionId,
+        effectiveFrom: new Date(`${weekStart}T12:00:00.000Z`),
+        effectiveTo: new Date(`${this.addDays(weekStart, 6)}T12:00:00.000Z`),
+        kind: 'FLEXIBLE',
+        occasionsPerWeek: 1,
+        source: 'REVIEW',
+      },
+    });
   }
 
   private async weekEffects(
@@ -1774,15 +2266,21 @@ export class JourneyService {
           active: true,
           weekday: action.weekday,
           intervalDays: action.intervalDays,
+          occasionsPerWeek: action.occasionsPerWeek,
+          minutesPerOccasion: action.minutesPerOccasion,
           paused: Boolean(action.pausedAt),
           preparation: action.preparation,
+          cue: action.cue,
+          minimumVersion: action.minimumVersion,
         }))),
         decisions ?? {},
         revisions ?? {},
       );
     } catch (err) {
       const code = err instanceof Error ? err.message : '';
-      const message = code === 'REDUCE_REQUIRES_CHANGE'
+      const message = code === 'ADJUST_REQUIRES_CHANGE'
+        ? 'El ajuste de una acción no tiene un cambio concreto.'
+        : code === 'REDUCE_REQUIRES_CHANGE'
         ? 'Reducir exige un día o una frecuencia distinta.'
         : code === 'SUBSTITUTE_REQUIRES_CHANGE'
           ? 'Sustituir exige la estrategia nueva.'
@@ -1900,49 +2398,206 @@ export class JourneyService {
         : Promise.resolve([]),
     ]);
     const focusPlan = plans.find((plan) => plan.isFocus) ?? plans.find((plan) => plan.status === 'ACTIVE') ?? null;
-    let focusWeekCounts = null;
-    if (focusPlan) {
-      const weekStart = this.weekStart();
-      const actions = await this.prisma.planAction.findMany({ where: { planId: focusPlan.id, active: true } });
-      const actionIds = actions.map((a) => a.id);
-      const [records, schedules] = await Promise.all([
-        actionIds.length ? this.prisma.actionRecord.findMany({ where: { actionId: { in: actionIds } } }) : Promise.resolve([]),
-        loadActionSchedules(this.prisma, actionIds),
-      ]);
-      const reviewed = Boolean(await this.prisma.weekReview.findUnique({ where: { userId_weekStart: { userId, weekStart } } }));
-      focusWeekCounts = weekCounts({
+    const weekStart = this.weekStart();
+    const planIds = plans.map((plan) => plan.id);
+    const actions = planIds.length
+      ? await this.prisma.planAction.findMany({ where: { planId: { in: planIds } } })
+      : [];
+    const actionIds = actions.map((action) => action.id);
+    const [records, schedules, review] = await Promise.all([
+      actionIds.length ? this.prisma.actionRecord.findMany({ where: { actionId: { in: actionIds } } }) : Promise.resolve([]),
+      loadActionSchedules(this.prisma, actionIds),
+      this.prisma.weekReview.findUnique({ where: { userId_weekStart: { userId, weekStart } } }),
+    ]);
+    const today = this.civilToday();
+    const reviewed = Boolean(review);
+    const planFacts: PlanFact[] = plans.map((plan) => {
+      const siblings = actions.filter((action) => action.planId === plan.id);
+      const owned = siblings.filter((action) => actionVisibleForWeek(action, siblings, weekStart, this.addDays(weekStart, 6)));
+      const ownedIds = new Set(owned.map((action) => action.id));
+      const week = weekCounts({
         weekStart,
-        today: this.civilToday(),
+        today,
         weekReviewed: reviewed,
         legacyWeek: false,
-        actions: actions.map((a) => ({ id: a.id, weekday: a.weekday, intervalDays: a.intervalDays, occasionsPerWeek: a.occasionsPerWeek, active: a.active })),
+        actions: owned.map((action) => ({
+          id: action.id,
+          weekday: action.weekday,
+          intervalDays: action.intervalDays,
+          occasionsPerWeek: action.occasionsPerWeek,
+          active: true,
+        })),
         schedules,
-        records: records.map((r) => ({ actionId: r.actionId, day: r.day, status: r.status })),
+        records: records.filter((row) => ownedIds.has(row.actionId)).map((row) => ({ actionId: row.actionId, day: row.day, status: row.status })),
         cancellations: [],
       });
-    }
-    return buildDashboard({
+      return {
+        id: plan.id,
+        week,
+        nextOccasion: nextPlanOccasion(owned.map((action) => ({ ...action, active: true })), today, new Set()),
+      };
+    });
+    const focusWeekCounts = focusPlan ? planFacts.find((fact) => fact.id === focusPlan.id)?.week ?? null : null;
+    const directionView = await this.memberDirection(userId);
+    const dashboard = buildDashboard({
       ledger,
       catalogQuestions: questions.filter((q) => q.sourceRef).map((q) => ({ sourceRef: q.sourceRef as string })),
       plans,
       focusWeekCounts,
       focusPlanId: focusPlan?.id ?? null,
+      planFacts,
+      weekStart,
     });
+    return {
+      ...dashboard,
+      cycle: {
+        directionStatement: directionView.statement,
+        directionDesiredChange: directionView.desiredChange,
+        focusChange: focusPlan?.title ?? null,
+        focusOutcome: focusPlan?.outcome ?? null,
+        reviewAt: focusPlan?.reviewAt?.toISOString().slice(0, 10) ?? null,
+      },
+    };
+  }
+
+  async planSummary(userId: string, planId: string) {
+    const plan = await this.prisma.personalPlan.findFirst({ where: { id: planId, userId } });
+    if (!plan) throw new NotFoundException('Plan no encontrado.');
+    let directionAtCreation: { statement: string | null; desiredChange: string | null; revision: number | null } | null = null;
+    if (plan.purposeRevisionId) {
+      const rev = await this.prisma.purposeRevision.findFirst({ where: { id: plan.purposeRevisionId, userId } });
+      if (rev) {
+        const fields = readDirectionFields(rev.content);
+        directionAtCreation = {
+          statement: fields.statement,
+          desiredChange: fields.desiredChange,
+          revision: rev.revision,
+        };
+      }
+    }
+    const proposal = await this.prisma.planProposal.findFirst({
+      where: { userId, planId, kind: 'INTERVENTION_PLAN' },
+      orderBy: { createdAt: 'desc' },
+    });
+    const payload = proposal?.payload && typeof proposal.payload === 'object' ? proposal.payload as Record<string, unknown> : {};
+    const snapshot = payload.templateSnapshot && typeof payload.templateSnapshot === 'object'
+      ? payload.templateSnapshot as { title?: string; action?: string; doneWhen?: string }
+      : null;
+    const actions = await this.prisma.planAction.findMany({
+      where: { planId: plan.id, active: true },
+      orderBy: [{ position: 'asc' }, { createdAt: 'asc' }],
+    });
+    const action = actions[0] ?? null;
+    const design = payload.design && typeof payload.design === 'object'
+      ? payload.design as { obstacles?: { obstacle: string; response: string }[]; resources?: string | null; actions?: { title: string; doneWhen: string; cue: string | null; minimum: string | null }[] }
+      : null;
+    const contract = contractFromPlanRow(plan)?.current ?? null;
+    const [learning, observed] = await Promise.all([
+      this.prisma.planEvidence.findFirst({
+        where: { userId, planId: plan.id, kind: 'NOTE', status: 'LEARNING' },
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.planEvidence.findFirst({
+        where: { userId, planId: plan.id, status: 'OBSERVED' },
+        orderBy: { createdAt: 'desc' },
+      }),
+    ]);
+    return {
+      id: plan.id,
+      title: plan.title,
+      outcome: plan.outcome,
+      whyItMatters: plan.whyItMatters,
+      linkKind: plan.linkKind,
+      stage: plan.stage,
+      territory: plan.territory,
+      reviewAt: plan.reviewAt?.toISOString().slice(0, 10) ?? null,
+      directionAtCreation,
+      strategyTitle: snapshot?.title ?? null,
+      actionTitle: action?.title ?? snapshot?.action ?? null,
+      doneWhen: action?.doneWhen ?? snapshot?.doneWhen ?? plan.criterionText,
+      outcomeCriterion: plan.criterionText,
+      outcomeContract: contractFromPlanRow(plan)?.current ?? null,
+      outcomeContractMeta: outcomeContractMeta(plan),
+      outcomeContractComplete: outcomeContractMeta(plan).complete,
+      evidenceHint: contractFromPlanRow(plan)?.current.evidenceHint ?? null,
+      learningNote: learning?.text ?? null,
+      observedEvidence: observed?.text ?? null,
+      resultMode: contract?.mode ?? 'RESULT',
+      actions: actions.length
+        ? actions.map((row) => ({
+          id: row.id,
+          title: row.title,
+          doneWhen: row.doneWhen,
+          cue: row.cue,
+          minimum: row.minimumVersion,
+          occasionsPerWeek: row.occasionsPerWeek,
+          minutesPerOccasion: row.minutesPerOccasion,
+        }))
+        : (design?.actions ?? []).map((row, index) => ({
+          id: `draft-${index}`,
+          title: row.title,
+          doneWhen: row.doneWhen,
+          cue: row.cue,
+          minimum: row.minimum,
+          occasionsPerWeek: null,
+          minutesPerOccasion: null,
+        })),
+      obstacles: design?.obstacles ?? [],
+      resources: design?.resources ?? null,
+    };
   }
 
   async territoryView(userId: string, territory: string) {
     const t = territory.toUpperCase();
     if (!['MENTALIDAD', 'FINANZAS', 'RELACIONES', 'SALUD_FISICA'].includes(t)) {
-      throw new BadRequestException('Ámbito desconocido.');
+      throw new BadRequestException('No encontramos ese ámbito. Vuelve a Inicio y elige uno.');
     }
-    const [ledger, questions] = await Promise.all([
+    const version = await this.prisma.diagnosticVersion.findFirst({
+      where: { definitionRef: FORMULARIO_COMPLETO_REF },
+      orderBy: { createdAt: 'desc' },
+    });
+    const [ledger, questions, purpose] = await Promise.all([
       answerLedger(this.prisma, userId),
-      this.prisma.question.findMany({
-        select: { sourceRef: true },
-        take: 800,
-      }),
+      version
+        ? this.prisma.question.findMany({
+            where: { module: { versionId: version.id } },
+            select: { sourceRef: true, textEs: true },
+          })
+        : Promise.resolve([]),
+      this.prisma.purposeRevision.findFirst({ where: { userId }, orderBy: { revision: 'desc' } }),
     ]);
-    const detail = territoryDetail(t as 'MENTALIDAD' | 'FINANZAS' | 'RELACIONES' | 'SALUD_FISICA', ledger, questions.filter((q) => q.sourceRef).map((q) => ({ sourceRef: q.sourceRef as string })));
+    const catalog = questions.filter((q) => q.sourceRef).map((q) => ({
+      sourceRef: q.sourceRef as string,
+      textEs: q.textEs,
+    }));
+    const detail = territoryDetail(t as 'MENTALIDAD' | 'FINANZAS' | 'RELACIONES' | 'SALUD_FISICA', ledger, catalog);
+    const exceptionResponses: Record<string, { exceptionKind: string | null }> = {};
+    for (const row of ledger) exceptionResponses[row.sourceRef] = { exceptionKind: row.exceptionKind };
+    const exceptions = territoryExceptionRows(
+      t as 'MENTALIDAD' | 'FINANZAS' | 'RELACIONES' | 'SALUD_FISICA',
+      catalog,
+      exceptionResponses,
+    );
+    const texts = accountTextsFromLedger(ledger);
+    const directionRaw = directionOf(purpose);
+    const direction =
+      directionRaw === 'EXPLORANDO' || directionRaw === 'PROVISIONAL' || directionRaw === 'CONFIRMADO_POR_USUARIO'
+        ? directionRaw
+        : null;
+    const partialCoverage = detail.coverage.state !== 'EXPLORED';
+    const synthesis = discoverSynthesis({
+      direction,
+      visionDay: texts.visionDay,
+      visionPhrase: texts.visionPhrase,
+      valueDefended: texts.valueDefended,
+      weeklyStandard: texts.weeklyStandard,
+      postpone: texts.postpone,
+      ikigaiActivity: null,
+      goalText: null,
+      goalKind: null,
+      ledger,
+      partialCoverage,
+    });
     const plans = await this.prisma.personalPlan.findMany({
       where: { userId, territory: t },
       orderBy: { updatedAt: 'desc' },
@@ -1950,7 +2605,8 @@ export class JourneyService {
     });
     return {
       ...detail,
-      synthesis: [] as { text: string; sourceRef: string | null; partial: boolean }[],
+      exceptions,
+      synthesis,
       plans: plans.map((plan) => ({
         id: plan.id,
         title: plan.title,
@@ -1980,6 +2636,11 @@ export class JourneyService {
     }
     const plan = await this.prisma.personalPlan.findFirst({ where: { id: planId, userId } });
     if (!plan) throw new NotFoundException('Plan no encontrado.');
+    const allowedKinds = new Set(['DELIVERABLE', 'DECISION', 'OTHER_PERSON_RESPONSE', 'MEASURE', 'NOTE']);
+    if (!allowedKinds.has(input.kind)) throw new BadRequestException('Tipo de evidencia desconocido.');
+    if (input.status === 'OBSERVED' && !input.text?.trim()) {
+      throw new BadRequestException('La evidencia observada necesita un texto.');
+    }
     const revision = plan.criterionRevision ?? 1;
     const observedOn = input.observedOn ?? this.civilToday();
     const evidence = await this.prisma.planEvidence.create({
@@ -2001,7 +2662,7 @@ export class JourneyService {
   async declareAchievement(
     userId: string,
     planId: string,
-    input: { confirm: boolean; expectedVersion?: number; commandKey?: string },
+    input: { confirm: boolean; expectedVersion?: number; commandKey?: string; learningNote?: string | null },
   ) {
     if (!input.confirm) throw new BadRequestException('Hay que confirmar el logro.');
     if (input.commandKey) {
@@ -2017,15 +2678,43 @@ export class JourneyService {
     const plan = await this.prisma.personalPlan.findFirst({ where: { id: planId, userId } });
     if (!plan) throw new NotFoundException('Plan no encontrado.');
     this.guardPlanVersion(plan, input.expectedVersion);
-    const criterionOk = plan.criterionStatus === 'CONFIRMED' || (plan.outcome?.trim().length ?? 0) > 0;
-    if (!criterionOk) {
-      throw new ConflictException({ message: 'El criterio del plan no está confirmado.', code: 'CRITERION_NOT_CONFIRMED' });
-    }
     const from = this.planStage(plan);
+    if (!canDeclareAchievement({ criterionText: plan.criterionText, criterionStatus: plan.criterionStatus, stage: from })) {
+      throw new ConflictException({
+        message: 'Para registrar un logro, primero confirma cómo sabrás que lo lograste.',
+        code: 'CRITERION_NOT_CONFIRMED',
+      });
+    }
+    const revision = plan.criterionRevision ?? 1;
+    const evidence = await this.prisma.planEvidence.findFirst({
+      where: { userId, planId: plan.id, criterionRevision: revision, status: 'OBSERVED' },
+      orderBy: { createdAt: 'desc' },
+    });
+    if (!achievementEvidenceReady(evidence)) {
+      throw new ConflictException({
+        message: 'Antes del logro, anota qué muestra que se cumplió el criterio.',
+        code: 'ACHIEVEMENT_EVIDENCE_REQUIRED',
+      });
+    }
     if (!canTransition(from, 'CLOSED')) {
       throw new BadRequestException('Este plan no puede cerrarse por logro desde su etapa actual.');
     }
+    const learning = input.learningNote?.trim().slice(0, 1000) || null;
     return this.prisma.$transaction(async (tx) => {
+      if (learning) {
+        await tx.planEvidence.create({
+          data: {
+            userId,
+            planId: plan.id,
+            criterionRevision: revision,
+            observedOn: new Date(),
+            kind: 'NOTE',
+            status: 'LEARNING',
+            text: learning,
+            source: 'DECLARED_BY_MEMBER',
+          },
+        });
+      }
       const updated = await tx.personalPlan.update({
         where: { id: plan.id },
         data: {
@@ -2033,8 +2722,14 @@ export class JourneyService {
           stage: 'CLOSED',
           status: compatStatus('CLOSED'),
           closedReason: 'ACHIEVED',
+          isFocus: false,
+          focusSince: null,
           version: nextPlanVersion(plan.version),
         },
+      });
+      await tx.planAction.updateMany({
+        where: { planId: plan.id, active: true },
+        data: { active: false },
       });
       await tx.planTransition.create({
         data: {
@@ -2052,10 +2747,18 @@ export class JourneyService {
   }
 
   async memory(userId: string) {
-    const [purpose, plans] = await Promise.all([
+    const [purpose, plans, learningNotes] = await Promise.all([
       this.prisma.purposeRevision.findMany({ where: { userId }, orderBy: { revision: 'desc' }, take: 5 }),
       this.prisma.personalPlan.findMany({ where: { userId }, orderBy: { updatedAt: 'desc' } }),
+      this.prisma.planEvidence.findMany({
+        where: { userId, kind: 'NOTE', status: 'LEARNING' },
+        orderBy: { createdAt: 'desc' },
+      }),
     ]);
+    const noteByPlan = new Map<string, string>();
+    for (const row of learningNotes) {
+      if (!noteByPlan.has(row.planId) && row.text?.trim()) noteByPlan.set(row.planId, row.text.trim());
+    }
     const signed = purpose.find((row) => row.confirmedAt) ?? null;
     const draft = purpose.find((row) => !row.confirmedAt) ?? null;
     const readPurpose = (row: typeof signed) => {
@@ -2070,43 +2773,71 @@ export class JourneyService {
         contractFrozen: Boolean(row.confirmedAt),
       };
     };
+    const purposeById = new Map(purpose.map((row) => [row.id, row]));
     return buildMemory({
       signed: readPurpose(signed),
       draft: draft && draft.id !== signed?.id ? readPurpose(draft) : null,
-      plans: plans.map((plan) => ({
-        id: plan.id,
-        title: plan.title,
-        outcome: plan.outcome,
-        whyItMatters: plan.whyItMatters,
-        stage: plan.stage,
-        closedReason: plan.closedReason,
-        achievedAt: plan.achievedAt?.toISOString() ?? null,
-      })),
+      directionHistory: purpose.map((row) => {
+        const fields = readDirectionFields(row.content);
+        return {
+          id: row.id,
+          revision: row.revision,
+          statement: fields.statement,
+          desiredChange: fields.desiredChange,
+          crossPossibility: fields.statement ? null : crossPossibilityText(row.content),
+          createdAt: row.createdAt.toISOString(),
+        };
+      }),
+      plans: plans.map((plan) => {
+        const rev = plan.purposeRevisionId ? purposeById.get(plan.purposeRevisionId) : null;
+        const dir = rev ? readDirectionFields(rev.content) : null;
+        return {
+          id: plan.id,
+          title: plan.title,
+          outcome: plan.outcome,
+          whyItMatters: plan.whyItMatters,
+          stage: plan.stage,
+          closedReason: plan.closedReason,
+          achievedAt: plan.achievedAt?.toISOString() ?? null,
+          learningNote: noteByPlan.get(plan.id) ?? null,
+          directionStatement: dir?.statement ?? null,
+        };
+      }),
     });
   }
 
   async returnReading(userId: string) {
-    const plan = await this.prisma.personalPlan.findFirst({
-      where: { userId, OR: [{ isFocus: true }, { status: 'ACTIVE' }] },
-      orderBy: [{ isFocus: 'desc' }, { updatedAt: 'desc' }],
-    });
-    const lastReview = await this.prisma.weekReview.findFirst({ where: { userId }, orderBy: { closedAt: 'desc' } });
-    const lastRecord = await this.prisma.actionRecord.findFirst({
-      where: { action: { plan: { userId } } },
-      orderBy: { day: 'desc' },
-    });
+    const plans = await this.prisma.personalPlan.findMany({ where: { userId } });
+    const chosen = selectContextualPlan(plans);
+    const plan = chosen ? plans.find((row) => row.id === chosen.id) ?? null : null;
+    const stage = plan ? this.planStage(plan) : null;
+    const lastReview = plan
+      ? await this.prisma.weekReview.findFirst({ where: { userId }, orderBy: { closedAt: 'desc' } })
+      : null;
+    const lastRecord = plan
+      ? await this.prisma.actionRecord.findFirst({
+        where: { action: { planId: plan.id } },
+        orderBy: { day: 'desc' },
+      })
+      : null;
     const today = this.civilToday();
     const daysSince = lastRecord?.day
       ? Math.max(0, Math.round((Date.parse(`${today}T12:00:00Z`) - Date.parse(`${lastRecord.day}T12:00:00Z`)) / 86400000))
       : null;
-    return returnPanel({
+    const reading = returnPanel({
       planTitle: plan?.title ?? null,
       planOutcome: plan?.outcome ?? null,
       protectNote: plan?.protectNote ?? null,
       lastReviewNote: lastReview?.note ?? null,
       daysSinceLastActivity: daysSince,
-      pendingOccasionDays: daysSince != null && daysSince >= 21 ? 0 : 0,
+      pendingOccasionDays: 0,
     });
+    return {
+      ...reading,
+      planId: plan?.id ?? null,
+      stage,
+      hasPendingOccasions: false,
+    };
   }
 
   async ownPlanPreview(userId: string, planId: string) {
@@ -2162,6 +2893,24 @@ export class JourneyService {
     return { purposeRevisionId: saved.id, repeated: false };
   }
 
+  async listPlanProposals(userId: string, planId: string) {
+    const plan = await this.prisma.personalPlan.findFirst({ where: { id: planId, userId } });
+    if (!plan) throw new NotFoundException('Plan no encontrado.');
+    const rows = await this.prisma.planProposal.findMany({
+      where: { userId, planId },
+      orderBy: { createdAt: 'asc' },
+    });
+    return rows.map((row) => ({
+      id: row.id,
+      kind: row.kind,
+      status: row.status,
+      payload: row.payload,
+      editedPayload: row.editedPayload,
+      reasons: row.reasons,
+      decidedAt: row.decidedAt?.toISOString() ?? null,
+    }));
+  }
+
   async createPlanDraft(userId: string, input: { entry?: 'NO_DIRECTION' | 'GOAL' | 'OWN_PLAN'; territory?: string | null }) {
     return this.prisma.personalPlan.create({
       data: {
@@ -2185,11 +2934,18 @@ export class JourneyService {
       whyItMatters?: string | null;
       whyStatus?: string | null;
       territory?: string | null;
+      capacityMinutes?: number;
+      protectNote?: string | null;
+      criterionText?: string | null;
+      criterionStatus?: string | null;
       expectedVersion?: number;
     },
   ) {
     const plan = await this.ownPlan(userId, planId);
     this.guardPlanVersion(plan, input.expectedVersion);
+    if (input.capacityMinutes !== undefined && (!Number.isInteger(input.capacityMinutes) || input.capacityMinutes < 0 || input.capacityMinutes > 1680)) {
+      throw new BadRequestException('Los minutos semanales tienen que ser un entero entre 0 y 1680.');
+    }
     return this.prisma.personalPlan.update({
       where: { id: plan.id },
       data: {
@@ -2198,6 +2954,10 @@ export class JourneyService {
         whyItMatters: input.whyItMatters !== undefined ? input.whyItMatters : undefined,
         whyStatus: input.whyStatus ?? undefined,
         territory: input.territory ?? undefined,
+        ...(input.capacityMinutes !== undefined ? { capacityMinutes: input.capacityMinutes } : {}),
+        ...(input.protectNote !== undefined ? { protectNote: input.protectNote } : {}),
+        ...(input.criterionText !== undefined ? { criterionText: input.criterionText?.trim() || null } : {}),
+        ...(input.criterionStatus !== undefined ? { criterionStatus: input.criterionStatus } : {}),
         version: nextPlanVersion(plan.version),
       },
     });
@@ -2225,6 +2985,9 @@ export class JourneyService {
     this.guardPlanVersion(plan, input.expectedVersion);
     const proposal = await this.prisma.planProposal.findFirst({ where: { id: proposalId, userId, planId } });
     if (!proposal) throw new NotFoundException('Propuesta no encontrada.');
+    if (input.decision === 'EDIT' && (!input.editedPayload || Object.keys(input.editedPayload).length === 0)) {
+      throw new BadRequestException('Editar exige el contenido revisado.');
+    }
     const status =
       input.decision === 'REJECT' ? 'REJECTED' : input.decision === 'EDIT' ? 'EDITED' : 'ACCEPTED';
     const updated = await this.prisma.planProposal.update({
@@ -2233,6 +2996,7 @@ export class JourneyService {
         status,
         decidedAt: new Date(),
         ...(input.decision === 'EDIT' && input.editedPayload ? { editedPayload: asJson(input.editedPayload) } : {}),
+        ...(input.decision === 'ACCEPT' ? { editedPayload: Prisma.JsonNull } : {}),
         ...(input.commandKey ? { commandKey: input.commandKey } : {}),
       },
     });

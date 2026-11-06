@@ -114,7 +114,7 @@ describe('admin journey', () => {
     expect(JSON.stringify(opened.body.signed)).not.toContain('NO FIRMADO');
     expect(opened.body.direction.statement).toBe('BORRADOR POSTERIOR');
     expect(opened.body.draftIsLater).toBe(true);
-    expect(opened.body.profile.alertCount).toBe(3);
+    expect(opened.body.profile.alertCount).toBe(1);
     expect(await prisma.response.count({ where: { sessionId: session.id } })).toBe(before);
 
     const other = await register('other');

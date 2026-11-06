@@ -1762,7 +1762,7 @@
           "role": "QUESTION",
           "type": "FREE_TEXT",
           "textEs": "Circunferencia de cintura, si quieres registrarla",
-          "contextEs": "@numero:cm:40:200",
+          "contextEs": "@numero:cm:35:200",
           "instrument": "body",
           "polarity": "DIRECT",
           "allowedExceptions": [

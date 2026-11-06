@@ -50,6 +50,7 @@ export type AccompanimentBody = {
   actionId?: string | null;
   path?: 'EXPLORAR' | 'PREPARAR' | 'SEGUIR' | null;
   helpPreference?: 'GUIADA' | 'PUNTUAL' | 'PROPIO' | null;
+  requestedFamilyId?: string | null;
   helpRequested?: boolean;
   standardChoice?: 'FULL' | 'PARTIAL' | null;
   digest?: string | null;
@@ -79,6 +80,14 @@ type Built = {
 
 function asJson(value: unknown): Prisma.InputJsonValue {
   return JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue;
+}
+
+export function readWholeNumber(value: number | null | undefined, label: string, max: number): number | null {
+  if (value == null) return null;
+  if (typeof value !== 'number' || !Number.isInteger(value) || value < 0 || value > max) {
+    throw new BadRequestException(`${label} tiene que ser un entero entre 0 y ${max}.`);
+  }
+  return value;
 }
 
 function daysBetween(from: string, to: string): number {
@@ -131,7 +140,7 @@ export class AccompanimentService {
     }
     if (body.digest && body.digest !== built.digest) {
       throw new ConflictException({
-        message: 'La propuesta cambió desde la vista previa. No se guardó.',
+        message: 'La propuesta cambió mientras la revisabas. No guardamos tu decisión. Revisa la información actualizada e inténtalo nuevamente.',
         code: 'STALE_PREVIEW',
         proposal: built.proposal,
         help: built.help,
@@ -299,12 +308,29 @@ export class AccompanimentService {
       actionId: body.actionId ?? null,
       path: body.path ?? null,
       helpPreference: body.helpPreference ?? null,
+      requestedFamilyId: body.requestedFamilyId ?? null,
+    });
+  }
+
+  /** Plan vigente para preview y MODIFY: ACTIVE, o el borrador más reciente en preparación. */
+  private async primaryPlan(userId: string) {
+    const active = await this.prisma.personalPlan.findFirst({
+      where: { userId, status: 'ACTIVE' },
+      orderBy: { createdAt: 'desc' },
+    });
+    if (active) return active;
+    return this.prisma.personalPlan.findFirst({
+      where: { userId, status: 'DRAFT' },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
   private async build(userId: string, body: AccompanimentBody): Promise<Built> {
     const territory = body.territory == null || body.territory === '' ? null : body.territory;
     if (territory && !TERRITORIES.includes(territory as Territory)) throw new BadRequestException('Ámbito desconocido.');
+    const occasions = readWholeNumber(body.occasions, 'La frecuencia', 21);
+    const weeklyMinutes = readWholeNumber(body.weeklyMinutes, 'Los minutos semanales', 1680);
+    body = { ...body, occasions, weeklyMinutes };
     if (body.goalKind && !isGoalKind(body.goalKind)) throw new BadRequestException('Tipo de meta desconocido.');
     const situation = (body.situation ?? null) as Situation | null;
     if (situation && !['NONE', 'PAUSE', 'RETURN', 'RECONFIRM'].includes(situation)) throw new BadRequestException('Situación desconocida.');
@@ -324,7 +350,7 @@ export class AccompanimentService {
       this.prisma.purposeRevision.findFirst({ where: { userId }, orderBy: { revision: 'desc' } }),
       this.prisma.coreReading.findFirst({ where: { userId, methodVersion: 'ia-mk-cuest@0.1' }, orderBy: { computedAt: 'desc' } }),
       this.prisma.memberClarification.findMany({ where: { userId }, orderBy: { createdAt: 'desc' } }),
-      this.prisma.personalPlan.findFirst({ where: { userId, status: 'ACTIVE' }, orderBy: { createdAt: 'desc' } }),
+      this.primaryPlan(userId),
       this.prisma.accompanimentHead.findUnique({ where: { userId } }),
       this.prisma.actionRecord.findMany({ where: { action: { plan: { userId } } }, orderBy: { day: 'desc' }, take: 50 }),
       this.prisma.planAction.findMany({ where: { plan: { userId, status: 'ACTIVE' }, active: true } }),
@@ -404,6 +430,7 @@ export class AccompanimentService {
       country: body.country ?? null,
       valueRef: textField(purpose?.content, 'value'),
       helpPreference: body.helpPreference ?? null,
+      requestedFamilyId: body.requestedFamilyId ?? null,
       helpRequested: Boolean(body.helpRequested),
       standardChoice: body.standardChoice ?? null,
       weeklyStandard: texts.weeklyStandard,
@@ -535,7 +562,7 @@ export class AccompanimentService {
       throw new ConflictException({ message: 'Ya hay un plan principal. Elige mantenerlo, modificarlo o sustituirlo.', code: 'PLAN_CHOICE_REQUIRED', choices: ['KEEP', 'MODIFY', 'REPLACE'], plan: { id: built.plan.id, updatedAt: built.plan.updatedAt.toISOString() } });
     }
     if (built.plan && body.planChoice && body.planChoice !== 'KEEP' && body.expectedPlanUpdatedAt && body.expectedPlanUpdatedAt !== built.plan.updatedAt.toISOString()) {
-      throw new ConflictException({ message: 'El plan cambió. No se escribió la decisión.', code: 'STALE_PLAN', updatedAt: built.plan.updatedAt.toISOString() });
+      throw new ConflictException({ message: 'Este plan tiene cambios más recientes. Revísalos antes de continuar.', code: 'STALE_PLAN', updatedAt: built.plan.updatedAt.toISOString() });
     }
     const family = familyById(built.proposal.familyId);
     const tags = family?.tags ?? [];

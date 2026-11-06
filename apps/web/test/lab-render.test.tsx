@@ -49,6 +49,7 @@ const emptyExpectationDraft = {
   personal_first_domain: '',
   confidence: '',
   notes: '',
+  expected_alerts: [] as string[],
 };
 
 const emptyReviewDraft = {

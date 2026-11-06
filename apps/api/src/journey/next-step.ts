@@ -25,8 +25,8 @@ export function nextStep(input: NextStepInput): NextStep {
   if (!input.directionWorks) {
     return {
       href: '/proposito',
-      label: 'Abrir la hoja de ruta',
-      detail: 'Falta elegir una dirección en la hoja. Puedes dejarla en exploración.',
+      label: 'Definir tu dirección',
+      detail: 'Escribe qué quieres cuidar o explorar, o avanza por el cuestionario.',
     };
   }
   if (!input.activePlan) {

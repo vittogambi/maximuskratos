@@ -98,13 +98,6 @@ const FINANCE_LEVELS: Record<string, ScalePrompt> = {
       4: "Deuda controlada",
       5: "Sin deudas problemáticas o deuda productiva bajo control total",
     },
-    details: {
-      1: "No puedo cubrir regularmente las cuotas o gastos básicos. Presento atrasos, cobranza, uso permanente de nuevas deudas para pagar obligaciones anteriores o una carga financiera que amenaza vivienda, alimentación o servicios esenciales.",
-      2: "Aún pago la mayoría de las obligaciones, pero las cuotas consumen una parte excesiva de mis ingresos. Frecuentemente debo postergar gastos básicos, usar tarjetas o líneas de crédito para llegar a fin de mes y la deuda me genera preocupación constante.",
-      3: "Cumplo los pagos y no tengo atrasos relevantes, pero la deuda limita considerablemente mi capacidad de ahorrar, enfrentar emergencias o desarrollar otros objetivos. Un imprevisto importante podría desestabilizarme.",
-      4: "Todas mis obligaciones están al día, las cuotas son compatibles con mis ingresos y dispongo de un plan definido para reducirlas. La deuda no compromete mis necesidades básicas ni genera una presión mental significativa.",
-      5: "No tengo deudas de consumo, o mantengo únicamente obligaciones justificadas y sostenibles, por ejemplo hipotecarias, educativas o productivas, con tasas, plazos y cuotas plenamente controladas. La deuda no limita mi ahorro ni mi estabilidad.",
-    },
   },
   "formulario-v1:E-AUD-001!R38": {
     low: "Vivo al día / Cero ahorro",
@@ -115,13 +108,6 @@ const FINANCE_LEVELS: Record<string, ScalePrompt> = {
       3: "Ahorro inicial, pero irregular",
       4: "Ahorro sistemático y protegido",
       5: "Ahorro e inversión consolidados",
-    },
-    details: {
-      1: "Utilizo la totalidad de mis ingresos para gastos y deudas. No ahorro regularmente y cualquier emergencia debe financiarse mediante deuda, ayuda externa o venta de bienes.",
-      2: "Ahorro solo algunos meses o cuando sobra dinero, normalmente menos del 5% de mis ingresos. Suelo retirar lo ahorrado para cubrir gastos corrientes o imprevistos.",
-      3: "Logro separar aproximadamente entre 5% y 10% de mis ingresos en la mayoría de los meses, aunque todavía existen interrupciones. Estoy formando un fondo de emergencia, pero aún no alcanzo una estructura estable de ahorro e inversión.",
-      4: "Separo automáticamente alrededor de 10% a 20% de mis ingresos todos los meses. Cuento con un fondo de emergencia en desarrollo o consolidado y comienzo a destinar recursos a objetivos de mediano y largo plazo.",
-      5: "Ahorro o invierto sistemáticamente más del 20% de mis ingresos, mediante transferencias automatizadas y objetivos definidos. Cuento con un fondo de emergencia adecuado y una estrategia diversificada de largo plazo.",
     },
   },
   "formulario-v1:E-AUD-001!R39": {
@@ -134,13 +120,6 @@ const FINANCE_LEVELS: Record<string, ScalePrompt> = {
       4: "Plan financiero estructurado y seguimiento mensual",
       5: "Plan integral y seguimiento sistemático",
     },
-    details: {
-      1: "No registro ingresos, gastos ni deudas. Desconozco cuánto gasto mensualmente, tomo decisiones financieras de manera reactiva y no tengo metas ni plazos definidos.",
-      2: "Tengo una idea general de mis ingresos y gastos, pero no utilizo un presupuesto escrito o actualizado. Reviso mis finanzas solo cuando aparece un problema y mis objetivos son vagos o no tienen fechas.",
-      3: "Mantengo un registro simple de ingresos, gastos y deudas, y cuento con algunas metas financieras. Sin embargo, actualizo la información de forma irregular y no siempre ajusto mis decisiones según los resultados.",
-      4: "Cuento con un presupuesto escrito, categorías de gasto, metas de ahorro, estrategia de deuda y proyecciones de corto y mediano plazo. Reviso el plan al menos una vez al mes y corrijo desviaciones.",
-      5: "Dispongo de un plan financiero completo que integra presupuesto, deuda, fondo de emergencia, seguros, ahorro, inversión, jubilación y objetivos de largo plazo. Realizo seguimiento semanal o quincenal, evaluación mensual y ajustes periódicos, con apoyo profesional cuando corresponde.",
-    },
   },
   "formulario-v1:E-AUD-001!R40": {
     low: "Muy insuficientes",
@@ -152,13 +131,6 @@ const FINANCE_LEVELS: Record<string, ScalePrompt> = {
       4: "Adecuados y alineados con mis objetivos",
       5: "Superiores a las necesidades y metas actuales",
     },
-    details: {
-      1: "Mis ingresos no cubren regularmente necesidades básicas y obligaciones esenciales. Dependo de deuda, ayuda externa o incumplimientos para mantenerme. No tengo capacidad real de ahorro ni de avanzar hacia mis objetivos.",
-      2: "Cubro la mayoría de mis necesidades básicas, pero con estrés frecuente, restricciones importantes o uso ocasional de deuda. No puedo absorber imprevistos ni financiar metas relevantes.",
-      3: "Mis ingresos cubren necesidades y obligaciones habituales, pero dejan poco margen para ahorro, inversión, formación, ocio significativo o proyectos de largo plazo. Mantengo estabilidad básica, aunque con poca capacidad de crecimiento.",
-      4: "Mis ingresos cubren responsablemente necesidades, obligaciones y un estilo de vida razonable. Puedo ahorrar, enfrentar imprevistos y avanzar de manera sostenida hacia metas personales, familiares y profesionales.",
-      5: "Mis ingresos exceden de forma sostenible mis costos de vida y obligaciones. Puedo ahorrar e invertir ampliamente, financiar objetivos significativos, apoyar a otros y elegir con mayor libertad cómo utilizar mi tiempo y capacidades.",
-    },
   },
 };
 
@@ -167,5 +139,5 @@ export function scalePromptFor(sourceRef: string | null | undefined): ScalePromp
   const base = SCALE_PROMPTS[sourceRef] ?? WORKBOOK_ENDPOINTS[sourceRef] ?? WORKBOOK_POINT_LABELS[sourceRef] ?? null;
   const levels = FINANCE_LEVELS[sourceRef];
   if (!levels) return base;
-  return base ? { ...base, points: levels.points, details: levels.details } : levels;
+  return base ? { ...base, points: levels.points } : levels;
 }

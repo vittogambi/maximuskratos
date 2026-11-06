@@ -5,7 +5,7 @@ import { draftAccompanimentHelp } from '../src/journey/accompaniment/help';
 import { assessObservation, depthContrast, nextHypothesis } from '../src/journey/accompaniment/experiments';
 import { NOT_CONNECTED, READ_BY_ACCOMPANIMENT } from '../src/journey/accompaniment/sources';
 import { proposeAccompaniment, type AccompanimentInput } from '../src/journey/accompaniment/rules';
-import { FAMILIES } from '../src/journey/accompaniment/families';
+import { FAMILIES, generalStartingPoints } from '../src/journey/accompaniment/families';
 import { planningCandidate, SOURCE_INVENTORY } from '../src/journey/accompaniment/sources';
 import { fitLoad } from '../src/journey/accompaniment/load';
 import { occasionTally } from '../src/journey/execution';
@@ -229,6 +229,51 @@ describe('acompañamiento', () => {
     const help = draftAccompanimentHelp(urgent, base({ urgency: true }));
     expect(help.action).toBeNull();
     expect(help.futureEffect).toMatch(/semana/);
+  });
+
+  it('el catálogo general usa familias reales y no incluye esfuerzo físico sin indicación', () => {
+    const points = generalStartingPoints('FINANZAS');
+    expect(points.map((row) => row.id)).toEqual(['FIN-CONT', 'FIN-EST', 'FIN-CONS', 'FIN-EXP']);
+    expect(points[0]?.action).toMatch(/obligaciones/);
+    expect(points.every((row) => row.suggested.occasions >= 1 && row.suggested.weeklyMinutes !== 30 || row.id !== 'FIN-CONT')).toBe(true);
+    expect(generalStartingPoints('SALUD_FISICA').some((row) => row.id === 'SAL-EXP')).toBe(false);
+  });
+
+  it('un punto de partida general no exige meta y no se presenta como lectura personal', () => {
+    const proposal = proposeAccompaniment(base({
+      goalText: null,
+      goalKind: null,
+      occasions: null,
+      weeklyMinutes: null,
+      requestedFamilyId: 'FIN-EST',
+      territory: 'FINANZAS',
+    }));
+    expect(proposal.familyId).toBe('FIN-EST');
+    expect(proposal.requiresAction).toBe(true);
+    expect(proposal.reasons.some((row) => row.text.includes('Punto de partida general'))).toBe(true);
+    expect(proposal.modeStatus).toBe('UNDETERMINED');
+  });
+
+  it('sin meta, una respuesta baja de planificación orienta a estabilizar y sin evidencia no inventa', () => {
+    const oriented = proposeAccompaniment(base({
+      goalText: null,
+      goalKind: null,
+      helpPreference: 'GUIADA',
+      territory: 'MENTALIDAD',
+      rawSignals: { 'formulario-v1:E-AUD-001!R26': 1 },
+    }));
+    expect(oriented.familyId).toBe('MEN-EST');
+    expect(oriented.reasons.some((row) => row.refs.includes('formulario-v1:E-AUD-001!R26'))).toBe(true);
+    const empty = proposeAccompaniment(base({
+      goalText: null,
+      goalKind: null,
+      helpPreference: 'GUIADA',
+      territory: 'FINANZAS',
+      rawSignals: {},
+      postpone: null,
+    }));
+    expect(empty.requiresAction).toBe(false);
+    expect(empty.reasons.some((row) => row.text.includes('evidencia suficiente'))).toBe(true);
   });
 
   it('cada familia tiene un paso usable o una alternativa concreta', () => {

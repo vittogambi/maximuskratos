@@ -64,20 +64,17 @@ function memberHintFor(question: QuestionDto): string | null {
 const MEASURE_PICKERS: Record<string, {
   label: string;
   unit: string;
-  low: number;
-  high: number;
-  step?: number;
   empty: string;
   hint: string;
 }> = {
-  'formulario-v1:F-RAD-001!R8': { label: 'Altura en cm', unit: 'cm', low: 150, high: 210, empty: 'Elige la altura', hint: 'Elige la altura en cm para continuar.' },
-  'formulario-v1:F-RAD-001!R9': { label: 'Peso en kg', unit: 'kg', low: 45, high: 150, empty: 'Elige el peso', hint: 'Elige el peso en kg para continuar.' },
-  'formulario-v1:F-RAD-001!R10': { label: 'Grasa corporal en porcentaje', unit: '%', low: 5, high: 50, empty: 'Elige el porcentaje', hint: 'Elige el porcentaje para continuar.' },
-  'formulario-v1:F-RAD-001!R11': { label: 'Cintura en cm', unit: 'cm', low: 60, high: 140, empty: 'Elige la cintura', hint: 'Elige la cintura en cm para continuar.' },
-  'formulario-v1:F-RAD-001!R26': { label: 'Nivel de dolor', unit: '', low: 0, high: 10, empty: 'Elige el nivel', hint: 'Elige el nivel para continuar.' },
-  'formulario-v1:F-RAD-001!R35': { label: 'Comidas al día', unit: '', low: 1, high: 8, empty: 'Elige la cantidad', hint: 'Elige cuántas comidas para continuar.' },
-  'formulario-v1:F-RAD-001!R53': { label: 'Minutos por sesión', unit: 'min', low: 15, high: 180, step: 5, empty: 'Elige los minutos', hint: 'Elige los minutos para continuar.' },
-  'formulario-v1:F-RAD-001!R61': { label: 'Horas de sueño', unit: 'horas', low: 4, high: 12, empty: 'Elige las horas', hint: 'Elige las horas para continuar.' },
+  'formulario-v1:F-RAD-001!R8': { label: 'Altura en cm', unit: 'cm', empty: 'Elige la altura', hint: 'Elige la altura en cm para continuar.' },
+  'formulario-v1:F-RAD-001!R9': { label: 'Peso en kg', unit: 'kg', empty: 'Elige el peso', hint: 'Elige el peso en kg para continuar.' },
+  'formulario-v1:F-RAD-001!R10': { label: 'Grasa corporal en porcentaje', unit: '%', empty: 'Elige el porcentaje', hint: 'Elige el porcentaje para continuar.' },
+  'formulario-v1:F-RAD-001!R11': { label: 'Cintura en cm', unit: 'cm', empty: 'Elige la cintura', hint: 'Elige la cintura en cm para continuar.' },
+  'formulario-v1:F-RAD-001!R26': { label: 'Nivel de dolor', unit: '', empty: 'Elige el nivel', hint: 'Elige el nivel para continuar.' },
+  'formulario-v1:F-RAD-001!R35': { label: 'Comidas al día', unit: '', empty: 'Elige la cantidad', hint: 'Elige cuántas comidas para continuar.' },
+  'formulario-v1:F-RAD-001!R53': { label: 'Minutos por sesión', unit: 'min', empty: 'Elige los minutos', hint: 'Elige los minutos para continuar.' },
+  'formulario-v1:F-RAD-001!R61': { label: 'Horas de sueño', unit: 'horas', empty: 'Elige las horas', hint: 'Elige las horas para continuar.' },
 };
 
 function shadowNote(note: string): string {
@@ -539,6 +536,7 @@ export function QuestionCard({
 
 /** Build initial selection state from question type */
 export function buildInitialSelection(question: QuestionDto): SelectionState {
+  if (question.savedAnswer) return selectionFromSaved(question, question.savedAnswer);
   switch (question.type) {
     case 'SINGLE_CHOICE':
       return { type: 'single', selected: null };
@@ -550,6 +548,39 @@ export function buildInitialSelection(question: QuestionDto): SelectionState {
       return { type: 'text', value: '' };
     case 'RANKING':
       return { type: 'ranking', order: question.options.map((o) => o.id) };
+  }
+}
+
+export function selectionFromSaved(
+  question: QuestionDto,
+  saved: NonNullable<QuestionDto['savedAnswer']>,
+): SelectionState {
+  if (saved.exceptionKind) {
+    return { type: 'exception', kind: saved.exceptionKind as 'UNKNOWN' | 'NOT_APPLICABLE' | 'DECLINED' };
+  }
+  switch (question.type) {
+    case 'SINGLE_CHOICE':
+      return { type: 'single', selected: saved.selectedOptionIds[0] ?? null };
+    case 'MULTI_CHOICE':
+      return { type: 'multi', selected: [...saved.selectedOptionIds] };
+    case 'SCALE_1_5': {
+      const selected = saved.selectedOptionIds[0] ?? null;
+      const option = selected ? question.options.find((item) => item.id === selected) : null;
+      const selectedOrder = option ? Number(option.value) : null;
+      return {
+        type: 'scale',
+        selected,
+        selectedOrder: Number.isFinite(selectedOrder) ? selectedOrder : null,
+        reason: saved.freeText ?? '',
+      };
+    }
+    case 'FREE_TEXT':
+      return { type: 'text', value: saved.freeText ?? '' };
+    case 'RANKING':
+      return {
+        type: 'ranking',
+        order: saved.rankingOrder.length > 0 ? [...saved.rankingOrder] : question.options.map((o) => o.id),
+      };
   }
 }
 
@@ -847,12 +878,6 @@ function BirthdateField({
   );
 }
 
-function measureOption(amount: number, unit: string): string {
-  if (!unit) return String(amount);
-  if (unit === 'horas') return amount === 1 ? '1 hora' : `${amount} horas`;
-  return `${amount} ${unit}`;
-}
-
 function MeasurePicker({
   spec,
   floor,
@@ -866,27 +891,21 @@ function MeasurePicker({
   value: string;
   onChange: (next: string) => void;
 }) {
-  const min = Math.max(floor, spec.low);
-  const max = Math.min(ceiling, spec.high);
-  const step = spec.step ?? 1;
-  const amounts: number[] = [];
-  for (let amount = min; amount <= max; amount += step) amounts.push(amount);
-  const chosen = Number(value);
-  const stored = amounts.includes(chosen) ? String(chosen) : '';
+  const unit = spec.unit ? ` ${spec.unit}` : '';
   return (
-    <label className="dk-age">
-      <select
-        className="dk-age__select dk-age__select--list"
-        value={stored}
+    <label className="dk-number">
+      <span className="dk-measure__label">{spec.label}. Entre {floor} y {ceiling}{unit}.</span>
+      <input
+        className="dk-measure__input"
+        type="number"
+        inputMode="decimal"
+        min={floor}
+        max={ceiling}
+        step="any"
+        value={value}
         aria-label={spec.label}
         onChange={(event) => onChange(event.target.value)}
-      >
-        <option value="">{spec.empty}</option>
-        {amounts.map((amount) => (
-          <option key={amount} value={String(amount)}>{measureOption(amount, spec.unit)}</option>
-        ))}
-      </select>
-      <span className="dk-age__chevron" aria-hidden />
+      />
     </label>
   );
 }

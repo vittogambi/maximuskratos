@@ -158,7 +158,7 @@ export function IkigaiFieldStep({
         {filled.length > 0 && !editing ? (
           <div className="ik-create__own">
             {filled.map((item) => (
-              <button key={item.id} type="button" className="ik-text" onClick={() => setEditing(item.id)}>{item.text}</button>
+              <button key={item.id} type="button" className="ik-text" aria-label={`${field.title}: ${item.text}`} onClick={() => setEditing(item.id)}>{item.text}</button>
             ))}
           </div>
         ) : null}

@@ -47,6 +47,7 @@ model User {
   accompanimentDecisions AccompanimentDecision[]
   ikigaiExperiments   IkigaiExperiment[]
   questionnaireAlerts QuestionnaireAlert[]
+  planWeekPreparations PlanWeekPreparation[]
 
   @@map("users")
 }
@@ -313,7 +314,7 @@ model ResponseRevision {
   response          Response @relation(fields: [responseId], references: [id], onDelete: Cascade)
   revision          Int
   freeText          String?  @map("free_text")
-  selectedOptionIds String[] @map("selected_option_ids")
+  selectedOptionIds String[] @default([]) @map("selected_option_ids")
   exceptionKind     String?  @map("exception_kind")
   exceptionOrigin   String?  @map("exception_origin")
   createdAt         DateTime @default(now()) @map("created_at")
@@ -1066,6 +1067,8 @@ model PersonalPlan {
   criterionRevision Int?          @map("criterion_revision")
   reviewAt     DateTime?          @map("review_at") @db.Date
   expectedSignal String?          @map("expected_signal")
+  /// Versioned plan outcome contract (distinct from template tool indicators).
+  outcomeContract Json?           @map("outcome_contract")
   capacityMinutes Int?            @map("capacity_minutes")
   protectNote  String?            @map("protect_note")
   activatedAt  DateTime?          @map("activated_at")
@@ -1080,9 +1083,32 @@ model PersonalPlan {
   transitions  PlanTransition[]
   proposals    PlanProposal[]
   evidence     PlanEvidence[]
+  weekPreparations PlanWeekPreparation[]
 
   @@index([userId, status])
   @@map("personal_plans")
+}
+
+model PlanWeekPreparation {
+  id             String       @id @default(uuid())
+  userId         String       @map("user_id")
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId         String       @map("plan_id")
+  plan           PersonalPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  weekStart      String       @map("week_start")
+  familyId       String       @map("family_id")
+  minimum        Boolean      @default(false)
+  status         String
+  payload        Json
+  reviewOutcomes Json?        @map("review_outcomes")
+  commandKey     String?      @map("command_key")
+  frozenAt       DateTime?    @map("frozen_at")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+
+  @@unique([userId, planId, weekStart])
+  @@index([userId, planId])
+  @@map("plan_week_preparations")
 }
 
 model PlanTransition {
@@ -1121,6 +1147,10 @@ model PlanAction {
   /// Published territory. domain stays the pillar.
   territory    String?
   effectiveFrom String? @map("effective_from")
+  /// Last civil day the action counts. Set when a review ends or replaces it. Null while open, and on older rows.
+  effectiveTo  String?    @map("effective_to")
+  /// Why the member ended the action in a review. Null when it was replaced or ended before this column.
+  endedReason  String?    @map("ended_reason")
   /// Marks the member declared for this action. Empty means they declared none.
   contentTags  String[]   @default([]) @map("content_tags")
   /// VIABLE when this action was declared a confrontation the member can hold. Null otherwise.
@@ -1135,6 +1165,10 @@ model PlanAction {
   occasionsPerWeek Int?   @map("occasions_per_week")
   minimumVersion String?  @map("minimum_version")
   alternative  String?
+  /// When and where the member plans to do it. Null on actions written before the design contract.
+  cue          String?
+  /// Order the member gave the actions of one plan. Older rows stay at 0 and fall back to createdAt.
+  position     Int        @default(0)
   active       Boolean    @default(true)
   createdAt    DateTime   @default(now()) @map("created_at")
   records      ActionRecord[]
@@ -1206,9 +1240,16 @@ model PlanEvidence {
   actionRecordId    String?      @map("action_record_id")
   source            String       @default("DECLARED_BY_MEMBER")
   commandKey        String?      @map("command_key")
+  /// Versioned follow-up indicator, e.g. ind-men-confianza@0.1. Null for ordinary evidence.
+  indicatorRef      String?      @map("indicator_ref")
+  /// Numeric answer of the indicator. Text answers stay in text.
+  value             Float?
+  /// Civil Monday of the week the measure belongs to.
+  periodStart       String?      @map("period_start")
   createdAt         DateTime     @default(now()) @map("created_at")
 
   @@index([planId, observedOn])
+  @@index([planId, indicatorRef, periodStart])
   @@map("plan_evidence")
 }
 

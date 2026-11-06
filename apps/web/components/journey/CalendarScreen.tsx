@@ -1,11 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { closeWeek, formatAlignmentDate, formatAlignmentValue, journeyCalendar, journeyState, journeyWeeks, previewWeek, saveRecord, type AlignmentReading, type CalendarPayload, type IndexCard } from '@/lib/journey-api';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { journeyCalendar, journeyWeeks, saveRecord, type CalendarPayload } from '@/lib/journey-api';
 import { getAccessToken } from '@/lib/auth-storage';
-import { reviewGuidance } from '@/lib/review-guidance';
+import { addDays, buildWeekQuery, formatWeekRange, weekOffsetFromStart } from '@/lib/week-screen';
+import { MenA1PrepBar } from './MenA1PrepBar';
 import { TaskRow } from './TaskRow';
-import { IndexSummary } from './IndexSummary';
+import { WeekScreenShell } from './WeekScreenShell';
 
 const WEEKDAYS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
@@ -36,6 +39,64 @@ function frozenActions(snapshot: unknown): { id: string; title: string; doneWhen
   });
 }
 
+function civil(iso: string): Date {
+  const [year, month, day] = iso.split('-').map(Number);
+  return new Date(Date.UTC(year, month - 1, day));
+}
+
+function formatDay(iso: string): string {
+  return String(civil(iso).getUTCDate());
+}
+
+function weekdayLabel(iso: string): string {
+  return WEEKDAYS[civil(iso).getUTCDay()];
+}
+
+function isClockToday(iso: string, today: string | undefined): boolean {
+  return Boolean(today) && iso === today;
+}
+
+const TERRITORY_SLUG: Record<string, string> = {
+  MENTALIDAD: 'mentalidad',
+  FINANZAS: 'finanzas',
+  RELACIONES: 'relaciones',
+  SALUD_FISICA: 'salud_fisica',
+};
+
+function dayOf(value: string | null | undefined): string {
+  return (value ?? '').slice(0, 10);
+}
+
+/** Mirrors the server window: an action counts from its start until it ends or a successor replaces it. */
+function actionVisibleInWeek(
+  action: { id: string; active?: boolean; pausedAt?: string | null; effectiveFrom?: string | null; effectiveTo?: string | null; replacesActionId?: string | null },
+  siblings: { id: string; effectiveFrom?: string | null; replacesActionId?: string | null }[],
+  viewedWeek: string,
+  weekEnd: string,
+): boolean {
+  if (!viewedWeek) return action.active !== false && !action.pausedAt;
+  const from = dayOf(action.effectiveFrom);
+  if (from && from > weekEnd) return false;
+  const successorFrom = dayOf(siblings.find((item) => item.replacesActionId === action.id && item.effectiveFrom)?.effectiveFrom);
+  const end = action.effectiveTo ? dayOf(action.effectiveTo) : successorFrom ? addDays(successorFrom, -1) : action.active === false ? undefined : null;
+  if (end === undefined) return false;
+  if (end && end < viewedWeek) return false;
+  return !action.pausedAt;
+}
+
+/** A one-time action only has occasions inside its schedule window. Outside it there is nothing to mark. */
+function scheduledInWeek(
+  action: { id: string; weekday: number | null; occasionsPerWeek?: number | null },
+  schedules: NonNullable<CalendarPayload['schedules']>,
+  viewedWeek: string,
+  weekEnd: string,
+): boolean {
+  if (action.weekday != null || action.occasionsPerWeek != null) return true;
+  const rows = schedules.filter((row) => row.actionId === action.id);
+  if (!rows.length) return true;
+  return rows.some((row) => row.kind !== 'PAUSED' && row.kind !== 'NONE' && row.effectiveFrom <= weekEnd && (row.effectiveTo == null || row.effectiveTo >= viewedWeek));
+}
+
 function snapshotOutcomes(snapshot: unknown): { id: string; outcome: string }[] {
   if (!snapshot || typeof snapshot !== 'object') return [];
   const plans = (snapshot as { plans?: unknown }).plans;
@@ -47,366 +108,255 @@ function snapshotOutcomes(snapshot: unknown): { id: string; outcome: string }[] 
   });
 }
 
-function futureOccasions(from: string, weekday: number, intervalDays: number): string[] {
-  if (!from) return [];
-  const dates: string[] = [];
-  for (let offset = 0; offset < 21; offset += 1) {
-    const date = addDays(from, offset);
-    if (civil(date).getUTCDay() === weekday) dates.push(date);
-  }
-  const every = Math.max(1, Math.round(Math.max(7, intervalDays) / 7));
-  return dates.filter((_, index) => index % every === 0);
-}
-
-function addDays(iso: string, days: number): string {
-  const [year, month, day] = iso.split('-').map(Number);
-  return new Date(Date.UTC(year, month - 1, day + days)).toISOString().slice(0, 10);
-}
-
-function civil(iso: string): Date {
-  const [year, month, day] = iso.split('-').map(Number);
-  return new Date(Date.UTC(year, month - 1, day));
-}
-
-const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
-
-function formatDay(iso: string): string {
-  // Date-only civil values. UTC keeps the browser zone from shifting the day.
-  return String(civil(iso).getUTCDate());
-}
-
-function formatRange(start: string, end: string): string {
-  const a = civil(start);
-  const b = civil(end);
-  return `${a.getUTCDate()} ${MONTHS[a.getUTCMonth()]} a ${b.getUTCDate()} ${MONTHS[b.getUTCMonth()]}`;
-}
-
-function weekdayLabel(iso: string): string {
-  return WEEKDAYS[civil(iso).getUTCDay()];
-}
-
-function pillar(domain: string | null): string | null {
-  if (domain === 'MENTE') return 'Mente';
-  if (domain === 'ESPIRITU') return 'Espíritu';
-  if (domain === 'CUERPO') return 'Cuerpo';
-  return null;
-}
-
 export function CalendarScreen() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const planId = searchParams.get('planId');
+  const semanaParam = searchParams.get('semana');
+
   const [data, setData] = useState<CalendarPayload | null>(null);
   const [weeks, setWeeks] = useState<{ id: string; weekStart: string; note: string | null; snapshot: unknown }[]>([]);
-  const [note, setNote] = useState('');
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const [offset, setOffset] = useState(0);
   const [day, setDay] = useState<string | null>(null);
-  const [decisions, setDecisions] = useState<Record<string, 'KEEP' | 'REDUCE' | 'SUBSTITUTE' | 'PAUSE' | 'RESUME' | 'CLOSE'>>({});
-  const [outcomes, setOutcomes] = useState<Record<string, string>>({});
-  const [strategies, setStrategies] = useState<Record<string, string>>({});
-  const [weekdays, setWeekdays] = useState<Record<string, string>>({});
-  const [intervals, setIntervals] = useState<Record<string, string>>({});
-  const [result, setResult] = useState<'MOVED' | 'STUCK' | 'UNKNOWN'>('UNKNOWN');
-  const [resultNotes, setResultNotes] = useState<Record<string, string>>({});
-  const [preview, setPreview] = useState<string[]>([]);
-  const [alignment, setAlignment] = useState<AlignmentReading | null>(null);
-  const [indexes, setIndexes] = useState<{ alignment: IndexCard | null; depth: IndexCard | null } | null>(null);
-  const [alignmentFailed, setAlignmentFailed] = useState(false);
-  const [alignmentLow, setAlignmentLow] = useState(false);
-  const [bodyCareLow, setBodyCareLow] = useState(false);
-  const [directionChanged, setDirectionChanged] = useState(false);
-
-  function reviewBody() {
-    const next: Record<string, { title?: string; weekday?: number; intervalDays?: number }> = {};
-    for (const [id, decision] of Object.entries(decisions)) {
-      if (decision === 'KEEP' || decision === 'PAUSE' || decision === 'CLOSE' || decision === 'RESUME') continue;
-      const weekday = weekdays[id] === '' || weekdays[id] == null ? undefined : Number(weekdays[id]);
-      const intervalDays = intervals[id] ? Number(intervals[id]) : undefined;
-      next[id] = {
-        ...(decision === 'SUBSTITUTE' ? { title: strategies[id] ?? '' } : {}),
-        ...(weekday == null || Number.isNaN(weekday) ? {} : { weekday }),
-        ...(intervalDays == null || Number.isNaN(intervalDays) ? {} : { intervalDays }),
-      };
-    }
-    return next;
-  }
-
-  function planOutcomes() {
-    const next: Record<string, string> = {};
-    for (const [id, value] of Object.entries(outcomes)) {
-      if (value.trim()) next[id] = value.trim();
-    }
-    return next;
-  }
 
   async function load() {
     const token = getAccessToken();
     if (!token) return;
-    const [calendar, history, state] = await Promise.all([
+    const [calendar, history] = await Promise.all([
       journeyCalendar(token),
       journeyWeeks(token),
-      journeyState(token).then((row) => ({ failed: false, alignment: row.alignment, indexes: row.indexes ?? null })).catch(() => ({ failed: true, alignment: null, indexes: null })),
     ]);
     setData(calendar);
     setWeeks(history);
-    setAlignment(state.alignment);
-    setIndexes(state.indexes);
-    setAlignmentFailed(state.failed);
   }
 
   useEffect(() => { void load().catch((err: Error) => setError(err.message)); }, []);
 
+  useEffect(() => {
+    if (!data?.weekStart || !semanaParam) return;
+    setOffset(weekOffsetFromStart(data.weekStart, semanaParam));
+  }, [data?.weekStart, semanaParam]);
+
   const currentWeek = data?.weekStart ?? '';
   const viewedWeek = currentWeek ? addDays(currentWeek, offset * 7) : '';
+  const weekEnd = viewedWeek ? addDays(viewedWeek, 6) : '';
   const days = viewedWeek ? Array.from({ length: 7 }, (_, index) => addDays(viewedWeek, index)) : [];
-  const selected = day && days.includes(day) ? day : viewedWeek;
+  const selected = day && days.includes(day) ? day : (data?.today && days.includes(data.today) ? data.today : viewedWeek);
   const closedWeek = weeks.find((week) => week.weekStart === viewedWeek);
   const weekClosed = Boolean(closedWeek);
-  const activePlans = data?.plans.filter((plan) => plan.status === 'ACTIVE') ?? [];
-  const liveActions = activePlans.flatMap((plan) => plan.actions).filter((action) => action.active !== false && !action.pausedAt);
-  const pausedActions = activePlans.flatMap((plan) => plan.actions).filter((action) => action.active !== false && action.pausedAt);
+  const scopedPlans = planId ? (data?.plans.filter((p) => p.id === planId) ?? []) : (data?.plans ?? []);
+  const unknownPlan = Boolean(planId && data && scopedPlans.length === 0);
+  const activePlans = scopedPlans.filter((plan) => plan.status === 'ACTIVE' && plan.stage !== 'PAUSED');
+  const pausedPlan = scopedPlans.find((plan) => String(plan.status) === 'PAUSED' || plan.stage === 'PAUSED') ?? null;
+  const draftPlan = scopedPlans.find((plan) => plan.status === 'DRAFT') ?? null;
+  const emptyWeek = Boolean(data && !unknownPlan && activePlans.length === 0 && weeks.length === 0);
+  const liveActions = activePlans.flatMap((plan) =>
+    plan.actions
+      .filter((action) => actionVisibleInWeek(action, plan.actions, viewedWeek, weekEnd))
+      .filter((action) => scheduledInWeek(action, data?.schedules ?? [], viewedWeek, weekEnd))
+      .map((action) => ({ ...action, planTitle: plan.title, planTerritory: plan.territory })),
+  );
+  const unfinishedOnce = activePlans.flatMap((plan) => plan.actions
+    .filter((action) => action.active !== false && action.occasionsPerWeek == null && action.weekday == null)
+    .flatMap((action) => {
+      const window = (data?.schedules ?? []).find((row) => row.actionId === action.id && row.kind === 'FLEXIBLE' && row.effectiveTo);
+      if (!window?.effectiveTo || !data?.today || window.effectiveTo >= data.today) return [];
+      const inWindow = (data?.records ?? []).filter(
+        (row) => row.actionId === action.id && row.day >= window.effectiveFrom && row.day <= window.effectiveTo!,
+      );
+      const done = inWindow.some((row) => row.status === 'DONE');
+      if (done) return [];
+      const markedNotDone = inWindow.some((row) => row.status === 'SKIPPED');
+      return [{ planId: plan.id, title: action.title, markedNotDone }];
+    }));
   const frozen = weekClosed ? frozenActions(closedWeek?.snapshot) : [];
-  const doneCount = liveActions.filter((action) => data?.records.some((record) => (
-    record.actionId === action.id && record.status === 'DONE' && days.includes(record.day)
-  ))).length;
-  const guidance = reviewGuidance({
-    done: doneCount,
-    applicable: liveActions.length,
-    result,
-    alignmentLow,
-    bodyCareLow,
-    directionChanged,
-  });
   const actions = frozen.length
-    ? frozen.map((action) => ({
-        ...action,
-        domain: null as string | null,
-        pausedAt: null,
-        intervalDays: action.intervalDays,
-      }))
+    ? frozen.map((action) => ({ ...action, domain: null as string | null, pausedAt: null, planTitle: null, planTerritory: null, cue: null, minimumVersion: null }))
     : liveActions;
+
+  const query = useMemo(
+    () => buildWeekQuery({ planId, semana: viewedWeek || null }),
+    [planId, viewedWeek],
+  );
+
+  const syncWeek = useCallback(
+    (nextOffset: number) => {
+      if (!data?.weekStart) return;
+      const nextStart = addDays(data.weekStart, nextOffset * 7);
+      setOffset(nextOffset);
+      setDay(null);
+      router.replace(`/semana${buildWeekQuery({ planId, semana: nextStart })}`, { scroll: false });
+    },
+    [data?.weekStart, planId, router],
+  );
 
   async function mark(actionId: string, status: 'DONE' | 'SKIPPED' | 'NOT_APPLICABLE' | 'PENDING') {
     const token = getAccessToken();
-    if (!token || !selected || saving) return;
+    if (!token || !selected || saving || weekClosed) return;
     setError('');
     setSaving(true);
     try {
-      await saveRecord(token, { actionId, day: selected, status, resultNote: resultNotes[actionId] });
+      await saveRecord(token, { actionId, day: selected, status });
       await load();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'No se pudo registrar.');
+      setError(err instanceof Error ? err.message : 'No pudimos guardar el registro. Inténtalo nuevamente.');
     } finally {
       setSaving(false);
     }
   }
 
-  async function showEffect() {
-    const token = getAccessToken();
-    if (!token || !viewedWeek) return;
-    setError('');
-    try {
-      const row = await previewWeek(token, viewedWeek, note, decisions, reviewBody(), planOutcomes());
-      setPreview([...row.effects.map((effect) => effect.summary), ...(row.plans ?? []).map((plan) => plan.summary)]);
-    } catch (err) {
-      setPreview([]);
-      setError(err instanceof Error ? err.message : 'No se pudo ver el efecto.');
-    }
-  }
-
-  async function close() {
-    const token = getAccessToken();
-    if (!token || !viewedWeek || saving || preview.length === 0) return;
-    setError('');
-    setSaving(true);
-    try {
-      await closeWeek(token, viewedWeek, note, decisions, reviewBody(), planOutcomes());
-      setPreview([]);
-      await load();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'No se pudo cerrar la semana.');
-    } finally {
-      setSaving(false);
-    }
+  if (!data && !error) {
+    return (
+      <div className="mk-week-wrap" aria-busy="true">
+        <div className="mk-mx-skeleton"><span /><span /></div>
+      </div>
+    );
   }
 
   return (
-    <div className="mk-dashboard mk-cal">
-      <header className="mk-cal__head">
-        <div>
-          <p className="mk-section-eyebrow">Calendario</p>
-          <h1 className="mk-page-title">{viewedWeek ? formatRange(viewedWeek, addDays(viewedWeek, 6)) : 'Cargando'}</h1>
-        </div>
-        <div className="mk-cal__nav">
-          <button type="button" onClick={() => { setOffset((value) => value - 1); setDay(null); }}>Anterior</button>
-          <button type="button" onClick={() => { setOffset(0); setDay(null); }}>Hoy</button>
-          <button type="button" onClick={() => { setOffset((value) => value + 1); setDay(null); }}>Siguiente</button>
-        </div>
-      </header>
-      {error ? <p role="alert">{error}</p> : null}
-      <div className="mk-week" role="group" aria-label="Días de la semana">
-        {days.map((date) => (
-          <button
-            key={date}
-            type="button"
-            className={date === selected ? 'mk-week__day is-selected' : 'mk-week__day'}
-            aria-pressed={date === selected}
-            onClick={() => setDay(date)}
-          >
-            <span>{weekdayLabel(date)}</span>
-            <strong>{formatDay(date)}</strong>
-          </button>
-        ))}
-      </div>
-      <div className="mk-cal__work">
-        <section>
-          {weekClosed ? <p>Esta semana conserva el criterio con el que se cerró.</p> : null}
-          {weekClosed
-            ? snapshotOutcomes(closedWeek?.snapshot).map((item) => <p key={item.id}>Resultado de esa semana: {item.outcome}</p>)
-            : activePlans.map((plan) => <p key={plan.id}>Resultado vigente: {plan.outcome}</p>)}
-          {actions.length === 0 ? <p>No hay tareas vigentes en esta cuenta.</p> : null}
-          {actions.map((action) => {
-            const live = data?.records.find((item) => item.actionId === action.id && item.day === selected);
-            const frozenRecord = 'records' in action ? action.records.find((item) => item.day === selected) : undefined;
-            const record = weekClosed ? frozenRecord : live;
-            return (
-              <TaskRow
-                key={action.id}
-                title={action.title}
-                detail={action.doneWhen}
-                pillar={pillar(action.domain)}
-                status={record?.status ?? null}
-                resultNote={record && 'resultNote' in record ? record.resultNote : null}
-                disabled={weekClosed || saving}
-                disabledReason={weekClosed ? 'Esta semana ya está cerrada. El registro no se reescribe.' : 'Guardando.'}
-                onStatus={(status) => mark(action.id, status)}
-                onResult={(text) => setResultNotes({ ...resultNotes, [action.id]: text })}
-              />
-            );
-          })}
+    <WeekScreenShell
+      view="actions"
+      viewedWeek={viewedWeek}
+      weekEnd={weekEnd}
+      query={query}
+      onPrevWeek={() => syncWeek(offset - 1)}
+      onNextWeek={() => syncWeek(offset + 1)}
+      onToday={() => syncWeek(0)}
+    >
+      {error ? <p className="mk-week-alert" role="alert">{error}</p> : null}
+      {unknownPlan ? <p role="status">No encontramos ese plan en tu cuenta.</p> : null}
+      {pausedPlan ? (
+        <section className="mk-mx-next">
+          <p className="mk-mx-next__body">El plan «{pausedPlan.title}» está en pausa. No tiene acciones previstas esta semana.</p>
+          <Link className="mk-mx__action mk-mx__action--primary" href={`/planes/${pausedPlan.id}`}>Ver el plan en pausa</Link>
         </section>
-        {offset <= 0 ? (
-          <aside className="mk-review">
-            <h2>Revisión de la semana</h2>
-            <p>Primero se muestra el efecto. Aplicar escribe el futuro. El registro ya hecho y la ficha de alineación no se reescriben.</p>
-            {activePlans.map((plan) => (
-              <label key={plan.id}>
-                Resultado observable a partir de ahora, para {plan.title}
-                <textarea
-                  aria-label={`Resultado futuro de ${plan.title}`}
-                  value={outcomes[plan.id] ?? ''}
-                  rows={2}
-                  disabled={weekClosed}
-                  onChange={(event) => { setPreview([]); setOutcomes({ ...outcomes, [plan.id]: event.target.value }); }}
-                />
-              </label>
-            ))}
-            <p>Si lo dejas vacío, el resultado del plan sigue. Si escribes otro, el futuro usa ese y esta semana conserva el anterior.</p>
-            <IndexSummary alignment={indexes?.alignment} depth={indexes?.depth} />
-            {alignmentFailed ? <p>No se pudo leer la ficha.</p> : alignment ? (
-              <p>
-                Alineación declarada: {alignment.status === 'saved' && alignment.total != null ? formatAlignmentValue(alignment.total) : 'sin total'}.
-                Cobertura {alignment.coverage.answered} de {alignment.coverage.required}.
-                {alignment.savedAt ? ` ${formatAlignmentDate(alignment.savedAt)}.` : ''}
-                {alignment.revision != null ? ` Revisión ${alignment.revision}.` : ''}
-              </p>
-            ) : <p>Sin ficha guardada.</p>}
-            {(weekClosed ? actions : [...liveActions, ...pausedActions]).map((action) => (
-              <label key={action.id}>
-                {action.title}
-                <select
-                  aria-label={`Decisión para ${action.title}`}
-                  value={decisions[action.id] ?? 'KEEP'}
-                  disabled={weekClosed}
-                  onChange={(event) => {
-                    setPreview([]);
-                    setDecisions({ ...decisions, [action.id]: event.target.value as 'KEEP' | 'REDUCE' | 'SUBSTITUTE' | 'PAUSE' | 'RESUME' | 'CLOSE' });
-                  }}
+      ) : null}
+      {unfinishedOnce.length ? (
+        <section className="mk-mx-next" aria-label="Tareas pendientes de decidir">
+          <p className="mk-mx-next__body">
+            {unfinishedOnce.length === 1
+              ? unfinishedOnce[0]!.markedNotDone
+                ? `La tarea «${unfinishedOnce[0]!.title}» quedó marcada como no realizada.`
+                : `La tarea «${unfinishedOnce[0]!.title}» quedó sin registro en su semana.`
+              : `Tienes ${unfinishedOnce.length} tareas pendientes de revisar.`}
+          </p>
+          <Link className="mk-mx__action" href={`/semana/revision?planId=${unfinishedOnce[0]!.planId}`}>Decidir en la revisión</Link>
+        </section>
+      ) : null}
+      {emptyWeek && !pausedPlan ? (
+        <section className="mk-mx-next">
+          <p className="mk-mx-next__body">Todavía no hay un plan con ocasiones ni una semana revisada.</p>
+          {draftPlan ? (
+            <Link className="mk-mx__action mk-mx__action--primary" href={`/disenar/${draftPlan.id}`}>
+              Continuar mi plan
+            </Link>
+          ) : (
+            <Link className="mk-mx__action mk-mx__action--primary" href="/disenar">
+              Elegir un cambio
+            </Link>
+          )}
+        </section>
+      ) : null}
+
+      {!emptyWeek ? (
+        <>
+          <div className="mk-week" role="group" aria-label="Días de la semana">
+            {days.map((date) => {
+              const selectedDay = date === selected;
+              const today = isClockToday(date, data?.today);
+              return (
+                <button
+                  key={date}
+                  type="button"
+                  className={[
+                    'mk-week__day',
+                    selectedDay ? 'is-selected' : '',
+                    today && !selectedDay ? 'is-today' : '',
+                  ].filter(Boolean).join(' ')}
+                  aria-pressed={selectedDay}
+                  aria-label={`${weekdayLabel(date)} ${formatDay(date)}${today ? ', hoy' : ''}`}
+                  onClick={() => setDay(date)}
                 >
-                  <option value="KEEP">{action.pausedAt ? 'Seguir en pausa' : 'Mantener'}</option>
-                  <option value="REDUCE">Reducir frecuencia o día</option>
-                  <option value="SUBSTITUTE">Sustituir</option>
-                  <option value="PAUSE">Pausar</option>
-                  {action.pausedAt ? <option value="RESUME">Reanudar</option> : null}
-                  <option value="CLOSE">Cerrar</option>
-                </select>
-                {decisions[action.id] === 'REDUCE' ? (
-                  <>
-                    <select
-                      aria-label={`Frecuencia futura de ${action.title}`}
-                      value={intervals[action.id] ?? ''}
-                      onChange={(event) => { setPreview([]); setIntervals({ ...intervals, [action.id]: event.target.value }); }}
-                    >
-                      <option value="">Misma frecuencia</option>
-                      <option value="14">Cada 14 días</option>
-                      <option value="21">Cada 21 días</option>
-                    </select>
-                    <select
-                      aria-label={`Día futuro de ${action.title}`}
-                      value={weekdays[action.id] ?? ''}
-                      onChange={(event) => { setPreview([]); setWeekdays({ ...weekdays, [action.id]: event.target.value }); }}
-                    >
-                      <option value="">Mismo día</option>
-                      {WEEKDAYS.map((label, index) => <option key={label} value={String(index)}>{label}</option>)}
-                    </select>
-                  </>
-                ) : null}
-                {decisions[action.id] === 'SUBSTITUTE' ? (
-                  <input
-                    aria-label={`Estrategia nueva de ${action.title}`}
-                    value={strategies[action.id] ?? ''}
-                    placeholder="Estrategia nueva"
-                    onChange={(event) => { setPreview([]); setStrategies({ ...strategies, [action.id]: event.target.value }); }}
-                  />
-                ) : null}
-                {!weekClosed && action.weekday != null ? (
-                  <p>
-                    Ocasiones en 21 días: {futureOccasions(viewedWeek, action.weekday, action.intervalDays ?? 7).join(', ') || 'ninguna en esta ventana'}.
-                    Un día sin registro no cuenta como incumplimiento.
-                  </p>
-                ) : null}
-                {!weekClosed && action.weekday == null ? <p>Sin día fijo. No se fabrican ocasiones atrasadas.</p> : null}
-              </label>
-            ))}
-            <label>
-              Qué pasó con el resultado
-              <select value={result} disabled={weekClosed} onChange={(event) => setResult(event.target.value as 'MOVED' | 'STUCK' | 'UNKNOWN')}>
-                <option value="UNKNOWN">No lo sé</option>
-                <option value="MOVED">Se movió</option>
-                <option value="STUCK">Se estancó</option>
-              </select>
-            </label>
-            <label><input type="checkbox" checked={alignmentLow} disabled={weekClosed} onChange={(event) => setAlignmentLow(event.target.checked)} /> La alineación que declaro quedó baja</label>
-            <label><input type="checkbox" checked={bodyCareLow} disabled={weekClosed} onChange={(event) => setBodyCareLow(event.target.checked)} /> El cuidado del cuerpo no alcanzó</label>
-            <label><input type="checkbox" checked={directionChanged} disabled={weekClosed} onChange={(event) => setDirectionChanged(event.target.checked)} /> Cambió la dirección o se cayó una hipótesis</label>
-            {guidance ? (
-              <div>
-                <p>{guidance.prompt}</p>
-                <p>Puedes elegir: {guidance.options.join(', ')}. Nada de esto se aplica solo.</p>
-              </div>
+                  <span>{weekdayLabel(date)}</span>
+                  <strong>{formatDay(date)}</strong>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mk-week-actions">
+            {weekClosed ? (
+              <>
+                <p className="mk-mx-next__body">Esta semana conserva el criterio con el que se cerró.</p>
+                {snapshotOutcomes(closedWeek?.snapshot).map((item) => (
+                  <p key={item.id} className="mk-mx-next__meta">Resultado de esa semana: {item.outcome}</p>
+                ))}
+              </>
             ) : null}
-            <label>
-              Nota
-              <textarea value={note} rows={3} onChange={(event) => setNote(event.target.value)} disabled={weekClosed} />
-            </label>
-            {preview.length ? <ul>{preview.map((line) => <li key={line}>{line}</li>)}</ul> : null}
-            <button type="button" className="mk-member-btn" onClick={showEffect} disabled={weekClosed || saving}>Ver efecto</button>
-            <button type="button" className="mk-member-btn" onClick={close} disabled={weekClosed || saving || preview.length === 0}>
-              {weekClosed ? 'Esta semana ya está cerrada' : saving ? 'Guardando' : 'Aplicar'}
-            </button>
-            {data?.timezone ? <p className="mk-cal__zone">Zona {data.timezone}</p> : null}
-          </aside>
-        ) : null}
-      </div>
+            {!weekClosed && activePlans.length === 1 ? (
+              <p className="mk-mx-next__meta">Resultado vigente: {activePlans[0].outcome}</p>
+            ) : null}
+            {actions.length === 0 && !emptyWeek ? (
+              <p className="mk-mx-next__body">No hay acciones previstas para este día.</p>
+            ) : null}
+            {actions.map((action) => {
+              const live = data?.records.find((item) => item.actionId === action.id && item.day === selected);
+              const frozenRecord = 'records' in action ? action.records.find((item) => item.day === selected) : undefined;
+              const record = weekClosed ? frozenRecord : live;
+              const resultNote = record && 'resultNote' in record ? record.resultNote : null;
+              return (
+                <TaskRow
+                  key={action.id}
+                  title={action.title}
+                  detail={action.doneWhen}
+                  cue={action.cue ?? undefined}
+                  minimum={action.minimumVersion ?? undefined}
+                  context={action.planTitle ?? undefined}
+                  status={record?.status ?? null}
+                  disabled={weekClosed || saving}
+                  disabledReason={weekClosed ? 'Esta semana ya está cerrada.' : 'Guardando.'}
+                  onStatus={(status) => mark(action.id, status)}
+                />
+              );
+            })}
+            {weekClosed && actions.map((action) => {
+              const frozenRecord = 'records' in action ? action.records.find((item) => item.day === selected) : undefined;
+              const note = frozenRecord && 'resultNote' in frozenRecord ? frozenRecord.resultNote : null;
+              return note ? <p key={`${action.id}-note`} className="mk-mx-next__meta">Resultado: {note}</p> : null;
+            })}
+            {!weekClosed && offset === 0 && viewedWeek
+              ? activePlans.flatMap((plan) =>
+                plan.territory === 'MENTALIDAD' ? (
+                  [
+                    <MenA1PrepBar
+                      key={`prep-${plan.id}`}
+                      territory={TERRITORY_SLUG[plan.territory!]}
+                      planId={plan.id}
+                      weekStart={viewedWeek}
+                      planTitle={activePlans.length > 1 ? plan.title : undefined}
+                    />,
+                  ]
+                ) : [],
+              )
+              : null}
+          </div>
+        </>
+      ) : null}
+
       {weeks.length > 0 ? (
-        <section>
-          <h2 className="mk-page-title mk-page-title--sm">Semanas cerradas</h2>
-          <ul>
+        <section className="mk-week-history">
+          <h2 className="mk-mx-section-title">Semanas cerradas</h2>
+          <ul className="mk-week-history__list">
             {weeks.map((week) => (
-              <li key={week.id}>{formatRange(week.weekStart, addDays(week.weekStart, 6))}. {week.note || 'Sin nota.'}</li>
+              <li key={week.id}>
+                {formatWeekRange(week.weekStart, addDays(week.weekStart, 6))}. {week.note || 'Sin nota.'}
+              </li>
             ))}
           </ul>
         </section>
       ) : null}
-    </div>
+    </WeekScreenShell>
   );
 }

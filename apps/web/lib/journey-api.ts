@@ -1,4 +1,4 @@
-import { getApiBaseUrl, type MemberAccess } from '@/lib/api';
+import { fetchAuthed, type MemberAccess } from '@/lib/api';
 
 /** A rejected write keeps the server message plus the step that unblocks it. */
 export class JourneyApiError extends Error {
@@ -26,15 +26,13 @@ export class JourneyApiError extends Error {
   }
 }
 
-async function send<T>(path: string, token: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${getApiBaseUrl()}${path}`, {
+export async function send<T>(path: string, token: string, init?: RequestInit): Promise<T> {
+  const res = await fetchAuthed(token, path, {
     ...init,
     headers: {
-      Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
       ...(init?.headers ?? {}),
     },
-    credentials: 'include',
   });
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
@@ -166,7 +164,27 @@ export type PlanRow = {
   valueRef: string | null;
   purposeRevisionId: string | null;
   status: 'DRAFT' | 'ACTIVE' | 'ARCHIVED';
-  actions: { id: string; title: string; doneWhen: string; weekday: number | null; intervalDays?: number; pausedAt?: string | null; domain: ActionDomainName | null; active?: boolean; planId?: string }[];
+  stage?: string | null;
+  territory?: string | null;
+  criterionText?: string | null;
+  criterionStatus?: string | null;
+  actions: {
+    id: string;
+    title: string;
+    doneWhen: string;
+    weekday: number | null;
+    intervalDays?: number;
+    pausedAt?: string | null;
+    domain: ActionDomainName | null;
+    active?: boolean;
+    planId?: string;
+    effectiveFrom?: string | null;
+    effectiveTo?: string | null;
+    replacesActionId?: string | null;
+    occasionsPerWeek?: number | null;
+    cue?: string | null;
+    minimumVersion?: string | null;
+  }[];
 };
 
 export type SynthesisActivity = {
@@ -210,8 +228,10 @@ export type SynthesisPayload = {
 export type CalendarPayload = {
   timezone: string;
   weekStart: string;
+  today: string;
   plans: PlanRow[];
   records: { id: string; actionId: string; day: string; status: string; note: string | null; resultNote?: string | null }[];
+  schedules?: { actionId: string; effectiveFrom: string; effectiveTo: string | null; kind: string }[];
 };
 
 export type ActionDomainName = 'MENTE' | 'ESPIRITU' | 'CUERPO';
@@ -280,12 +300,12 @@ export const confirmPurpose = (token: string) =>
 export const reopenHdrpGap = (token: string, moduleSlug: string) =>
   send<{ ok: boolean }>('/api/v1/journey/purpose/reopen', token, { method: 'POST', body: JSON.stringify({ moduleSlug }) });
 export const journeyPlans = (token: string) => send<PlanRow[]>('/api/v1/journey/plans', token);
-export const createPlan = (token: string, body: { title: string; outcome: string; priorityNote?: string; linkKind?: string; valueRef?: string; purposeRevisionId?: string | null; sourceCombinationId?: string | null }) =>
+export const createPlan = (token: string, body: { title: string; outcome: string; priorityNote?: string; linkKind?: string; valueRef?: string; purposeRevisionId?: string | null; sourceCombinationId?: string | null; territory?: string | null }) =>
   send<PlanRow>('/api/v1/journey/plans', token, { method: 'POST', body: JSON.stringify(body) });
 export const addAction = (
   token: string,
   planId: string,
-  body: { title: string; doneWhen: string; weekday?: number; guideId?: string; contentTags?: string[]; healthLimit?: string; conversation?: string },
+  body: { title: string; doneWhen: string; weekday?: number; guideId?: string; contentTags?: string[]; healthLimit?: string; conversation?: string; occasionsPerWeek?: number; minutesPerOccasion?: number; templateRef?: string; minimumVersion?: string },
 ) =>
   send(`/api/v1/journey/plans/${planId}/actions`, token, { method: 'POST', body: JSON.stringify(body) });
 export const journeyCalendar = (token: string) => send<CalendarPayload>('/api/v1/journey/calendar', token);
@@ -318,6 +338,192 @@ export const closeWeek = (
   });
 export const purposeHistory = (token: string) =>
   send<PurposeRow[]>('/api/v1/journey/purpose/history', token);
+
+export type DirectionMode = 'CLEAR' | 'EXPLORE' | 'UNKNOWN';
+
+export type MemberDirection = {
+  mode: DirectionMode | null;
+  statement: string | null;
+  desiredChange: string | null;
+  directionStatus: string | null;
+  revision: number | null;
+  purposeRevisionId: string | null;
+  updatedAt: string | null;
+  sources: {
+    vision: string | null;
+    values: string[];
+    ikigaiPurpose: string | null;
+  };
+  sourcesUsed: { id: string; label: string; text: string }[];
+  plansOnOlderRevision: number;
+};
+
+export type DirectionSourceId = keyof MemberDirection['sources'];
+
+export type EvidenceItem = {
+  status: 'ANSWERED' | 'UNKNOWN' | 'DECLINED' | 'NOT_APPLICABLE' | 'PENDING' | 'SKIPPED' | 'EMPTY';
+  texts: string[];
+};
+
+export type EvidenceSection = {
+  id: 'vision' | 'values' | 'ikigai';
+  title: string;
+  moduleSlug: string;
+  answered: number;
+  total: number;
+  groups: { id: string; title: string; question: string | null; items: EvidenceItem[] }[];
+  access: 'ANSWERED' | 'CURRENT' | 'LATER' | 'NOT_STARTED' | 'CLOSED';
+  href: string | null;
+};
+
+export type DirectionOverview = {
+  history: {
+    purposeRevisionId: string;
+    revision: number;
+    statement: string;
+    mode: DirectionMode | null;
+    savedAt: string;
+    current: boolean;
+  }[];
+  linkedPlans: {
+    id: string;
+    title: string;
+    territory: string | null;
+    stage: string | null;
+    linkKind: string | null;
+    revision: number | null;
+    directionStatement: string | null;
+    current: boolean;
+  }[];
+  evidence: EvidenceSection[];
+};
+
+export const fetchDirection = (token: string) =>
+  send<MemberDirection>('/api/v1/journey/direction', token);
+
+export const fetchDirectionOverview = (token: string) =>
+  send<DirectionOverview>('/api/v1/journey/direction/overview', token);
+
+export const saveDirection = (
+  token: string,
+  body: {
+    mode: DirectionMode;
+    statement?: string | null;
+    desiredChange?: string | null;
+    commandKey?: string | null;
+    sourceIds?: DirectionSourceId[];
+  },
+) =>
+  send<{ purposeRevisionId: string; revision: number; repeated: boolean }>(
+    '/api/v1/journey/direction',
+    token,
+    { method: 'POST', body: JSON.stringify(body) },
+  );
+
+export type ExplorationStep =
+  | 'intro'
+  | 'sources'
+  | 'experience'
+  | 'important'
+  | 'contribution'
+  | 'connection'
+  | 'synthesis'
+  | 'trial'
+  | 'done';
+
+export type ConfirmableSourceId = 'vision' | 'values' | 'ikigai' | 'heritage' | 'seal';
+
+export type DirectionExplorationDraft = {
+  version: 1;
+  updatedAt: string;
+  step: ExplorationStep;
+  altEntry?: 'keep' | 'miss' | 'improve' | null;
+  experience?: string;
+  whyImportant?: string;
+  contribution?: string;
+  connection?: string;
+  connectionSuggested?: string;
+  connectionRejected?: boolean;
+  recognition?: 'represents' | 'partial' | 'reword' | 'unseen' | null;
+  partialNote?: string;
+  directionPublished?: boolean;
+  mattersOnItsOwn?: boolean;
+  openDoubt?: string;
+  questionSuggested?: string | null;
+  questionAccepted?: string | null;
+  trialSuggested?: string | null;
+  trialAccepted?: string | null;
+  observeSuggested?: string | null;
+  observeAccepted?: string | null;
+  returnWhen?: string;
+  trialChoice?: 'accepted' | 'skipped' | null;
+  trialFollowup?: 'tried' | 'not_tried' | 'adapted' | null;
+  trialHappened?: string;
+  trialKeep?: string;
+  provisionalDirection?: string;
+  synthesisEdit?: string;
+  synthesisChoice?: 'accept' | 'edit' | 'continue' | null;
+  trialWhat?: string;
+  trialDiscover?: string;
+  trialObserve?: string;
+  sourceConfirmations?: Partial<Record<ConfirmableSourceId, 'yes' | 'edit' | 'skip'>>;
+  sourceEdits?: Partial<Record<ConfirmableSourceId, string>>;
+};
+
+export type ConfirmableSource = {
+  id: ConfirmableSourceId;
+  label: string;
+  origin: string;
+  text: string;
+};
+
+export type ExplorationSharedItem = { id: string; label: string; text: string; origin: 'exploration' | 'source' };
+
+export type ExplorationView = {
+  draft: DirectionExplorationDraft;
+  sources: ConfirmableSource[];
+  synthesis: {
+    shared: ExplorationSharedItem[];
+    pair: { from: ExplorationSharedItem; to: ExplorationSharedItem; rule: string } | null;
+    ownConnection: string | null;
+    insufficient: boolean;
+    reason: 'NO_ANSWERS' | 'TOO_LITTLE' | 'REJECTED' | null;
+  };
+  learning: {
+    recognized: string | null;
+    lines: string[];
+    question: string | null;
+    contextual: string | null;
+    trial: string | null;
+    observe: string | null;
+  };
+};
+
+export const fetchDirectionExploration = (token: string) =>
+  send<ExplorationView>('/api/v1/journey/direction/exploration', token);
+
+export const saveDirectionExploration = (token: string, draft: Partial<DirectionExplorationDraft>) =>
+  send<ExplorationView>('/api/v1/journey/direction/exploration', token, {
+    method: 'PUT',
+    body: JSON.stringify({ draft }),
+  });
+
+export const confirmDirectionExploration = (
+  token: string,
+  body: {
+    statement?: string;
+    desiredChange?: string | null;
+    commandKey?: string | null;
+    keepExploring?: boolean;
+    draft?: Partial<DirectionExplorationDraft>;
+  },
+) =>
+  send<{ purposeRevisionId: string; revision: number; repeated: boolean }>(
+    '/api/v1/journey/direction/exploration/confirm',
+    token,
+    { method: 'POST', body: JSON.stringify(body) },
+  );
+
 export const journeyWeeks = (token: string) =>
   send<{ id: string; weekStart: string; note: string | null; snapshot: unknown }[]>('/api/v1/journey/weeks', token);
 export const requestGuidance = (token: string, source: string, note?: string) =>
@@ -368,6 +574,34 @@ export const saveExperimentObservation = (token: string, experimentId: string, b
 export const reviewExperiment = (token: string, experimentId: string, body: unknown) =>
   send(`/api/v1/journey/experiments/${experimentId}/review`, token, { method: 'POST', body: JSON.stringify(body) });
 
+export type MatrixWeek = {
+  done: number;
+  notDone: number;
+  noInformation: number;
+  excepted: number;
+  dueUnmarked: number;
+  upcoming: number;
+  percent: number | null;
+  percentReason: 'OPEN_WEEK' | 'NO_INFORMATION' | 'EXCEPTIONS' | 'NONE_RESOLVED' | 'LEGACY_WEEK' | null;
+};
+
+export type MatrixPlan = {
+  id: string;
+  title: string;
+  stage: 'PREPARING' | 'ACTIVE' | 'PAUSED' | 'MAINTENANCE' | 'CLOSED';
+  isFocus: boolean;
+  nextOccasion: { day: string; title: string } | null;
+  week: MatrixWeek | null;
+};
+
+export type MatrixRow = {
+  territory: string;
+  label: string;
+  discover: { state: 'NOT_STARTED' | 'PARTIAL' | 'EXPLORED'; settled: number; required: number; exceptionCount: number };
+  planCount: number;
+  plan: MatrixPlan | null;
+};
+
 export type MemberDashboard = {
   territories: { territory: string; label: string; state: string; required: number; settled: number }[];
   focusPlan: {
@@ -378,12 +612,51 @@ export type MemberDashboard = {
   } | null;
   chooseStart: boolean;
   otherActivePlans: number;
+  matrix?: MatrixRow[];
+  weekStart?: string | null;
+  cycle?: {
+    directionStatement: string | null;
+    directionDesiredChange: string | null;
+    focusChange: string | null;
+    focusOutcome: string | null;
+    reviewAt: string | null;
+  };
 };
+
+export type PlanSummary = {
+  id: string;
+  title: string;
+  outcome: string;
+  whyItMatters: string | null;
+  linkKind: string | null;
+  stage: string | null;
+  territory: string | null;
+  reviewAt: string | null;
+  directionAtCreation: { statement: string | null; desiredChange: string | null; revision: number | null } | null;
+  strategyTitle: string | null;
+  actionTitle: string | null;
+  doneWhen: string | null;
+  outcomeCriterion?: string | null;
+  outcomeContract?: import('@/lib/intervention-api').PlanOutcomeContractView | null;
+  outcomeContractMeta?: import('@/lib/intervention-api').OutcomeContractMeta;
+  outcomeContractComplete?: boolean;
+  evidenceHint?: string | null;
+  learningNote?: string | null;
+  observedEvidence?: string | null;
+  resultMode?: 'RESULT' | 'EXPLORATION';
+  actions?: { id: string; title: string; doneWhen: string; cue: string | null; minimum: string | null; occasionsPerWeek: number | null; minutesPerOccasion: number | null }[];
+  obstacles?: { obstacle: string; response: string }[];
+  resources?: string | null;
+};
+
+export const fetchPlanSummary = (token: string, planId: string) =>
+  send<PlanSummary>(`/api/v1/journey/plans/${planId}/summary`, token);
 
 export type MemoryView = {
   plans: unknown[];
   signedContract: unknown;
   draftPurpose: unknown;
+  directionHistory?: { id: string; revision: number; statement: string | null; desiredChange: string | null; crossPossibility?: string | null; createdAt: string }[];
 };
 
 export const fetchDashboard = (token: string) =>
@@ -401,6 +674,8 @@ export type ReturnReading = {
   protectedNote: string | null;
   daysAway: number | null;
   hasPendingOccasions: boolean;
+  planId?: string | null;
+  stage?: string | null;
 };
 
 export const fetchReturnReading = (token: string) =>
@@ -418,6 +693,96 @@ export const createPlanDraft = (token: string, body?: { entry?: string; territor
     body: JSON.stringify(body ?? {}),
   });
 
+export type PlanProposalRow = {
+  id: string;
+  kind: string;
+  status: string;
+  payload: unknown;
+  editedPayload: unknown;
+  reasons: unknown;
+  decidedAt: string | null;
+};
+
+export const fetchPlanProposals = (token: string, planId: string) =>
+  send<PlanProposalRow[]>(`/api/v1/journey/plans/${planId}/proposals`, token);
+
+export const patchPlanDraft = (
+  token: string,
+  planId: string,
+  body: {
+    title?: string;
+    outcome?: string;
+    whyItMatters?: string | null;
+    whyStatus?: string | null;
+    territory?: string | null;
+    capacityMinutes?: number;
+    protectNote?: string | null;
+    criterionText?: string | null;
+    criterionStatus?: string | null;
+    expectedVersion?: number;
+  },
+) =>
+  send<PlanRow>(`/api/v1/journey/plans/${planId}/draft`, token, {
+    method: 'PATCH',
+    body: JSON.stringify(body),
+  });
+
+export const activatePlanDraft = (
+  token: string,
+  planId: string,
+  body: {
+    confirmed?: boolean;
+    capacityMinutes?: number;
+    protectNote?: string | null;
+    explicitNoSchedule?: boolean;
+    expectedVersion?: number;
+    commandKey?: string;
+  },
+) =>
+  send<{ plan: PlanRow; repeated: boolean }>(`/api/v1/journey/plans/${planId}/activate`, token, {
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+
+export const addPlanEvidence = (
+  token: string,
+  planId: string,
+  body: {
+    kind: string;
+    status: string;
+    text?: string | null;
+    observedOn?: string;
+    commandKey?: string;
+  },
+) =>
+  send(`/api/v1/journey/plans/${planId}/evidence`, token, {
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+
+export const transitionPlanStage = (
+  token: string,
+  planId: string,
+  body: {
+    toStage: 'PREPARING' | 'ACTIVE' | 'PAUSED' | 'MAINTENANCE' | 'CLOSED';
+    reason?: string | null;
+    learningNote?: string | null;
+    expectedVersion?: number;
+  },
+) =>
+  send<PlanRow>(`/api/v1/journey/plans/${planId}/transition`, token, {
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+
+export type MaintenancePreview = {
+  minimumAction: { title: string; doneWhen: string; weekday: number | null; intervalDays: number } | null;
+  reviewSignal: string;
+};
+
+export const fetchMaintenancePreview = (token: string, planId: string) =>
+  send<MaintenancePreview>(`/api/v1/journey/plans/${planId}/maintenance/preview`, token);
+
 export const decidePlanProposal = (
   token: string,
   planId: string,
@@ -425,6 +790,22 @@ export const decidePlanProposal = (
   body: { decision: 'ACCEPT' | 'EDIT' | 'REJECT'; editedPayload?: Record<string, unknown>; commandKey?: string; expectedVersion?: number },
 ) =>
   send(`/api/v1/journey/plans/${planId}/proposals/${proposalId}/decision`, token, {
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+
+export function planAllowsAchievement(plan: Pick<PlanRow, 'criterionText' | 'criterionStatus' | 'stage' | 'status'>): boolean {
+  const stage = plan.stage ?? (plan.status === 'ACTIVE' ? 'ACTIVE' : plan.status === 'ARCHIVED' ? 'CLOSED' : 'PREPARING');
+  if (stage !== 'ACTIVE' && stage !== 'MAINTENANCE') return false;
+  return plan.criterionStatus === 'CONFIRMED' && Boolean(plan.criterionText?.trim());
+}
+
+export const declarePlanAchievement = (
+  token: string,
+  planId: string,
+  body: { confirm: boolean; expectedVersion?: number; commandKey?: string; learningNote?: string | null },
+) =>
+  send<{ plan: PlanRow; repeated: boolean }>(`/api/v1/journey/plans/${planId}/achievement`, token, {
     method: 'POST',
     body: JSON.stringify(body),
   });

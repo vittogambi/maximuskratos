@@ -1,0 +1,18 @@
+---
+description: Matriz v2 sigue congelada. No cambia el scoring para una pantalla, y esa protección no obliga a mostrarla en el ciclo de miembros.
+alwaysApply: true
+---
+
+# Matriz v2
+
+Matriz v2 es la autoridad diagnóstica ejecutable. No cambies scoring, estados, denominadores de cobertura, seguridad, prioridad ni ruta diagnóstica para cumplir una intervención futura, una síntesis de Direction o un pedido de producto o de pantalla.
+
+Esa protección no obliga a mostrar la Matriz ni a usarla en el ciclo viable de miembros. Ese ciclo no importa el motor de la Matriz.
+
+Corregir layout, copy de interfaz o navegación no es un cambio de scoring. Puede hacerse sin abrir la Matriz.
+
+Si aparece un problema diagnóstico real, ábrelo como Matriz v2.1 con un hallazgo de Lab y evidencia. No parches v2 en silencio.
+
+Direction v0.1 puede organizar evidencia. No alimenta esas salidas diagnósticas.
+
+Intervención es un método posterior. Se diseña como contrato aparte sobre DiagnosticContract, DirectionReading, DirectionVersion y el contexto operativo. No devuelvas el foco de intervención a la Matriz.

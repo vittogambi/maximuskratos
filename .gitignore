@@ -14,7 +14,9 @@ coverage
 !apps/web/app/admin/lab/coverage/
 !apps/web/app/admin/lab/coverage/**
 .turbo
-.cursor
+.cursor/*
+!.cursor/rules/
+!.cursor/rules/**
 apps/api/dist
 apps/web/.next
 docs/
@@ -24,3 +26,9 @@ presentation/
 # Browser QA output (screenshots + console report) from scripts/lab-ux-qa.mjs
 .qa/
 apps/api/test/artifacts/
+apps/web/.next-audit
+apps/api/dist-audit
+apps/api/dist-test
+tmp/
+test-results/
+*.tsbuildinfo

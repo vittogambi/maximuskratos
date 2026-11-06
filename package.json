@@ -18,6 +18,7 @@
     "dev:prepare": "npm run db:generate && npm run db:migrate:deploy && npm run db:seed",
     "db:seed": "npm run seed -w @mk/database",
     "db:seed:plans": "npm run seed:plans -w @mk/database",
+    "dev:audit": "sh scripts/dev-audit.sh",
     "dev:api": "npm run dev -w @mk/api",
     "dev:web": "npm run dev -w @mk/web",
     "db:generate": "npm run generate -w @mk/database",

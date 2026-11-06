@@ -42,7 +42,7 @@ DATABASE_URL="$DB_URL" npx prisma migrate deploy --schema packages/database/pris
 pg_end=$(date +%s)
 
 echo "build api $(date +%T)"
-npm run build -w @mk/api
+npm run build:test -w @mk/api
 echo "http $(date +%T)"
 http_start=$(date +%s)
 DATABASE_URL="$DB_URL" npm run test:http -w @mk/api

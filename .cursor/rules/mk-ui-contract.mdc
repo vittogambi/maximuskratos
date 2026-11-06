@@ -1,0 +1,18 @@
+---
+description: Contrato común de UI. Al cambiar una pantalla, leer DESIGN.md y clasificar la superficie antes de tocar shells.
+alwaysApply: true
+---
+
+# UI
+
+Cuando el cambio se vea en pantalla, lee `DESIGN.md` y nombra la superficie: marketing, miembros, cuestionario, IKIGAI independiente o admin. Acceso (`/login`, `/register`, recuperación de contraseña) no es marketing ni el shell de miembros.
+
+La instrucción del encargo y los contratos funcionales prevalecen. `DESIGN.md` define el resultado visual. El CSS heredado muestra lo que hay. Corrígelo si incumple el contrato.
+
+Shells: marketing `PublicLayout`, miembros `AppShell` (`.mk-app-shell`), cuestionario `.dk-shell`, IKIGAI `IkigaiShell` (`.ik-app`), admin `AdminShell`. No uses `IkigaiShell` en el cuestionario. No pongas nav, footer ni motion de marketing en áreas operativas.
+
+Casi todos los estilos están en `apps/web/app/globals.css`. Clasifica por clase: `.ag-landing` marketing, `.mk-app-shell` y `.mk-mx` miembros, `.dk-shell` y `.dk-stage` cuestionario, `.ik-app` IKIGAI. No mezcles esas clases para heredar el chrome de otra superficie.
+
+Tokens en ese mismo archivo. Si un componente compartido falla, corrígelo y revisa sus consumidores. No copies un sistema visual por página.
+
+La verificación visual está en `AGENTS.md`. Los tamaños de referencia están en `DESIGN.md`.

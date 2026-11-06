@@ -266,7 +266,7 @@ describe.skipIf(!hasDb)('auth session contract (web cookie vs native body)', () 
     ).rejects.toBeInstanceOf(UnauthorizedException);
   });
 
-  it('logout-all revokes every refresh token; access tokens already issued live until they expire', async () => {
+  it('logout-all revokes every refresh token; access tokens already issued stay valid', async () => {
     const session = await nativeSession('all');
     const web = await webLogin(session.userEmail);
     const android = await controller.login({ email: session.userEmail, password: PASSWORD }, 'android', fakeRes());
@@ -287,7 +287,7 @@ describe.skipIf(!hasDb)('auth session contract (web cookie vs native body)', () 
       await expect(service.refresh(token, 'native', fakeRes())).rejects.toBeInstanceOf(UnauthorizedException);
     }
 
-    // Documented contract: JWT access tokens are not revoked server-side; they expire after 15 minutes.
+    // Logout revokes refresh tokens. An access JWT already issued stays valid until its exp.
     const guard = new JwtAuthGuard(jwt, cfg);
     const ctx = {
       switchToHttp: () => ({
@@ -295,6 +295,10 @@ describe.skipIf(!hasDb)('auth session contract (web cookie vs native body)', () 
       }),
     } as never;
     await expect(guard.canActivate(ctx)).resolves.toBe(true);
+    const exp = (jwt.decode(session.accessToken) as { exp?: number }).exp;
+    expect(exp).toEqual(expect.any(Number));
+    expect((exp ?? 0) - Math.floor(Date.now() / 1000)).toBeGreaterThan(14 * 60);
+    expect((exp ?? 0) - Math.floor(Date.now() / 1000)).toBeLessThanOrEqual(15 * 60);
   });
 
   it('rejects an unknown X-MK-Client before touching credentials', () => {

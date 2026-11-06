@@ -1,14 +1,23 @@
-import { Body, Controller, Get, Param, Post, Request, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post, Request, UseGuards } from '@nestjs/common';
 import { SkipThrottle } from '@nestjs/throttler';
 import { JwtAuthGuard, type AuthenticatedRequest } from '../auth/jwt-auth.guard';
 import { DiagnosticOpenGuard } from '../diagnostic/diagnostic-open.guard';
+import { generalStartingPoints } from './accompaniment/families';
 import { AccompanimentService, type AccompanimentBody } from './accompaniment.service';
+import { TERRITORIES, type Territory } from '../instrumentos/glossary';
 
 @Controller('journey')
 @UseGuards(JwtAuthGuard, DiagnosticOpenGuard)
 @SkipThrottle({ auth: true })
 export class AccompanimentController {
   constructor(private readonly accompaniment: AccompanimentService) {}
+
+  @Get('accompaniment/starting-points/:territory')
+  startingPoints(@Param('territory') territory: string) {
+    const key = territory.toUpperCase();
+    if (!TERRITORIES.includes(key as Territory)) throw new BadRequestException('Ámbito desconocido.');
+    return { territory: key, points: generalStartingPoints(key as Territory) };
+  }
 
   @Get('devolution')
   devolution(@Request() req: AuthenticatedRequest) {

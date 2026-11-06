@@ -16,8 +16,8 @@
         "required": 20
       },
       "pending": [],
-      "answeredAt": "2026-10-13T23:00:21.978Z",
-      "computedAt": "2026-10-13T23:00:33.214Z",
+      "answeredAt": "2026-11-05T03:05:52.584Z",
+      "computedAt": "2026-11-05T03:06:03.698Z",
       "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
       "delta": null
     },
@@ -231,8 +231,8 @@
       "weekSubstitute": "USER_AUTHORED",
       "records": "SCRIPTED_SIMULATION"
     },
-    "planId": "d1615a9b-85e1-4ef7-b8b2-3fcf0ceff9c9",
-    "actionId": "a5f20eb2-dffd-40ba-8ee1-be82d8dbeb69"
+    "planId": "ca455c95-8d41-4ee9-aef3-f9ee1cb1110f",
+    "actionId": "983d584b-8fb8-4e83-a7b8-5efe532e9f57"
   },
   "MK-S02": {
     "index": {
@@ -253,8 +253,8 @@
       "pending": [
         "IN7 UNKNOWN"
       ],
-      "answeredAt": "2026-10-13T23:00:34.112Z",
-      "computedAt": "2026-10-13T23:00:45.307Z",
+      "answeredAt": "2026-11-05T03:06:04.564Z",
+      "computedAt": "2026-11-05T03:06:15.831Z",
       "explanation": "Lectura inicial del cuestionario. Falta cobertura para el general. No es cero.",
       "delta": null
     },
@@ -490,8 +490,8 @@
       "weekSubstitute": "USER_AUTHORED",
       "records": "SCRIPTED_SIMULATION"
     },
-    "planId": "c65e471d-21d9-4f63-86fb-7a12c969027a",
-    "actionId": "e9656a62-25c1-432a-a44f-b846a6580fa0"
+    "planId": "39ee31e4-6c2a-4bac-8021-f1a68b4edac0",
+    "actionId": "751f70fa-404b-4749-a4da-d2e0bdda618b"
   },
   "MK-S03": {
     "index": {
@@ -510,8 +510,8 @@
         "required": 20
       },
       "pending": [],
-      "answeredAt": "2026-10-13T23:00:46.068Z",
-      "computedAt": "2026-10-13T23:00:57.255Z",
+      "answeredAt": "2026-11-05T03:06:16.648Z",
+      "computedAt": "2026-11-05T03:06:27.614Z",
       "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
       "delta": null
     },
@@ -723,8 +723,8 @@
       "weekSubstitute": "USER_AUTHORED",
       "records": "SCRIPTED_SIMULATION"
     },
-    "planId": "552f469b-314a-4edf-aa57-121d11d267fe",
-    "actionId": "fe0a21e1-d87a-4957-9bca-798b1d608254"
+    "planId": "24646e1a-6460-468d-83c9-22af937eff4a",
+    "actionId": "556141fc-2971-4ea2-9347-4d967ebe78ab"
   },
   "MK-S04": {
     "index": {
@@ -743,8 +743,8 @@
         "required": 20
       },
       "pending": [],
-      "answeredAt": "2026-10-13T23:00:58.164Z",
-      "computedAt": "2026-10-13T23:01:09.511Z",
+      "answeredAt": "2026-11-05T03:06:28.523Z",
+      "computedAt": "2026-11-05T03:06:39.924Z",
       "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
       "delta": null
     },
@@ -926,8 +926,8 @@
         "required": 20
       },
       "pending": [],
-      "answeredAt": "2026-10-13T23:01:10.260Z",
-      "computedAt": "2026-10-13T23:01:21.467Z",
+      "answeredAt": "2026-11-05T03:06:40.677Z",
+      "computedAt": "2026-11-05T03:06:52.372Z",
       "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
       "delta": null
     },
@@ -1126,8 +1126,8 @@
       "weekSubstitute": "USER_AUTHORED",
       "records": "SCRIPTED_SIMULATION"
     },
-    "planId": "3a1ef545-5477-4943-a6ad-1c2e1f4ddaf9",
-    "actionId": "b2f3d987-9842-4b45-babb-a0633ea75443"
+    "planId": "88cdf140-0954-4193-ad66-08b39a69818b",
+    "actionId": "eae10078-2fb2-4137-a11c-9a26951f63d3"
   },
   "MK-S06": {
     "index": {
@@ -1146,8 +1146,8 @@
         "required": 20
       },
       "pending": [],
-      "answeredAt": "2026-10-13T23:01:22.250Z",
-      "computedAt": "2026-10-13T23:01:33.348Z",
+      "answeredAt": "2026-11-05T03:06:53.180Z",
+      "computedAt": "2026-11-05T03:07:04.413Z",
       "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
       "delta": null
     },
@@ -1354,8 +1354,8 @@
       "weekSubstitute": "USER_AUTHORED",
       "records": "SCRIPTED_SIMULATION"
     },
-    "planId": "e0d84b10-8b01-4bbf-a843-04c471f34906",
-    "actionId": "0acd1e03-d206-47dd-a8b7-dd367483b660"
+    "planId": "9d4ccd98-2683-401d-ae08-77cf6661feff",
+    "actionId": "d28a8b3c-782c-415f-8cfb-21bd0242a640"
   },
   "MK-S07": {
     "index": {
@@ -1374,8 +1374,8 @@
         "required": 20
       },
       "pending": [],
-      "answeredAt": "2026-10-13T23:01:34.122Z",
-      "computedAt": "2026-10-13T23:01:45.401Z",
+      "answeredAt": "2026-11-05T03:07:05.163Z",
+      "computedAt": "2026-11-05T03:07:16.214Z",
       "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
       "delta": null
     },
@@ -1566,8 +1566,8 @@
       "weekSubstitute": "USER_AUTHORED",
       "records": "SCRIPTED_SIMULATION"
     },
-    "planId": "e89231ae-652a-40b4-9f0d-4b2780c1ef68",
-    "actionId": "a741de52-5a07-470d-b09b-d2564b999265"
+    "planId": "37798e02-39f5-4b16-95e6-05921a7dc6b4",
+    "actionId": "0c1a6f01-1fd8-4d00-8c3c-873c31382ef5"
   },
   "MK-S08": {
     "index": {
@@ -1586,8 +1586,8 @@
         "required": 20
       },
       "pending": [],
-      "answeredAt": "2026-10-13T23:01:46.172Z",
-      "computedAt": "2026-10-13T23:01:57.330Z",
+      "answeredAt": "2026-11-05T03:07:16.987Z",
+      "computedAt": "2026-11-05T03:07:28.344Z",
       "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
       "delta": null
     },
@@ -1801,8 +1801,8 @@
       "weekSubstitute": "USER_AUTHORED",
       "records": "SCRIPTED_SIMULATION"
     },
-    "planId": "e943933a-9b29-430c-9cd3-e35ffde0fc97",
-    "actionId": "3ea63f1d-c205-43ec-97da-436972c3e418"
+    "planId": "47711249-62d4-45ee-a2d8-965b13136795",
+    "actionId": "aeea7ce8-a3f6-4520-a6fe-951ae74978b0"
   },
   "MK-S09": {
     "index": {
@@ -1821,8 +1821,8 @@
         "required": 20
       },
       "pending": [],
-      "answeredAt": "2026-10-13T23:01:58.124Z",
-      "computedAt": "2026-10-13T23:02:09.401Z",
+      "answeredAt": "2026-11-05T03:07:29.123Z",
+      "computedAt": "2026-11-05T03:07:40.829Z",
       "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
       "delta": null
     },
@@ -2056,8 +2056,8 @@
       "weekSubstitute": "USER_AUTHORED",
       "records": "SCRIPTED_SIMULATION"
     },
-    "planId": "868358fb-c4b4-49f7-866b-8a0c22a3369d",
-    "actionId": "f8b9270b-7ef2-4b33-b467-fe84ae544614"
+    "planId": "d378d941-c85f-4bb5-8d22-777c4fc02f50",
+    "actionId": "a0a487a1-78c4-424a-9884-498cbc7c6a28"
   },
   "MK-S10": {
     "index": {
@@ -2076,8 +2076,8 @@
         "required": 20
       },
       "pending": [],
-      "answeredAt": "2026-10-13T23:02:10.234Z",
-      "computedAt": "2026-10-13T23:02:21.458Z",
+      "answeredAt": "2026-11-05T03:07:41.659Z",
+      "computedAt": "2026-11-05T03:07:53.268Z",
       "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
       "delta": null
     },
@@ -2272,8 +2272,8 @@
       "weekSubstitute": "USER_AUTHORED",
       "records": "SCRIPTED_SIMULATION"
     },
-    "planId": "80d5fbf4-0747-475e-9626-5e42329d80aa",
-    "actionId": "979968eb-8c26-428d-9ae0-d4077d4efd52"
+    "planId": "e29a08f6-b278-4086-9b58-0e0720097eeb",
+    "actionId": "3ca7a028-7407-459c-b29b-deab9a559f0a"
   },
   "MK-S11": {
     "index": {
@@ -2292,8 +2292,8 @@
         "required": 20
       },
       "pending": [],
-      "answeredAt": "2026-10-13T23:02:22.353Z",
-      "computedAt": "2026-10-13T23:02:33.516Z",
+      "answeredAt": "2026-11-05T03:07:54.205Z",
+      "computedAt": "2026-11-05T03:08:05.507Z",
       "explanation": "Índice de alineación MK. Lectura inicial del cuestionario. Método en revisión.",
       "delta": null
     },
@@ -2507,8 +2507,8 @@
       "weekSubstitute": "USER_AUTHORED",
       "records": "SCRIPTED_SIMULATION"
     },
-    "planId": "0ae98eed-f766-4fe7-ba5e-7229dfc9ffc0",
-    "actionId": "87e56f53-df06-42ef-ab87-38b9368d391a"
+    "planId": "5c728120-7d6c-476c-b5e2-670237e2d8ef",
+    "actionId": "dba0356b-d080-4a01-b54f-72156b6ab4bc"
   },
   "MK-S12": {
     "before": {
@@ -2540,8 +2540,8 @@
         "I86 OPCIONES_SIN_SIGNIFICADO",
         "E57 ANCLAJES_OCULTOS"
       ],
-      "answeredAt": "2026-10-13T23:02:34.237Z",
-      "computedAt": "2026-10-13T23:02:34.384Z",
+      "answeredAt": "2026-11-05T03:08:06.201Z",
+      "computedAt": "2026-11-05T03:08:06.343Z",
       "explanation": "Lectura inicial del cuestionario. Falta cobertura para el general. No es cero.",
       "delta": null
     },
@@ -2561,8 +2561,8 @@
         "required": 20
       },
       "pending": [],
-      "answeredAt": "2026-10-13T23:02:34.391Z",
-      "computedAt": "2026-10-13T23:02:34.438Z",
+      "answeredAt": "2026-11-05T03:08:06.350Z",
+      "computedAt": "2026-11-05T03:08:06.402Z",
       "explanation": "Reconstrucción de la captura. No se presenta como mejora frente a una captura que no era elegible.",
       "delta": null
     },

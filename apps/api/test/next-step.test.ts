@@ -22,7 +22,7 @@ describe('nextStep', () => {
   it('asks for a direction, and says what is missing, when the sheet has none', () => {
     const step = nextStep({ ...base, directionWorks: false });
     expect(step.href).toBe('/proposito');
-    expect(step.detail).toContain('Falta elegir una dirección');
+    expect(step.detail).toContain('cuidar o explorar');
   });
 
   it('sends a member without a persisted formulario reading back to the questionnaire', () => {

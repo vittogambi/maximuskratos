@@ -12,26 +12,10 @@ import {
   type DiagnosticState,
 } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth-storage';
-import { settleModuleOutro } from '@/lib/diagnostic-continue';
+import { routeDiagnosticFromState, settleModuleOutro } from '@/lib/diagnostic-continue';
 import { questionnaireStageLabel, ProgressRail } from './ProgressRail';
 import { PlayerStage } from './PlayerStage';
 import { introStaggerContainer, introStaggerItem } from './diagnostic-motion';
-
-function routeFromState(state: DiagnosticState, router: ReturnType<typeof useRouter>) {
-  const { nextStep, sessionState } = state;
-
-  if (nextStep.type === 'question' && sessionState.currentModuleSlug) {
-    router.push(`/diagnostico/modulo/${sessionState.currentModuleSlug}/pregunta`);
-    return;
-  }
-  if (nextStep.type === 'module_outro') {
-    router.push(`/diagnostico/outro/${nextStep.data.moduleSlug}`);
-    return;
-  }
-  if (nextStep.type === 'diagnostic_complete') {
-    router.push('/diagnostico/resultado');
-  }
-}
 
 export function DiagnosticWelcome() {
   const router = useRouter();
@@ -58,7 +42,7 @@ export function DiagnosticWelcome() {
           } catch {
             settled = state;
           }
-          routeFromState(settled, router);
+          routeDiagnosticFromState(settled, router, 'push');
           return;
         }
         setReady(true);
@@ -85,7 +69,7 @@ export function DiagnosticWelcome() {
       } catch {
         // The outro route retries the same step.
       }
-      routeFromState(state, router);
+      routeDiagnosticFromState(state, router, 'push');
     } catch (err) {
       setError(
         err instanceof Error && err.message
@@ -98,9 +82,19 @@ export function DiagnosticWelcome() {
 
   return (
     <PlayerStage
-      header={<ProgressRail pct={0} questionIndex={null} questionTotal={null} contextLabel={questionnaireStageLabel(null)} />}
+      header={(
+        <ProgressRail
+          pct={0}
+          questionIndex={null}
+          questionTotal={null}
+          contextLabel={questionnaireStageLabel(null)}
+          exitLabel="Salir"
+          exitDisabled={loading}
+          onExit={() => router.push('/panel')}
+        />
+      )}
       primary={{
-        label: loading ? 'Preparando…' : 'Comenzar auditoría',
+        label: loading ? 'Preparando…' : 'Comenzar cuestionario',
         onClick: handleStart,
         disabled: !ready || loading,
       }}

@@ -1,0 +1,13 @@
+---
+description: Admin y Lab. Lectura y tareas de administración, sin chrome de marketing.
+globs: "apps/web/app/admin/**/*.{tsx,css},apps/web/components/admin/**/*.{tsx,css},apps/web/components/admin-shell.tsx"
+alwaysApply: false
+---
+
+# Admin
+
+Lee `DESIGN.md`. El shell es `AdminShell`. Prioriza leer datos y completar la tarea. Usa `--font-body` y los tokens compartidos.
+
+Filtros y acciones siguen usables en móvil. Una tabla ancha scrollea en su propio contenedor y no empuja la página.
+
+No apliques escenas, intro ni motion de landing. Preserva permisos y trazabilidad. Revisar un caso de Lab no autoriza a cambiar el scoring de Matriz v2.

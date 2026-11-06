@@ -1,0 +1,17 @@
+---
+description: Sesión IKIGAI independiente. No es el cuestionario ni la página pública de IKIGAI.
+globs: "apps/web/app/ikigai/**/*.{tsx,css},apps/web/components/ikigai/**/*.{tsx,css}"
+alwaysApply: false
+---
+
+# IKIGAI independiente
+
+Lee `DESIGN.md`. La sesión (`/ikigai/empezar`, `/ikigai/s/`) usa `IkigaiShell` y `.ik-app`. Logo con `markOnly`, salida y progreso. Sin `PublicNav` ni `PublicFooter` dentro de la sesión.
+
+La página de marketing está en `apps/web/app/(public)/ikigai/` y sigue la regla de marketing. El cuestionario usa `.dk-shell`, no este shell. `ikigai.css` también lo carga el cuestionario: no conviertas `.dk-shell` o `.dk-stage` en chrome de esta sesión.
+
+El primario sigue `DESIGN.md`: `--color-action`, texto blanco, min-height 52 px. El disabled explica su motivo.
+
+Guardar una posibilidad y seleccionarla son operaciones distintas. Conectar lista las cuatro lentes. No pintes Pasión, Misión, Profesión, Vocación o IKIGAI como nombres de zona.
+
+No cambies nombres metodológicos, zonas, criterios ni engine para cumplir una referencia visual. No importes `@mk/ikigai-engine` en web.

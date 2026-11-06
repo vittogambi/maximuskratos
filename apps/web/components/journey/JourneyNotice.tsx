@@ -11,7 +11,7 @@ export type JourneyNoticeState = {
 
 const TARGET_LABELS: Record<string, string> = {
   '/diagnostico': 'Abrir el cuestionario',
-  '/proposito': 'Abrir la hoja de ruta',
+  '/proposito': 'Definir tu dirección',
   '/planes': 'Abrir planes',
 };
 

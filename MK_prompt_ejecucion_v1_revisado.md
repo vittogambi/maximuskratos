@@ -2,7 +2,7 @@
 
 name: Prompt ejecución formulario v1
 
-overview: "Prompt de ejecución detallado para implementar en el repositorio el recorrido completo de miembro basado solo en formulario v1: inventario y catálogo formulario-completo@1, captura con excepciones, puntajes fieles por instrumento, alertas del formulario con efecto en servidor, HdRP-v1 con estados de dirección, ficha IAD-MK 0.1 borrador, prioridad, plan conectado con guías propias, ejecución, revisión aplicada e integridad. Excluye la matriz v2 del recorrido. Reemplaza el plan revisión 3 donde sea incompatible."
+overview: "HISTÓRICO, 7 oct 2026. No ejecutar. El antecedente pedía implementar el recorrido de miembro basado solo en formulario v1: inventario y catálogo formulario-completo@1, captura con excepciones, puntajes fieles por instrumento, alertas del formulario con efecto en servidor, HdRP-v1 con estados de dirección, ficha IAD-MK 0.1 borrador, prioridad, plan conectado con guías propias, ejecución, revisión aplicada e integridad. Excluye la matriz v2 del recorrido. Reemplaza el plan revisión 3 donde sea incompatible."
 
 todos:
 
@@ -66,11 +66,13 @@ isProject: false
 
 # Prompt de ejecución: Maximus Kratos desde formulario v1
 
-Este documento es el prompt autocontenido que el agente ejecuta en Agent mode, dentro del checkout de Maximus Kratos (ruta reportada: `/Users/vittoriogambi/maximuskratos`). Revisión corregida del 7 oct 2026. Basta este documento y el Excel original para ejecutar; los planes anteriores no son una dependencia.
+**Histórico. 7 oct 2026.** No es la instrucción vigente. Para trabajar ahora: [AGENTS.md](AGENTS.md) dice cómo ejecutar, [DESIGN.md](DESIGN.md) es el diseño y [PRODUCTO_VIABLE.md](PRODUCTO_VIABLE.md) es el ciclo viable. El texto que sigue se conserva como antecedente. No cambies permisos, metodología ni código para hacer coincidir la aplicación con este prompt.
 
-Las referencias de código, comandos y hechos del repositorio provienen de la inspección reportada en el plan. Vuelve a comprobarlos en el checkout actual antes de editar. Esta revisión documental no constituye una nueva ejecución de sus pruebas ni una inspección directa del repositorio.
+En su fecha, este prompt se presentó como fuente única y dijo que ganaba al plan de revisión 3. Eso ya no ordena el trabajo. También pedía el formulario antes del primer plan, una navegación con Perfil, Ruta y Hoy, índices de alineación y permisos de administración distintos de los acuerdos posteriores. Esas declaraciones no son instrucciones actuales. El cuestionario no es obligatorio para tener un plan. El inicio es el cruce de cuatro ámbitos por tres fases.
 
-Si choca con el plan «Recorrido completo miembro (revisión 3)», gana este documento. Del plan anterior se conserva el núcleo de integridad (§12). Se descarta todo uso de la matriz v2.
+Las referencias de código, comandos y hechos del repositorio provienen de la inspección reportada en el plan. Esta revisión documental no constituye una nueva ejecución de sus pruebas ni una inspección directa del repositorio.
+
+Entonces se decía: si choca con el plan «Recorrido completo miembro (revisión 3)», gana este documento. Del plan anterior se conserva el núcleo de integridad (§12). Se descarta todo uso de la matriz v2.
 
 ## 0. Rol, resultado y forma de trabajo
 
@@ -85,6 +87,8 @@ Si choca con el plan «Recorrido completo miembro (revisión 3)», gana este doc
 - **Alcance:** completa el ciclo especificado sin abrir más módulos, subsistemas o índices. Los nombres de modelos describen contratos; reutiliza una entidad compatible antes de crear otra. Una decisión rutinaria reversible se resuelve y documenta, sin detener toda la entrega.
 
 ## 1. Precedencia y lo que reemplaza
+
+Lo de esta sección es la precedencia que el prompt se daba el 7 oct 2026. No es la precedencia actual.
 
 - **Fuente única** del cuestionario, sus instrumentos y sus ejercicios: `260529-FORMULARIOS-X-PASO.xlsx`.
 

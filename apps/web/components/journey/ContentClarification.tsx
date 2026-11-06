@@ -14,8 +14,8 @@ export function ContentClarification({
         { value: 'CURRENT_LIMIT', label: 'Hay un límite vigente' },
       ]
     : [
-        { value: 'VIABLE', label: 'Puedo hacerla' },
-        { value: 'UNSAFE', label: 'No es segura' },
+        { value: 'VIABLE', label: 'Puedo tener esta conversación de forma segura' },
+        { value: 'UNSAFE', label: 'No es seguro tener esta conversación' },
       ];
   return (
     <div className="mk-form__actions">

@@ -5,7 +5,12 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useId, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { AppIcon } from '@/components/app-icon';
+import type { AppIconName } from '@/components/icons/registry';
 import { APP_MOTION, MOTION_EASE } from '@/components/motion/tokens';
+
+function TabBarIcon({ name }: { name: AppIconName }) {
+  return <AppIcon name={name} size={22} />;
+}
 
 const TABS = [
   {
@@ -31,11 +36,7 @@ const TABS = [
   {
     href: '/planes',
     label: 'Planes',
-    icon: (active: boolean) => (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2 : 1.5} strokeLinecap="round" strokeLinejoin="round">
-        <path d="M4 6h16M4 12h16M4 18h10" />
-      </svg>
-    ),
+    icon: () => <TabBarIcon name="layout-grid" />,
   },
 ] as const;
 
@@ -115,9 +116,7 @@ export function BottomTabBar() {
           onClick={() => (open ? close(false) : setOpen(true))}
         >
           <span className="mk-tab__icon" aria-hidden>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={open || moreActive ? 2 : 1.5} strokeLinecap="round">
-              <path d="M4 7h16M4 12h16M4 17h16" />
-            </svg>
+            <TabBarIcon name={open ? 'x' : 'menu'} />
           </span>
           <span className="mk-tab__label">Más</span>
         </button>

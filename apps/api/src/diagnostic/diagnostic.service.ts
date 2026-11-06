@@ -42,11 +42,15 @@ import {
   visibleQuestionTrail,
 } from './player-navigation';
 import {
+  moduleFullySettled,
   moduleMatchesTerritory,
   parseTerritoryParam,
-  questionMatchesTerritory,
+  questionsInScope,
   readFocusTerritory,
+  selectPlayable,
+  territoryQuestionsSettled,
   withFocusTerritory,
+  withoutFocusTerritory,
 } from './diagnostic-territory';
 import type { Territory } from '../instrumentos/glossary';
 
@@ -106,10 +110,10 @@ export class DiagnosticService {
         data: { status: active.completedAt ? 'COMPLETED' : 'ABANDONED' },
       });
     }
-    return this.startOrResume(userId);
+    return this.startOrResume(userId, { confirmNew: true });
   }
 
-  async startOrResume(userId: string) {
+  async startOrResume(userId: string, options: { general?: boolean; confirmNew?: boolean } = {}) {
     try {
       await this.catalog.ensureReady();
     } catch {
@@ -133,6 +137,14 @@ export class DiagnosticService {
     }
 
     let session = await this.findActiveSession(userId);
+
+    if (!session && !options.confirmNew) {
+      const closed = await this.prisma.diagnosticSession.findFirst({
+        where: { userId, status: 'COMPLETED' },
+        orderBy: { startedAt: 'desc' },
+      });
+      if (closed) return this.buildState(closed.id, userId);
+    }
 
     if (!session) {
       let isNewSession = false;
@@ -193,6 +205,13 @@ export class DiagnosticService {
           },
         });
       }
+    }
+
+    if (options.general && readFocusTerritory(session.metadata)) {
+      session = await this.prisma.diagnosticSession.update({
+        where: { id: session.id },
+        data: { metadata: JSON.parse(JSON.stringify(withoutFocusTerritory(session.metadata))) },
+      });
     }
 
     return this.buildState(session.id, userId);
@@ -691,27 +710,28 @@ export class DiagnosticService {
       where: { id: userId },
       select: { onboardingStep: true },
     });
-    const showWelcomeScreen = user?.onboardingStep === 'DIAGNOSTICO_BIENVENIDA';
+    let showWelcomeScreen = user?.onboardingStep === 'DIAGNOSTICO_BIENVENIDA';
+    if (showWelcomeScreen && focusTerritory) {
+      await this.markWelcomeSeen(userId);
+      showWelcomeScreen = false;
+    }
     const totalModules = session.moduleProgress.length;
 
     // Find current active module.
     // Prefer AVAILABLE/IN_PROGRESS; fall back to COMPLETE modules whose outro
     // hasn't been seen yet (the module was just finished but the next module is
     // still LOCKED — we should show the outro, not claim the diagnostic is done).
-    const activeProgress =
-      scopedProgress.find(
-        (p) => p.status === 'AVAILABLE' || p.status === 'IN_PROGRESS',
-      ) ??
-      scopedProgress.find(
-        (p) => p.status === 'COMPLETE' && !p.outroSeen,
-      );
+    const activeProgress = selectPlayable(scopedProgress, settledIds, focusTerritory);
 
     if (!activeProgress) {
       if (focusTerritory) {
-        const scopeDone =
-          scopedProgress.length > 0
-          && scopedProgress.every((p) => p.status === 'COMPLETE' && p.outroSeen);
+        const scopeDone = territoryQuestionsSettled(scopedProgress, settledIds, focusTerritory);
         if (scopeDone) {
+          // The territory pass is over; the next plain start resumes the full questionnaire.
+          await this.prisma.diagnosticSession.update({
+            where: { id: session.id },
+            data: { metadata: JSON.parse(JSON.stringify(withoutFocusTerritory(session.metadata))) },
+          });
           return {
             sessionState: {
               phase: session.currentPhase,
@@ -784,14 +804,12 @@ export class DiagnosticService {
     }
 
     const currentModule = activeProgress.module;
-    const moduleQuestions = focusTerritory
-      ? currentModule.questions.filter((question) => questionMatchesTerritory(question.sourceRef, focusTerritory))
-      : currentModule.questions;
+    const moduleQuestions = questionsInScope(currentModule.questions, focusTerritory);
     const totalQuestions = moduleQuestions.length;
     const answeredInModule = moduleQuestions.filter((question) => settledIds.has(question.id)).length;
 
-    // Check if module needs outro
-    if (answeredInModule === totalQuestions && totalQuestions > 0 && !activeProgress.outroSeen) {
+    // Outro and COMPLETE belong to the whole module. A territory slice must not close the sibling questions.
+    if (moduleFullySettled(currentModule.questions, settledIds) && !activeProgress.outroSeen) {
       if (activeProgress.status !== 'COMPLETE') {
         await this.prisma.userModuleProgress.update({
           where: { id: activeProgress.id },
@@ -937,8 +955,10 @@ export class DiagnosticService {
           currentQuestionIndex,
           moduleQuestionCount: visibleCount,
           showWelcomeScreen,
-          currentModuleOrder: currentModule.order,
-          totalModules,
+          currentModuleOrder: focusTerritory
+            ? Math.max(1, scopedProgress.findIndex((entry) => entry.module.slug === currentModule.slug) + 1)
+            : currentModule.order,
+          totalModules: focusTerritory ? scopedProgress.length : totalModules,
           currentModuleEstimatedMinutes: currentModule.estimatedMinutes,
         },
         session,

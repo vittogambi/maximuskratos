@@ -42,6 +42,11 @@ function complete(parts: Partial<Record<ActivityFieldName, string>>): parts is R
   return ORDER.every((field) => Boolean(parts[field]));
 }
 
+function listNames(names: string[]): string {
+  if (names.length <= 1) return names[0] ?? '';
+  return `${names.slice(0, -1).join(', ')} y ${names[names.length - 1]}`;
+}
+
 export function DiagnosticCross({
   activities,
   step,
@@ -59,6 +64,9 @@ export function DiagnosticCross({
   const chosen = mixes.find((mix) => mix.id === chosenId);
   const sentence = chosen ? purposeSentence(activities, chosen.parts) : '';
   const ready = step === 0 ? mixes.length > 0 : Boolean(sentence);
+  const missing = rows
+    .filter((row) => activities.some((item) => item.field === row.field) && !draft[row.field])
+    .map((row) => row.row);
 
   useEffect(() => {
     onDraft({ mixes, chosenId, ready, sentence });
@@ -81,11 +89,21 @@ export function DiagnosticCross({
         <>
           <p className="dk-shadow-result__title">Cruce</p>
           <h2 className="ik-question font-body">Arma las combinaciones que quieras explorar.</h2>
-          <p className="dk-question-context">Elige una actividad de cada fila y guárdala. Puedes repetir el armado las veces que quieras.</p>
+          <p className="dk-question-context">Elige una actividad de cada fila y guárdala. Puedes armar más de una. Siguiente sigue apagado hasta que guardes al menos una posibilidad.</p>
+          <p className="dk-cross__status" role="status">
+            {missing.length > 0
+              ? `Falta elegir en ${listNames(missing)}.`
+              : 'Ya elegiste una actividad en cada fila. Guarda la posibilidad para poder seguir.'}
+          </p>
+          {mixes.length > 0 ? (
+            <p className="dk-cross__status" role="status">
+              Posibilidad guardada. Ya puedes seguir. Si eliges otra vez, armas una posibilidad nueva. La guardada sigue en la lista.
+            </p>
+          ) : null}
           {rows.map((row) => {
             const items = activities.filter((item) => item.field === row.field);
             return (
-              <div key={row.field} className="dk-cross__row">
+              <div key={row.field} className="dk-cross__row" role="group" aria-label={row.row}>
                 <p className="dk-cross__label">{row.row}</p>
                 {items.length === 0 ? <p className="dk-question-context">Falta al menos una actividad.</p> : null}
                 <div className="dk-cross__items">

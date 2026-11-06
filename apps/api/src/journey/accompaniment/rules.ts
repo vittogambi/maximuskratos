@@ -80,6 +80,8 @@ export type AccompanimentInput = {
   general?: number | null;
   weekday?: number | null;
   flexible?: boolean;
+  /** Catálogo general: usa esa familia si pertenece al ámbito. No es una lectura personal. */
+  requestedFamilyId?: string | null;
 };
 
 export type Reason = { text: string; refs: string[] };
@@ -419,6 +421,65 @@ export function proposeAccompaniment(input: AccompanimentInput): AccompanimentPr
       requiresAction: true,
       reasons: [...reasons, { text: 'Declaraste que retomas. Se recupera el contexto desde hoy. Volver no es contención ni una pérdida de disciplina.', refs: ['RETURN'] }],
       missing: [...missing, { key: 'goal', question: '¿Qué meta quieres retomar: entregar, enseñar, cuidar, ordenar, un vínculo u otra?' }],
+    });
+  }
+
+  if (input.requestedFamilyId) {
+    const requested = familyById(input.requestedFamilyId);
+    const territory = goal.territory ?? input.territory;
+    if (!requested || (territory && requested.territory && requested.territory !== territory)) {
+      return base({
+        familyId: null,
+        mode: null,
+        modeStatus: 'UNDETERMINED',
+        situation: goal.situation,
+        requiresAction: false,
+        reasons: [...reasons, { text: 'Ese punto de partida no existe para este ámbito.', refs: [] }],
+        missing,
+      });
+    }
+    const tags = [...requested.tags, ...(input.requestedTags ?? [])];
+    const covered = indicationCovers(input.indication, tags);
+    const decision = decideAction(tags, resolvedHealth);
+    const blocked = !covered.ok || !decision.allowed;
+    return base({
+      familyId: requested.id,
+      mode: requested.mode,
+      modeStatus: 'UNDETERMINED',
+      situation: 'NONE',
+      territory: requested.territory,
+      pillar: requested.pillar,
+      requiresAction: !blocked,
+      incompatible: blocked ? { familyId: requested.id, reason: covered.reason ?? decision.reason ?? 'Esta ayuda no es compatible con una restricción vigente.' } : null,
+      reasons: [...reasons, { text: 'Punto de partida general del catálogo. No es una lectura de tus respuestas.', refs: ['CATALOG'] }],
+      missing,
+    });
+  }
+
+  if (input.helpPreference === 'GUIADA' && !goal.kind && !input.goalText?.trim() && goal.territory) {
+    const oriented = candidate || postponeCandidate;
+    if (!oriented) {
+      return base({
+        familyId: null,
+        mode: null,
+        modeStatus: 'UNDETERMINED',
+        situation: goal.situation,
+        territory: goal.territory,
+        requiresAction: false,
+        reasons: [...reasons, { text: 'No hay evidencia suficiente en este ámbito para orientar un primer paso.', refs: [] }],
+        missing,
+      });
+    }
+    const familyId = familyIdFor(goal.territory, 'ESTABILIZACION');
+    return base({
+      familyId,
+      mode: 'ESTABILIZACION',
+      modeStatus: 'PROVISIONAL',
+      situation: 'NONE',
+      territory: goal.territory,
+      requiresAction: true,
+      reasons: [...reasons, { text: 'Por eso el primer paso es de estabilización: usa lo que ya declaraste, sin completar el cuestionario.', refs: ['ANSWERS'] }],
+      missing,
     });
   }
 

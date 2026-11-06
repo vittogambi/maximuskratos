@@ -127,3 +127,29 @@ export function territoryCoverage(
     return { territory, required, settled, pending, exceptions, state };
   });
 }
+
+export type TerritoryExceptionKind = 'UNKNOWN' | 'NOT_APPLICABLE' | 'DECLINED';
+
+export type TerritoryExceptionRow = {
+  sourceRef: string;
+  prompt: string;
+  kind: TerritoryExceptionKind;
+};
+
+/** Saved user exceptions for one territory. Same kinds the coverage count uses. No answer text. */
+export function territoryExceptionRows(
+  territory: Territory,
+  questions: { sourceRef: string; textEs?: string | null }[],
+  responses: Record<string, CoverageResponse>,
+): TerritoryExceptionRow[] {
+  const refs = new Set(buildTerritorySourcesFromCatalog(questions)[territory]);
+  const rows: TerritoryExceptionRow[] = [];
+  for (const question of questions) {
+    if (!refs.has(question.sourceRef)) continue;
+    const kind = responses[question.sourceRef]?.exceptionKind;
+    if (kind !== 'UNKNOWN' && kind !== 'NOT_APPLICABLE' && kind !== 'DECLINED') continue;
+    const prompt = question.textEs?.trim() || question.sourceRef;
+    rows.push({ sourceRef: question.sourceRef, prompt, kind });
+  }
+  return rows;
+}

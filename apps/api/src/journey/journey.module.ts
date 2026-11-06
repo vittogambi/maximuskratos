@@ -4,12 +4,14 @@ import { DiagnosticOpenGuard } from '../diagnostic/diagnostic-open.guard';
 import { JourneyClock, WeekApplyHook } from './journey-clock';
 import { AccompanimentController } from './accompaniment.controller';
 import { AccompanimentService } from './accompaniment.service';
+import { InterventionController } from './intervention.controller';
+import { InterventionService } from './intervention.service';
 import { JourneyController } from './journey.controller';
 import { JourneyService } from './journey.service';
 
 @Module({
   imports: [AuthModule],
-  controllers: [JourneyController, AccompanimentController],
-  providers: [JourneyService, AccompanimentService, DiagnosticOpenGuard, JourneyClock, WeekApplyHook],
+  controllers: [JourneyController, AccompanimentController, InterventionController],
+  providers: [JourneyService, AccompanimentService, InterventionService, DiagnosticOpenGuard, JourneyClock, WeekApplyHook],
 })
 export class JourneyModule {}

@@ -18,7 +18,7 @@ export function DevolucionView({
   if (!paths.length) return null;
   return (
     <section aria-label="Devolución">
-      <h2>Después del cuestionario</h2>
+      <h2>Elige un camino</h2>
       {paths.map((path) => (
         <article key={path.id}>
           <h3>{path.title}</h3>

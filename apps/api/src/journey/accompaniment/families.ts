@@ -474,6 +474,69 @@ export function familyById(id: string | null | undefined): FamilyDef | null {
   return BY_ID.get(id) ?? null;
 }
 
+const SEEKS: Record<string, string> = {
+  'MEN-CONT': 'Dejar claro qué vas a sostener y qué queda fuera esta semana.',
+  'MEN-EST': 'Avanzar una parte revisable en las ocasiones que sí puedes usar.',
+  'MEN-CONS': 'Repetir una estrategia que ya dio resultado y anotar qué la hace frágil.',
+  'MEN-EXP': 'Preparar la explicación de una tarea que ya dominas y cómo comprobar si se entiende.',
+  'REL-CONT': 'Nombrar el vínculo que quieres cuidar y el límite de esta semana.',
+  'REL-EST': 'Preparar una conversación concreta y qué harás si no hay respuesta.',
+  'REL-CONS': 'Repetir un trato que ya funcionó y anotar la fricción.',
+  'REL-EXP': 'Dejar escrito un encargo conjunto y la salida si no hay respuesta.',
+  'FIN-CONT': 'Distinguir obligaciones conocidas de lo que todavía no está a la vista.',
+  'FIN-EST': 'Armar un registro de obligaciones y un recordatorio en una ocasión real.',
+  'FIN-CONS': 'Revisar la información y la asignación que ya declaraste, sin abrir una inversión.',
+  'FIN-EXP': 'Definir un proyecto pequeño dentro de un límite de dinero y fechas conocidas.',
+  'SAL-CONT': 'Preparar una gestión compatible con el límite vigente y anotar qué no vas a hacer.',
+  'SAL-EST': 'Organizar el cuidado que ya elegiste en una ocasión compatible.',
+  'SAL-CONS': 'Revisar si ese cuidado sigue siendo sostenible con la carga de esta semana.',
+};
+
+const SUGGESTED: Record<string, { weeklyMinutes: number; occasions: number; minutesPerOccasion: number }> = {
+  'MEN-CONT': { weeklyMinutes: 15, occasions: 1, minutesPerOccasion: 15 },
+  'MEN-EST': { weeklyMinutes: 40, occasions: 2, minutesPerOccasion: 20 },
+  'MEN-CONS': { weeklyMinutes: 30, occasions: 2, minutesPerOccasion: 15 },
+  'MEN-EXP': { weeklyMinutes: 45, occasions: 1, minutesPerOccasion: 45 },
+  'REL-CONT': { weeklyMinutes: 20, occasions: 1, minutesPerOccasion: 20 },
+  'REL-EST': { weeklyMinutes: 30, occasions: 1, minutesPerOccasion: 30 },
+  'REL-CONS': { weeklyMinutes: 25, occasions: 2, minutesPerOccasion: 12 },
+  'REL-EXP': { weeklyMinutes: 40, occasions: 1, minutesPerOccasion: 40 },
+  'FIN-CONT': { weeklyMinutes: 20, occasions: 1, minutesPerOccasion: 20 },
+  'FIN-EST': { weeklyMinutes: 25, occasions: 2, minutesPerOccasion: 12 },
+  'FIN-CONS': { weeklyMinutes: 20, occasions: 1, minutesPerOccasion: 20 },
+  'FIN-EXP': { weeklyMinutes: 35, occasions: 1, minutesPerOccasion: 35 },
+  'SAL-CONT': { weeklyMinutes: 20, occasions: 1, minutesPerOccasion: 20 },
+  'SAL-EST': { weeklyMinutes: 30, occasions: 2, minutesPerOccasion: 15 },
+  'SAL-CONS': { weeklyMinutes: 15, occasions: 1, minutesPerOccasion: 15 },
+};
+
+export type StartingPoint = {
+  id: string;
+  templateVersion: string;
+  seeks: string;
+  action: string;
+  doneWhen: string;
+  expectedEvidence: string;
+  learningQuestion: string;
+  minimumVersion: string;
+  suggested: { weeklyMinutes: number; occasions: number; minutesPerOccasion: number };
+};
+
+/** Plantillas reales del ámbito que se pueden proponer sin una lectura personal. */
+export function generalStartingPoints(territory: Territory): StartingPoint[] {
+  return FAMILIES.filter((row) => row.territory === territory && row.mode && row.tags.length === 0).map((row) => ({
+    id: row.id,
+    templateVersion: row.templateVersion,
+    seeks: SEEKS[row.id] ?? row.learningQuestion,
+    action: row.action,
+    doneWhen: row.doneWhen,
+    expectedEvidence: row.expectedEvidence,
+    learningQuestion: row.learningQuestion,
+    minimumVersion: row.minimumVersion,
+    suggested: SUGGESTED[row.id] ?? { weeklyMinutes: 20, occasions: 1, minutesPerOccasion: 20 },
+  }));
+}
+
 export function familyIdFor(territory: Territory, mode: Mode): string {
   const prefix = { MENTALIDAD: 'MEN', RELACIONES: 'REL', FINANZAS: 'FIN', SALUD_FISICA: 'SAL' }[territory];
   const suffix = { CONTENCION: 'CONT', ESTABILIZACION: 'EST', CONSOLIDACION: 'CONS', EXPANSION: 'EXP' }[mode];

@@ -12,7 +12,7 @@ import { AccompanimentFlow } from './AccompanimentFlow';
 import { DevolucionView } from './DevolucionView';
 import { JourneyNotice, noticeFrom, type JourneyNoticeState } from './JourneyNotice';
 
-export function PlansScreen() {
+export function PlansScreen({ embedded = false, territory }: { embedded?: boolean; territory?: string | null }) {
   const [plans, setPlans] = useState<PlanRow[]>([]);
   const [title, setTitle] = useState('');
   const [outcome, setOutcome] = useState('');
@@ -76,6 +76,7 @@ export function PlansScreen() {
         linkKind: link,
         valueRef: valueRef || undefined,
         purposeRevisionId: bundle?.purposeRevisionId,
+        territory: territory || undefined,
       });
       setTitle('');
       setOutcome('');
@@ -119,10 +120,14 @@ export function PlansScreen() {
   const active = plans.filter((plan) => plan.status === 'ACTIVE');
 
   return (
-    <div className="mk-dashboard">
-      <p className="mk-section-eyebrow">PLANES</p>
-      <h1 className="sys-header__title">Planes personales.</h1>
-      <p className="sys-header__method">Esto no es el precio de la suscripción. Es lo que vas a hacer.</p>
+    <div className={embedded ? 'mk-design-embed' : 'mk-dashboard'}>
+      {embedded ? null : (
+        <>
+          <p className="mk-section-eyebrow">PLANES</p>
+          <h1 className="sys-header__title">Planes</h1>
+        </>
+      )}
+      {territory ? <p className="mk-m-muted">Este plan queda en {territory.replaceAll('_', ' ').toLowerCase()}.</p> : null}
       <DevolucionView
         paths={paths}
         chosen={chosenPath}

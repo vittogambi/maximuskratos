@@ -27,8 +27,9 @@ async function enter(page: import('@playwright/test').Page) {
 test('member home shows territories and week nav', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await enter(page);
-  await expect(page.getByRole('heading', { name: /Tu mapa|¿Cómo quieres empezar?/ })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Ámbitos' })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Siguiente paso' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Tus ámbitos' })).toBeVisible();
+  await expect(page.getByRole('table', { name: 'Tus ámbitos por fase' })).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'Secciones' }).getByRole('link', { name: 'Semana' })).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'Secciones' }).getByRole('link', { name: 'Memoria' })).toBeVisible();
   await page.screenshot({ path: 'tmp/member-ux-despues/1440-inicio.png' });

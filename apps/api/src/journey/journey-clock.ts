@@ -13,6 +13,17 @@ export class JourneyClock {
       day: '2-digit',
     }).format(new Date());
   }
+
+  /** Instant for journey timestamps such as activation. Follows MK_CLOCK_DAY so simulated weeks stay coherent. */
+  now(): Date {
+    if (process.env.MK_CLOCK_DAY) return new Date(`${process.env.MK_CLOCK_DAY}T12:00:00.000Z`);
+    return new Date();
+  }
+}
+
+/** Test doubles may only provide today(). Their instant is noon UTC of that civil day. */
+export function journeyNow(clock: { today(): string; now?: () => Date }): Date {
+  return typeof clock.now === 'function' ? clock.now() : new Date(`${clock.today()}T12:00:00.000Z`);
 }
 
 let raceEntered = 0;

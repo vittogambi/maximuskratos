@@ -1,17 +1,15 @@
 ---
 name: mk-ui-surface
-description: Audit or fix an MK web surface against the product UI contract. Use when a page drifts from its shell, type, tokens, or mobile behavior.
+description: Audit or fix an MK web screen against its shell and DESIGN.md. Use when a page drifts from its surface, type, tokens, or mobile behavior. Do not use for API-only work or methodology changes.
 ---
 
-# MK UI surface
+# Superficie UI
 
-1. Clasificar la superficie: marketing, player, miembros, diagnóstico o admin.
-2. Leer `DESIGN.md` y la regla de esa superficie (`mk-public-ui`, `mk-player-ui`, `mk-member-ui`, `mk-admin-ui`).
-3. Inspeccionar la referencia visual de esa superficie y los componentes compartidos que ya la implementan.
-4. Corregir el shell y los componentes compartidos. No copiar un sistema paralelo ni conservar un defecto por reutilizarlo.
-5. Verificar móvil (320, 375, 390) y escritorio (1440). Incluir error, texto largo, loading y datos ausentes cuando la pantalla los tiene.
-6. Registrar capturas y el comando de prueba.
+1. Nombra la superficie: marketing, miembros, cuestionario, IKIGAI independiente o admin. Acceso no es ninguna de esas.
+2. Lee `DESIGN.md` y la regla de esa superficie: `mk-public-ui`, `mk-member-ui`, `mk-questionnaire-ui`, `mk-player-ui` (solo IKIGAI) o `mk-admin-ui`.
+3. Corrige el shell compartido y los componentes que ya cubren el caso. Revisa los consumidores que el cambio afecte.
+4. Verifica como dice `AGENTS.md`: navegador, móvil primero, tamaños según el componente. Un cambio de shell mira más anchos y estados.
 
-Marketing monta `PublicLayout`. El player monta `IkigaiShell`. Miembros montan `AppShell`. Admin monta `AdminShell`. No imponer nav, footer ni motion de marketing a las otras superficies.
+Marketing usa `PublicLayout`. Miembros usan `AppShell`. El cuestionario usa `.dk-shell`. IKIGAI usa `IkigaiShell`. Admin usa `AdminShell`. No pases nav, footer ni motion de marketing a las otras. No uses `IkigaiShell` en el cuestionario.
 
-No cambiar metodología, acceso, sesiones, cálculos ni persistencia salvo instrucción explícita.
+No cambies metodología, acceso, sesiones, cálculos ni persistencia salvo encargo explícito. No reescribas preguntas del cuestionario como copy de interfaz.

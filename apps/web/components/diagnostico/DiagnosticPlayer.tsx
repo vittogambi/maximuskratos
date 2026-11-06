@@ -12,7 +12,7 @@ import {
 } from '@/lib/api';
 import { getAccessToken } from '@/lib/auth-storage';
 import { journeySynthesis, saveSynthesis } from '@/lib/journey-api';
-import { continuePastModule } from '@/lib/diagnostic-continue';
+import { ambitoPathForTerritory, continuePastModule } from '@/lib/diagnostic-continue';
 import { AppIcon } from '@/components/app-icon';
 import { ReviewVersionNote } from '@/components/app-shell/ReviewVersionNote';
 import {
@@ -28,6 +28,8 @@ import { DiagnosticCross, type CrossActivity, type CrossDraft } from './Diagnost
 import { moduleIntroIcon } from './module-intro-icon';
 import { ProgressRail, questionnaireStageLabel } from './ProgressRail';
 import { PlayerStage } from './PlayerStage';
+import { AreaSectionsRail } from './AreaSectionsRail';
+import { consumePlayerNav, playerBackTarget, playerNavEpoch, rememberPlayerNav } from './player-back';
 import { moduleDisplayTitle, moduleSectionIntro } from './section-copy';
 import { activityAnswer, activityCounts, activityDraftReady, activityField, activityLens, isIkigaiClose, type ActivityFieldName } from '@/lib/activity-map';
 import { oceanClosedReading } from '@/lib/ocean-reading';
@@ -232,10 +234,14 @@ export function DiagnosticPlayer() {
   const stateRef = useRef(state);
   const scrollRef = useRef<HTMLDivElement>(null);
   const pendingOutroRef = useRef<string | null>(null);
+  const hydratedRef = useRef(false);
+  const playerStatusRef = useRef(playerStatus);
   stateRef.current = state;
+  playerStatusRef.current = playerStatus;
 
   useEffect(() => {
     if (status === 'guest') {
+      hydratedRef.current = false;
       router.replace('/login');
       return;
     }
@@ -246,12 +252,22 @@ export function DiagnosticPlayer() {
       router.replace('/login');
       return;
     }
+    if (hydratedRef.current) return;
+
+    const held = consumePlayerNav();
+    if (held) {
+      hydratedRef.current = true;
+      applyState(held.state, held.skipIntro);
+      return;
+    }
 
     let cancelled = false;
+    const epoch = playerNavEpoch();
 
     apiDiagnosticState(token)
       .then((s) => {
-        if (cancelled) return;
+        if (cancelled || epoch !== playerNavEpoch()) return;
+        hydratedRef.current = true;
         if (s.sessionState.showWelcomeScreen) {
           router.replace('/diagnostico/bienvenida');
           return;
@@ -260,7 +276,7 @@ export function DiagnosticPlayer() {
       })
       .catch(() => {
         if (cancelled) return;
-        setError('No se pudo cargar el cuestionario.');
+        setError('No pudimos cargar el cuestionario. Inténtalo nuevamente.');
         setPlayerStatus('error');
       });
 
@@ -289,6 +305,10 @@ export function DiagnosticPlayer() {
       }];
     }
     if (s.nextStep.type === 'module_outro') {
+      if (s.nextStep.data.moduleSlug === 'e-aud-s6') {
+        router.replace('/diagnostico/outro/e-aud-s6');
+        return;
+      }
       void passModule(s.nextStep.data.moduleSlug);
       return;
     }
@@ -302,6 +322,10 @@ export function DiagnosticPlayer() {
         shownAtRef.current = Date.now();
       }
     } else if (s.nextStep.type === 'diagnostic_complete') {
+      router.replace('/diagnostico/resultado');
+    } else if (s.nextStep.type === 'territory_complete' || s.nextStep.type === 'territory_pause') {
+      router.replace(ambitoPathForTerritory(s.nextStep.data.territory, s.nextStep.type));
+    } else if (s.nextStep.type === 'phase_end') {
       router.replace('/diagnostico/resultado');
     }
   }
@@ -332,6 +356,42 @@ export function DiagnosticPlayer() {
     }
   }
 
+  async function navigateAtQuestion(questionId: string) {
+    const token = getAccessToken();
+    if (!token) return;
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      const s = await apiDiagnosticState(token, { at: questionId });
+      rememberPlayerNav(s, true);
+      applyState(s, true);
+    } catch {
+      setError('No pudimos cargar la pregunta anterior.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  async function navigateIntroModule(moduleSlug: string) {
+    const token = getAccessToken();
+    if (!token) return;
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      const s = await apiDiagnosticState(token, { introModule: moduleSlug });
+      if (s.sessionState.currentModuleSlug !== moduleSlug || !s.sessionState.isModuleStart) {
+        setError('No pudimos abrir la introducción de esa sección.');
+        return;
+      }
+      rememberPlayerNav(s, false);
+      applyState(s, false);
+    } catch {
+      setError('No pudimos cargar la sección anterior.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   function handleGoBack() {
     if (isSubmitting || isExiting) return;
     if (reveal?.kind === 'cross' && crossStep > 0) {
@@ -345,13 +405,29 @@ export function DiagnosticPlayer() {
       setReveal(null);
       return;
     }
-    const prev = historyRef.current.at(-1);
-    if (!prev) return;
-    historyRef.current = historyRef.current.slice(0, -1);
-    setState(prev.state);
-    setSelection(prev.selection);
-    setPlayerStatus('question');
-    shownAtRef.current = Date.now();
+    const current = stateRef.current;
+    const session = current?.sessionState;
+    const question = current?.nextStep.type === 'question' ? current.nextStep.data : null;
+    const screen = playerStatusRef.current === 'module_intro'
+      ? 'intro'
+      : playerStatusRef.current === 'question'
+        ? 'question'
+        : 'other';
+    const target = playerBackTarget({
+      screen,
+      moduleSlug: session?.currentModuleSlug ?? null,
+      isFirstInModule: question?.isFirstInModule === true
+        || (question?.isFirstInModule == null && session?.currentQuestionIndex === 1),
+      previousQuestionId: question?.previousQuestionId ?? null,
+    });
+    if (target?.kind === 'intro') {
+      void navigateIntroModule(target.moduleSlug);
+      return;
+    }
+    if (target?.kind === 'question') {
+      void navigateAtQuestion(target.questionId);
+      return;
+    }
   }
 
   async function handleSubmit() {
@@ -374,6 +450,7 @@ export function DiagnosticPlayer() {
     if (!token) return;
 
     const submittedId = state.nextStep.data.id;
+    const wasRevisit = Boolean(state.nextStep.data.savedAnswer);
     const submittedSelection = selection;
     setIsSubmitting(true);
     setError(null);
@@ -413,7 +490,17 @@ export function DiagnosticPlayer() {
       }
 
       if (next.nextStep.type === 'module_outro') {
+        if (next.nextStep.data.moduleSlug === 'e-aud-s6') {
+          router.replace('/diagnostico/outro/e-aud-s6');
+          return;
+        }
         await passModule(next.nextStep.data.moduleSlug);
+        return;
+      }
+
+      if (wasRevisit) {
+        const resumed = await apiDiagnosticState(token, { after: submittedId });
+        applyState(resumed, false, true);
         return;
       }
 
@@ -424,12 +511,12 @@ export function DiagnosticPlayer() {
       const stillHere = current?.nextStep.type === 'question' && current.nextStep.data.id === submittedId;
       if (!stillHere) {
         // A late failure belongs to the earlier question. It must not replace the one on screen.
-        setError('No se pudo guardar la respuesta anterior. Vuelve a ella para reintentar.');
+        setError('No pudimos guardar la respuesta anterior. Vuelve a esa pregunta e inténtalo de nuevo.');
         return;
       }
       setError(status === 409
-        ? 'Otra sesión escribió después. Recarga el cuestionario antes de guardar.'
-        : 'No se pudo guardar. El texto sigue aquí. Puedes reintentar.');
+        ? 'Otra sesión guardó cambios después. Espera un momento e intenta guardar de nuevo.'
+        : 'No pudimos guardar tu respuesta. El texto sigue aquí. Puedes intentarlo de nuevo.');
     } finally {
       setIsSubmitting(false);
     }
@@ -555,7 +642,16 @@ export function DiagnosticPlayer() {
   const isValid =
     currentQuestion && selection ? isSelectionValid(currentQuestion, selection) : false;
   const ss = state?.sessionState;
-  const canGoBack = historyRef.current.length > 0;
+  const onIntro = playerStatus === 'module_intro';
+  const asking = playerStatus === 'question' && currentQuestion != null && selection != null;
+  const backAction = playerBackTarget({
+    screen: onIntro ? 'intro' : playerStatus === 'question' ? 'question' : 'other',
+    moduleSlug: ss?.currentModuleSlug ?? null,
+    isFirstInModule: currentQuestion?.isFirstInModule === true
+      || (currentQuestion?.isFirstInModule == null && ss?.currentQuestionIndex === 1),
+    previousQuestionId: currentQuestion?.previousQuestionId ?? null,
+  });
+  const canGoBack = backAction != null;
   const introKey = ss?.currentModuleSlug ?? 'intro';
 
   useEffect(() => {
@@ -609,12 +705,11 @@ export function DiagnosticPlayer() {
         header={null}
         primary={{ label: 'Volver al inicio', onClick: () => router.push('/diagnostico') }}
       >
-        <p className="dk-player-error" role="alert">{error ?? 'Ocurrió un error inesperado.'}</p>
+        <p className="dk-player-error" role="alert">{error ?? 'Algo salió mal. Inténtalo nuevamente.'}</p>
       </PlayerStage>
     );
   }
 
-  const onIntro = playerStatus === 'module_intro';
   const introStep =
     onIntro && ss.currentModuleOrder != null && ss.totalModules > 0
       ? `Módulo ${ss.currentModuleOrder} de ${ss.totalModules}`
@@ -628,7 +723,6 @@ export function DiagnosticPlayer() {
   const introIcon = onIntro ? moduleIntroIcon(ss.currentModuleSlug, ss.currentModuleIcon) : null;
   const sectionIntro = moduleSectionIntro(ss.currentModuleSlug);
 
-  const asking = playerStatus === 'question' && currentQuestion != null && selection != null;
   const primaryLabel = onIntro
     ? 'Comenzar'
     : isSubmitting && !isExiting
@@ -639,8 +733,21 @@ export function DiagnosticPlayer() {
     <>
       <PlayerStage
         bodyRef={scrollRef}
+        sectionsRail={ss.areaSections?.length ? <AreaSectionsRail sections={ss.areaSections} /> : null}
         describedBy={asking && !reveal && !isValid ? 'dk-continue-hint' : undefined}
-        note={asking && !reveal ? 'Tu respuesta se guarda al continuar.' : null}
+        note={
+          reveal?.kind === 'cross'
+            ? crossStep < 1
+              ? crossDraft?.ready
+                ? 'Guardamos tu elección. Puedes continuar.'
+                : 'Elige una actividad en cada fila y guarda la posibilidad para seguir.'
+              : crossDraft?.ready
+                ? 'Vas a conservar la posibilidad elegida.'
+                : 'Elige una posibilidad para continuar.'
+            : asking
+              ? 'Tu respuesta se guarda al continuar.'
+              : null
+        }
         primary={{
           label: reveal?.kind === 'cross' && crossStep < 1 ? 'Siguiente' : primaryLabel,
           onClick: reveal?.kind === 'cross'
@@ -654,10 +761,13 @@ export function DiagnosticPlayer() {
             questionIndex={playerStatus === 'question' ? ss.currentQuestionIndex : undefined}
             questionTotal={playerStatus === 'question' ? ss.moduleQuestionCount : undefined}
             contextLabel={questionnaireStageLabel(ss.currentModuleSlug)}
-            exitLabel={playerStatus === 'question' ? 'Guardar y salir' : null}
+            exitLabel={playerStatus === 'question' || playerStatus === 'module_intro' ? 'Guardar y salir' : null}
             exitDisabled={isSubmitting || isExiting}
-            onExit={playerStatus === 'question' ? handleSaveAndExit : undefined}
-            back={(reveal || (asking && canGoBack)) ? { onClick: handleGoBack, disabled: isSubmitting || isExiting } : null}
+            onExit={playerStatus === 'question' || playerStatus === 'module_intro' ? handleSaveAndExit : undefined}
+            back={(reveal || canGoBack) ? {
+              onClick: handleGoBack,
+              disabled: isSubmitting || isExiting || (!reveal && !canGoBack),
+            } : null}
           />
         )}
       >
@@ -708,11 +818,18 @@ export function DiagnosticPlayer() {
                     </ol>
                   </motion.div>
                 ) : sectionIntro ? (
-                  sectionIntro.map((paragraph) => (
-                    <motion.p key={paragraph} className="dk-intro-text" variants={reduced ? undefined : introStaggerItem}>
-                      {paragraph}
-                    </motion.p>
-                  ))
+                  <>
+                    {sectionIntro.map((paragraph) => (
+                      <motion.p key={paragraph} className="dk-intro-text" variants={reduced ? undefined : introStaggerItem}>
+                        {paragraph}
+                      </motion.p>
+                    ))}
+                    {ss.currentModuleSlug === 'f-rad-001-s1' && introAddsDetail(ss.currentModuleTitle, ss.currentModuleIntro) ? (
+                      <motion.p className="dk-intro-text" variants={reduced ? undefined : introStaggerItem}>
+                        {ss.currentModuleIntro}
+                      </motion.p>
+                    ) : null}
+                  </>
                 ) : introAddsDetail(ss.currentModuleTitle, ss.currentModuleIntro) ? (
                   <motion.p className="dk-intro-text" variants={reduced ? undefined : introStaggerItem}>
                     {ss.currentModuleIntro}
